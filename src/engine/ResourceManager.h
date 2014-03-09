@@ -10,7 +10,6 @@
 #include <memory>
 
 struct SDL_Texture;
-struct SDL_Renderer;
 
 typedef std::shared_ptr<SDL_Texture> Texture_ptr;
 
@@ -21,7 +20,7 @@ public:
 		return manager;
 	}
 
-	Texture_ptr loadTexture(SDL_Renderer* renderer, const std::string& file) const;
+	Texture_ptr loadTexture(const std::string& file) const;
 
 private:
 	ResourceManager();

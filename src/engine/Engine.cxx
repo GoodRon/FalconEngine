@@ -12,17 +12,22 @@
 #include "Engine.h"
 #include "TimerPool.h"
 #include "ResourceManager.h"
+#include "Renderer.h"
 
 using namespace std;
 
 Engine::Engine() :
 	m_width(1024),
 	m_height(768),
-	m_window(nullptr),
-	m_renderer(nullptr),
 	m_run(true),
-	m_init(false),
 	m_returnCode(0) {
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+		cout << "SDL_Init Error: " << SDL_GetError() << endl;
+	}
+}
+
+Engine::~Engine() {
+	SDL_Quit();
 }
 
 bool Engine::loadConfig(const std::string& file) {
@@ -31,53 +36,40 @@ bool Engine::loadConfig(const std::string& file) {
 }
 
 int Engine::execute() {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-		cout << "SDL_Init Error: " << SDL_GetError() << endl;
-		return 1;
-	}
+	Renderer& renderer = Renderer::getInstance();
+	renderer.init(m_width, m_height);
 
-	m_window = SDL_CreateWindow("Falcon Engine",
-								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-								m_width, m_height, SDL_WINDOW_SHOWN);
-	if (m_window == nullptr) {
-		cerr << "Window creation failed: " << SDL_GetError() << endl;
-		SDL_Quit();
-		return 1;
-	}
-
-	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED |
-									SDL_RENDERER_PRESENTVSYNC);
-	if (m_renderer == nullptr) {
-		cerr << "Renderer Creation Failed: " << SDL_GetError() << endl;
-		SDL_DestroyWindow(m_window);
-		SDL_Quit();
-		return 1;
-	}
-
-	m_init = true;
-
-	Texture_ptr background = ResourceManager::getInstance().loadTexture(m_renderer, "background.png");
-
-	TimerPool timers;
-	timers.addTimer(100, [this, background](TimerPool::id_t) {
-		SDL_Rect rsource = {0, 0, 0, 0};
-		SDL_QueryTexture(background.get(), nullptr, nullptr, &(rsource.w), &(rsource.h));
-		SDL_RenderClear(m_renderer);
-		SDL_RenderCopy(m_renderer, background.get(), nullptr, &rsource);
-		SDL_RenderPresent(m_renderer);
+	TimerPool& timers = TimerPool::getInstance();
+	timers.addTimer(33, [](TimerPool::id_t) {
+		SDL_RenderPresent(Renderer::getInstance().get());
 	});
 
-	SDL_Event event;
-	while (m_run) {
-		if (SDL_WaitEvent(&event) != 0) {
-			onEvent(event);
-		}
-		timers.check();
-	}
+	Texture_ptr background = ResourceManager::getInstance().loadTexture("background.png");
+	timers.addTimer(33, [&background](TimerPool::id_t) {
+		Renderer& renderer = Renderer::getInstance();
+		SDL_Rect rsource = {0, 0, 0, 0};
+		SDL_QueryTexture(background.get(), nullptr, nullptr, &(rsource.w), &(rsource.h));
+		SDL_Rect rdest = renderer.getPosition();
+		rsource.x += rdest.x;
+		rsource.y += rdest.y;
+		SDL_RenderClear(renderer.get());
+		SDL_RenderCopy(renderer.get(), background.get(), nullptr, &rsource);
+	});
 
-	SDL_DestroyRenderer(m_renderer);
-	SDL_DestroyWindow(m_window);
-	SDL_Quit();
+	thread eventsThread([this](){
+		SDL_Event event;
+		while (m_run) {
+			if (SDL_WaitEvent(&event) != 0) {
+				onEvent(event);
+			}
+		}
+	});
+
+	while (m_run) {
+		timers.check();
+		usleep(1000);
+	}
+	eventsThread.join();
 	return m_returnCode;
 }
 
@@ -87,8 +79,20 @@ void Engine::onEvent(const SDL_Event& event) {
 			m_run = false;
 			break;
 		case SDL_KEYDOWN:
-			if (event.key.keysym.sym == SDLK_ESCAPE) {
-				m_run = false;
+			switch (event.key.keysym.sym) {
+				case SDLK_ESCAPE:
+					m_run = false;
+					break;
+				case SDLK_UP: {
+					SDL_Rect rdest = Renderer::getInstance().getPosition();
+					Renderer::getInstance().setPosition(rdest.x, rdest.y + 5);
+				} break;
+				case SDLK_DOWN: {
+					SDL_Rect rdest = Renderer::getInstance().getPosition();
+					Renderer::getInstance().setPosition(rdest.x, rdest.y - 5);
+				} break;
+				default:
+					break;
 			}
 			break;
 		default:

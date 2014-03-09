@@ -25,6 +25,11 @@ public:
 	typedef uint32_t id_t;
 #endif
 
+	static TimerPool& getInstance() {
+		static TimerPool manager;
+		return manager;
+	}
+
 	/**
 	 * @brief Описатель обработчика сигнала таймера
 	 **/
@@ -66,6 +71,12 @@ public:
 	bool getNextShootTimeInterval ( struct timeval &tv );
 
 private:
+	TimerPool() : timers() {}
+	~TimerPool() {}
+
+	TimerPool(const TimerPool& other) = delete;
+	TimerPool& operator=(TimerPool& other) = delete;
+
 	/**
 	* @brief Достаточно точный программный таймер
 	*

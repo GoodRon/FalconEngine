@@ -9,6 +9,7 @@
 #include <SDL2/SDL_image.h>
 
 #include "ResourceManager.h"
+#include "Renderer.h"
 
 using namespace std;
 
@@ -18,10 +19,11 @@ ResourceManager::ResourceManager() {
 ResourceManager::~ResourceManager() {
 }
 
-shared_ptr<SDL_Texture> ResourceManager::loadTexture(SDL_Renderer* renderer, const string& file) const {
+Texture_ptr ResourceManager::loadTexture(const string& file) const {
 	shared_ptr<SDL_Texture> ptr;
+	Renderer& renderer = Renderer::getInstance();
 
-	if (renderer == nullptr) {
+	if (!renderer.isInit()) {
 		return ptr;
 	}
 
@@ -31,7 +33,7 @@ shared_ptr<SDL_Texture> ResourceManager::loadTexture(SDL_Renderer* renderer, con
 		return ptr;
 	}
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer.get(), surface);
 	if (texture == nullptr) {
 		cerr << "Unable to create texture from image " << file << ". Error: " << SDL_GetError() << endl;
 		SDL_FreeSurface(surface);

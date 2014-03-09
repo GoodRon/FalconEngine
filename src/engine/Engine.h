@@ -9,12 +9,11 @@
 #include <string>
 
 union SDL_Event;
-struct SDL_Window;
-struct SDL_Renderer;
 
 class Engine {
 public:
 	Engine();
+	~Engine();
 
 	bool loadConfig(const std::string& file);
 
@@ -27,11 +26,7 @@ private:
 	unsigned m_width;
 	unsigned m_height;
 
-	SDL_Window* m_window;
-	SDL_Renderer* m_renderer;
-
 	bool m_run;
-	bool m_init;
 	int m_returnCode;
 };
 
