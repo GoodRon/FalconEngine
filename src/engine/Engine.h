@@ -3,20 +3,18 @@
 
 #include <string>
 
-#include <SDL2/SDL.h>
+union SDL_Event;
 
 class Engine {
 public:
-	Engine(int argc, char** argv);
-	~Engine();
+	Engine();
 
-	bool loadConfig(const std::string& file) {}
+	bool loadConfig(const std::string& file);
 
 	int execute();
 
 private:
-	bool init();
-	void onEvent(const SDL_Event& event) {}
+	void onEvent(const SDL_Event& event);
 
 private:
 	unsigned m_width;
