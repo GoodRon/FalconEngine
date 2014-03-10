@@ -8,6 +8,7 @@
 
 #include <string>
 #include <memory>
+#include <unordered_map>
 
 struct SDL_Texture;
 
@@ -20,7 +21,7 @@ public:
 		return manager;
 	}
 
-	Texture_ptr loadTexture(const std::string& file) const;
+	Texture_ptr loadTexture(const std::string& name);
 
 private:
 	ResourceManager();
@@ -28,6 +29,9 @@ private:
 
 	ResourceManager(const ResourceManager& other) = delete;
 	ResourceManager& operator=(ResourceManager& other) = delete;
+
+private:
+	std::unordered_map<std::string, Texture_ptr> m_textures;
 };
 
 #endif // RESOURCEMANAGER_H
