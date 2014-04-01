@@ -44,7 +44,7 @@ int Engine::execute() {
 		SDL_RenderPresent(Renderer::getInstance().get());
 	});
 
-	Texture_ptr background = ResourceManager::getInstance().loadTexture("background.png");
+	TexturePointer background = ResourceManager::getInstance().loadTexture("ship.png");
 	timers.addTimer(33, [&background](TimerPool::id_t) {
 		Renderer& renderer = Renderer::getInstance();
 		SDL_Rect rsource = {0, 0, 0, 0};

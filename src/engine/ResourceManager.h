@@ -12,26 +12,60 @@
 
 struct SDL_Texture;
 
-typedef std::shared_ptr<SDL_Texture> Texture_ptr;
+typedef std::shared_ptr<SDL_Texture> TexturePointer;
 
+/**
+ * @brief Менеджер ресурсов
+ */
 class ResourceManager {
 public:
+	/**
+	 * @brief Вернуть ссылку на объект синглтона
+	 * @return ResourceManager&
+	 */
 	static ResourceManager& getInstance() {
 		static ResourceManager manager;
 		return manager;
 	}
 
-	Texture_ptr loadTexture(const std::string& name);
+	/**
+	 * @brief Загрузка текстуры
+	 * 
+	 * @param name имя текстуры
+	 * @return TexturePointer
+	 */
+	TexturePointer loadTexture(const std::string& name);
 
 private:
+	/**
+	 * @brief Конструктор
+	 */
 	ResourceManager();
+
+	/**
+	 * @brief Деструктор
+	 */
 	~ResourceManager();
 
+	/**
+	 * @brief Копирующий конструктор
+	 * 
+	 * @param other
+	 */
 	ResourceManager(const ResourceManager& other) = delete;
+
+	/**
+	 * @brief Оператор присваивания
+	 * 
+	 * @param other
+	 */
 	ResourceManager& operator=(ResourceManager& other) = delete;
 
 private:
-	std::unordered_map<std::string, Texture_ptr> m_textures;
+	/**
+	 * @brief Мэп текстур
+	 */
+	std::unordered_map<std::string, TexturePointer> m_textures;
 };
 
 #endif // RESOURCEMANAGER_H

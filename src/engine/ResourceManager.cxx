@@ -19,12 +19,12 @@ ResourceManager::ResourceManager() {
 ResourceManager::~ResourceManager() {
 }
 
-Texture_ptr ResourceManager::loadTexture(const string& name) {
+TexturePointer ResourceManager::loadTexture(const string& name) {
 	if (m_textures.find(name) != m_textures.end()) {
 		return m_textures.at(name);
 	}
 
-	Texture_ptr ptr;
+	TexturePointer ptr;
 	Renderer& renderer = Renderer::getInstance();
 
 	if (!renderer.isInit()) {

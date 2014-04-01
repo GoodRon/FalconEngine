@@ -10,10 +10,7 @@
 Renderer::Renderer() :
 	m_window(nullptr),
 	m_renderer(nullptr),
-	m_x(0),
-	m_y(0),
-	m_width(0),
-	m_height(0),
+	m_rect({0, 0, 0, 0}),
 	m_isInit(false) {
 }
 
@@ -27,15 +24,20 @@ Renderer::~Renderer() {
 }
 
 bool Renderer::init(int width, int height) {
-	if (m_isInit) {
-		return m_isInit;
+	m_isInit = false;
+	if (m_renderer) {
+		SDL_DestroyRenderer(m_renderer);
 	}
-	m_width = width;
-	m_height = height;
+	if (m_window) {
+		SDL_DestroyWindow(m_window);
+	}
+
+	m_rect.w = width;
+	m_rect.h = height;
 
 	m_window = SDL_CreateWindow("Falcon Engine",
 								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-								m_width, m_height, SDL_WINDOW_SHOWN);
+								m_rect.w, m_rect.h, SDL_WINDOW_SHOWN);
 	if (m_window == nullptr) {
 //		cerr << "Window creation failed: " << SDL_GetError() << endl;
 		return m_isInit;
@@ -52,7 +54,6 @@ bool Renderer::init(int width, int height) {
 	return m_isInit;
 }
 
-
 bool Renderer::isInit() const {
 	return m_isInit;
 }
@@ -62,11 +63,15 @@ SDL_Renderer* Renderer::get() const {
 }
 
 SDL_Rect Renderer::getPosition() const {
-	SDL_Rect rect = {m_x, m_y, m_width, m_height};
-	return rect;
+	return m_rect;
+}
+
+void Renderer::setPosition(const SDL_Rect& position) {
+	m_rect.x = position.x;
+	m_rect.y = position.y;
 }
 
 void Renderer::setPosition(int x, int y) {
-	m_x = x;
-	m_y = y;
+	m_rect.x = x;
+	m_rect.y = y;
 }
