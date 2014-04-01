@@ -12,6 +12,7 @@ struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_Rect;
 
+// TODO rename to viewport
 /**
  * @brief Класс рендерера
  */
@@ -22,8 +23,8 @@ public:
 	 * @return Renderer&
 	 */
 	static Renderer& getInstance() {
-		static Renderer manager;
-		return manager;
+		static Renderer renderer;
+		return renderer;
 	}
 
 	/**

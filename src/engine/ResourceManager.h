@@ -36,6 +36,11 @@ public:
 	 */
 	TexturePointer loadTexture(const std::string& name);
 
+	/**
+	 * @brief Освободить неиспользуемые текстуры
+	 */
+	void freeUnused();
+
 private:
 	/**
 	 * @brief Конструктор

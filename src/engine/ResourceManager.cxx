@@ -49,3 +49,11 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 	m_textures.emplace(name, ptr);
 	return ptr;
 }
+
+void ResourceManager::freeUnused() {
+	for (auto texture = m_textures.begin(); texture != m_textures.end(); ++texture) {
+		if ((*texture).second.use_count() <= 1) {
+			m_textures.erase(texture);
+		}
+	}
+}

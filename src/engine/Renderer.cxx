@@ -3,9 +3,13 @@
  * All rights reserved
  */
 
+#include <iostream>
+
 #include <SDL2/SDL.h>
 
 #include "Renderer.h"
+
+using namespace std;
 
 Renderer::Renderer() :
 	m_window(nullptr),
@@ -39,14 +43,14 @@ bool Renderer::init(int width, int height) {
 								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 								m_rect.w, m_rect.h, SDL_WINDOW_SHOWN);
 	if (m_window == nullptr) {
-//		cerr << "Window creation failed: " << SDL_GetError() << endl;
+		cerr << "Window creation failed: " << SDL_GetError() << endl;
 		return m_isInit;
 	}
 
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED |
 									SDL_RENDERER_PRESENTVSYNC);
 	if (m_renderer == nullptr) {
-//		cerr << "Renderer Creation Failed: " << SDL_GetError() << endl;
+		cerr << "Renderer Creation Failed: " << SDL_GetError() << endl;
 		SDL_DestroyWindow(m_window);
 		return m_isInit;
 	}
