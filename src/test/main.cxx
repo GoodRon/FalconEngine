@@ -3,9 +3,18 @@
  * All rights reserved
  */
 
+#include <iostream>
+
 #include "Engine.h"
+#include "EngineException.h"
 
 int main() {
-	Engine engine;
-	return engine.execute();
+	int returnCode = -1;
+	try {
+		Engine engine;
+		returnCode = engine.execute();
+	} catch (EngineException& exception) {
+		std::cout << "Exception caught: " << exception.what() << std::endl;
+	}
+	return returnCode;
 }
