@@ -9,6 +9,8 @@
 #include <string>
 
 union SDL_Event;
+class Renderer;
+class ResourceManager;
 
 /**
  * @brief Класс игрового движка
@@ -50,16 +52,6 @@ private:
 
 private:
 	/**
-	 * @brief Ширина порта вывода
-	 */
-	unsigned m_width;
-
-	/**
-	 * @brief Высота порта вывода
-	 */
-	unsigned m_height;
-
-	/**
 	 * @brief Флаг работы движка
 	 */
 	bool m_run;
@@ -68,6 +60,16 @@ private:
 	 * @brief Возвращаемое значение
 	 */
 	int m_returnCode;
+
+	/**
+	 * @brief Рендерер
+	 */
+	Renderer* m_renderer;
+
+	/**
+	 * @brief Менеджер ресурсов
+	 */
+	ResourceManager* m_resourceManager;
 };
 
 #endif // ENGINE_H

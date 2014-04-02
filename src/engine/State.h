@@ -33,6 +33,8 @@ public:
 	 */
 	virtual void onExit() = 0;
 
+// Update() Draw() 
+
 	/**
 	 * @brief Обработчик событий
 	 * 

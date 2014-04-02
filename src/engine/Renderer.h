@@ -11,6 +11,9 @@
 struct SDL_Window;
 struct SDL_Renderer;
 struct SDL_Rect;
+struct SDL_Texture;
+
+typedef std::shared_ptr<SDL_Texture> TexturePointer;
 
 // TODO rename to viewport
 /**
@@ -19,68 +22,57 @@ struct SDL_Rect;
 class Renderer {
 public:
 	/**
-	 * @brief Вернуть ссылку на объект синглтона
-	 * @return Renderer&
-	 */
-	static Renderer& getInstance() {
-		static Renderer renderer;
-		return renderer;
-	}
-
-	/**
-	 * @brief Инициализировать рендерер
+	 * @brief Конструктор
 	 * 
 	 * @param width ширина порта вывода
 	 * @param heigh высота порта вывода
-	 * 
-	 * @return bool
 	 */
-	bool init(int width, int heigh);
-
-	/**
-	 * @brief Проверка инициализации рендерера
-	 * @return bool
-	 */
-	bool isInit() const;
-
-	/**
-	 * @brief Вернуть указатель на объект SDL_Renderer
-	 * @return SDL_Renderer*
-	 */
-	SDL_Renderer* get() const;
-
-	/**
-	 * @brief Вернуть положение в мировом пространстве
-	 * @return SDL_Rect
-	 */
-	SDL_Rect getPosition() const;
-
-	/**
-	 * @brief Установить положение в мировом пространстве
-	 * 
-	 * @param SDL_Rect Учитываются только поля x и y
-	 */
-	void setPosition(const SDL_Rect& position);
-
-	/**
-	 * @brief Установить положение в мировом пространстве
-	 * 
-	 * @param x
-	 * @param y
-	 */
-	void setPosition(int x, int y);
-
-private:
-	/**
-	 * @brief Конструктор
-	 */
-	Renderer();
+	Renderer(int width, int heigh);
 
 	/**
 	 * @brief Деструктор
 	 */
 	~Renderer();
 
+	/**
+	 * @brief Очистка
+	 * 
+	 * @return  bool
+	 */
+	bool clear();
+
+	/**
+	 * @brief Отрисовать текстуру
+	 * @details [long description]
+	 * 
+	 * @param texture текстура
+	 * @param source область текстуры (nullptr - вся текстура)
+	 * @param destination область вывода (nullptr - все окно)
+	 * @return bool
+	 */
+	bool drawTexture(TexturePointer& texture, SDL_Rect* source, 
+		SDL_Rect* destination);
+
+	/**
+	 * @brief Вернуть указатель на объект SDL_Renderer
+	 * @return SDL_Renderer*
+	 */
+	SDL_Renderer* getContext() const;
+
+	/**
+	 * @brief Вернуть порт вывода
+	 * @return SDL_Rect
+	 */
+	SDL_Rect getViewport() const;
+
+	/**
+	 * @brief Установить порт вывода
+	 * 
+	 * @param SDL_Rect
+	 */
+	void setViewport(const SDL_Rect& viewport);
+
+private:
 	/**
 	 * @brief Копирующий конструктор
 	 * 
@@ -109,12 +101,7 @@ private:
 	/**
 	 * @brief Ширина, высота и положение в мировом пространстве
 	 */
-	SDL_Rect m_rect;
-
-	/**
-	 * @brief Признак инициализации
-	 */
-	bool m_isInit;
+	SDL_Rect m_viewport;
 };
 
 #endif // RENDERER_H
