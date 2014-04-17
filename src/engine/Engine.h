@@ -8,6 +8,8 @@
 
 #include <string>
 
+#include "TimerPool.h"
+
 union SDL_Event;
 class Renderer;
 class ResourceManager;
@@ -42,6 +44,27 @@ public:
 	 */
 	int execute();
 
+	/**
+	 * @brief Вернуть указатель на рендерер
+	 *
+	 * @return Renderer*
+	 */
+	Renderer* getRenderer() const;
+
+	/**
+	 * @brief Вернуть указатель на менеджер ресурсов
+	 *
+	 * @return ResourceManager*
+	 */
+	ResourceManager* getResourceManager() const;
+
+	/**
+	 * @brief Вернуть указатель на пул таймеров
+	 *
+	 * @return TimerPool*
+	 */
+	TimerPool* getTimersPool() const;
+
 private:
 	/**
 	 * @brief Обработчик событий
@@ -70,6 +93,11 @@ private:
 	 * @brief Менеджер ресурсов
 	 */
 	ResourceManager* m_resourceManager;
+
+	/**
+	 * @brief Пул таймеров
+	 */
+	TimerPool* m_timers;
 };
 
 #endif // ENGINE_H

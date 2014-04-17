@@ -38,7 +38,9 @@ bool TimerPool::getNextShootTimeInterval ( struct timeval &tv ) {
 		return false;
 	}
 
-	auto it = min_element(timers.begin(), timers.end());
+	auto it = min_element(timers.begin(), timers.end(), [](const TimerPointer& lhs, const TimerPointer& rhs) {
+		return *lhs < *rhs;
+	});
 	microseconds delta = duration_cast<std::chrono::microseconds>((*it)->m_next_shoot - steady_clock::now());
 
 	if( delta.count() <= 0 ) {

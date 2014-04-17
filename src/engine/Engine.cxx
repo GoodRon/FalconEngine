@@ -20,20 +20,20 @@ Engine::Engine() :
 	m_run(true),
 	m_returnCode(0),
 	m_renderer(nullptr),
-	m_resourceManager(nullptr) {
+	m_resourceManager(nullptr),
+	m_timers(new TimerPool) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
 	}
+
+	m_renderer = new Renderer(1024, 768);
+	m_resourceManager = new ResourceManager(m_renderer);
 }
 
 Engine::~Engine() {
-	if (m_resourceManager) {
-		delete m_resourceManager;
-	}
-
-	if (m_renderer) {
-		delete m_renderer;
-	}
+	delete m_resourceManager;
+	delete m_renderer;
+	delete m_timers;
 
 	SDL_Quit();
 }
@@ -44,23 +44,8 @@ bool Engine::loadConfig(const std::string& file) {
 }
 
 int Engine::execute() {
-	m_renderer = new Renderer(1024, 768);
-	m_resourceManager = new ResourceManager(m_renderer);
-
-	TimerPool& timers = TimerPool::getInstance();
-	timers.addTimer(33, [this](TimerPool::id_t) {
+	m_timers->addTimer(33, [this](TimerPool::id_t) {
 		SDL_RenderPresent(m_renderer->getContext());
-	});
-
-	TexturePointer background = m_resourceManager->loadTexture("ship.png");
-	timers.addTimer(33, [&background, this](TimerPool::id_t) {
-		SDL_Rect rsource = {0, 0, 0, 0};
-		SDL_QueryTexture(background.get(), nullptr, nullptr, &(rsource.w), &(rsource.h));
-		SDL_Rect rdest = m_renderer->getViewport();
-		rsource.x += rdest.x;
-		rsource.y += rdest.y;
-		m_renderer->clear();
-		m_renderer->drawTexture(background, nullptr, &rsource);
 	});
 
 	thread eventsThread([this](){
@@ -73,11 +58,23 @@ int Engine::execute() {
 	});
 
 	while (m_run) {
-		timers.check();
+		m_timers->check();
 		usleep(1000);
 	}
 	eventsThread.join();
 	return m_returnCode;
+}
+
+Renderer* Engine::getRenderer() const {
+	return m_renderer;
+}
+
+ResourceManager* Engine::getResourceManager() const {
+	return m_resourceManager;
+}
+
+TimerPool* Engine::getTimersPool() const {
+	return m_timers;
 }
 
 void Engine::onEvent(const SDL_Event& event) {
