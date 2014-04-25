@@ -53,14 +53,14 @@ public:
 	 * @brief Вернуть положение в мировом пространстве
 	 * @return SDL_Rect
 	 */
-	SDL_Rect getPosition() const;
+	SDL_Rect getViewportPosition() const;
 
 	/**
 	 * @brief Установить положение в мировом пространстве
 	 * 
 	 * @param SDL_Rect Учитываются только поля x и y
 	 */
-	void setPosition(const SDL_Rect& position);
+	void setViewportPosition(const SDL_Rect& position);
 
 	/**
 	 * @brief Установить положение в мировом пространстве
@@ -68,7 +68,7 @@ public:
 	 * @param x
 	 * @param y
 	 */
-	void setPosition(int x, int y);
+	void setViewportPosition(int x, int y);
 
 private:
 	/**

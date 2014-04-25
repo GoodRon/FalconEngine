@@ -58,6 +58,7 @@ bool Renderer::init(int width, int height) {
 	return m_isInit;
 }
 
+
 bool Renderer::isInit() const {
 	return m_isInit;
 }
@@ -66,16 +67,16 @@ SDL_Renderer* Renderer::get() const {
 	return m_renderer;
 }
 
-SDL_Rect Renderer::getPosition() const {
+SDL_Rect Renderer::getViewportPosition() const {
 	return m_rect;
 }
 
-void Renderer::setPosition(const SDL_Rect& position) {
+void Renderer::setViewportPosition(const SDL_Rect& position) {
 	m_rect.x = position.x;
 	m_rect.y = position.y;
 }
 
-void Renderer::setPosition(int x, int y) {
+void Renderer::setViewportPosition(int x, int y) {
 	m_rect.x = x;
 	m_rect.y = y;
 }

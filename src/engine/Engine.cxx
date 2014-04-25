@@ -49,7 +49,7 @@ int Engine::execute() {
 		Renderer& renderer = Renderer::getInstance();
 		SDL_Rect rsource = {0, 0, 0, 0};
 		SDL_QueryTexture(background.get(), nullptr, nullptr, &(rsource.w), &(rsource.h));
-		SDL_Rect rdest = renderer.getPosition();
+		SDL_Rect rdest = renderer.getViewportPosition();
 		rsource.x += rdest.x;
 		rsource.y += rdest.y;
 		SDL_RenderClear(renderer.get());
@@ -84,12 +84,12 @@ void Engine::onEvent(const SDL_Event& event) {
 					m_run = false;
 					break;
 				case SDLK_UP: {
-					SDL_Rect rdest = Renderer::getInstance().getPosition();
-					Renderer::getInstance().setPosition(rdest.x, rdest.y + 5);
+					SDL_Rect rdest = Renderer::getInstance().getViewportPosition();
+					Renderer::getInstance().setViewportPosition(rdest.x, rdest.y + 5);
 				} break;
 				case SDLK_DOWN: {
-					SDL_Rect rdest = Renderer::getInstance().getPosition();
-					Renderer::getInstance().setPosition(rdest.x, rdest.y - 5);
+					SDL_Rect rdest = Renderer::getInstance().getViewportPosition();
+					Renderer::getInstance().setViewportPosition(rdest.x, rdest.y - 5);
 				} break;
 				default:
 					break;
