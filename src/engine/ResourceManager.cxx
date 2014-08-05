@@ -13,7 +13,8 @@
 
 using namespace std;
 
-ResourceManager::ResourceManager() {
+ResourceManager::ResourceManager(Renderer* renderer) : 
+m_renderer(renderer) {
 }
 
 ResourceManager::~ResourceManager() {
@@ -25,9 +26,7 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 	}
 
 	TexturePointer ptr;
-	Renderer& renderer = Renderer::getInstance();
-
-	if (!renderer.isInit()) {
+	if (!m_renderer) {
 		return ptr;
 	}
 
@@ -37,7 +36,7 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 		return ptr;
 	}
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer.get(), surface);
+	SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer->getContext(), surface);
 	if (texture == nullptr) {
 		cerr << "Unable to create texture from image " << name << ". Error: " << SDL_GetError() << endl;
 		SDL_FreeSurface(surface);

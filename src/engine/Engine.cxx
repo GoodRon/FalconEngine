@@ -13,20 +13,29 @@
 #include "TimerPool.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
+#include "EngineException.h"
 
 using namespace std;
 
 Engine::Engine() :
-	m_width(1024),
-	m_height(768),
 	m_run(true),
-	m_returnCode(0) {
+	m_returnCode(0),
+	m_renderer(nullptr),
+	m_resourceManager(nullptr),
+	m_timers(new TimerPool) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-		cout << "SDL_Init Error: " << SDL_GetError() << endl;
+		throw EngineException(SDL_GetError());
 	}
+
+	m_renderer = new Renderer(1024, 768);
+	m_resourceManager = new ResourceManager(m_renderer);
 }
 
 Engine::~Engine() {
+	delete m_resourceManager;
+	delete m_renderer;
+	delete m_timers;
+
 	SDL_Quit();
 }
 
@@ -36,24 +45,8 @@ bool Engine::loadConfig(const std::string& file) {
 }
 
 int Engine::execute() {
-	Renderer& renderer = Renderer::getInstance();
-	renderer.init(m_width, m_height);
-
-	TimerPool& timers = TimerPool::getInstance();
-	timers.addTimer(33, [](TimerPool::id_t) {
-		SDL_RenderPresent(Renderer::getInstance().get());
-	});
-
-	TexturePointer background = ResourceManager::getInstance().loadTexture("ship.png");
-	timers.addTimer(33, [&background](TimerPool::id_t) {
-		Renderer& renderer = Renderer::getInstance();
-		SDL_Rect rsource = {0, 0, 0, 0};
-		SDL_QueryTexture(background.get(), nullptr, nullptr, &(rsource.w), &(rsource.h));
-		SDL_Rect rdest = renderer.getViewportPosition();
-		rsource.x += rdest.x;
-		rsource.y += rdest.y;
-		SDL_RenderClear(renderer.get());
-		SDL_RenderCopy(renderer.get(), background.get(), nullptr, &rsource);
+	m_timers->addTimer(33, [this](TimerPool::id_t) {
+		SDL_RenderPresent(m_renderer->getContext());
 	});
 
 	thread eventsThread([this](){
@@ -66,11 +59,23 @@ int Engine::execute() {
 	});
 
 	while (m_run) {
-		timers.check();
+		m_timers->check();
 		usleep(1000);
 	}
 	eventsThread.join();
 	return m_returnCode;
+}
+
+Renderer* Engine::getRenderer() const {
+	return m_renderer;
+}
+
+ResourceManager* Engine::getResourceManager() const {
+	return m_resourceManager;
+}
+
+TimerPool* Engine::getTimersPool() const {
+	return m_timers;
 }
 
 void Engine::onEvent(const SDL_Event& event) {
@@ -83,14 +88,20 @@ void Engine::onEvent(const SDL_Event& event) {
 				case SDLK_ESCAPE:
 					m_run = false;
 					break;
-				case SDLK_UP: {
-					SDL_Rect rdest = Renderer::getInstance().getViewportPosition();
-					Renderer::getInstance().setViewportPosition(rdest.x, rdest.y + 5);
-				} break;
-				case SDLK_DOWN: {
-					SDL_Rect rdest = Renderer::getInstance().getViewportPosition();
-					Renderer::getInstance().setViewportPosition(rdest.x, rdest.y - 5);
-				} break;
+				case SDLK_UP:
+					if (m_renderer) {
+						SDL_Rect rdest = m_renderer->getViewport();
+						rdest.y += 5;
+						m_renderer->setViewport(rdest);
+					}
+					break;
+				case SDLK_DOWN:
+					if (m_renderer) {
+						SDL_Rect rdest = m_renderer->getViewport();
+						rdest.y -= 5;
+						m_renderer->setViewport(rdest);
+					}
+					break;
 				default:
 					break;
 			}

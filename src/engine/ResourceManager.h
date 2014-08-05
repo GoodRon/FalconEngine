@@ -11,7 +11,11 @@
 #include <unordered_map>
 
 struct SDL_Texture;
+class Renderer;
 
+/**
+ * @brief Умный указатель на объект текстуры
+ */
 typedef std::shared_ptr<SDL_Texture> TexturePointer;
 
 /**
@@ -20,17 +24,20 @@ typedef std::shared_ptr<SDL_Texture> TexturePointer;
 class ResourceManager {
 public:
 	/**
-	 * @brief Вернуть ссылку на объект синглтона
-	 * @return ResourceManager&
+	 * @brief Конструктор
+	 *
+	 * @param renderer указатель на объект рендерера
 	 */
-	static ResourceManager& getInstance() {
-		static ResourceManager manager;
-		return manager;
-	}
+	ResourceManager(Renderer* renderer);
+
+	/**
+	 * @brief Деструктор
+	 */
+	~ResourceManager();
 
 	/**
 	 * @brief Загрузка текстуры
-	 * 
+	 *
 	 * @param name имя текстуры
 	 * @return TexturePointer
 	 */
@@ -43,30 +50,25 @@ public:
 
 private:
 	/**
-	 * @brief Конструктор
-	 */
-	ResourceManager();
-
-	/**
-	 * @brief Деструктор
-	 */
-	~ResourceManager();
-
-	/**
 	 * @brief Копирующий конструктор
-	 * 
+	 *
 	 * @param other
 	 */
 	ResourceManager(const ResourceManager& other) = delete;
 
 	/**
 	 * @brief Оператор присваивания
-	 * 
+	 *
 	 * @param other
 	 */
 	ResourceManager& operator=(ResourceManager& other) = delete;
 
 private:
+	/**
+	 * @brief указатель на объект рендерера
+	 */
+	Renderer* m_renderer;
+
 	/**
 	 * @brief Мэп текстур
 	 */

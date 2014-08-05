@@ -8,7 +8,11 @@
 
 #include <string>
 
+#include "TimerPool.h"
+
 union SDL_Event;
+class Renderer;
+class ResourceManager;
 
 /**
  * @brief Класс игрового движка
@@ -40,6 +44,27 @@ public:
 	 */
 	int execute();
 
+	/**
+	 * @brief Вернуть указатель на рендерер
+	 *
+	 * @return Renderer*
+	 */
+	Renderer* getRenderer() const;
+
+	/**
+	 * @brief Вернуть указатель на менеджер ресурсов
+	 *
+	 * @return ResourceManager*
+	 */
+	ResourceManager* getResourceManager() const;
+
+	/**
+	 * @brief Вернуть указатель на пул таймеров
+	 *
+	 * @return TimerPool*
+	 */
+	TimerPool* getTimersPool() const;
+
 private:
 	/**
 	 * @brief Обработчик событий
@@ -50,16 +75,6 @@ private:
 
 private:
 	/**
-	 * @brief Ширина порта вывода
-	 */
-	unsigned m_width;
-
-	/**
-	 * @brief Высота порта вывода
-	 */
-	unsigned m_height;
-
-	/**
 	 * @brief Флаг работы движка
 	 */
 	bool m_run;
@@ -68,6 +83,21 @@ private:
 	 * @brief Возвращаемое значение
 	 */
 	int m_returnCode;
+
+	/**
+	 * @brief Рендерер
+	 */
+	Renderer* m_renderer;
+
+	/**
+	 * @brief Менеджер ресурсов
+	 */
+	ResourceManager* m_resourceManager;
+
+	/**
+	 * @brief Пул таймеров
+	 */
+	TimerPool* m_timers;
 };
 
 #endif // ENGINE_H
