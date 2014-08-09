@@ -61,6 +61,7 @@ int Engine::execute() {
 
 	while (m_run) {
 		m_timers->check();
+        // TODO write better
 		usleep(1000);
 	}
 	eventsThread.join();

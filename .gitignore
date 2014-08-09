@@ -3,3 +3,4 @@ install/*
 *.user
 doc/
 *.kdev4
+*.kate-swp
