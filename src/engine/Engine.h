@@ -8,11 +8,10 @@
 
 #include <string>
 
-#include "TimerPool.h"
-
 union SDL_Event;
 class Renderer;
 class ResourceManager;
+class TimerPool;
 
 /**
  * @brief Класс игрового движка

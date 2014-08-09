@@ -40,11 +40,12 @@ Engine::~Engine() {
 }
 
 bool Engine::loadConfig(const std::string& file) {
-
+	// TODO write me!
 	return true;
 }
 
 int Engine::execute() {
+	// TODO write better
 	m_timers->addTimer(33, [this](TimerPool::id_t) {
 		SDL_RenderPresent(m_renderer->getContext());
 	});
@@ -79,6 +80,7 @@ TimerPool* Engine::getTimersPool() const {
 }
 
 void Engine::onEvent(const SDL_Event& event) {
+	// TODO just debug. write better
 	switch (event.type) {
 		case SDL_QUIT:
 			m_run = false;

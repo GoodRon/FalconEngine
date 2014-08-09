@@ -13,9 +13,11 @@ struct SDL_Renderer;
 struct SDL_Rect;
 struct SDL_Texture;
 
+/**
+ * @brief Умный указатель на объект текстуры
+ */
 typedef std::shared_ptr<SDL_Texture> TexturePointer;
 
-// TODO rename to viewport
 /**
  * @brief Класс рендерера
  */
@@ -37,13 +39,12 @@ public:
 	/**
 	 * @brief Очистка
 	 * 
-	 * @return  bool
+	 * @return bool
 	 */
 	bool clear();
 
 	/**
 	 * @brief Отрисовать текстуру
-	 * @details [long description]
 	 * 
 	 * @param texture текстура
 	 * @param source область текстуры (nullptr - вся текстура)

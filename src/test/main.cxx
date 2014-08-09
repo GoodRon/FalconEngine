@@ -10,6 +10,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "EngineException.h"
+#include "TimerPool.h"
 
 int main() {
 	try {

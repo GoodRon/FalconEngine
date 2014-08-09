@@ -6,6 +6,11 @@
 #ifndef STATEMANAGER_H
 #define STATEMANAGER_H
 
+#include <stack>
+#include <memory>
+
+class State;
+
 /**
  * @brief Менеджер состояний
  */
@@ -48,8 +53,12 @@ private:
 	StateManager& operator=(StateManager& other) = delete;
 
 private:
+	/**
+	 * @brief Стэк состояний
+	 */
+	std::stack<std::unique_ptr<State>> m_statesQueue;
 
-	
+	// TODO object manager
 };
 
  #endif // STATEMANAGER_H

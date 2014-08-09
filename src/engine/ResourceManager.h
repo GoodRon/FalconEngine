@@ -65,7 +65,7 @@ private:
 
 private:
 	/**
-	 * @brief указатель на объект рендерера
+	 * @brief Указатель на объект рендерера
 	 */
 	Renderer* m_renderer;
 
