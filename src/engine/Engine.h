@@ -31,7 +31,7 @@ public:
 
 	/**
 	 * @brief Обработка конфигурационного файла
-	 * 
+	 *
 	 * @param file путь к файлу
 	 * @return bool
 	 */
@@ -64,7 +64,7 @@ public:
 	 * @return ObjectManager*
 	 */
 	ObjectManager* getObjectManager() const;
-    
+
 	/**
 	 * @brief Вернуть указатель на пул таймеров
 	 *
@@ -75,7 +75,7 @@ public:
 private:
 	/**
 	 * @brief Обработчик событий
-	 * 
+	 *
 	 * @param event
 	 */
 	void onEvent(const SDL_Event& event);
@@ -101,11 +101,11 @@ private:
 	 */
 	ResourceManager* m_resourceManager;
 
-    /**
-     * @brief Менеджер объектов
-     */
-    ObjectManager* m_objectManager;
-    
+	/**
+	 * @brief Менеджер объектов
+	 */
+	ObjectManager* m_objectManager;
+
 	/**
 	 * @brief Пул таймеров
 	 */

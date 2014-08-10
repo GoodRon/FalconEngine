@@ -55,25 +55,25 @@ public:
 	 * @param renderer указатель на рендерер
 	 */
 	virtual void draw(Renderer* renderer) = 0;
- 
-    /**
-     * @brief Работа внутренней логики объекта
-     * 
-     * @param timeDelta прошедшее время с момента последнего вызова (мс)
-     * @return void
-     */
-    virtual void doLogic(const std::chrono::milliseconds& timeDelta);
-    
+
+	/**
+	 * @brief Работа внутренней логики объекта
+	 *
+	 * @param timeDelta прошедшее время с момента последнего вызова (мс)
+	 * @return void
+	 */
+	virtual void doLogic(const std::chrono::milliseconds& timeDelta);
+
 	// cacheFullState();
 
-    // TODO maybe this shoud be done in different way
-    /**
-     * @brief Вернуть приоритет при отрисовке
-     * 
-     * @return int значение приоритета (меньше - выше)
-     */
-    virtual int getDrawPriority();
-    
+	// TODO maybe this shoud be done in different way
+	/**
+	 * @brief Вернуть приоритет при отрисовке
+	 *
+	 * @return int значение приоритета (меньше - выше)
+	 */
+	virtual int getDrawPriority();
+
 private:
 	/**
 	 * @brief Координата x
