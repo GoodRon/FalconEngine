@@ -50,7 +50,7 @@ bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
 	if (!texture) {
 		return false;
 	}
-
+	
 	// TODO check if inside viewport
 
 	if (SDL_RenderCopy(m_renderer, texture.get(), source, destination) != 0) {

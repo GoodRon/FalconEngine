@@ -12,6 +12,7 @@ union SDL_Event;
 class Renderer;
 class ResourceManager;
 class TimerPool;
+class ObjectManager;
 
 /**
  * @brief Класс игрового движка
@@ -58,6 +59,13 @@ public:
 	ResourceManager* getResourceManager() const;
 
 	/**
+	 * @brief Вернуть указатель на менеджер объектов
+	 *
+	 * @return ObjectManager*
+	 */
+	ObjectManager* getObjectManager() const;
+    
+	/**
 	 * @brief Вернуть указатель на пул таймеров
 	 *
 	 * @return TimerPool*
@@ -93,6 +101,11 @@ private:
 	 */
 	ResourceManager* m_resourceManager;
 
+    /**
+     * @brief Менеджер объектов
+     */
+    ObjectManager* m_objectManager;
+    
 	/**
 	 * @brief Пул таймеров
 	 */

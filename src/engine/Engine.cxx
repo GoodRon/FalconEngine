@@ -14,6 +14,7 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "EngineException.h"
+#include "ObjectManager.h"
 
 using namespace std;
 
@@ -22,6 +23,7 @@ Engine::Engine() :
 	m_returnCode(0),
 	m_renderer(nullptr),
 	m_resourceManager(nullptr),
+	m_objectManager(nullptr),
 	m_timers(new TimerPool) {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
@@ -29,6 +31,7 @@ Engine::Engine() :
 
 	m_renderer = new Renderer(1024, 768);
 	m_resourceManager = new ResourceManager(m_renderer);
+    m_objectManager = new ObjectManager(m_renderer);
 }
 
 Engine::~Engine() {
@@ -73,7 +76,11 @@ Renderer* Engine::getRenderer() const {
 }
 
 ResourceManager* Engine::getResourceManager() const {
-	return m_resourceManager;
+    return m_resourceManager;
+}
+
+ObjectManager* Engine::getObjectManager() const {
+	return m_objectManager;
 }
 
 TimerPool* Engine::getTimersPool() const {

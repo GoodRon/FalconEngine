@@ -6,6 +6,8 @@
 #ifndef WORLDOBJECT_H
 #define WORLDOBJECT_H
 
+#include <chrono>
+
 struct SDL_Rect;
 class Renderer;
 
@@ -14,68 +16,84 @@ class Renderer;
  */
 class WorldObject {
 public:
+	/**
+	 * @brief Конструктор
+	 */
+	WorldObject();
+
+	/**
+	 * @brief Конструктор
+	 * @param x
+	 * @param y
+	 */
+	WorldObject(int x, int y);
+
+	/**
+	 * @brief Деструктор
+	 */
+	virtual ~WorldObject() = 0;
+
+	/**
+	 * @brief Изменить позицию в мире
+	 *
+	 * @param x
+	 * @param y
+	 * @return void
+	 */
+	virtual void setPosition(int x, int y);
+
+	/**
+	 * @brief Вернуть мировые координаты и габариты объекта в двумерной проекции
+	 *
+	 * @return SDL_Rect
+	 */
+	virtual SDL_Rect getPositionAndProfile() const;
+
+	/**
+	 * @brief Отрисовать объект
+	 *
+	 * @param renderer указатель на рендерер
+	 */
+	virtual void draw(Renderer* renderer) = 0;
+ 
     /**
-     * @brief Конструктор
-     */
-    WorldObject();
-    
-    /**
-     * @brief Конструктор
-     * @param x
-     * @param y
-     */
-    WorldObject(int x, int y);
-    
-    /**
-     * @brief Деструктор 
-     */
-    virtual ~WorldObject() = delete;
-    
-    /**
-     * @brief Изменить позицию в мире
+     * @brief Работа внутренней логики объекта
      * 
-     * @param x
-     * @param y
+     * @param timeDelta прошедшее время с момента последнего вызова (мс)
      * @return void
      */
-    virtual void setPosition(int x, int y);
+    virtual void doLogic(const std::chrono::milliseconds& timeDelta);
     
+	// cacheFullState();
+
+    // TODO maybe this shoud be done in different way
     /**
-     * @brief Вернуть мировые координаты и габариты объекта
+     * @brief Вернуть приоритет при отрисовке
      * 
-     * @return SDL_Rect
+     * @return int значение приоритета (меньше - выше)
      */
-    virtual SDL_Rect getPositionAndProfile() const;
-    
-    /**
-     * @brief Отрисовать объект
-     * 
-     * @param renderer указатель на рендерер
-     */
-    virtual void drow(Renderer* renderer) = delete;
-    
-    // cacheFullState();
+    virtual int getDrawPriority();
     
 private:
-    /**
-     * @brief Координата x 
-     */
-    int m_x;
-    
-    /**
-     * @brief Координата y 
-     */
-    int m_y;
-    
-    /**
-     * @brief Ширина
-     */
-    int m_width;
-    
-    /**
-     * @brief Высота
-     */
-    int m_height;
+	/**
+	 * @brief Координата x
+	 */
+	int m_x;
+
+	/**
+	 * @brief Координата y
+	 */
+	int m_y;
+
+	/**
+	 * @brief Ширина
+	 */
+	int m_width;
+
+	/**
+	 * @brief Высота
+	 */
+	int m_height;
 };
 
 #endif // WORLDOBJECT_H
