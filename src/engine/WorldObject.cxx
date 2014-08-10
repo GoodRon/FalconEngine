@@ -14,6 +14,9 @@ WorldObject::WorldObject() :
 	m_height(0) {
 }
 
+WorldObject::~WorldObject() {
+}
+
 WorldObject::WorldObject(int x, int y) :
 	m_x(x),
 	m_y(y),
@@ -27,8 +30,23 @@ void WorldObject::setPosition(int x, int y) {
 }
 
 SDL_Rect WorldObject::getPositionAndProfile() const {
-	SDL_Rect rect = {m_x, m_y, m_width, m_height};
+    SDL_Rect position = getPosition();
+    SDL_Rect profile = getProfile();
+    SDL_Rect rect = {position.x, position.y, profile.w, profile.h};
 	return rect;
+}
+
+SDL_Rect WorldObject::getProfile() const {
+    SDL_Rect rect = {0, 0, m_width, m_height};
+    return rect;
+}
+
+SDL_Rect WorldObject::getPosition() const {
+    SDL_Rect rect = {m_x, m_y, 0, 0};
+    return rect;
+}
+
+void WorldObject::doLogic(const std::chrono::milliseconds&) {
 }
 
 int WorldObject::getDrawPriority() {

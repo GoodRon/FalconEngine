@@ -26,7 +26,7 @@ public:
 	 *
 	 * @param texture текстура
 	 */
-	Tile(TexturePointer& texture);
+	Tile(TexturePointer texture);
 
 	/**
 	 * @brief Вернуть текстуру тайла
@@ -50,6 +50,13 @@ public:
 	 * @return SDL_Rect
 	 */
 	SDL_Rect getPositionAndProfile() const;
+
+	/**
+	 * @brief Вернуть только габариты объекта в двумерной проекции
+	 *
+	 * @return SDL_Rect
+	 */
+	SDL_Rect getProfile() const;
 
 	/**
 	 * @brief Установить видимость

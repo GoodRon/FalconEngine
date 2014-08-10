@@ -34,6 +34,22 @@ Engine::Engine() :
     m_objectManager = new ObjectManager(m_renderer);
 }
 
+Engine::Engine(unsigned width, unsigned height) :
+    m_run(true),
+    m_returnCode(0),
+    m_renderer(nullptr),
+    m_resourceManager(nullptr),
+    m_objectManager(nullptr),
+    m_timers(new TimerPool) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        throw EngineException(SDL_GetError());
+    }
+    
+    m_renderer = new Renderer(width, height);
+    m_resourceManager = new ResourceManager(m_renderer);
+    m_objectManager = new ObjectManager(m_renderer);
+}
+
 Engine::~Engine() {
 	delete m_resourceManager;
 	delete m_renderer;

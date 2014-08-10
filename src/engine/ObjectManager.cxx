@@ -20,7 +20,7 @@ ObjectManager::ObjectManager(Renderer* renderer) :
 ObjectManager::~ObjectManager() {
 }
 
-void ObjectManager::pushObject(std::shared_ptr<WorldObject>& object) {
+void ObjectManager::pushObject(std::shared_ptr<WorldObject> object) {
 	m_objects.push_back(object);
 }
 

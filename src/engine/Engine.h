@@ -25,6 +25,14 @@ public:
 	Engine();
 
 	/**
+	 * @brief Конструктор
+	 *
+	 * @param width ширина порта вывода
+	 * @param height выоста порта вывода
+	 */
+	Engine(unsigned width, unsigned height);
+
+	/**
 	 * @brief Деструктор
 	 */
 	~Engine();

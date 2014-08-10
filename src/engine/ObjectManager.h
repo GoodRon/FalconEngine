@@ -36,7 +36,7 @@ public:
 	 * @param object
 	 * @return void
 	 */
-	void pushObject(std::shared_ptr<WorldObject>& object);
+	void pushObject(std::shared_ptr<WorldObject> object);
 
 	/**
 	 * @brief Обновить логику объектов

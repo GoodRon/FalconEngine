@@ -49,6 +49,20 @@ public:
 	 */
 	virtual SDL_Rect getPositionAndProfile() const;
 
+    /**
+     * @brief Вернуть только габариты объекта в двумерной проекции
+     *
+     * @return SDL_Rect
+     */
+    virtual SDL_Rect getProfile() const;
+    
+    /**
+     * @brief Вернуть только мировые координаты
+     *
+     * @return SDL_Rect
+     */
+    virtual SDL_Rect getPosition() const;
+    
 	/**
 	 * @brief Отрисовать объект
 	 *
@@ -74,7 +88,7 @@ public:
 	 */
 	virtual int getDrawPriority();
 
-private:
+protected:
 	/**
 	 * @brief Координата x
 	 */
