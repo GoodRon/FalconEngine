@@ -22,15 +22,14 @@ SDL_Rect Field::getProfile() const {
 
 	if (m_tiles.empty()) {
 		return rect;
-	} else {
-		if (m_tiles[0].empty()) {
-			return rect;
-		}
-
-		SDL_Rect tileProfile = m_tiles[0][0]->getProfile();
-		rect.h = m_tiles.size() * tileProfile.h;
-		rect.w = m_tiles[0].size() * tileProfile.w;
 	}
+	if (m_tiles[0].empty()) {
+		return rect;
+	}
+
+	SDL_Rect tileProfile = m_tiles[0][0]->getProfile();
+	rect.h = m_tiles.size() * tileProfile.h;
+	rect.w = m_tiles[0].size() * tileProfile.w;
 
 	return rect;
 }
@@ -56,14 +55,13 @@ TexturePointer Field::createFieldTexture(Renderer* renderer) {
 
 	if (m_tiles.empty()) {
 		return outTexture;
-	} else {
-		if (m_tiles[0].empty()) {
-			return outTexture;
-		}
-
-		tileProfile = m_tiles[0][0]->getProfile();
-		tileDestination = m_tiles[0][0]->getPositionAndProfile();
 	}
+	if (m_tiles[0].empty()) {
+		return outTexture;
+	}
+
+	tileProfile = m_tiles[0][0]->getProfile();
+	tileDestination = m_tiles[0][0]->getPositionAndProfile();
 
 	outTexture.reset(SDL_CreateTexture(renderer->getContext(), SDL_PIXELFORMAT_RGBA8888,
                                        SDL_TEXTUREACCESS_TARGET, fieldProfile.w, fieldProfile.h),
