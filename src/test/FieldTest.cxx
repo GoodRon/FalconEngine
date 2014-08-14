@@ -34,12 +34,15 @@ int main() {
         }
         
         std::shared_ptr<Field> grassField(new Field(tiles));
-        grassField->setPosition(40, 40);
         engine.getObjectManager()->pushObject(
             std::dynamic_pointer_cast<WorldObject>(grassField));
         
-        engine.getTimersPool()->addTimer(33, [&engine](TimerPool::id_t) {
+        engine.getTimersPool()->addTimer(33, [&engine, grassField](TimerPool::id_t) {
+            engine.getRenderer()->clear();
             engine.getObjectManager()->drawAllObjects();
+            SDL_Rect fieldPosition = grassField->getPosition();
+            fieldPosition.x += 1;
+            grassField->setPosition(fieldPosition.x, fieldPosition.y);
         });
         
         return engine.execute();

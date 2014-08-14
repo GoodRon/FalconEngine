@@ -14,6 +14,12 @@ Field::Field(std::vector<std::vector<std::shared_ptr<Tile>>> tiles) :
 	m_tiles(tiles) {
 }
 
+/*
+Field::Field(const std::string& jsonFile) {
+	// TODO write me!
+}
+*/
+
 Field::~Field() {
 }
 

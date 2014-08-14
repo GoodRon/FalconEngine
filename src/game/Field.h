@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 
 #include "WorldObject.h"
 
@@ -32,6 +33,13 @@ public:
 	 * @param tiles массив тайлов
 	 */
 	Field(std::vector<std::vector<std::shared_ptr<Tile>>> tiles);
+
+	/**
+	 * @brief Конструктор из json
+	 *
+	 * @param jsonFile путь к json
+	 */
+	// Field(const std::string& jsonFile);
 
 	/**
 	 * @override
