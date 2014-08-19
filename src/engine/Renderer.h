@@ -51,8 +51,8 @@ public:
 	 * @param destination область вывода (nullptr - все окно)
 	 * @return bool
 	 */
-	bool drawTexture(TexturePointer& texture, SDL_Rect* source,
-	                 SDL_Rect* destination);
+	bool drawTexture(TexturePointer& texture, SDL_Rect* source = nullptr,
+	                 SDL_Rect* destination = nullptr);
 
 
 	/**

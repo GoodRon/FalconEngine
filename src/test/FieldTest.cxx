@@ -3,7 +3,10 @@
  * All rights reserved
  */
 
+#include <vector>
+#include <memory>
 #include <iostream>
+
 #include <SDL2/SDL.h>
 
 #include "Engine.h"
@@ -14,9 +17,6 @@
 #include "Tile.h"
 #include "Field.h"
 #include "ObjectManager.h"
-
-#include <vector>
-#include <memory>
 
 int main() {
     try {

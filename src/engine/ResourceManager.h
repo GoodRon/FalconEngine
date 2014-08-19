@@ -43,6 +43,8 @@ public:
 	 */
 	TexturePointer loadTexture(const std::string& name);
 
+	//std::vector<TexturePointer> loadTextureVector();
+
 	/**
 	 * @brief Освободить неиспользуемые текстуры
 	 */

@@ -21,25 +21,26 @@ typedef std::shared_ptr<SDL_Texture> TexturePointer;
 /**
  * @brief Класс анимации
  */
-Animation {
+class Animation {
 public:
 	/**
 	 * @brief Конструктор
 	 *
 	 * @param frames массив фреймов
-	 * @param frameTimeout время проигрывания одного фрейма
+	 * @param frameTime время проигрывания одного фрейма
 	 * @param isLooped признак цикличности
 	 */
 	Animation(const std::vector<TexturePointer>& frames, 
-			  const std::chrono::milliseconds& frameTimeout, 
+			  const std::chrono::milliseconds& frameTime, 
 			  bool isLooped = true);
 
+	// TODO write it!
 	/**
 	 * @brief Конструктор из json
 	 *
 	 * @param jsonFile путь к json
 	 */
-	Animation(const std::string& jsonFile);
+//	Animation(const std::string& jsonFile);
 
 	/**
 	 * @brief Начать или продолжить воспроизведение
@@ -61,7 +62,7 @@ public:
 	 *
 	 * @return bool
 	 */
-	bool isPaused();
+	bool isPaused() const;
 
 	/**
 	 * @brief Установить признак цикличности
@@ -76,7 +77,7 @@ public:
 	 *
 	 * @return bool
 	 */
-	bool isLooped();
+	bool isLooped() const;
 
 	/**
 	 * @brief Вернуть текущий фрейм
@@ -84,6 +85,20 @@ public:
 	 * @return TexturePointer фрейм
 	 */
 	TexturePointer getFrame();
+
+	/**
+	 * @brief Вернуть период анимации
+	 *
+	 * @return std::chrono::milliseconds
+	 */
+	std::chrono::milliseconds getPeriod() const;
+
+	/**
+	 * @brief Вернуть оставшееся время
+	 *
+	 * @return std::chrono::milliseconds
+	 */
+	std::chrono::milliseconds getRemainingTime() const;
 
 private:
 	/**
@@ -94,7 +109,7 @@ private:
 	/**
 	 * @brief Время проигрывания одного фрейма
 	 */
-	std::chrono::milliseconds m_frameTimeout;
+	std::chrono::milliseconds m_frameTime;
 
 	/**
 	 * @brief Признак цикличности
@@ -104,7 +119,7 @@ private:
 	/**
 	 * @brief Рассчитанный период всей анимации
 	 */
-	std::chrono::millisecond m_period;
+	std::chrono::milliseconds m_period;
 
 	/**
 	 * @brief Точка отсчета
@@ -119,7 +134,7 @@ private:
 	/**
 	 * @brief Признак остановки проигрывания анимации
 	 */
-	bool m_isStoped;
-}
+	bool m_isPaused;
+};
 
 #endif // ANIMATION_H

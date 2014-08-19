@@ -33,6 +33,7 @@ SDL_Rect Tile::getPositionAndProfile() const {
 }
 
 SDL_Rect Tile::getProfile() const {
+	// m_width & m_height ?
     SDL_Rect rect = {0, 0, m_width, m_height};
     SDL_QueryTexture(m_texture.get(), nullptr, nullptr, &(rect.w),
                      &(rect.h));
