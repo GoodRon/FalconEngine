@@ -20,13 +20,13 @@ using namespace std;
 
 int main() {
 	try {
-		Engine engine(200, 200);
+		Engine engine(300, 300);
 
-		vector<TexturePointer> frames;
-		// TODO сделать загрузку вектором
-		frames.push_back(engine.getResourceManager()->loadTexture("walk1.png"));
-		frames.push_back(engine.getResourceManager()->loadTexture("walk2.png"));
-		frames.push_back(engine.getResourceManager()->loadTexture("walk3.png"));
+		TexturePointer textureFrames = engine.getResourceManager()->loadTexture("walk.png");
+		SDL_Rect rect = {0, 0, 33, 52};
+		vector<TexturePointer> frames = engine.getResourceManager()->createTextureVector(
+			textureFrames, rect);
+
 		Animation animation(frames, chrono::milliseconds(333));
 
 		engine.getTimersPool()->addTimer(100, [&engine, &animation](TimerPool::id_t) {
@@ -41,7 +41,7 @@ int main() {
 
 		return engine.execute();
 	} catch (EngineException& exception) {
-        std::cout << "Exception caught: " << exception.what() << std::endl;
+        cout << "Exception caught: " << exception.what() << endl;
     }
     return -1;
 }

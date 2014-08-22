@@ -71,6 +71,7 @@ bool Renderer::drawTextureToTexture(TexturePointer& sourceTexture,
 	// WARNING check it!
 	SDL_Texture* screen = SDL_GetRenderTarget(m_renderer);
 	SDL_SetRenderTarget(m_renderer, destinationTexture.get());
+	clear();
 	bool ret = drawTexture(sourceTexture, source, destination);
 	SDL_SetRenderTarget(m_renderer, screen);
 	return ret;

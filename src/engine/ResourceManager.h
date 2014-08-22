@@ -8,9 +8,11 @@
 
 #include <string>
 #include <memory>
+#include <vector>
 #include <unordered_map>
 
 struct SDL_Texture;
+struct SDL_Rect;
 class Renderer;
 
 /**
@@ -43,7 +45,19 @@ public:
 	 */
 	TexturePointer loadTexture(const std::string& name);
 
-	//std::vector<TexturePointer> loadTextureVector();
+	/**
+	 * @brief Разделить текстуру на вектор текстур
+	 * Текстуры вырезаются в порядке слева направо, rect задает размеры текстур в векторе.
+	 * Вызов функции работает с одной строкой (относительно размеров rect) исходной текстуры 
+	 * (если строк в ней несколько)
+	 *
+	 * @param source исходная текстура
+	 * @param rect размер текстуры в векторе
+	 * @param row строка в текстуре
+	 * @return std::vector<TexturePointer>
+	 */
+	std::vector<TexturePointer> createTextureVector(TexturePointer source, const SDL_Rect& rect, 
+												   	unsigned row = 0) const;
 
 	/**
 	 * @brief Освободить неиспользуемые текстуры

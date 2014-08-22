@@ -60,6 +60,8 @@ TexturePointer Animation::getFrame() {
 		m_timeOffset = m_timeOffset % m_period;
 	}
 
+	// TODO сделать пересчет m_startTimepoint! чтобы не копить большие значения
+
 	if (m_timeOffset > m_period) {
 		m_timeOffset = m_period;
 	}
