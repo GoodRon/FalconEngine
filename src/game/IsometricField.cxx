@@ -5,25 +5,27 @@
 
 #include <SDL2/SDL.h>
 
-#include "Field.h"
+#include "IsometricField.h"
 #include "Tile.h"
 #include "Renderer.h"
 
-Field::Field(std::vector<std::vector<std::shared_ptr<Tile>>> tiles) :
+IsometricField::IsometricField(std::vector<std::vector<std::shared_ptr<Tile>>> tiles, 
+							   const SDL_Rect& tileSize) :
 	WorldObject(),
-	m_tiles(tiles) {
+	m_tiles(tiles),
+	m_tileSize(tileSize) {
 }
 
 /*
-Field::Field(const std::string& jsonFile) {
+IsometricField::IsometricField(const std::string& jsonFile) {
 	// TODO write me!
 }
 */
 
-Field::~Field() {
+IsometricField::~IsometricField() {
 }
 
-SDL_Rect Field::getProfile() const {
+SDL_Rect IsometricField::getProfile() const {
 	SDL_Rect rect = {0, 0, 0, 0};
 
 	if (m_tiles.empty()) {
@@ -34,13 +36,13 @@ SDL_Rect Field::getProfile() const {
 	}
 
 	SDL_Rect tileProfile = m_tiles[0][0]->getProfile();
-	rect.h = m_tiles.size() * tileProfile.h;
-	rect.w = m_tiles[0].size() * tileProfile.w;
+	rect.h = (m_tiles.size() + m_tiles[0].size()) * tileProfile.h / 2;
+	rect.w = (m_tiles.size() + m_tiles[0].size()) * tileProfile.w / 2;
 
 	return rect;
 }
 
-void Field::draw(Renderer* renderer) {
+void IsometricField::draw(Renderer* renderer) {
 	// TODO кэширование
 	SDL_Rect source = getProfile();
 	SDL_Rect destination = getPositionAndProfile();
@@ -48,16 +50,15 @@ void Field::draw(Renderer* renderer) {
 	renderer->drawTexture(fieldTexture, &source, &destination);
 }
 
-int Field::getDrawPriority() {
+int IsometricField::getDrawPriority() {
 	// TODO write
 	return 0;
 }
 
-TexturePointer Field::createFieldTexture(Renderer* renderer) {
+TexturePointer IsometricField::createFieldTexture(Renderer* renderer) {
 	TexturePointer outTexture;
     SDL_Rect fieldProfile = getProfile();
-	SDL_Rect tileProfile = {0, 0, 0, 0}; // NOTE предполагаем одинаковые тайлы
-	SDL_Rect tileDestination = {0, 0, 0, 0};
+	SDL_Rect tileDestination = {0, 0, m_tileSize.w, m_tileSize.h};
 
 	if (m_tiles.empty()) {
 		return outTexture;
@@ -66,21 +67,24 @@ TexturePointer Field::createFieldTexture(Renderer* renderer) {
 		return outTexture;
 	}
 
-	tileProfile = m_tiles[0][0]->getProfile();
-	tileDestination = m_tiles[0][0]->getPositionAndProfile();
-
 	outTexture.reset(SDL_CreateTexture(renderer->getContext(), SDL_PIXELFORMAT_RGBA8888,
                                        SDL_TEXTUREACCESS_TARGET, fieldProfile.w, fieldProfile.h),
 	                 SDL_DestroyTexture);
 
+	renderer->clearTexture(outTexture);
+
 	// TODO check!
 	for (unsigned i = 0; i < m_tiles.size(); ++i) {
 		for (unsigned j = 0; j < m_tiles[i].size(); ++j) {
-			tileDestination.x = tileProfile.w * j;
-			tileDestination.y = tileProfile.h * i;
+			// TODO recalculate!
+			tileDestination = m_tiles[i][j]->getProfile();
+			tileDestination.x = (fieldProfile.w - m_tiles.size() * m_tileSize.w / 2 - m_tileSize.w / 2) 
+							  + (m_tileSize.w / 2) * i - (m_tileSize.w / 2) * j;
+			tileDestination.y = m_tileSize.h - tileDestination.h + (m_tileSize.h / 2) * i 
+								+ (m_tileSize.h / 2) * j;
 			TexturePointer tileTexture = m_tiles[i][j]->getTexture();
 			renderer->drawTextureToTexture(tileTexture, outTexture,
-			                               &tileProfile, &tileDestination);
+			                               nullptr, &tileDestination);
 		}
 	}
 

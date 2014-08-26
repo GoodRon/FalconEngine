@@ -14,6 +14,7 @@
 
 class Tile;
 struct SDL_Texture;
+struct SDL_Rect;
 
 /**
  * @brief Умный указатель на объект текстуры
@@ -23,7 +24,7 @@ typedef std::shared_ptr<SDL_Texture> TexturePointer;
 /**
  * @brief Класс игрового поля
  */
-class Field : public WorldObject {
+class IsometricField : public WorldObject {
 public:
     // NOTE кэшировать карту, перерисовывать только изменённые тайлы
     
@@ -31,20 +32,22 @@ public:
 	 * @brief Конструктор из двумерного массива (сделать трехмерный и свойства тайлов)
 	 *
 	 * @param tiles массив тайлов
+	 * @param tileSize размер тайла
 	 */
-	Field(std::vector<std::vector<std::shared_ptr<Tile>>> tiles);
+	IsometricField(std::vector<std::vector<std::shared_ptr<Tile>>> tiles, 
+				   const SDL_Rect& tileSize);
 
 	/**
 	 * @brief Конструктор из json
 	 *
 	 * @param jsonFile путь к json
 	 */
-	// Field(const std::string& jsonFile);
+	// IsometricField(const std::string& jsonFile);
 
 	/**
 	 * @override
 	 */
-	virtual ~Field();
+	virtual ~IsometricField();
     
     /**
      * @override
@@ -74,6 +77,11 @@ private:
 	 * @brief Карта тайлов
 	 */
 	std::vector<std::vector<std::shared_ptr<Tile>>> m_tiles;
+
+	/**
+	 * @brief Размер тайла на карте (без учета смещения по высоте)
+	 */
+	SDL_Rect m_tileSize;
 };
 
 #endif // FIELD_H

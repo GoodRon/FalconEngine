@@ -5,7 +5,6 @@
 
 #include <iostream>
 #include <thread>
-#include <unistd.h>
 
 #include <SDL2/SDL.h>
 
@@ -80,8 +79,7 @@ int Engine::execute() {
 
 	while (m_run) {
 		m_timers->check();
-        // TODO write better
-		usleep(1000);
+        SDL_Delay(10);
 	}
 	eventsThread.join();
 	return m_returnCode;

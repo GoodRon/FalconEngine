@@ -15,7 +15,7 @@
 #include "ResourceManager.h"
 #include "TimerPool.h"
 #include "Tile.h"
-#include "Field.h"
+#include "IsometricField.h"
 #include "ObjectManager.h"
 
 int main() {
@@ -23,9 +23,11 @@ int main() {
         Engine engine(1280, 768);
     
         // Конструируем поле (пока руками)
-        std::shared_ptr<Tile> grassTile(new Tile(engine.getResourceManager()->loadTexture("grass.png")));
+        SDL_Rect tileSize = {0, 0, 128, 64};
+        std::shared_ptr<Tile> grassTile(new Tile(engine.getResourceManager()->
+        								loadTexture("grass2.png")));
         std::vector<std::vector<std::shared_ptr<Tile>>> tiles;
-        for (int i = 0; i < 3; ++i) {
+        for (int i = 0; i < 9; ++i) {
             std::vector<std::shared_ptr<Tile>> row;
             tiles.push_back(row);
             for (int j = 0; j < 5; ++j) {
@@ -33,16 +35,16 @@ int main() {
             }
         }
         
-        std::shared_ptr<Field> grassField(new Field(tiles));
+        std::shared_ptr<IsometricField> grassField(new IsometricField(tiles, tileSize));
         engine.getObjectManager()->pushObject(
             std::dynamic_pointer_cast<WorldObject>(grassField));
         
         engine.getTimersPool()->addTimer(33, [&engine, grassField](TimerPool::id_t) {
             engine.getRenderer()->clear();
             engine.getObjectManager()->drawAllObjects();
-            SDL_Rect fieldPosition = grassField->getPosition();
-            fieldPosition.x += 1;
-            grassField->setPosition(fieldPosition.x, fieldPosition.y);
+            //SDL_Rect fieldPosition = grassField->getPosition();
+            //fieldPosition.x += 1;
+            //grassField->setPosition(fieldPosition.x, fieldPosition.y);
         });
         
         return engine.execute();

@@ -68,11 +68,23 @@ bool Renderer::drawTextureToTexture(TexturePointer& sourceTexture,
                                     TexturePointer& destinationTexture,
                                     SDL_Rect* source,
                                     SDL_Rect* destination) {
+	if ((!sourceTexture) || (!destinationTexture)) {
+		return false;
+	}
+
 	// WARNING check it!
 	SDL_Texture* screen = SDL_GetRenderTarget(m_renderer);
 	SDL_SetRenderTarget(m_renderer, destinationTexture.get());
-	clear();
 	bool ret = drawTexture(sourceTexture, source, destination);
+	SDL_SetRenderTarget(m_renderer, screen);
+	return ret;
+}
+
+bool Renderer::clearTexture(TexturePointer& texture) {
+	// WARNING check it!
+	SDL_Texture* screen = SDL_GetRenderTarget(m_renderer);
+	SDL_SetRenderTarget(m_renderer, texture.get());
+	bool ret = clear();
 	SDL_SetRenderTarget(m_renderer, screen);
 	return ret;
 }

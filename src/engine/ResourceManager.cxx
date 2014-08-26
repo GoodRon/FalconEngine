@@ -81,6 +81,7 @@ vector<TexturePointer> ResourceManager::createTextureVector(TexturePointer sourc
 							   SDL_DestroyTexture);
 		SDL_Rect crop = {static_cast<int>(col * rect.w), static_cast<int>(row * rect.h), 
 						 rect.w, rect.h};
+		m_renderer->clearTexture(texture);
 		m_renderer->drawTextureToTexture(source, texture, &crop, nullptr);
 		textures.push_back(texture);
 	}

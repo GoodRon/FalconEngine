@@ -70,6 +70,14 @@ public:
 	                          SDL_Rect* destination);
 
 	/**
+	 * @brief Очистить текстуру
+	 *
+	 * @param texture
+	 * @return bool
+	 */
+	bool clearTexture(TexturePointer& texture);
+
+	/**
 	 * @brief Вернуть указатель на объект SDL_Renderer
 	 * @return SDL_Renderer*
 	 */
