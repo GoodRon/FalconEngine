@@ -12,13 +12,28 @@
 
 class DirectedAnimation {
 public:
-	DirectedAnimation(const std::vector<Animation>& animations);
-	
+	DirectedAnimation();
 
+	/**
+	 * @brief Добавить анимацию 
+	 *
+	 * @param animation
+	 * @param direction направление от 0 до 360 градусов
+	 * @return void
+	 */
+	void pushAnimation(const Animation& animation, double direction);
+	
+	void play(bool fromStart = false);
+
+	void pause();
+
+	void setDirection(double direction);
+
+	TexturePointer getFrame();
 	
 private:
-	std::vector<Animation> m_animations;
-	
+	std::vector<std::pair<double, Animation>> m_animations;
+	double m_direction;
 };
 
 #endif // DIRECTEDANIMATION_H

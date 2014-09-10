@@ -16,10 +16,10 @@ Animation::Animation(const vector<TexturePointer>& frames,
 	m_frames(frames),
 	m_frameTime(frameTime),
 	m_isLooped(isLooped),
-	m_period(m_frameTime * frames.size()),
+	m_period(frames.size() * m_frameTime),
 	m_startTimepoint(steady_clock::now()),
-	m_timeOffset(),
-	m_isPaused(false) {
+	m_timeOffset(0),
+	m_isPaused(true) {
 }
 
 void Animation::play(bool fromStart) {
@@ -52,15 +52,19 @@ bool Animation::isLooped() const {
 }
 
 TexturePointer Animation::getFrame() {
+	if (m_frames.empty()) {
+		// WARNING check!
+		return TexturePointer();
+	}
+
 	if (!m_isPaused) {
 		m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
 	}
 
 	if (m_isLooped) {
 		m_timeOffset = m_timeOffset % m_period;
+		m_startTimepoint = steady_clock::now() - m_timeOffset;
 	}
-
-	// TODO сделать пересчет m_startTimepoint! чтобы не копить большие значения
 
 	if (m_timeOffset > m_period) {
 		m_timeOffset = m_period;

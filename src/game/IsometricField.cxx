@@ -79,7 +79,7 @@ TexturePointer IsometricField::createFieldTexture(Renderer* renderer) {
 			// TODO recalculate!
 			tileDestination = m_tiles[i][j]->getProfile();
 			tileDestination.x = (fieldProfile.w - m_tiles.size() * m_tileSize.w / 2 - m_tileSize.w / 2) 
-							  + (m_tileSize.w / 2) * i - (m_tileSize.w / 2) * j;
+							  	+ (m_tileSize.w / 2) * i - (m_tileSize.w / 2) * j;
 			tileDestination.y = m_tileSize.h - tileDestination.h + (m_tileSize.h / 2) * i 
 								+ (m_tileSize.h / 2) * j;
 			TexturePointer tileTexture = m_tiles[i][j]->getTexture();

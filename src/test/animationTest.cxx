@@ -28,6 +28,7 @@ int main() {
 			textureFrames, rect);
 
 		Animation animation(frames, chrono::milliseconds(333));
+		animation.play();
 
 		engine.getTimersPool()->addTimer(100, [&engine, &animation](TimerPool::id_t) {
 			engine.getRenderer()->clear();

@@ -9,6 +9,10 @@ target_link_libraries(fieldTest game)
 add_executable(animationTest animationTest.cxx)
 target_link_libraries(animationTest game)
 
+add_executable(directedAnimationTest directedAnimationTest.cxx)
+target_link_libraries(directedAnimationTest game)
+
 install(TARGETS test RUNTIME DESTINATION .)
 install(TARGETS fieldTest RUNTIME DESTINATION .)
 install(TARGETS animationTest RUNTIME DESTINATION .)
+install(TARGETS directedAnimationTest RUNTIME DESTINATION .)
