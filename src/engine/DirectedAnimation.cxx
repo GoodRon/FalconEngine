@@ -13,10 +13,9 @@ DirectedAnimation::DirectedAnimation() :
 }
 
 void DirectedAnimation::pushAnimation(const Animation& animation, double direction) {
-	// TODO сделать нормально!
 	if (direction < 0.0) {
-		direction = 0.0;
-	} else if (direction >= 360.0) {
+		direction = fmod(direction, 360.0) + 360.0;
+	} else {
 		direction = fmod(direction, 360.0);
 	}
 
@@ -35,8 +34,18 @@ void DirectedAnimation::pause() {
 	}
 }
 
+void DirectedAnimation::setLoop(bool isLooped) {
+	for (auto &animation: m_animations) {
+		animation.second.setLoop(isLooped);
+	}
+}
+
 void DirectedAnimation::setDirection(double direction) {
-	m_direction = direction;
+	if (direction < 0.0) {
+		m_direction = fmod(direction, 360.0) + 360.0;
+	} else {
+		m_direction = fmod(direction, 360.0);
+	}
 }
 
 TexturePointer DirectedAnimation::getFrame() {
@@ -49,8 +58,12 @@ TexturePointer DirectedAnimation::getFrame() {
 	auto result = *m_animations.begin();
 
 	for (auto &animation: m_animations) {
-		if (fabs(animation.first - m_direction) < delta) {
-			delta = fabs(animation.first - m_direction);
+		double fromZero = fabs(m_direction - animation.first);
+		double fromPi = 360.0 - fabs(m_direction - animation.first);
+		double currentDelta = (fromZero < fromPi) ? fromZero : fromPi;
+		
+		if (currentDelta < delta) {
+			delta = currentDelta;
 			result = animation;
 		}
 	}

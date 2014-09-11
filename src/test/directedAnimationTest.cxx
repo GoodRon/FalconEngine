@@ -58,11 +58,8 @@ int main() {
 			engine.getRenderer()->drawTexture(frame, &source, &dest);
 		});
 
-		engine.getTimersPool()->addTimer(5000, [&animation, &direction](TimerPool::id_t) {
-			direction += 90.0;
-			if (direction >= 360.0) {
-				direction = 0.0;
-			}
+		engine.getTimersPool()->addTimer(100, [&animation, &direction](TimerPool::id_t) {
+			direction += 10.0;
 			animation.setDirection(direction);
 		});
 	

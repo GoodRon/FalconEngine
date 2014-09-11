@@ -70,7 +70,7 @@ public:
 	 * @param isLooped
 	 * @return void
 	 */
-	void setLoop(bool isLooped);
+	void setLoop(bool isLooped = true);
 
 	/**
 	 * @brief Вернуть признак цикличности
