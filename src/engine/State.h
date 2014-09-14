@@ -6,17 +6,22 @@
 #ifndef STATE_H
 #define STATE_H
 
+#include <string>
+
 struct SDL_Event;
 
 /**
  * @brief Абстрактный класс состояния
  */
+template <class Object>
 class State {
 public:
 	/**
 	 * @brief Конструктор
+	 *
+	 * @param name
 	 */
-	State() {}
+	State(const std::string& name) : m_name(name) {}
 
 	/**
 	 * @brief Деструктор
@@ -24,23 +29,39 @@ public:
 	virtual ~State() {}
 
 	/**
+	 * @brief Вернуть название состояния
+	 * 
+	 * @return std::string
+	 */
+	std::string getName() const;
+
+	/**
 	 * @brief Обработчик входа в состояние
 	 */
-	virtual void onEnter() = 0;
+	virtual void onEnter(Object* object) = 0;
 
 	/**
 	 * @brief Обработчик выхода из состояния
 	 */
-	virtual void onExit() = 0;
-
-// Update() Draw() 
+	virtual void onExit(Object* object) = 0;
 
 	/**
 	 * @brief Обработчик событий
 	 * 
 	 * @param event
 	 */
-	virtual void onEvent(const SDL_Event& event) = 0;
+	virtual void onEvent(Object* object, const SDL_Event& event) = 0;
+
+	/**
+	 * @brief Обновить логику
+	 */
+	virtual void doLogic(Object* object) = 0;
+
+private:
+	/**
+	 * @brief Название состояния
+	 */
+	std::string m_name;
 };
 
 #endif // STATE_H

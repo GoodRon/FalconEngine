@@ -22,6 +22,25 @@ Animation::Animation(const vector<TexturePointer>& frames,
 	m_isPaused(true) {
 }
 
+void Animation::recalculateTimes() {
+	if (m_isPaused) {
+		return;
+	}
+
+	m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
+
+	if (m_isLooped) {
+		m_timeOffset = m_timeOffset % m_period;
+		m_startTimepoint = steady_clock::now() - m_timeOffset;
+	}
+
+	// Если мы не зациклены - остановимся
+	if (m_timeOffset > m_period) {
+		m_timeOffset = m_period;
+		m_isPaused = true;
+	}
+}
+
 void Animation::play(bool fromStart) {
 	if (fromStart) {
 		m_timeOffset = milliseconds(0);
@@ -35,11 +54,12 @@ void Animation::play(bool fromStart) {
 }
 
 void Animation::pause() {
-	m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
+	recalculateTimes();
 	m_isPaused = true;
 }
 
-bool Animation::isPaused() const {
+bool Animation::isPaused() {
+	recalculateTimes();
 	return m_isPaused;
 }
 
@@ -57,18 +77,7 @@ TexturePointer Animation::getFrame() {
 		return TexturePointer();
 	}
 
-	if (!m_isPaused) {
-		m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
-	}
-
-	if (m_isLooped) {
-		m_timeOffset = m_timeOffset % m_period;
-		m_startTimepoint = steady_clock::now() - m_timeOffset;
-	}
-
-	if (m_timeOffset > m_period) {
-		m_timeOffset = m_period;
-	}
+	recalculateTimes();
 
 	unsigned frameNumber = m_timeOffset / m_frameTime;
 	if (frameNumber >= m_frames.size()) {
@@ -81,6 +90,7 @@ milliseconds Animation::getPeriod() const {
 	return m_period;
 }
 
-milliseconds Animation::getRemainingTime() const {
+milliseconds Animation::getRemainingTime() {
+	recalculateTimes();
 	return m_period - m_timeOffset;
 }

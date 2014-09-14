@@ -43,6 +43,13 @@ public:
 //	Animation(const std::string& jsonFile);
 
 	/**
+	 * @brief Пересчитать временные интервалы
+	 *
+	 * @return void
+	 */
+	 void recalculateTimes();
+
+	/**
 	 * @brief Начать или продолжить воспроизведение
 	 *
 	 * @param fromStart признак необходимости начать сначала
@@ -62,7 +69,7 @@ public:
 	 *
 	 * @return bool
 	 */
-	bool isPaused() const;
+	bool isPaused();
 
 	/**
 	 * @brief Установить признак цикличности
@@ -98,7 +105,7 @@ public:
 	 *
 	 * @return std::chrono::milliseconds
 	 */
-	std::chrono::milliseconds getRemainingTime() const;
+	std::chrono::milliseconds getRemainingTime();
 
 private:
 	/**
