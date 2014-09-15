@@ -17,6 +17,7 @@
 
 struct SDL_Rect;
 class Target;
+class State<Unit>;
 
 struct UnitState {
 	std::string animation;
@@ -33,7 +34,7 @@ public:
 	
 	virtual void draw(Renderer* renderer);
 
-	virtual void doLogic(const std::chrono::milliseconds& timeDelta);
+	virtual void doLogic();
 
 	void setSpeed(double speed);
 
@@ -44,6 +45,8 @@ public:
 	// void attack(const std::shared_ptr<Target>& target);
 
 	// SDL_Rect getCollisionBounds() const;
+
+	friend State<Unit>;
 
 private:
 	std::string m_name;

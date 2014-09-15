@@ -33,10 +33,10 @@ int main() {
 		auto framesUp = engine.getResourceManager()->createTextureVector(
 			source, rect, 3);
 
-		Animation animationDown(framesDown, chrono::milliseconds(333));
-		Animation animationLeft(framesLeft, chrono::milliseconds(333));
-		Animation animationRight(framesRight, chrono::milliseconds(333));
-		Animation animationUp(framesUp, chrono::milliseconds(333));
+		Animation animationDown(framesDown, chrono::milliseconds(1000));
+		Animation animationLeft(framesLeft, chrono::milliseconds(1000));
+		Animation animationRight(framesRight, chrono::milliseconds(1000));
+		Animation animationUp(framesUp, chrono::milliseconds(1000));
 
 		DirectedAnimation animation;
 		animation.pushAnimation(animationDown, 180.0);

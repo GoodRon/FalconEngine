@@ -43,7 +43,7 @@ public:
 	 *
 	 * @return void
 	 */
-	void doObjectsLogic(const std::chrono::milliseconds& timeDelta);
+	void doObjectsLogic();
 
 	/**
 	 * @brief Отрисовать все объекты

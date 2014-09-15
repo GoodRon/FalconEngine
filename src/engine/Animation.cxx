@@ -11,12 +11,11 @@ using namespace std;
 using namespace chrono;
 
 Animation::Animation(const vector<TexturePointer>& frames, 
-			  		 const milliseconds& frameTime, 
+			  		 const milliseconds& period, 
 			  		 bool isLooped) :
 	m_frames(frames),
-	m_frameTime(frameTime),
 	m_isLooped(isLooped),
-	m_period(frames.size() * m_frameTime),
+	m_period(period),
 	m_startTimepoint(steady_clock::now()),
 	m_timeOffset(0),
 	m_isPaused(true) {
@@ -79,11 +78,16 @@ TexturePointer Animation::getFrame() {
 
 	recalculateTimes();
 
-	unsigned frameNumber = m_timeOffset / m_frameTime;
+	unsigned frameNumber = m_timeOffset * m_frames.size() / m_period;
 	if (frameNumber >= m_frames.size()) {
 		frameNumber = m_frames.size() - 1;
 	}
 	return m_frames[frameNumber];
+}
+
+void Animation::setPeriod(const milliseconds& period) {
+	m_period = period;
+	recalculateTimes();
 }
 
 milliseconds Animation::getPeriod() const {

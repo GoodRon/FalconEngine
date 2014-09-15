@@ -24,10 +24,10 @@ void ObjectManager::pushObject(std::shared_ptr<WorldObject> object) {
 	m_objects.push_back(object);
 }
 
-void ObjectManager::doObjectsLogic(const std::chrono::milliseconds& timeDelta) {
+void ObjectManager::doObjectsLogic() {
 	for (auto & object : m_objects) {
 		if (object) {
-			object->doLogic(timeDelta);
+			object->doLogic();
 		}
 	}
 }

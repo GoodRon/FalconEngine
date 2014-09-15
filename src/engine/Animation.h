@@ -27,20 +27,12 @@ public:
 	 * @brief Конструктор
 	 *
 	 * @param frames массив фреймов
-	 * @param frameTime время проигрывания одного фрейма
+	 * @param period период анимации
 	 * @param isLooped признак цикличности
 	 */
 	Animation(const std::vector<TexturePointer>& frames, 
-			  const std::chrono::milliseconds& frameTime, 
+			  const std::chrono::milliseconds& period, 
 			  bool isLooped = true);
-
-	// TODO write it!
-	/**
-	 * @brief Конструктор из json
-	 *
-	 * @param jsonFile путь к json
-	 */
-//	Animation(const std::string& jsonFile);
 
 	/**
 	 * @brief Пересчитать временные интервалы
@@ -94,6 +86,14 @@ public:
 	TexturePointer getFrame();
 
 	/**
+	 * @brief Установить период для анимации
+	 *
+	 * @param period
+	 * @return void
+	 */
+	void setPeriod(const std::chrono::milliseconds& period);
+
+	/**
 	 * @brief Вернуть период анимации
 	 *
 	 * @return std::chrono::milliseconds
@@ -114,17 +114,12 @@ private:
 	std::vector<TexturePointer> m_frames;
 
 	/**
-	 * @brief Время проигрывания одного фрейма
-	 */
-	std::chrono::milliseconds m_frameTime;
-
-	/**
 	 * @brief Признак цикличности
 	 */
 	bool m_isLooped;
 
 	/**
-	 * @brief Рассчитанный период всей анимации
+	 * @brief Период всей анимации
 	 */
 	std::chrono::milliseconds m_period;
 
@@ -139,7 +134,7 @@ private:
 	std::chrono::milliseconds m_timeOffset;
 
 	/**
-	 * @brief Признак остановки проигрывания анимации
+	 * @brief Признак остановки анимации
 	 */
 	bool m_isPaused;
 };

@@ -27,7 +27,7 @@ int main() {
 		vector<TexturePointer> frames = engine.getResourceManager()->createTextureVector(
 			textureFrames, rect);
 
-		Animation animation(frames, chrono::milliseconds(333));
+		Animation animation(frames, chrono::milliseconds(1000));
 		animation.play();
 
 		engine.getTimersPool()->addTimer(100, [&engine, &animation](TimerPool::id_t) {

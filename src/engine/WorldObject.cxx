@@ -11,17 +11,19 @@ WorldObject::WorldObject() :
 	m_x(0),
 	m_y(0),
 	m_width(0),
-	m_height(0) {
-}
-
-WorldObject::~WorldObject() {
+	m_height(0),
+	m_isVisible(false) {
 }
 
 WorldObject::WorldObject(int x, int y) :
 	m_x(x),
 	m_y(y),
 	m_width(0),
-	m_height(0) {
+	m_height(0),
+	m_isVisible(false) {
+}
+
+WorldObject::~WorldObject() {
 }
 
 void WorldObject::setPosition(int x, int y) {
@@ -46,9 +48,17 @@ SDL_Rect WorldObject::getPosition() const {
     return rect;
 }
 
-void WorldObject::doLogic(const std::chrono::milliseconds&) {
+void WorldObject::doLogic() {
 }
 
 int WorldObject::getDrawPriority() {
     return 0;
+}
+
+void WorldObject::setVisibility(bool isVisible) {
+	m_isVisible = isVisible;
+}
+
+bool WorldObject::getVisibility() const {
+	return m_isVisible;
 }

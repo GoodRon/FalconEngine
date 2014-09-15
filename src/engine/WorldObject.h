@@ -72,11 +72,8 @@ public:
 
 	/**
 	 * @brief Работа внутренней логики объекта
-	 *
-	 * @param timeDelta прошедшее время с момента последнего вызова (мс)
-	 * @return void
 	 */
-	virtual void doLogic(const std::chrono::milliseconds& timeDelta);
+	virtual void doLogic();
 
 	// cacheFullState();
 
@@ -87,6 +84,20 @@ public:
 	 * @return int значение приоритета (меньше - выше)
 	 */
 	virtual int getDrawPriority();
+
+	/**
+	 * @brief Установить признак видимости
+	 *
+	 * @param isVisible
+	 */
+	void setVisibility(bool isVisible);
+
+	/**
+	 * @brief Вернуть признак видимости
+	 *
+	 * @return bool
+	 */
+	bool getVisibility() const;
 
 protected:
 	/**
@@ -108,6 +119,11 @@ protected:
 	 * @brief Высота
 	 */
 	int m_height;
+
+	/**
+	 * @brief Признак видимости
+	 */
+	bool m_isVisible;
 };
 
 #endif // WORLDOBJECT_H
