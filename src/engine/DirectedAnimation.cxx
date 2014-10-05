@@ -7,11 +7,6 @@
 
 #include "DirectedAnimation.h"
 
-DirectedAnimation::DirectedAnimation() :
-	m_animations(),
-	m_direction(0.0) {
-}
-
 void DirectedAnimation::pushAnimation(const Animation& animation, double direction) {
 	if (direction < 0.0) {
 		direction = fmod(direction, 360.0) + 360.0;
@@ -34,18 +29,24 @@ void DirectedAnimation::pause() {
 	}
 }
 
+bool DirectedAnimation::isPaused() {
+	if (!m_animations.empty()) {
+		return m_animations.begin()->second.isPaused();
+	}
+	return true;
+}
+
 void DirectedAnimation::setLoop(bool isLooped) {
 	for (auto &animation: m_animations) {
 		animation.second.setLoop(isLooped);
 	}
 }
 
-void DirectedAnimation::setDirection(double direction) {
-	if (direction < 0.0) {
-		m_direction = fmod(direction, 360.0) + 360.0;
-	} else {
-		m_direction = fmod(direction, 360.0);
+bool DirectedAnimation::isLooped() const {
+	if (!m_animations.empty()) {
+		return m_animations.begin()->second.isLooped();
 	}
+	return false;
 }
 
 TexturePointer DirectedAnimation::getFrame() {
@@ -68,4 +69,12 @@ TexturePointer DirectedAnimation::getFrame() {
 		}
 	}
 	return result.second.getFrame();
+}
+
+void DirectedAnimation::setDirection(double direction) {
+	if (direction < 0.0) {
+		m_direction = fmod(direction, 360.0) + 360.0;
+	} else {
+		m_direction = fmod(direction, 360.0);
+	}
 }

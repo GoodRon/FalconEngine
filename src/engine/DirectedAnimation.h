@@ -6,20 +6,13 @@
 #ifndef DIRECTEDANIMATION_H
 #define DIRECTEDANIMATION_H
 
-#include <vector>
-
 #include "Animation.h"
 
 /**
  * @brief Класс направленной анимации
  */
-class DirectedAnimation {
+class DirectedAnimation : public IAnimation {
 public:
-	/**
- 	 * @brief Конструктор
- 	 */
-	DirectedAnimation();
-
 	/**
 	 * @brief Добавить анимацию 
 	 *
@@ -35,14 +28,21 @@ public:
 	 * @param fromStart признак необходимости начать сначала
 	 * @return void
 	 */
-	void play(bool fromStart = false);
+	virtual void play(bool fromStart = false) override;
 
 	/**
 	 * @brief Приостановить воспроизведение
 	 *
 	 * @return void
 	 */
-	void pause();
+	virtual void pause() override;
+
+	/**
+	 * @brief Вернуть признак остановки воспроизведения
+	 *
+	 * @return bool
+	 */
+	virtual bool isPaused() override;
 
 	/**
 	 * @brief Установить признак цикличности
@@ -50,7 +50,21 @@ public:
 	 * @param isLooped
 	 * @return void
 	 */
-	void setLoop(bool isLooped = true);
+	virtual void setLoop(bool isLooped = true) override;
+
+	/**
+	 * @brief Вернуть признак цикличности
+	 *
+	 * @return bool
+	 */
+	virtual bool isLooped() const override;
+
+	/**
+	 * @brief Вернуть текущий фрейм
+	 *
+	 * @return TexturePointer фрейм
+	 */
+	virtual TexturePointer getFrame() override;
 
 	/**
 	 * @brief Установить направление
@@ -60,13 +74,6 @@ public:
 	 */
 	void setDirection(double direction);
 
-	/**
-	 * @brief Вернуть текущий фрейм
-	 *
-	 * @return TexturePointer фрейм
-	 */
-	TexturePointer getFrame();
-	
 private:
 	/**
 	 * @brief Вектор пар направление - анимация

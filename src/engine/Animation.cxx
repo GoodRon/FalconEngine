@@ -21,25 +21,6 @@ Animation::Animation(const vector<TexturePointer>& frames,
 	m_isPaused(true) {
 }
 
-void Animation::recalculateTimes() {
-	if (m_isPaused) {
-		return;
-	}
-
-	m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
-
-	if (m_isLooped) {
-		m_timeOffset = m_timeOffset % m_period;
-		m_startTimepoint = steady_clock::now() - m_timeOffset;
-	}
-
-	// Если мы не зациклены - остановимся
-	if (m_timeOffset > m_period) {
-		m_timeOffset = m_period;
-		m_isPaused = true;
-	}
-}
-
 void Animation::play(bool fromStart) {
 	if (fromStart) {
 		m_timeOffset = milliseconds(0);
@@ -97,4 +78,23 @@ milliseconds Animation::getPeriod() const {
 milliseconds Animation::getRemainingTime() {
 	recalculateTimes();
 	return m_period - m_timeOffset;
+}
+
+void Animation::recalculateTimes() {
+	if (m_isPaused) {
+		return;
+	}
+
+	m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
+
+	if (m_isLooped) {
+		m_timeOffset = m_timeOffset % m_period;
+		m_startTimepoint = steady_clock::now() - m_timeOffset;
+	}
+
+	// Если мы не зациклены - остановимся
+	if (m_timeOffset > m_period) {
+		m_timeOffset = m_period;
+		m_isPaused = true;
+	}
 }

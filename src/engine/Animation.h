@@ -8,20 +8,13 @@
 
 #include <vector>
 #include <chrono>
-#include <memory>
-#include <string>
 
-struct SDL_Texture;
-
-/**
- * @brief Умный указатель на объект текстуры
- */
-typedef std::shared_ptr<SDL_Texture> TexturePointer;
+#include "IAnimation.h"
 
 /**
  * @brief Класс анимации
  */
-class Animation {
+class Animation : public IAnimation {
 public:
 	/**
 	 * @brief Конструктор
@@ -35,33 +28,26 @@ public:
 			  bool isLooped = true);
 
 	/**
-	 * @brief Пересчитать временные интервалы
-	 *
-	 * @return void
-	 */
-	 void recalculateTimes();
-
-	/**
 	 * @brief Начать или продолжить воспроизведение
 	 *
 	 * @param fromStart признак необходимости начать сначала
 	 * @return void
 	 */
-	void play(bool fromStart = false);
+	virtual void play(bool fromStart = false) override;
 	
 	/**
 	 * @brief Приостановить воспроизведение
 	 *
 	 * @return void
 	 */
-	void pause();
+	virtual void pause() override;
 
 	/**
 	 * @brief Вернуть признак остановки воспроизведения
 	 *
 	 * @return bool
 	 */
-	bool isPaused();
+	virtual bool isPaused() override;
 
 	/**
 	 * @brief Установить признак цикличности
@@ -69,21 +55,21 @@ public:
 	 * @param isLooped
 	 * @return void
 	 */
-	void setLoop(bool isLooped = true);
+	virtual void setLoop(bool isLooped = true) override;
 
 	/**
 	 * @brief Вернуть признак цикличности
 	 *
 	 * @return bool
 	 */
-	bool isLooped() const;
+	virtual bool isLooped() const override;
 
 	/**
 	 * @brief Вернуть текущий фрейм
 	 *
 	 * @return TexturePointer фрейм
 	 */
-	TexturePointer getFrame();
+	virtual TexturePointer getFrame() override;
 
 	/**
 	 * @brief Установить период для анимации
@@ -106,6 +92,14 @@ public:
 	 * @return std::chrono::milliseconds
 	 */
 	std::chrono::milliseconds getRemainingTime();
+
+private:
+	/**
+	 * @brief Пересчитать временные интервалы
+	 *
+	 * @return void
+	 */
+	 void recalculateTimes();
 
 private:
 	/**
