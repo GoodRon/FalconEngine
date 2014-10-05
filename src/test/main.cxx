@@ -16,7 +16,7 @@ int main() {
 	try {
 		Engine engine;
 
-		TexturePointer background = engine.getResourceManager()->loadTexture("ship.png");
+		TexturePointer background = engine.getResourceManager()->loadTexture("resources/ship.png");
 		engine.getTimersPool()->addTimer(33, [&background, &engine](TimerPool::id_t) {
 			SDL_Rect rsource = {0, 0, 0, 0};
 			SDL_QueryTexture(background.get(), nullptr, nullptr, &(rsource.w), &(rsource.h));

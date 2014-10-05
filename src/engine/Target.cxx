@@ -21,9 +21,9 @@ Target::Target(int x, int y):
 }
 
 SDL_Rect Target::getPosition() {
-	SDL_Rect coordinates = {m_x, m_y, 0, 0};
 	if (m_object) {
-		coordinates = m_object->getPosition();
+		return m_object->getPosition();
 	}
+	SDL_Rect coordinates = {m_x, m_y, 0, 0};
 	return coordinates;
 }

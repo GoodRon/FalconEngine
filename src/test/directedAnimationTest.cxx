@@ -22,7 +22,7 @@ int main() {
 	try {
 		Engine engine(300, 300);
 
-		TexturePointer source = engine.getResourceManager()->loadTexture("walkvector.png");
+		TexturePointer source = engine.getResourceManager()->loadTexture("resources/walkvector.png");
 		SDL_Rect rect = {0, 0, 32, 48};
 		auto framesDown = engine.getResourceManager()->createTextureVector(
 			source, rect, 0);

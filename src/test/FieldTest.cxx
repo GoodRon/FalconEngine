@@ -25,7 +25,7 @@ int main() {
         // Конструируем поле (пока руками)
         SDL_Rect tileSize = {0, 0, 128, 64};
         std::shared_ptr<Tile> grassTile(new Tile(engine.getResourceManager()->
-        								loadTexture("grass3.png")));
+        								loadTexture("resources/grass3.png")));
         std::vector<std::vector<std::shared_ptr<Tile>>> tiles;
         for (int i = 0; i < 9; ++i) {
             std::vector<std::shared_ptr<Tile>> row;
