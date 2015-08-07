@@ -20,6 +20,9 @@ class Renderer;
  */
 typedef std::shared_ptr<SDL_Texture> TexturePointer;
 
+
+typedef std::vector<std::vector<TexturePointer>> TextureMap;
+
 /**
  * @brief Менеджер ресурсов
  */
@@ -46,18 +49,13 @@ public:
 	TexturePointer loadTexture(const std::string& name);
 
 	/**
-	 * @brief Разделить текстуру на вектор текстур
-	 * Текстуры вырезаются в порядке слева направо, rect задает размеры текстур в векторе.
-	 * Вызов функции работает с одной строкой (относительно размеров rect) исходной текстуры 
-	 * (если строк в ней несколько)
+	 * @brief Создать текстурную карту
 	 *
-	 * @param source исходная текстура
-	 * @param rect размер текстуры в векторе
-	 * @param row строка в текстуре
-	 * @return std::vector<TexturePointer>
+	 * @param source исходная развертка
+	 * @param rect размер одной текстуры
+	 * @return TextureMap
 	 */
-	std::vector<TexturePointer> createTextureVector(TexturePointer source, const SDL_Rect& rect, 
-												   	unsigned row = 0) const;
+	TextureMap createTextureMap(TexturePointer source, const SDL_Rect& rect) const;
 
 	/**
 	 * @brief Освободить неиспользуемые текстуры

@@ -24,25 +24,24 @@ int main() {
 
 		TexturePointer textureFrames = engine.getResourceManager()->loadTexture("resources/walk.png");
 		SDL_Rect rect = {0, 0, 33, 52};
-		vector<TexturePointer> frames = engine.getResourceManager()->createTextureVector(
-			textureFrames, rect);
+		auto frames = engine.getResourceManager()->createTextureMap(textureFrames, rect);
 
-		Animation animation(frames, chrono::milliseconds(1000));
+		Animation animation(frames[0], chrono::milliseconds(1000));
 		animation.play();
 
 		engine.getTimersPool()->addTimer(100, [&engine, &animation](TimerPool::id_t) {
 			engine.getRenderer()->clear();
 			TexturePointer frame = animation.getFrame();
 			SDL_Rect source = {0, 0, 0, 0};
-    		SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
-                     	     &(source.h));
-    		SDL_Rect dest = {0, 0, source.w * 4, source.h * 4};
+			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
+							 &(source.h));
+			SDL_Rect dest = {0, 0, source.w * 4, source.h * 4};
 			engine.getRenderer()->drawTexture(frame, &source, &dest);
 		});
 
 		return engine.execute();
 	} catch (EngineException& exception) {
-        cout << "Exception caught: " << exception.what() << endl;
-    }
-    return -1;
+		cout << "Exception caught: " << exception.what() << endl;
+	}
+	return -1;
 }

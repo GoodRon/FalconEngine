@@ -24,19 +24,12 @@ int main() {
 
 		TexturePointer source = engine.getResourceManager()->loadTexture("resources/walkvector.png");
 		SDL_Rect rect = {0, 0, 32, 48};
-		auto framesDown = engine.getResourceManager()->createTextureVector(
-			source, rect, 0);
-		auto framesLeft = engine.getResourceManager()->createTextureVector(
-			source, rect, 1);
-		auto framesRight = engine.getResourceManager()->createTextureVector(
-			source, rect, 2);
-		auto framesUp = engine.getResourceManager()->createTextureVector(
-			source, rect, 3);
+		auto textureMap = engine.getResourceManager()->createTextureMap(source, rect);
 
-		Animation animationDown(framesDown, chrono::milliseconds(1000));
-		Animation animationLeft(framesLeft, chrono::milliseconds(1000));
-		Animation animationRight(framesRight, chrono::milliseconds(1000));
-		Animation animationUp(framesUp, chrono::milliseconds(1000));
+		Animation animationDown(textureMap[0], chrono::milliseconds(1000));
+		Animation animationLeft(textureMap[1], chrono::milliseconds(1000));
+		Animation animationRight(textureMap[2], chrono::milliseconds(1000));
+		Animation animationUp(textureMap[3], chrono::milliseconds(1000));
 
 		DirectedAnimation animation;
 		animation.pushAnimation(animationDown, 180.0);
@@ -52,9 +45,9 @@ int main() {
 			engine.getRenderer()->clear();
 			TexturePointer frame = animation.getFrame();
 			SDL_Rect source = {0, 0, 0, 0};
-    		SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
-                     	     &(source.h));
-    		SDL_Rect dest = {0, 0, source.w * 4, source.h * 4};
+			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
+							 &(source.h));
+			SDL_Rect dest = {0, 0, source.w * 4, source.h * 4};
 			engine.getRenderer()->drawTexture(frame, &source, &dest);
 		});
 
@@ -62,10 +55,10 @@ int main() {
 			direction += 10.0;
 			animation.setDirection(direction);
 		});
-	
+
 		return engine.execute();
 	} catch (EngineException& exception) {
-        cout << "Exception caught: " << exception.what() << endl;
-    }
-    return -1;
+		cout << "Exception caught: " << exception.what() << endl;
+	}
+	return -1;
 }
