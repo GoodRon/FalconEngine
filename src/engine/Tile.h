@@ -8,6 +8,8 @@
 
 #include <memory>
 
+#include <WorldObject.h>
+
 struct SDL_Texture;
 struct SDL_Rect;
 
@@ -19,7 +21,7 @@ typedef std::shared_ptr<SDL_Texture> TexturePointer;
 /**
  * @brief Класс тайла
  */
-class Tile {
+class Tile : public WorldObject {
 public:
 	/**
 	 * @brief Конструктор
@@ -36,73 +38,15 @@ public:
 	TexturePointer getTexture() const;
 
 	/**
-	 * @brief Задать позицию для тайла
-	 *
-	 * @param x
-	 * @param y
-	 * @return void
+	 * @brief overload
 	 */
-	void setPosition(int x, int y);
-
-	/**
-	 * @brief Вернуть мировые координаты и габариты текстуры
-	 *
-	 * @return SDL_Rect
-	 */
-	SDL_Rect getPositionAndProfile() const;
-
-	/**
-	 * @brief Вернуть только габариты объекта в двумерной проекции
-	 *
-	 * @return SDL_Rect
-	 */
-	SDL_Rect getProfile() const;
-
-	/**
-	 * @brief Установить видимость
-	 *
-	 * @param visible
-	 * @return void
-	 */
-	void setVisible(bool visible);
-
-	/**
-	 * @brief Вернуть видимость
-	 *
-	 * @return bool
-	 */
-	bool isVisible() const;
+	virtual void draw(Renderer* renderer);
 
 private:
 	/**
 	 * @brief Текстура тайла
 	 */
 	TexturePointer m_texture;
-
-	/**
-	 * @brief Координата x
-	 */
-	int m_x;
-
-	/**
-	 * @brief Координата y
-	 */
-	int m_y;
-
-	/**
-	 * @brief Ширина
-	 */
-	int m_width;
-
-	/**
-	 * @brief Высота
-	 */
-	int m_height;
-
-	/**
-	 * @brief ПРизнак видимости
-	 */
-	bool m_visible;
 };
 
 #endif // TILE_H

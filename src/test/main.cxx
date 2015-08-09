@@ -10,7 +10,12 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "EngineException.h"
+#include "ObjectManager.h"
+#include "WorldObject.h"
+#include "Tile.h"
 #include "TimerPool.h"
+
+using namespace std;
 
 int main() {
 	try {
@@ -37,25 +42,36 @@ int main() {
 							break;
 					}
 					break;
+				case SDL_MOUSEBUTTONDOWN: {
+					int x, y;
+					if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+						cout << "x: " << x << ", y: " << y << endl;
+					}
+					auto object = engine.getObjectManager()->getWorldObject(x, y);
+					if (object) {
+						object->setVisibility(!object->getVisibility());
+					}
+				} break;
 				default:
 					break;
 			}
 		});
 
-		TexturePointer background = engine.getResourceManager()->loadTexture("resources/ship.png");
-		engine.getTimersPool()->addTimer(33, [&background, &engine](TimerPool::id_t) {
-			SDL_Rect rsource = {0, 0, 0, 0};
-			SDL_QueryTexture(background.get(), nullptr, nullptr, &(rsource.w), &(rsource.h));
-			SDL_Rect rdest = engine.getRenderer()->getViewport();
-			rsource.x += rdest.x;
-			rsource.y += rdest.y;
+		TexturePointer texture =
+				engine.getResourceManager()->loadTexture("resources/ship.png");
+		WorldObjectPointer ship(new Tile(texture));
+		engine.getObjectManager()->pushObject(ship);
+
+		engine.getTimersPool()->addTimer(33, [&engine](TimerPool::id_t) {
 			engine.getRenderer()->clear();
-			engine.getRenderer()->drawTexture(background, nullptr, &rsource);
+			engine.getObjectManager()->drawAllObjects();
 		});
+
+//		SDL_ShowCursor(SDL_ENABLE);
 
 		return engine.execute();
 	} catch (EngineException& exception) {
-		std::cout << "Exception caught: " << exception.what() << std::endl;
+		cout << "Exception caught: " << exception.what() << endl;
 	}
 	return -1;
 }

@@ -6,44 +6,34 @@
 #include <SDL2/SDL.h>
 
 #include "Tile.h"
+#include "Renderer.h"
 
 Tile::Tile(TexturePointer texture) :
-	m_texture(texture),
-	m_x(0),
-	m_y(0),
-	m_width(0),
-	m_height(0),
-	m_visible(false) {
+	WorldObject(),
+	m_texture(texture) {
+	SDL_Rect profile = {0, 0, 0, 0};
+	SDL_QueryTexture(m_texture.get(), nullptr, nullptr, &(profile.w), &(profile.h));
+	m_width = profile.w;
+	m_height = profile.h;
 }
 
 TexturePointer Tile::getTexture() const {
 	return m_texture;
 }
 
-void Tile::setPosition(int x, int y) {
-	m_x = x;
-	m_y = y;
-}
+void Tile::draw(Renderer* renderer) {
+	if (renderer == nullptr) {
+		return;
+	}
 
-SDL_Rect Tile::getPositionAndProfile() const {
-    SDL_Rect rect = getProfile();
-    rect.x = m_x;
-    rect.y = m_y;
-	return rect;
-}
+	if (!getVisibility()) {
+		return;
+	}
 
-SDL_Rect Tile::getProfile() const {
-	// m_width & m_height ?
-    SDL_Rect rect = {0, 0, m_width, m_height};
-    SDL_QueryTexture(m_texture.get(), nullptr, nullptr, &(rect.w),
-                     &(rect.h));
-    return rect;
-}
-
-void Tile::setVisible(bool visible) {
-	m_visible = visible;
-}
-
-bool Tile::isVisible() const {
-	return m_visible;
+	auto profile = getPositionAndProfile();
+	auto rdest = renderer->getViewport();
+	profile.x += rdest.x;
+	profile.y += rdest.y;
+	renderer->clear();
+	renderer->drawTexture(m_texture, nullptr, &profile);
 }

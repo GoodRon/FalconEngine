@@ -14,6 +14,11 @@ class WorldObject;
 class Renderer;
 
 /**
+ * @brief Умный указатель на мировой объект
+ */
+typedef std::shared_ptr<WorldObject> WorldObjectPointer;
+
+/**
  * @brief Менеджер мировых объектов
  */
 class ObjectManager {
@@ -36,7 +41,7 @@ public:
 	 * @param object
 	 * @return void
 	 */
-	void pushObject(std::shared_ptr<WorldObject> object);
+	void pushObject(const WorldObjectPointer& object);
 
 	/**
 	 * @brief Обновить логику объектов
@@ -51,6 +56,15 @@ public:
 	 * @return void
 	 */
 	void drawAllObjects();
+
+	/**
+	 * @brief Вернуть объект по экранным координатам
+	 * @param x
+	 * @param y
+	 *
+	 * @return WorldObject
+	 */
+	WorldObjectPointer getWorldObject(int x, int y);
 
 private:
 	/**
@@ -83,7 +97,7 @@ private:
 	/**
 	 * @brief Все объекты
 	 */
-	std::vector<std::shared_ptr<WorldObject>> m_objects;
+	std::vector<WorldObjectPointer> m_objects;
 };
 
 #endif // OBJECTMANAGER_H
