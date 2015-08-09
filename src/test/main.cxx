@@ -15,6 +15,32 @@
 int main() {
 	try {
 		Engine engine;
+		engine.pushEventHandler([&engine](const SDL_Event& event) {
+			switch (event.type) {
+				case SDL_KEYDOWN:
+					switch (event.key.keysym.sym) {
+						case SDLK_UP:
+							if (engine.getRenderer()) {
+								SDL_Rect rdest = engine.getRenderer()->getViewport();
+								rdest.y += 5;
+								engine.getRenderer()->setViewport(rdest);
+							}
+							break;
+						case SDLK_DOWN:
+							if (engine.getRenderer()) {
+								SDL_Rect rdest = engine.getRenderer()->getViewport();
+								rdest.y -= 5;
+								engine.getRenderer()->setViewport(rdest);
+							}
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+			}
+		});
 
 		TexturePointer background = engine.getResourceManager()->loadTexture("resources/ship.png");
 		engine.getTimersPool()->addTimer(33, [&background, &engine](TimerPool::id_t) {

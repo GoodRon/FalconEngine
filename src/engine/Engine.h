@@ -7,6 +7,8 @@
 #define ENGINE_H
 
 #include <string>
+#include <vector>
+#include <functional>
 
 union SDL_Event;
 class Renderer;
@@ -19,6 +21,11 @@ class ObjectManager;
  */
 class Engine {
 public:
+	/**
+	 * @brief Описатель обработчика событий
+	 */
+	typedef std::function<void(const SDL_Event&)> eventHandler;
+
 	/**
 	 * @brief Конструктор
 	 */
@@ -80,6 +87,21 @@ public:
 	 */
 	TimerPool* getTimersPool() const;
 
+	/**
+	 * @brief Добавить обработчик событий в стек
+	 *
+	 * @param handler
+	 * @return void
+	 */
+	void pushEventHandler(const eventHandler& handler);
+
+	/**
+	 * @brief Очистить стек обработчиков событий
+	 *
+	 * @return void
+	 */
+	void clearEventHandlers();
+
 private:
 	/**
 	 * @brief Обработчик событий
@@ -118,6 +140,11 @@ private:
 	 * @brief Пул таймеров
 	 */
 	TimerPool* m_timers;
+
+	/**
+	 * @brief Стек обработчиков событий
+	 */
+	std::vector<eventHandler> m_eventHandlers;
 };
 
 #endif // ENGINE_H

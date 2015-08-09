@@ -23,30 +23,32 @@ Engine::Engine() :
 	m_renderer(nullptr),
 	m_resourceManager(nullptr),
 	m_objectManager(nullptr),
-	m_timers(new TimerPool) {
+	m_timers(new TimerPool),
+	m_eventHandlers() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
 	}
 
 	m_renderer = new Renderer(1024, 768);
 	m_resourceManager = new ResourceManager(m_renderer);
-    m_objectManager = new ObjectManager(m_renderer);
+	m_objectManager = new ObjectManager(m_renderer);
 }
 
 Engine::Engine(unsigned width, unsigned height) :
-    m_run(true),
-    m_returnCode(0),
-    m_renderer(nullptr),
-    m_resourceManager(nullptr),
-    m_objectManager(nullptr),
-    m_timers(new TimerPool) {
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        throw EngineException(SDL_GetError());
-    }
-    
-    m_renderer = new Renderer(width, height);
-    m_resourceManager = new ResourceManager(m_renderer);
-    m_objectManager = new ObjectManager(m_renderer);
+	m_run(true),
+	m_returnCode(0),
+	m_renderer(nullptr),
+	m_resourceManager(nullptr),
+	m_objectManager(nullptr),
+	m_timers(new TimerPool),
+	m_eventHandlers() {
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+		throw EngineException(SDL_GetError());
+	}
+
+	m_renderer = new Renderer(width, height);
+	m_resourceManager = new ResourceManager(m_renderer);
+	m_objectManager = new ObjectManager(m_renderer);
 }
 
 Engine::~Engine() {
@@ -79,7 +81,7 @@ int Engine::execute() {
 
 	while (m_run) {
 		m_timers->check();
-        SDL_Delay(10);
+		SDL_Delay(10);
 	}
 	eventsThread.join();
 	return m_returnCode;
@@ -90,7 +92,7 @@ Renderer* Engine::getRenderer() const {
 }
 
 ResourceManager* Engine::getResourceManager() const {
-    return m_resourceManager;
+	return m_resourceManager;
 }
 
 ObjectManager* Engine::getObjectManager() const {
@@ -101,8 +103,16 @@ TimerPool* Engine::getTimersPool() const {
 	return m_timers;
 }
 
+void Engine::pushEventHandler(const eventHandler& handler) {
+	m_eventHandlers.push_back(handler);
+}
+
+void Engine::clearEventHandlers() {
+	m_eventHandlers.clear();
+}
+
 void Engine::onEvent(const SDL_Event& event) {
-	// TODO just debug. write better
+	// Дефолтный обработчик
 	switch (event.type) {
 		case SDL_QUIT:
 			m_run = false;
@@ -112,25 +122,16 @@ void Engine::onEvent(const SDL_Event& event) {
 				case SDLK_ESCAPE:
 					m_run = false;
 					break;
-				case SDLK_UP:
-					if (m_renderer) {
-						SDL_Rect rdest = m_renderer->getViewport();
-						rdest.y += 5;
-						m_renderer->setViewport(rdest);
-					}
-					break;
-				case SDLK_DOWN:
-					if (m_renderer) {
-						SDL_Rect rdest = m_renderer->getViewport();
-						rdest.y -= 5;
-						m_renderer->setViewport(rdest);
-					}
-					break;
 				default:
 					break;
 			}
 			break;
 		default:
 			break;
+	}
+
+	// Остальные обработчики
+	for (auto &handler: m_eventHandlers) {
+		handler(event);
 	}
 }
