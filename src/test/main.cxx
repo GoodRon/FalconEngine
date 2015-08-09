@@ -45,11 +45,10 @@ int main() {
 				case SDL_MOUSEBUTTONDOWN: {
 					int x, y;
 					if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-						cout << "x: " << x << ", y: " << y << endl;
-					}
-					auto object = engine.getObjectManager()->getWorldObject(x, y);
-					if (object) {
-						object->setVisibility(!object->getVisibility());
+						auto object = engine.getObjectManager()->getWorldObject(x, y);
+						if (object) {
+							object->setVisibility(!object->getVisibility());
+						}
 					}
 				} break;
 				default:

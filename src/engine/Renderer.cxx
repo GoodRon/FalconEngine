@@ -13,17 +13,17 @@ using namespace std;
 Renderer::Renderer(int width, int height) :
 	m_window(nullptr),
 	m_renderer(nullptr),
-	m_viewport( {0, 0, width, height}) {
+	m_viewport({0, 0, width, height}) {
 	m_window = SDL_CreateWindow("Falcon Engine",
-	                            SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-	                            m_viewport.w, m_viewport.h, SDL_WINDOW_SHOWN);
+								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+								m_viewport.w, m_viewport.h, SDL_WINDOW_SHOWN);
 
 	if (m_window == nullptr) {
 		throw EngineException(SDL_GetError());
 	}
 
 	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED |
-	                                SDL_RENDERER_PRESENTVSYNC);
+									SDL_RENDERER_PRESENTVSYNC);
 
 	if (m_renderer == nullptr) {
 		SDL_DestroyWindow(m_window);
@@ -50,7 +50,7 @@ bool Renderer::clear() {
 }
 
 bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
-                           SDL_Rect* destination) {
+						   SDL_Rect* destination) {
 	if (!texture) {
 		return false;
 	}
@@ -65,9 +65,9 @@ bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
 }
 
 bool Renderer::drawTextureToTexture(TexturePointer& sourceTexture,
-                                    TexturePointer& destinationTexture,
-                                    SDL_Rect* source,
-                                    SDL_Rect* destination) {
+									TexturePointer& destinationTexture,
+									SDL_Rect* source,
+									SDL_Rect* destination) {
 	if ((!sourceTexture) || (!destinationTexture)) {
 		return false;
 	}
