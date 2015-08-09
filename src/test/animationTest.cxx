@@ -39,6 +39,32 @@ int main() {
 			engine.getRenderer()->drawTexture(frame, &source, &dest);
 		});
 
+		double animationSpeed = 1.0;
+		engine.pushEventHandler([&engine, &animationSpeed, &animation]
+								(const SDL_Event& event) {
+			double delta = 0.1;
+			switch (event.type) {
+				case SDL_KEYDOWN:
+					switch (event.key.keysym.sym) {
+						case SDLK_UP:
+							animationSpeed += delta;
+							animation.setSpeed(animationSpeed);
+							break;
+						case SDLK_DOWN:
+							animationSpeed -= delta;
+							if (animationSpeed < 1.0) {
+								animationSpeed = 1.0;
+							}
+							animation.setSpeed(animationSpeed);
+							break;
+						default:
+							break;
+					}
+					break;
+				default:
+					break;
+			}
+		});
 		return engine.execute();
 	} catch (EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;
