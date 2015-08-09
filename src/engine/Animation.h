@@ -23,8 +23,8 @@ public:
 	 * @param period период анимации
 	 * @param isLooped признак цикличности
 	 */
-	Animation(const std::vector<TexturePointer>& frames, 
-			  const std::chrono::milliseconds& period, 
+	Animation(const std::vector<TexturePointer>& frames,
+			  const std::chrono::milliseconds& period,
 			  bool isLooped = true);
 
 	/**
@@ -34,7 +34,7 @@ public:
 	 * @return void
 	 */
 	virtual void play(bool fromStart = false) override;
-	
+
 	/**
 	 * @brief Приостановить воспроизведение
 	 *
@@ -93,6 +93,21 @@ public:
 	 */
 	std::chrono::milliseconds getRemainingTime();
 
+	/**
+	 * @brief Установить скорость анимации
+	 *
+	 * @param speed
+	 * @return void
+	 */
+	void setSpeed(double speed);
+
+	/**
+	 * @brief Вернуть скорость анимации
+	 *
+	 * @return double
+	 */
+	double getSpeed() const;
+
 private:
 	/**
 	 * @brief Пересчитать временные интервалы
@@ -131,6 +146,11 @@ private:
 	 * @brief Признак остановки анимации
 	 */
 	bool m_isPaused;
+
+	/**
+	 * @brief Модификатор скорости анимации
+	 */
+	double m_speed;
 };
 
 #endif // ANIMATION_H

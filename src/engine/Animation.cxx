@@ -10,15 +10,16 @@
 using namespace std;
 using namespace chrono;
 
-Animation::Animation(const vector<TexturePointer>& frames, 
-			  		 const milliseconds& period, 
-			  		 bool isLooped) :
+Animation::Animation(const vector<TexturePointer>& frames,
+					 const milliseconds& period,
+					 bool isLooped) :
 	m_frames(frames),
 	m_isLooped(isLooped),
 	m_period(period),
 	m_startTimepoint(steady_clock::now()),
 	m_timeOffset(0),
-	m_isPaused(true) {
+	m_isPaused(true),
+	m_speed(1.0) {
 }
 
 void Animation::play(bool fromStart) {
@@ -59,7 +60,7 @@ TexturePointer Animation::getFrame() {
 
 	recalculateTimes();
 
-	unsigned frameNumber = m_timeOffset * m_frames.size() / m_period;
+	unsigned frameNumber = m_timeOffset * m_frames.size() / (m_period * m_speed);
 	if (frameNumber >= m_frames.size()) {
 		frameNumber = m_frames.size() - 1;
 	}
@@ -77,7 +78,7 @@ milliseconds Animation::getPeriod() const {
 
 milliseconds Animation::getRemainingTime() {
 	recalculateTimes();
-	return m_period - m_timeOffset;
+	return duration_cast<milliseconds>(m_period * m_speed) - m_timeOffset;
 }
 
 void Animation::recalculateTimes() {
@@ -88,13 +89,24 @@ void Animation::recalculateTimes() {
 	m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
 
 	if (m_isLooped) {
-		m_timeOffset = m_timeOffset % m_period;
+		m_timeOffset = m_timeOffset % duration_cast<milliseconds>(m_period * m_speed);
 		m_startTimepoint = steady_clock::now() - m_timeOffset;
 	}
 
 	// Если мы не зациклены - остановимся
-	if (m_timeOffset > m_period) {
-		m_timeOffset = m_period;
+	if (m_timeOffset > duration_cast<milliseconds>(m_period * m_speed)) {
+		m_timeOffset = duration_cast<milliseconds>(m_period * m_speed);
 		m_isPaused = true;
 	}
+}
+
+void Animation::setSpeed(double speed) {
+	if (speed <= 0.0) {
+		return;
+	}
+	m_speed = speed;
+}
+
+double Animation::getSpeed() const {
+	return m_speed;
 }
