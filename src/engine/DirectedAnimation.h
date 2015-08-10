@@ -33,46 +33,32 @@ public:
 	void pushAnimation(const Animation& animation, double direction);
 
 	/**
-	 * @brief Начать или продолжить воспроизведение
-	 *
-	 * @param fromStart признак необходимости начать сначала
-	 * @return void
+	 * @overload
 	 */
 	virtual void play(bool fromStart = false) override;
 
 	/**
-	 * @brief Приостановить воспроизведение
-	 *
-	 * @return void
+	 * @overload
 	 */
 	virtual void pause() override;
 
 	/**
-	 * @brief Вернуть признак остановки воспроизведения
-	 *
-	 * @return bool
+	 * @overload
 	 */
 	virtual bool isPaused() override;
 
 	/**
-	 * @brief Установить признак цикличности
-	 *
-	 * @param isLooped
-	 * @return void
+	 * @overload
 	 */
 	virtual void setLoop(bool isLooped = true) override;
 
 	/**
-	 * @brief Вернуть признак цикличности
-	 *
-	 * @return bool
+	 * @overload
 	 */
 	virtual bool isLooped() const override;
 
 	/**
-	 * @brief Вернуть текущий фрейм
-	 *
-	 * @return TexturePointer фрейм
+	 * @overload
 	 */
 	virtual TexturePointer getFrame() override;
 
