@@ -28,6 +28,11 @@ public:
 			  bool isLooped = true);
 
 	/**
+	 * @brief Деструктор
+	 */
+	virtual ~Animation();
+
+	/**
 	 * @brief Начать или продолжить воспроизведение
 	 *
 	 * @param fromStart признак необходимости начать сначала

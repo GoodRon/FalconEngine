@@ -14,14 +14,24 @@
 class DirectedAnimation : public IAnimation {
 public:
 	/**
-	 * @brief Добавить анимацию 
+	 * @brief Конструктор
+	 */
+	DirectedAnimation();
+
+	/**
+	 * @brief Деструктор
+	 */
+	virtual ~DirectedAnimation();
+
+	/**
+	 * @brief Добавить анимацию
 	 *
 	 * @param animation
 	 * @param direction направление от 0 до 360 градусов
 	 * @return void
 	 */
 	void pushAnimation(const Animation& animation, double direction);
-	
+
 	/**
 	 * @brief Начать или продолжить воспроизведение
 	 *
@@ -67,23 +77,18 @@ public:
 	virtual TexturePointer getFrame() override;
 
 	/**
-	 * @brief Установить направление
+	 * @brief Вернуть текущий фрейм
 	 *
-	 * @param direction от 0 до 360 градусов
-	 * @return void
+	 * @param direction направление от 0 до 360 градусов
+	 * @return TexturePointer фрейм
 	 */
-	void setDirection(double direction);
+	TexturePointer getFrame(double direction);
 
 private:
 	/**
 	 * @brief Вектор пар направление - анимация
 	 */
 	std::vector<std::pair<double, Animation>> m_animations;
-
-	/**
-	 * @brief Направление
-	 */
-	double m_direction;
 };
 
 #endif // DIRECTEDANIMATION_H

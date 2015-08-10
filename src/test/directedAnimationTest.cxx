@@ -39,11 +39,10 @@ int main() {
 		animation.play();
 
 		double direction = 0.0;
-		animation.setDirection(direction);
 
-		engine.getTimersPool()->addTimer(100, [&engine, &animation](TimerPool::id_t) {
+		engine.getTimersPool()->addTimer(100, [&engine, &animation, &direction](TimerPool::id_t) {
 			engine.getRenderer()->clear();
-			TexturePointer frame = animation.getFrame();
+			TexturePointer frame = animation.getFrame(direction);
 			SDL_Rect source = {0, 0, 0, 0};
 			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
 							 &(source.h));
@@ -53,7 +52,6 @@ int main() {
 
 		engine.getTimersPool()->addTimer(100, [&animation, &direction](TimerPool::id_t) {
 			direction += 10.0;
-			animation.setDirection(direction);
 		});
 
 		return engine.execute();

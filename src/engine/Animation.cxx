@@ -13,6 +13,7 @@ using namespace chrono;
 Animation::Animation(const vector<TexturePointer>& frames,
 					 const milliseconds& period,
 					 bool isLooped) :
+	IAnimation(),
 	m_frames(frames),
 	m_isLooped(isLooped),
 	m_period(period),
@@ -20,6 +21,9 @@ Animation::Animation(const vector<TexturePointer>& frames,
 	m_timeOffset(0),
 	m_isPaused(true),
 	m_speed(1.0) {
+}
+
+Animation::~Animation() {
 }
 
 void Animation::play(bool fromStart) {

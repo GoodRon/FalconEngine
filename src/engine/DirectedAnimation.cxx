@@ -7,13 +7,19 @@
 
 #include "DirectedAnimation.h"
 
-void DirectedAnimation::pushAnimation(const Animation& animation, double direction) {
-	if (direction < 0.0) {
-		direction = fmod(direction, 360.0) + 360.0;
-	} else {
-		direction = fmod(direction, 360.0);
-	}
+DirectedAnimation::DirectedAnimation() :
+	IAnimation(),
+	m_animations() {
+}
 
+DirectedAnimation::~DirectedAnimation() {
+}
+
+void DirectedAnimation::pushAnimation(const Animation& animation, double direction) {
+	direction = fmod(direction, 360.0);
+	if (direction < 0.0) {
+		direction += 360.0;
+	}
 	m_animations.emplace_back(direction, animation);
 }
 
@@ -50,31 +56,32 @@ bool DirectedAnimation::isLooped() const {
 }
 
 TexturePointer DirectedAnimation::getFrame() {
+	return getFrame(0.0);
+}
+
+TexturePointer DirectedAnimation::getFrame(double direction) {
 	if (m_animations.empty()) {
 		// WARNING check!
 		return TexturePointer();
+	}
+
+	direction = fmod(direction, 360.0);
+	if (direction < 0.0) {
+		direction += 360.0;
 	}
 
 	double delta = 360.0;
 	auto result = *m_animations.begin();
 
 	for (auto &animation: m_animations) {
-		double fromZero = fabs(m_direction - animation.first);
-		double fromPi = 360.0 - fabs(m_direction - animation.first);
+		double fromZero = fabs(direction - animation.first);
+		double fromPi = 360.0 - fabs(direction - animation.first);
 		double currentDelta = (fromZero < fromPi) ? fromZero : fromPi;
-		
+
 		if (currentDelta < delta) {
 			delta = currentDelta;
 			result = animation;
 		}
 	}
 	return result.second.getFrame();
-}
-
-void DirectedAnimation::setDirection(double direction) {
-	if (direction < 0.0) {
-		m_direction = fmod(direction, 360.0) + 360.0;
-	} else {
-		m_direction = fmod(direction, 360.0);
-	}
 }

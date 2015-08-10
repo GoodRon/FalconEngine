@@ -21,6 +21,16 @@ typedef std::shared_ptr<SDL_Texture> TexturePointer;
 class IAnimation {
 public:
 	/**
+	 * @brief Конструктор
+	 */
+	IAnimation() {}
+
+	/**
+	 * @brief Деструктор
+	 */
+	virtual ~IAnimation() {}
+
+	/**
 	 * @brief Начать или продолжить воспроизведение
 	 *
 	 * @param fromStart признак необходимости начать сначала
