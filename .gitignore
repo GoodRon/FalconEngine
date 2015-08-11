@@ -5,3 +5,4 @@ doc/
 *.kdev4
 *.kate-swp
 *.bak
+*.autosave

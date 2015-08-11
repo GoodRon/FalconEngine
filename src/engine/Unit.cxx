@@ -1,5 +1,7 @@
 #include "Unit.h"
 
-Unit::Unit()
-{
+Unit::Unit() :
+	m_direction(0.0) {
 }
+
+

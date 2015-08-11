@@ -23,6 +23,8 @@ public:
 
 	virtual void doLogic();
 
+	virtual void draw(Renderer* renderer);
+
 private:
 	double m_direction;
 };

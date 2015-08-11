@@ -6,16 +6,29 @@
 #ifndef UNITCONTEXT_H
 #define UNITCONTEXT_H
 
+#include <memory>
+
 class UnitState;
+class WorldObject;
+struct SDL_Texture;
+
+/**
+ * @brief Умный указатель на объект текстуры
+ */
+typedef std::shared_ptr<SDL_Texture> TexturePointer;
 
 class UnitContext {
 public:
 	UnitContext();
-	~UnitContext();
+	virtual ~UnitContext();
 
+	void moveTo(int x, int y);
 
+	void stop();
 
-public:
+	TexturePointer getFrame();
+
+private:
 	UnitState* m_state;
 };
 

@@ -20,7 +20,9 @@ class Renderer;
  */
 typedef std::shared_ptr<SDL_Texture> TexturePointer;
 
-
+/**
+ * @brief Текстурная карта. Двумерный массив текстур
+ */
 typedef std::vector<std::vector<TexturePointer>> TextureMap;
 
 /**
