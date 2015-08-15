@@ -6,12 +6,12 @@
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
 
-class State;
+#include "State.h"
 
 /**
  * @brief Машина состояний
  */
-template <class ObjectType>
+template <typename ObjectType>
 class StateMachine {
 public:
 	/**
@@ -26,21 +26,21 @@ public:
 	 *
 	 * @param state
 	 */
-	void setCurrentState(State* state);
+	void setCurrentState(State<ObjectType>* state);
 
 	/**
 	 * @brief Установить предыдущее состояние
 	 *
 	 * @param state
 	 */
-	void setPreviousState(State* state);
+	void setPreviousState(State<ObjectType>* state);
 
 	/**
 	 * @brief Установить глобальное состояние
 	 *
 	 * @param state
 	 */
-	void setGlobalState(State* state);
+	void setGlobalState(State<ObjectType>* state);
 
 	/**
 	 * @brief Обновить логику состояния
@@ -52,7 +52,7 @@ public:
 	 *
 	 * @param state
 	 */
-	void changeState(State* state);
+	void changeState(State<ObjectType>* state);
 
 	/**
 	 * @brief Вернуться к предыдущему состоянию
@@ -68,17 +68,17 @@ private:
 	/**
 	 * @brief Указатель на текущее состояние
 	 */
-	State* m_currentState;
+	State<ObjectType>* m_currentState;
 
 	/**
 	 * @brief Указатель на предыдущее состояние
 	 */
-	State* m_previousState;
+	State<ObjectType>* m_previousState;
 
 	/**
 	 * @brief Указатель на глобальное состояние
 	 */
-	State* m_globalState;
+	State<ObjectType>* m_globalState;
 };
 
 #endif // STATEMACHINE_H

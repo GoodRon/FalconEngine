@@ -4,27 +4,33 @@
  */
 
 #include "StateMachine.h"
+#include "State.h"
 
-StateMachine::StateMachine(ObjectType* object):
+template <typename ObjectType>
+StateMachine<ObjectType>::StateMachine(ObjectType* object):
 	m_object(object),
 	m_currentState(nullptr),
 	m_previousState(nullptr),
 	m_globalState(nullptr) {
 }
 
-void StateMachine::setCurrentState(State* state) {
+template <typename ObjectType>
+void StateMachine<ObjectType>::setCurrentState(State<ObjectType>* state) {
 	m_currentState = state();
 }
 
-void StateMachine::setPreviousState(State* state) {
+template <typename ObjectType>
+void StateMachine<ObjectType>::setPreviousState(State<ObjectType>* state) {
 	m_previousState = state;
 }
 
-void StateMachine::setGlobalState(State* state) {
+template <typename ObjectType>
+void StateMachine<ObjectType>::setGlobalState(State<ObjectType>* state) {
 	m_globalState = state;
 }
 
-void StateMachine::updateState() const {
+template <typename ObjectType>
+void StateMachine<ObjectType>::updateState() const {
 	if (m_globalState) {
 		m_globalState->doLogic(m_object);
 	}
@@ -34,7 +40,8 @@ void StateMachine::updateState() const {
 	}
 }
 
-void StateMachine::changeState(State* state) {
+template <typename ObjectType>
+void StateMachine<ObjectType>::changeState(State<ObjectType>* state) {
 	if (state) {
 		return;
 	}
@@ -45,6 +52,7 @@ void StateMachine::changeState(State* state) {
 	m_currentState->onEnter(m_object);
 }
 
-void StateMachine::backToPreviousState() {
+template <typename ObjectType>
+void StateMachine<ObjectType>::backToPreviousState() {
 	changeState(m_previousState);
 }

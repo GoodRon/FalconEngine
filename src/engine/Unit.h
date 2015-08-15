@@ -7,9 +7,7 @@
 #define UNIT_H
 
 #include "WorldObject.h"
-
-class State;
-class StateMachine;
+#include "StateMachine.h"
 
 /**
  * @brief Класс юнита
@@ -24,10 +22,10 @@ public:
 
 	virtual void draw(Renderer* renderer);
 
-	void moveTo(int x, int y);
-	void attack(WorldObject& object);
+	virtual void moveTo(int x, int y);
+	virtual void attack(WorldObject& object);
 
-	void changeState(State* state);
+	void changeState(State<Unit>* state);
 
 private:
 	/**
