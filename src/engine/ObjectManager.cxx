@@ -42,7 +42,7 @@ void ObjectManager::drawAllObjects() {
 	}
 }
 
-WorldObjectPointer ObjectManager::getWorldObject(int x, int y) {
+WorldObjectPointer ObjectManager::getObjectByCoordinates(int x, int y) {
 	WorldObjectPointer result;
 	if (!m_renderer) {
 		return result;
@@ -61,6 +61,21 @@ WorldObjectPointer ObjectManager::getWorldObject(int x, int y) {
 		}
 	}
 	return result;
+}
+
+WorldObjectPointer ObjectManager::getObjectById(int id) {
+	WorldObjectPointer result;
+	for (auto &object: m_objects) {
+		if (object->getId() == id) {
+			result = object;
+			break;
+		}
+	}
+	return result;
+}
+
+void ObjectManager::clear() {
+	m_objects.clear();
 }
 
 void ObjectManager::sortByDrawPriority() {

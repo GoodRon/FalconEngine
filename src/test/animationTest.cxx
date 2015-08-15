@@ -30,7 +30,7 @@ int main() {
 		animation.play();
 
 		engine.getTimersPool()->addTimer(100, [&engine, &animation](TimerPool::id_t) {
-			engine.getRenderer()->clear();
+			engine.getRenderer()->clearViewport();
 			TexturePointer frame = animation.getFrame();
 			SDL_Rect source = {0, 0, 0, 0};
 			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),

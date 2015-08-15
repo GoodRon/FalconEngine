@@ -62,9 +62,26 @@ public:
 	 * @param x
 	 * @param y
 	 *
-	 * @return WorldObject
+	 * @return WorldObjectPointer
 	 */
-	WorldObjectPointer getWorldObject(int x, int y);
+	WorldObjectPointer getObjectByCoordinates(int x, int y);
+
+	/**
+	 * @brief Вернуть объект по идентификатору
+	 * @param id
+	 *
+	 * @return WorldObjectPointer
+	 */
+	WorldObjectPointer getObjectById(int id);
+
+	// void sendEvent();
+
+	/**
+	 * @brief Сбросить все объекты
+	 *
+	 * @return void
+	 */
+	void clear();
 
 private:
 	/**

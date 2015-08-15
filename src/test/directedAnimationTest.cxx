@@ -41,7 +41,7 @@ int main() {
 		double direction = 0.0;
 
 		engine.getTimersPool()->addTimer(100, [&engine, &animation, &direction](TimerPool::id_t) {
-			engine.getRenderer()->clear();
+			engine.getRenderer()->clearViewport();
 			TexturePointer frame = animation.getFrame(direction);
 			SDL_Rect source = {0, 0, 0, 0};
 			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),

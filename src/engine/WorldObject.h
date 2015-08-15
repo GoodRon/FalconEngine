@@ -18,20 +18,27 @@ class WorldObject {
 public:
 	/**
 	 * @brief Конструктор
-	 */
-	WorldObject();
-
-	/**
-	 * @brief Конструктор
 	 * @param x
 	 * @param y
 	 */
 	WorldObject(int x, int y);
 
 	/**
+	 * @brief Конструктор
+	 */
+	WorldObject();
+
+	/**
 	 * @brief Деструктор
 	 */
 	virtual ~WorldObject() = 0;
+
+	/**
+	 * @brief Вернуть идентификатор объекта
+	 *
+	 * @return int персональный идентификатор
+	 */
+	int getId() const;
 
 	/**
 	 * @brief Изменить позицию в мире
@@ -49,20 +56,20 @@ public:
 	 */
 	virtual SDL_Rect getPositionAndProfile() const;
 
-    /**
-     * @brief Вернуть только габариты объекта в двумерной проекции
-     *
-     * @return SDL_Rect
-     */
-    virtual SDL_Rect getProfile() const;
-    
-    /**
-     * @brief Вернуть только мировые координаты
-     *
-     * @return SDL_Rect
-     */
-    virtual SDL_Rect getPosition() const;
-    
+	/**
+	 * @brief Вернуть только габариты объекта в двумерной проекции
+	 *
+	 * @return SDL_Rect
+	 */
+	virtual SDL_Rect getProfile() const;
+
+	/**
+	 * @brief Вернуть только мировые координаты
+	 *
+	 * @return SDL_Rect
+	 */
+	virtual SDL_Rect getPosition() const;
+
 	/**
 	 * @brief Отрисовать объект
 	 *
@@ -76,6 +83,8 @@ public:
 	virtual void doLogic();
 
 	// cacheFullState();
+
+	// isCollide();
 
 	// TODO maybe this shoud be done in different way
 	/**
@@ -100,6 +109,11 @@ public:
 	bool getVisibility() const;
 
 protected:
+	/**
+	 * @brief Идентификатор объекта
+	 */
+	int m_id;
+
 	/**
 	 * @brief Координата x
 	 */

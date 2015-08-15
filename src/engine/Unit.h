@@ -8,13 +8,12 @@
 
 #include "WorldObject.h"
 
-class UnitState {
-public:
+class State;
+class StateMachine;
 
-private:
-
-};
-
+/**
+ * @brief Класс юнита
+ */
 class Unit : public WorldObject {
 public:
 	Unit();
@@ -25,8 +24,16 @@ public:
 
 	virtual void draw(Renderer* renderer);
 
+	void moveTo(int x, int y);
+	void attack(WorldObject& object);
+
+	void changeState(State* state);
+
 private:
-	double m_direction;
+	/**
+	 * @brief Машина состояний
+	 */
+	StateMachine<Unit>* m_stateMachine;
 };
 
 #endif // UNIT_H

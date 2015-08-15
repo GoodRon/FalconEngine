@@ -45,7 +45,7 @@ int main() {
 				case SDL_MOUSEBUTTONDOWN: {
 					int x, y;
 					if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-						auto object = engine.getObjectManager()->getWorldObject(x, y);
+						auto object = engine.getObjectManager()->getObjectByCoordinates(x, y);
 						if (object) {
 							object->setVisibility(!object->getVisibility());
 						}
@@ -62,7 +62,7 @@ int main() {
 		engine.getObjectManager()->pushObject(ship);
 
 		engine.getTimersPool()->addTimer(33, [&engine](TimerPool::id_t) {
-			engine.getRenderer()->clear();
+			engine.getRenderer()->clearViewport();
 			engine.getObjectManager()->drawAllObjects();
 		});
 

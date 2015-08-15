@@ -40,7 +40,7 @@ int main() {
             std::dynamic_pointer_cast<WorldObject>(grassField));
         
         engine.getTimersPool()->addTimer(33, [&engine, grassField](TimerPool::id_t) {
-            engine.getRenderer()->clear();
+            engine.getRenderer()->clearViewport();
             engine.getObjectManager()->drawAllObjects();
             //SDL_Rect fieldPosition = grassField->getPosition();
             //fieldPosition.x += 1;

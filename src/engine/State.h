@@ -18,22 +18,13 @@ class State {
 public:
 	/**
 	 * @brief Конструктор
-	 *
-	 * @param name
 	 */
-	State(const std::string& name) : m_name(name) {}
+	State(): {}
 
 	/**
 	 * @brief Деструктор
 	 */
 	virtual ~State() {}
-
-	/**
-	 * @brief Вернуть название состояния
-	 * 
-	 * @return std::string
-	 */
-	std::string getName() const;
 
 	/**
 	 * @brief Обработчик входа в состояние
@@ -47,21 +38,15 @@ public:
 
 	/**
 	 * @brief Обработчик событий
-	 * 
+	 *
 	 * @param event
 	 */
-	virtual void onEvent(Object* object, const SDL_Event& event) = 0;
+	virtual void onSdlEvent(Object* object, const SDL_Event& event) = 0;
 
 	/**
 	 * @brief Обновить логику
 	 */
 	virtual void doLogic(Object* object) = 0;
-
-private:
-	/**
-	 * @brief Название состояния
-	 */
-	std::string m_name;
 };
 
 #endif // STATE_H

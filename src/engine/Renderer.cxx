@@ -41,7 +41,7 @@ Renderer::~Renderer() {
 	}
 }
 
-bool Renderer::clear() {
+bool Renderer::clearViewport() {
 	if (SDL_RenderClear(m_renderer) != 0) {
 		return false;
 	}
@@ -84,7 +84,7 @@ bool Renderer::clearTexture(TexturePointer& texture) {
 	// WARNING check it!
 	SDL_Texture* screen = SDL_GetRenderTarget(m_renderer);
 	SDL_SetRenderTarget(m_renderer, texture.get());
-	bool ret = clear();
+	bool ret = clearViewport();
 	SDL_SetRenderTarget(m_renderer, screen);
 	return ret;
 }

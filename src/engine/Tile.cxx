@@ -34,6 +34,6 @@ void Tile::draw(Renderer* renderer) {
 	auto rdest = renderer->getViewport();
 	profile.x += rdest.x;
 	profile.y += rdest.y;
-	renderer->clear();
+	renderer->clearViewport();
 	renderer->drawTexture(m_texture, nullptr, &profile);
 }

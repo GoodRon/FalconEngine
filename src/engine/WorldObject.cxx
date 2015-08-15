@@ -3,27 +3,36 @@
  * All rights reserved
  */
 
+#include <random>
+
 #include <SDL2/SDL.h>
 
 #include "WorldObject.h"
 
-WorldObject::WorldObject() :
-	m_x(0),
-	m_y(0),
-	m_width(0),
-	m_height(0),
-	m_isVisible(true) {
-}
+using namespace std;
 
 WorldObject::WorldObject(int x, int y) :
+	m_id(),
 	m_x(x),
 	m_y(y),
 	m_width(0),
 	m_height(0),
 	m_isVisible(true) {
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<int> dis;
+	m_id = dis(gen);
+}
+
+WorldObject::WorldObject() :
+	WorldObject(0, 0) {
 }
 
 WorldObject::~WorldObject() {
+}
+
+int WorldObject::getId() const {
+	return m_id;
 }
 
 void WorldObject::setPosition(int x, int y) {

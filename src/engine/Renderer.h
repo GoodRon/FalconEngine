@@ -37,11 +37,11 @@ public:
 	~Renderer();
 
 	/**
-	 * @brief Очистка
+	 * @brief Очистить порт вывода
 	 *
 	 * @return bool
 	 */
-	bool clear();
+	bool clearViewport();
 
 	/**
 	 * @brief Отрисовать текстуру в порт вывода
@@ -52,7 +52,7 @@ public:
 	 * @return bool
 	 */
 	bool drawTexture(TexturePointer& texture, SDL_Rect* source = nullptr,
-	                 SDL_Rect* destination = nullptr);
+					 SDL_Rect* destination = nullptr);
 
 
 	/**
@@ -65,9 +65,9 @@ public:
 	 * @return bool
 	 */
 	bool drawTextureToTexture(TexturePointer& sourceTexture,
-	                          TexturePointer& destinationTexture,
-	                          SDL_Rect* source,
-	                          SDL_Rect* destination);
+							  TexturePointer& destinationTexture,
+							  SDL_Rect* source,
+							  SDL_Rect* destination);
 
 	/**
 	 * @brief Очистить текстуру
