@@ -42,6 +42,7 @@ public:
 	 */
 	~ResourceManager();
 
+	// Добавить чтение метаинформации из json'а
 	/**
 	 * @brief Загрузка текстуры
 	 *
@@ -50,6 +51,7 @@ public:
 	 */
 	TexturePointer loadTexture(const std::string& name);
 
+	// Добавить кеширование разрезанных текстур
 	/**
 	 * @brief Создать текстурную карту
 	 *
@@ -89,6 +91,8 @@ private:
 	 * @brief Мэп текстур
 	 */
 	std::unordered_map<std::string, TexturePointer> m_textures;
+
+	// Добавить мэп анимаций
 };
 
 #endif // RESOURCEMANAGER_H

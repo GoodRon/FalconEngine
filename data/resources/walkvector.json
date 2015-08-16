@@ -1,8 +1,28 @@
 {
   "fileName": "walkvector.png",
   "type": "animation",
+  "animationType": 2,
   "width": 96,
   "height": 192,
   "cols": 3,
-  "rows": 4
+  "rows": 4,
+  "periodMs": 1000,
+  "animations": [
+    {
+      "row": 0,
+      "direction": 180.0
+    },
+    {
+      "row": 1,
+      "direction": 270.0
+    },
+    {
+      "row": 2,
+      "direction": 90.0
+    },
+    {
+      "row": 3,
+      "direction": 0.0
+    }
+  ]
 }

@@ -6,8 +6,6 @@
 #ifndef STATE_H
 #define STATE_H
 
-#include <string>
-
 struct SDL_Event;
 
 /**
@@ -41,7 +39,7 @@ public:
 	 *
 	 * @param event
 	 */
-	virtual void onSdlEvent(ObjectType* object, const SDL_Event& event) = 0;
+//	virtual void onSdlEvent(ObjectType* object, const SDL_Event& event) = 0;
 
 	/**
 	 * @brief Обновить логику

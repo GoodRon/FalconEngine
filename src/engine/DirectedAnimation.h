@@ -63,12 +63,9 @@ public:
 	virtual TexturePointer getFrame() override;
 
 	/**
-	 * @brief Вернуть текущий фрейм
-	 *
-	 * @param direction направление от 0 до 360 градусов
-	 * @return TexturePointer фрейм
+	 * @overload
 	 */
-	TexturePointer getFrame(double direction);
+	virtual TexturePointer getFrame(double direction) override;
 
 private:
 	/**

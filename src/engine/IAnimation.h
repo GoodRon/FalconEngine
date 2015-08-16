@@ -73,6 +73,16 @@ public:
 	 * @return TexturePointer фрейм
 	 */
 	virtual TexturePointer getFrame() = 0;
+
+	/**
+	 * @brief Вернуть текущий фрейм по направлению
+	 *
+	 * @param direction направление от 0 до 360 градусов
+	 * @return TexturePointer фрейм
+	 */
+	virtual TexturePointer getFrame(double direction) {
+		return getFrame();
+	}
 };
 
 #endif // IANIMATION_H
