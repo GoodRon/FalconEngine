@@ -22,16 +22,12 @@ int main() {
 	try {
 		Engine engine(300, 300);
 
-		TexturePointer textureFrames = engine.getResourceManager()->loadTexture("resources/walk.png");
-		SDL_Rect rect = {0, 0, 33, 52};
-		auto frames = engine.getResourceManager()->createTextureMap(textureFrames, rect);
+		auto animation = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
+		animation->play();
 
-		Animation animation(frames[0], chrono::milliseconds(1000));
-		animation.play();
-
-		engine.getTimersPool()->addTimer(100, [&engine, &animation](TimerPool::id_t) {
+		engine.getTimersPool()->addTimer(50, [&engine, &animation](TimerPool::id_t) {
 			engine.getRenderer()->clearViewport();
-			TexturePointer frame = animation.getFrame();
+			TexturePointer frame = animation->getFrame(180.0);
 			SDL_Rect source = {0, 0, 0, 0};
 			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
 							 &(source.h));
@@ -48,14 +44,14 @@ int main() {
 					switch (event.key.keysym.sym) {
 						case SDLK_UP:
 							animationSpeed += delta;
-							animation.setSpeed(animationSpeed);
+							//animation->setSpeed(animationSpeed);
 							break;
 						case SDLK_DOWN:
 							animationSpeed -= delta;
 							if (animationSpeed < 1.0) {
 								animationSpeed = 1.0;
 							}
-							animation.setSpeed(animationSpeed);
+							//animation->setSpeed(animationSpeed);
 							break;
 						default:
 							break;

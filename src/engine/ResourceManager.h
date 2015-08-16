@@ -56,16 +56,6 @@ public:
 	 */
 	TexturePointer loadTexture(const std::string& name);
 
-	// TODO remove
-	/**
-	 * @brief Создать текстурную карту
-	 *
-	 * @param source исходная развертка
-	 * @param rect размер одной текстуры
-	 * @return TextureMap
-	 */
-	TextureMap createTextureMap(TexturePointer source, const SDL_Rect& rect) const;
-
 	/**
 	 * @brief Загрузка анимации по описанию из json-файла
 	 *

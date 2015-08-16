@@ -22,8 +22,6 @@ int main() {
 	try {
 		Engine engine(300, 300);
 
-		auto animation3 = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
-		auto animation2 = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
 		auto animation = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
 		animation->play();
 

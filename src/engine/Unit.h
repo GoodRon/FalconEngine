@@ -60,6 +60,10 @@ private:
 	std::map<AnimationType, AnimationPointer> m_animations;
 
 	double m_direction;
+
+	// weapon/item с приоритетом отрисовки в зависимости от направления
+	// инвентарь
+	// контроллер для управления персонажем
 };
 
 #endif // UNIT_H

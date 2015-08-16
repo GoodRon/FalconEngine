@@ -84,6 +84,8 @@ public:
 		direction = direction;
 		return getFrame();
 	}
+
+	// добавить модификатор скорости
 };
 
 #endif // IANIMATION_H

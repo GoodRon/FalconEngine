@@ -56,44 +56,6 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 	return ptr;
 }
 
-TextureMap ResourceManager::createTextureMap(TexturePointer source,
-											 const SDL_Rect& rect) const {
-	TextureMap textures;
-
-	if ((!m_renderer) || (!source) || (rect.w <= 0) || (rect.h <= 0)) {
-		return textures;
-	}
-
-	Uint32 format;
-	int access, width, height;
-
-	SDL_QueryTexture(source.get(), &format, &access, &width, &height);
-
-	unsigned cols = width / rect.w;
-	unsigned rows = height / rect.h;
-
-	if ((rows == 0) || (cols == 0)) {
-		return textures;
-	}
-
-	for(unsigned row = 0; row < rows; ++row) {
-		vector<TexturePointer> texturesVector;
-		for (unsigned col = 0; col < cols; ++col) {
-			TexturePointer texture(SDL_CreateTexture(m_renderer->getContext(),
-								   format, SDL_TEXTUREACCESS_TARGET, rect.w, rect.h),
-								   SDL_DestroyTexture);
-			SDL_Rect crop = {static_cast<int>(col * rect.w),
-							 static_cast<int>(row * rect.h),
-							 rect.w, rect.h};
-			m_renderer->clearTexture(texture);
-			m_renderer->drawTextureToTexture(source, texture, &crop, nullptr);
-			texturesVector.push_back(texture);
-		}
-		textures.push_back(texturesVector);
-	}
-	return textures;
-}
-
 AnimationPointer ResourceManager::loadAnimation(const string& json) {
 	AnimationPointer animationPtr;
 
