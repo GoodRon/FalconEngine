@@ -11,8 +11,14 @@
 #include "WorldObject.h"
 #include "StateMachine.h"
 #include "AnimationTypes.h"
+#include "IAnimation.h"
 
 class IAnimation;
+
+/**
+ * @brief Умный указатель на объект анимации
+ */
+typedef std::shared_ptr<IAnimation> AnimationPointer;
 
 /**
  * @brief Класс юнита
@@ -25,7 +31,7 @@ public:
 	virtual ~Unit();
 
 	// временно, пока не реализован нормальный конструктор или фабрика
-	void setAnimation(AnimationType type, IAnimation* animation);
+	void setAnimation(AnimationType type, const AnimationPointer& animation);
 
 	virtual void doLogic();
 
@@ -51,7 +57,7 @@ private:
 
 	IAnimation* m_currentAnimation;
 
-	std::map<AnimationType, IAnimation*> m_animations;
+	std::map<AnimationType, AnimationPointer> m_animations;
 
 	double m_direction;
 };

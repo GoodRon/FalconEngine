@@ -14,6 +14,7 @@
 struct SDL_Texture;
 struct SDL_Rect;
 class Renderer;
+class IAnimation;
 
 /**
  * @brief Умный указатель на объект текстуры
@@ -24,6 +25,11 @@ typedef std::shared_ptr<SDL_Texture> TexturePointer;
  * @brief Текстурная карта. Двумерный массив текстур
  */
 typedef std::vector<std::vector<TexturePointer>> TextureMap;
+
+/**
+ * @brief Умный указатель на объект анимации
+ */
+typedef std::shared_ptr<IAnimation> AnimationPointer;
 
 /**
  * @brief Менеджер ресурсов
@@ -42,7 +48,6 @@ public:
 	 */
 	~ResourceManager();
 
-	// Добавить чтение метаинформации из json'а
 	/**
 	 * @brief Загрузка текстуры
 	 *
@@ -51,7 +56,7 @@ public:
 	 */
 	TexturePointer loadTexture(const std::string& name);
 
-	// Добавить кеширование разрезанных текстур
+	// TODO remove
 	/**
 	 * @brief Создать текстурную карту
 	 *
@@ -60,6 +65,14 @@ public:
 	 * @return TextureMap
 	 */
 	TextureMap createTextureMap(TexturePointer source, const SDL_Rect& rect) const;
+
+	/**
+	 * @brief Загрузка анимации по описанию из json-файла
+	 *
+	 * @param json путь к файлу описани
+	 * @return AnimationPointer
+	 */
+	AnimationPointer loadAnimation(const std::string& json);
 
 	/**
 	 * @brief Освободить неиспользуемые текстуры
@@ -92,7 +105,10 @@ private:
 	 */
 	std::unordered_map<std::string, TexturePointer> m_textures;
 
-	// Добавить мэп анимаций
+	/**
+	 * @brief Мэп анимаций
+	 */
+	std::unordered_map<std::string, AnimationPointer> m_animations;
 };
 
 #endif // RESOURCEMANAGER_H

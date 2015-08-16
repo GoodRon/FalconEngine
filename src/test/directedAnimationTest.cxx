@@ -22,27 +22,16 @@ int main() {
 	try {
 		Engine engine(300, 300);
 
-		TexturePointer source = engine.getResourceManager()->loadTexture("resources/walkvector.png");
-		SDL_Rect rect = {0, 0, 32, 48};
-		auto textureMap = engine.getResourceManager()->createTextureMap(source, rect);
-
-		Animation animationDown(textureMap[0], chrono::milliseconds(1000));
-		Animation animationLeft(textureMap[1], chrono::milliseconds(1000));
-		Animation animationRight(textureMap[2], chrono::milliseconds(1000));
-		Animation animationUp(textureMap[3], chrono::milliseconds(1000));
-
-		DirectedAnimation animation;
-		animation.pushAnimation(animationDown, 180.0);
-		animation.pushAnimation(animationLeft, 270.0);
-		animation.pushAnimation(animationRight, 90.0);
-		animation.pushAnimation(animationUp, 0.0);
-		animation.play();
+		auto animation3 = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
+		auto animation2 = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
+		auto animation = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
+		animation->play();
 
 		double direction = 0.0;
 
 		engine.getTimersPool()->addTimer(100, [&engine, &animation, &direction](TimerPool::id_t) {
 			engine.getRenderer()->clearViewport();
-			TexturePointer frame = animation.getFrame(direction);
+			TexturePointer frame = animation->getFrame(direction);
 			SDL_Rect source = {0, 0, 0, 0};
 			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
 							 &(source.h));
@@ -50,7 +39,7 @@ int main() {
 			engine.getRenderer()->drawTexture(frame, &source, &dest);
 		});
 
-		engine.getTimersPool()->addTimer(100, [&animation, &direction](TimerPool::id_t) {
+		engine.getTimersPool()->addTimer(100, [&direction](TimerPool::id_t) {
 			direction += 10.0;
 		});
 

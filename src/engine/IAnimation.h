@@ -81,6 +81,7 @@ public:
 	 * @return TexturePointer фрейм
 	 */
 	virtual TexturePointer getFrame(double direction) {
+		direction = direction;
 		return getFrame();
 	}
 };

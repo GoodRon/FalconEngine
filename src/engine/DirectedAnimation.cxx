@@ -7,9 +7,12 @@
 
 #include "DirectedAnimation.h"
 
-DirectedAnimation::DirectedAnimation() :
+using namespace std;
+
+DirectedAnimation::DirectedAnimation(const vector<pair<double, Animation>>& animations):
 	IAnimation(),
-	m_animations() {
+	m_animations(animations),
+	m_lastDirection(0.0) {
 }
 
 DirectedAnimation::~DirectedAnimation() {
@@ -56,7 +59,7 @@ bool DirectedAnimation::isLooped() const {
 }
 
 TexturePointer DirectedAnimation::getFrame() {
-	return getFrame(0.0);
+	return getFrame(m_lastDirection);
 }
 
 TexturePointer DirectedAnimation::getFrame(double direction) {
@@ -70,6 +73,7 @@ TexturePointer DirectedAnimation::getFrame(double direction) {
 		direction += 360.0;
 	}
 
+	m_lastDirection = direction;
 	double delta = 360.0;
 	auto result = *m_animations.begin();
 

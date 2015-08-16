@@ -16,20 +16,14 @@ public:
 	/**
 	 * @brief Конструктор
 	 */
-	DirectedAnimation();
+	DirectedAnimation(const std::vector<std::pair<double, Animation>>& animations);
 
 	/**
 	 * @brief Деструктор
 	 */
 	virtual ~DirectedAnimation();
 
-	/**
-	 * @brief Добавить анимацию
-	 *
-	 * @param animation
-	 * @param direction направление от 0 до 360 градусов
-	 * @return void
-	 */
+	// TODO remove
 	void pushAnimation(const Animation& animation, double direction);
 
 	/**
@@ -72,6 +66,11 @@ private:
 	 * @brief Вектор пар направление - анимация
 	 */
 	std::vector<std::pair<double, Animation>> m_animations;
+
+	/**
+	 * @brief Последнее известное направление
+	 */
+	double m_lastDirection;
 };
 
 #endif // DIRECTEDANIMATION_H

@@ -18,7 +18,7 @@ Unit::Unit():
 Unit::~Unit() {
 }
 
-void Unit::setAnimation(AnimationType type, IAnimation* animation) {
+void Unit::setAnimation(AnimationType type, const AnimationPointer& animation) {
 	m_animations[type] = animation;
 }
 
