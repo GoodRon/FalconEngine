@@ -47,7 +47,7 @@ public:
 	void changeAnimation(AnimationType type);
 
 private:
-	virtual double calculateDistance(const WorldObject& object) const;
+	//virtual double calculateDistance(const WorldObject& object) const;
 
 private:
 	/**
@@ -55,7 +55,7 @@ private:
 	 */
 	StateMachine<Unit>* m_stateMachine;
 
-	IAnimation* m_currentAnimation;
+	AnimationPointer m_currentAnimation;
 
 	std::map<AnimationType, AnimationPointer> m_animations;
 

@@ -27,7 +27,7 @@ void ObjectManager::pushObject(const WorldObjectPointer& object) {
 }
 
 void ObjectManager::doObjectsLogic() {
-	for (auto & object : m_objects) {
+	for (auto &object : m_objects) {
 		if (object) {
 			object->doLogic();
 		}
@@ -35,7 +35,7 @@ void ObjectManager::doObjectsLogic() {
 }
 
 void ObjectManager::drawAllObjects() {
-	for (auto & object : m_objects) {
+	for (auto &object : m_objects) {
 		if (object) {
 			object->draw(m_renderer);
 		}

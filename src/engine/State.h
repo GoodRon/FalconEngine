@@ -6,12 +6,10 @@
 #ifndef STATE_H
 #define STATE_H
 
-struct SDL_Event;
-
 /**
  * @brief Абстрактный класс состояния
  */
-template <typename ObjectType>
+template <typename Object>
 class State {
 public:
 	/**
@@ -27,24 +25,24 @@ public:
 	/**
 	 * @brief Обработчик входа в состояние
 	 */
-	virtual void onEnter(ObjectType* object) = 0;
+	virtual void onEnter(Object* object) = 0;
 
 	/**
 	 * @brief Обработчик выхода из состояния
 	 */
-	virtual void onExit(ObjectType* object) = 0;
+	virtual void onExit(Object* object) = 0;
 
 	/**
 	 * @brief Обработчик событий
 	 *
 	 * @param event
 	 */
-//	virtual void onSdlEvent(ObjectType* object, const SDL_Event& event) = 0;
+//	virtual void onSdlEvent(Object* object, const SDL_Event& event) = 0;
 
 	/**
 	 * @brief Обновить логику
 	 */
-	virtual void doLogic(ObjectType* object) = 0;
+	virtual void doLogic(Object* object) = 0;
 };
 
 #endif // STATE_H

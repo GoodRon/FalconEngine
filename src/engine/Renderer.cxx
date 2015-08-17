@@ -3,10 +3,10 @@
  * All rights reserved
  */
 
-#include <SDL2/SDL.h>
-
 #include "Renderer.h"
 #include "EngineException.h"
+
+#include <SDL2/SDL.h>
 
 using namespace std;
 

@@ -17,26 +17,11 @@
 
 using namespace std;
 
-Engine::Engine() :
-	m_run(true),
-	m_returnCode(0),
-	m_renderer(nullptr),
-	m_resourceManager(nullptr),
-	m_objectManager(nullptr),
-	m_timers(new TimerPool),
-	m_eventHandlers() {
-	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-		throw EngineException(SDL_GetError());
-	}
-
-	m_renderer = new Renderer(1024, 768);
-	m_resourceManager = new ResourceManager(m_renderer);
-	m_objectManager = new ObjectManager(m_renderer);
-}
-
 Engine::Engine(unsigned width, unsigned height) :
 	m_run(true),
 	m_returnCode(0),
+	m_frameFrequency(33),
+	m_logicFrequency(10),
 	m_renderer(nullptr),
 	m_resourceManager(nullptr),
 	m_objectManager(nullptr),
@@ -51,23 +36,41 @@ Engine::Engine(unsigned width, unsigned height) :
 	m_objectManager = new ObjectManager(m_renderer);
 }
 
+Engine::Engine() :
+	Engine(0, 0) {
+}
+
 Engine::~Engine() {
+	delete m_objectManager;
 	delete m_resourceManager;
 	delete m_renderer;
 	delete m_timers;
-
 	SDL_Quit();
 }
 
+/*
 bool Engine::loadConfig(const std::string& file) {
 	// TODO write me!
 	return true;
 }
+*/
 
 int Engine::execute() {
-	// TODO write better
-	m_timers->addTimer(33, [this](TimerPool::id_t) {
+	// TODO dynamic framerate
+	m_timers->addTimer(m_frameFrequency, [this](TimerPool::id_t) {
+		if (!m_renderer || !m_objectManager) {
+			return;
+		}
+		m_renderer->clearViewport();
+		m_objectManager->drawAllObjects();
 		SDL_RenderPresent(m_renderer->getContext());
+	});
+
+	m_timers->addTimer(m_logicFrequency, [this](TimerPool::id_t) {
+		if (!m_objectManager) {
+			return;
+		}
+		m_objectManager->doObjectsLogic();
 	});
 
 	thread eventsThread([this](){

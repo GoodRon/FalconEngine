@@ -3,13 +3,15 @@
  * All rights reserved
  */
 
+#include <SDL2/SDL.h>
+
 #include "Unit.h"
-#include "StateMachine.h"
 #include "UnitIdleState.h"
+#include "Renderer.h"
 
 Unit::Unit():
 	m_stateMachine(new StateMachine<Unit>(this)),
-	m_currentAnimation(nullptr),
+	m_currentAnimation(),
 	m_animations(),
 	m_direction(0.0) {
 	m_stateMachine->setCurrentState(new UnitIdleState);
@@ -34,7 +36,12 @@ void Unit::draw(Renderer* renderer) {
 		return;
 	}
 
-
+	auto frame = m_currentAnimation->getFrame(m_direction);
+	// TODO забирать через интерфейс анимации
+	SDL_Rect source = {0, 0, 0, 0};
+	SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w), &(source.h));
+	SDL_Rect dest = {0, 0, source.w, source.h};
+	renderer->drawTexture(frame, &source, &dest);
 }
 
 void Unit::moveTo(int x, int y) {
@@ -50,4 +57,11 @@ void Unit::changeState(State<Unit>* state) {
 		return;
 	}
 	m_stateMachine->changeState(state);
+}
+
+void Unit::changeAnimation(AnimationType type) {
+	if (m_animations.find(type) != m_animations.end()) {
+		m_currentAnimation = m_animations[type];
+		m_currentAnimation->play(true);
+	}
 }

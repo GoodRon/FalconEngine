@@ -28,16 +28,16 @@ public:
 
 	/**
 	 * @brief Конструктор
-	 */
-	Engine();
-
-	/**
-	 * @brief Конструктор
 	 *
 	 * @param width ширина порта вывода
 	 * @param height выоста порта вывода
 	 */
 	Engine(unsigned width, unsigned height);
+
+	/**
+	 * @brief Конструктор
+	 */
+	Engine();
 
 	/**
 	 * @brief Деструктор
@@ -50,7 +50,7 @@ public:
 	 * @param file путь к файлу
 	 * @return bool
 	 */
-	bool loadConfig(const std::string& file);
+	// bool loadConfig(const std::string& file);
 
 	/**
 	 * @brief Основной рабочий цикл
@@ -120,6 +120,16 @@ private:
 	 * @brief Возвращаемое значение
 	 */
 	int m_returnCode;
+
+	/**
+	 * @brief Частота обновления кадров
+	 */
+	uint32_t m_frameFrequency;
+
+	/**
+	 * @brief Частота обновления логики
+	 */
+	uint32_t m_logicFrequency;
 
 	/**
 	 * @brief Рендерер
