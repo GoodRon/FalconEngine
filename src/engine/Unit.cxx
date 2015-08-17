@@ -24,6 +24,14 @@ void Unit::setAnimation(AnimationType type, const AnimationPointer& animation) {
 	m_animations[type] = animation;
 }
 
+void Unit::setDirection(double direction) {
+	direction = fmod(direction, 360.0);
+	if (direction < 0.0) {
+		direction += 360.0;
+	}
+	m_direction = direction;
+}
+
 void Unit::doLogic() {
 	if (!m_stateMachine) {
 		return;

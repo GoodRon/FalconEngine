@@ -25,14 +25,26 @@ int main() {
 	try {
 		Engine engine(300, 300);
 
-		auto animation = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
-
 		auto unit = new Unit;
-		unit->setAnimation(atIdle, animation);
+		unit->setAnimation(atIdle, engine.getResourceManager()->
+			loadAnimation("resources/boystand.json"));
+		unit->setAnimation(atMovement, engine.getResourceManager()->
+			loadAnimation("resources/boywalk.json"));
 		unit->changeState(new UnitIdleState);
 		WorldObjectPointer unitPtr(unit);
 
 		engine.getObjectManager()->pushObject(unitPtr);
+
+		double direction = 0.0;
+		engine.getTimersPool()->addTimer(100, [&direction, unit](TimerPool::id_t) {
+			direction += 10.0;
+			direction = fmod(direction, 360.0);
+			if (direction < 0.0) {
+				direction += 360.0;
+			}
+			unit->setDirection(direction);
+		});
+
 		return engine.execute();
 	} catch (EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;

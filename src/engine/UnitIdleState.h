@@ -39,9 +39,6 @@ public:
 	 * @overload
 	 */
 	virtual void doLogic(Unit* object) override;
-
-private:
-
 };
 
 #endif // UNITIDLESTATE_H

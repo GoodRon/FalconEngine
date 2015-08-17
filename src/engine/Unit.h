@@ -32,6 +32,8 @@ public:
 
 	// временно, пока не реализован нормальный конструктор или фабрика
 	void setAnimation(AnimationType type, const AnimationPointer& animation);
+	// временно,
+	void setDirection(double direction);
 
 	virtual void doLogic();
 
@@ -55,10 +57,19 @@ private:
 	 */
 	StateMachine<Unit>* m_stateMachine;
 
+	/**
+	 * @brief Текущая анимация
+	 */
 	AnimationPointer m_currentAnimation;
 
+	/**
+	 * @brief Мэп анимаций
+	 */
 	std::map<AnimationType, AnimationPointer> m_animations;
 
+	/**
+	 * @brief Направление
+	 */
 	double m_direction;
 
 	// weapon/item с приоритетом отрисовки в зависимости от направления
