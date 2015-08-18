@@ -4,6 +4,7 @@
   "name": "boyStand",
   "width": 32,
   "height": 48,
+  "scale": 1,
   "cols": 1,
   "rows": 4,
   "periodMs": 1000,

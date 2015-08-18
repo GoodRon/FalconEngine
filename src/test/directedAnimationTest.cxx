@@ -17,6 +17,7 @@
 #include "Renderer.h"
 #include "ObjectManager.h"
 #include "UnitIdleState.h"
+#include "UnitMovementState.h"
 #include "Unit.h"
 
 using namespace std;
@@ -30,7 +31,7 @@ int main() {
 			loadAnimation("resources/boystand.json"));
 		unit->setAnimation(atMovement, engine.getResourceManager()->
 			loadAnimation("resources/boywalk.json"));
-		unit->changeState(new UnitIdleState);
+		unit->changeState(new UnitMovementState);
 		WorldObjectPointer unitPtr(unit);
 
 		engine.getObjectManager()->pushObject(unitPtr);

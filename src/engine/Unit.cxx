@@ -67,6 +67,13 @@ void Unit::changeState(State<Unit>* state) {
 	m_stateMachine->changeState(state);
 }
 
+void Unit::backToPreviousState() {
+	if (!m_stateMachine) {
+		return;
+	}
+	m_stateMachine->backToPreviousState();
+}
+
 void Unit::changeAnimation(AnimationType type) {
 	if (m_animations.find(type) != m_animations.end()) {
 		m_currentAnimation = m_animations[type];

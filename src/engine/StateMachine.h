@@ -48,6 +48,13 @@ public:
 	void updateState() const;
 
 	/**
+	 * @brief Обработчик событий
+	 *
+	 * @param event
+	 */
+	void handleEvent(const Event& event) const;
+
+	/**
 	 * @brief Сменить состояние
 	 *
 	 * @param state
@@ -112,6 +119,17 @@ void StateMachine<ObjectType>::updateState() const {
 
 	if (m_currentState) {
 		m_currentState->doLogic(m_object);
+	}
+}
+
+template <typename ObjectType>
+void StateMachine<ObjectType>::handleEvent(const Event& event) const {
+	if (m_globalState) {
+		m_globalState->onEvent(m_object);
+	}
+
+	if (m_currentState) {
+		m_currentState->onEvent(m_object);
 	}
 }
 

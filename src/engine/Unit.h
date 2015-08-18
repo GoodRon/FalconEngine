@@ -25,7 +25,7 @@ typedef std::shared_ptr<IAnimation> AnimationPointer;
  */
 class Unit : public WorldObject {
 public:
-	// TODO сделать загрузку из json
+	// TODO сделать загрузку из json 
 	Unit();
 
 	virtual ~Unit();
@@ -45,6 +45,8 @@ public:
 	virtual void attack(WorldObject& object);
 
 	void changeState(State<Unit>* state);
+
+	void backToPreviousState();
 
 	void changeAnimation(AnimationType type);
 
