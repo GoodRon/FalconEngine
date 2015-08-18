@@ -124,8 +124,8 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 		vector<TexturePointer> frames;
 		for (int col = 0; col < cols; ++col) {
 			TexturePointer frame(SDL_CreateTexture(m_renderer->getContext(),
-								   format, SDL_TEXTUREACCESS_TARGET, width, height),
-								   SDL_DestroyTexture);
+								   format, SDL_TEXTUREACCESS_TARGET, width * scale, 
+								   height * scale), SDL_DestroyTexture);
 			SDL_Rect crop = {static_cast<int>(col * width),
 							 static_cast<int>(row * height),
 							 width, height};
