@@ -10,6 +10,7 @@
 
 struct SDL_Rect;
 class Renderer;
+class Command;
 
 /**
  * @brief Объект в мире
@@ -76,6 +77,13 @@ public:
 	 * @param renderer указатель на рендерер
 	 */
 	virtual void draw(Renderer* renderer) = 0;
+
+	/**
+	 * @brief Выполнить комманду
+	 *
+	 * @param command
+	 */
+	virtual void executeCommand(Command* command);
 
 	/**
 	 * @brief Работа внутренней логики объекта

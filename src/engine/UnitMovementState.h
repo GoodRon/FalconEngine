@@ -6,6 +6,8 @@
 #ifndef UNITMOVEMENTSTATE_H
 #define UNITMOVEMENTSTATE_H
 
+#include <chrono>
+
 #include "State.h"
 
 class Unit;
@@ -18,7 +20,7 @@ public:
 	/**
 	 * @brief Конструктор
 	 */
-	UnitMovementState();
+	UnitMovementState(int x, int y);
 
 	/**
 	 * @overload
@@ -39,6 +41,13 @@ public:
 	 * @overload
 	 */
 	virtual void doLogic(Unit* object) override;
+
+private:
+	int m_destinationX;
+	int m_destinationY;
+	int m_deltaX;
+	int m_deltaY;
+	std::chrono::steady_clock::time_point m_startTime;
 };
 
 #endif // UNITMOVEMENTSTATE_H

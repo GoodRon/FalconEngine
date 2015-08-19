@@ -31,11 +31,12 @@ int main() {
 			loadAnimation("resources/boystand.json"));
 		unit->setAnimation(atMovement, engine.getResourceManager()->
 			loadAnimation("resources/boywalk.json"));
-		unit->changeState(new UnitMovementState);
+		unit->changeState(new UnitMovementState(20, 20));
 		WorldObjectPointer unitPtr(unit);
 
 		engine.getObjectManager()->pushObject(unitPtr);
 
+/*
 		double direction = 0.0;
 		engine.getTimersPool()->addTimer(100, [&direction, unit](TimerPool::id_t) {
 			direction += 10.0;
@@ -45,6 +46,7 @@ int main() {
 			}
 			unit->setDirection(direction);
 		});
+*/
 
 		return engine.execute();
 	} catch (EngineException& exception) {

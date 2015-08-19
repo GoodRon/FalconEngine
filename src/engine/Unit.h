@@ -31,14 +31,20 @@ public:
 
 	virtual ~Unit();
 
+	virtual void doLogic() override;
+
+	virtual void draw(Renderer* renderer) override;
+
+	virtual void executeCommand(Command* command) override;
+
+	void setSpeed(double speed);
+
+	double getSpeed() const;
+
 	// временно, пока не реализован нормальный конструктор или фабрика
 	void setAnimation(AnimationType type, const AnimationPointer& animation);
 	// временно,
 	void setDirection(double direction);
-
-	virtual void doLogic();
-
-	virtual void draw(Renderer* renderer);
 
 	virtual void moveTo(int x, int y);
 
@@ -50,11 +56,6 @@ public:
 	void backToPreviousState();
 
 	void changeAnimation(AnimationType type);
-
-	void executeCommand(Command* command);
-
-private:
-	//virtual double calculateDistance(const WorldObject& object) const;
 
 private:
 	/**
@@ -76,6 +77,8 @@ private:
 	 * @brief Направление
 	 */
 	double m_direction;
+
+	double m_speed;
 
 	// weapon/item с приоритетом отрисовки в зависимости от направления
 	// инвентарь

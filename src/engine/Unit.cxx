@@ -14,23 +14,12 @@ Unit::Unit():
 	m_stateMachine(new StateMachine<Unit>(this)),
 	m_currentAnimation(),
 	m_animations(),
-	m_direction(0.0) {
+	m_direction(0.0),
+	m_speed(10.0) {
 	m_stateMachine->setCurrentState(new UnitIdleState);
 }
 
 Unit::~Unit() {
-}
-
-void Unit::setAnimation(AnimationType type, const AnimationPointer& animation) {
-	m_animations[type] = animation;
-}
-
-void Unit::setDirection(double direction) {
-	direction = fmod(direction, 360.0);
-	if (direction < 0.0) {
-		direction += 360.0;
-	}
-	m_direction = direction;
 }
 
 void Unit::doLogic() {
@@ -51,6 +40,33 @@ void Unit::draw(Renderer* renderer) {
 	SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w), &(source.h));
 	SDL_Rect dest = {0, 0, source.w, source.h};
 	renderer->drawTexture(frame, &source, &dest);
+}
+
+void Unit::executeCommand(Command* command) {
+	if (command == nullptr) {
+		return;
+	}
+	command->execute(this);
+}
+
+void Unit::setSpeed(double speed) {
+	m_speed = speed;
+}
+
+double Unit::getSpeed() const {
+	return m_speed;
+}
+
+void Unit::setAnimation(AnimationType type, const AnimationPointer& animation) {
+	m_animations[type] = animation;
+}
+
+void Unit::setDirection(double direction) {
+	direction = fmod(direction, 360.0);
+	if (direction < 0.0) {
+		direction += 360.0;
+	}
+	m_direction = direction;
 }
 
 void Unit::moveTo(int x, int y) {
@@ -80,11 +96,4 @@ void Unit::changeAnimation(AnimationType type) {
 		m_currentAnimation = m_animations[type];
 		m_currentAnimation->play(true);
 	}
-}
-
-void Unit::executeCommand(Command* command) {
-	if (command == nullptr) {
-		return;
-	}
-	command->execute(this);
 }
