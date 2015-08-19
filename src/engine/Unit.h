@@ -14,6 +14,7 @@
 #include "IAnimation.h"
 
 class IAnimation;
+class Command;
 
 /**
  * @brief Умный указатель на объект анимации
@@ -49,6 +50,8 @@ public:
 	void backToPreviousState();
 
 	void changeAnimation(AnimationType type);
+
+	void executeCommand(Command* command);
 
 private:
 	//virtual double calculateDistance(const WorldObject& object) const;

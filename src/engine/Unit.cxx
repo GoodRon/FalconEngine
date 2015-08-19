@@ -8,6 +8,7 @@
 #include "Unit.h"
 #include "UnitIdleState.h"
 #include "Renderer.h"
+#include "Command.h"
 
 Unit::Unit():
 	m_stateMachine(new StateMachine<Unit>(this)),
@@ -79,4 +80,11 @@ void Unit::changeAnimation(AnimationType type) {
 		m_currentAnimation = m_animations[type];
 		m_currentAnimation->play(true);
 	}
+}
+
+void Unit::executeCommand(Command* command) {
+	if (command == nullptr) {
+		return;
+	}
+	command->execute(this);
 }
