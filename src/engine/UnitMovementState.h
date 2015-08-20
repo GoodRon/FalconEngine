@@ -45,8 +45,8 @@ public:
 private:
 	int m_destinationX;
 	int m_destinationY;
-	int m_deltaX;
-	int m_deltaY;
+	double m_deltaX;
+	double m_deltaY;
 	std::chrono::steady_clock::time_point m_startTime;
 };
 

@@ -7,6 +7,7 @@
 
 #include "Unit.h"
 #include "UnitIdleState.h"
+#include "UnitMovementState.h"
 #include "Renderer.h"
 #include "Command.h"
 
@@ -38,7 +39,7 @@ void Unit::draw(Renderer* renderer) {
 	// TODO забирать через интерфейс анимации
 	SDL_Rect source = {0, 0, 0, 0};
 	SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w), &(source.h));
-	SDL_Rect dest = {0, 0, source.w, source.h};
+	SDL_Rect dest = {m_x, m_y, source.w, source.h};
 	renderer->drawTexture(frame, &source, &dest);
 }
 
@@ -70,7 +71,7 @@ void Unit::setDirection(double direction) {
 }
 
 void Unit::moveTo(int x, int y) {
-
+	changeState(new UnitMovementState(x, y));
 }
 
 void Unit::attack(WorldObject& object) {

@@ -48,24 +48,26 @@ void UnitMovementState::doLogic(Unit* object) {
 	double distance = sqrt((m_destinationX - pos.x) * (m_destinationX - pos.x) + 
 		(m_destinationY - pos.y) * (m_destinationY - pos.y));
 
-	auto deltaX = m_destinationX - pos.x;
-	auto deltaY = m_destinationY - pos.y;
-	auto angle = 90.0 - atan(deltaY/deltaX);
+	double deltaX = m_destinationX - pos.x;
+	double deltaY = m_destinationY - pos.y;
+	double angle = atan2(deltaY, deltaX) * 180.0 / M_PI;
+	object->setDirection(90.0 + angle);
 
 	auto currentTime = steady_clock::now();
 	auto deltaTime = duration_cast<milliseconds>(currentTime - m_startTime);
 	m_startTime = currentTime;
 
 	double path = object->getSpeed() * deltaTime.count() / 1000.0;
-	m_deltaX = path * sin(angle);
-	m_deltaY = path * cos(angle);
+	m_deltaX = path * cos(angle * M_PI / 180.0);
+	m_deltaY = path * sin(angle * M_PI / 180.0);
 	double x = pos.x + m_deltaX;
 	double y = pos.y + m_deltaY;
 	object->setPosition(x, y);
 
-	cout << "distance: " << distance << " path " << path << " dx: " << m_deltaX 
-		 << " dy: " << m_deltaY << " angle " << angle << " sin " << sin(angle) 
-		 << " cos " << cos(angle) << endl;
+	cout << "distance: " << distance << " angle " << angle << " path " << path
+		 << " dx: " << m_deltaX
+		 << " dy: " << m_deltaY << " angle " << angle << " sin " << sin(angle * M_PI / 180.0)
+		 << " cos " << cos(angle * M_PI / 180.0) << endl;
 
 	if (distance - path < 0.0) {
 		object->changeState(new UnitIdleState);

@@ -1,8 +1,5 @@
 project(FalconEngine)
-
-
 cmake_minimum_required(VERSION 2.8)
-
 
 # doxygen staff
 configure_file( Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile )
