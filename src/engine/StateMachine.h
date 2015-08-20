@@ -139,6 +139,7 @@ void StateMachine<ObjectType>::changeState(State<ObjectType>* state) {
 		return;
 	}
 
+	delete m_previousState;
 	m_previousState = m_currentState;
 	m_currentState->onExit(m_object);
 	m_currentState = state;

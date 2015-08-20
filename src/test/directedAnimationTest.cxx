@@ -33,7 +33,9 @@ int main() {
 
 		engine.getObjectManager()->pushObject(unitPtr);
 
-		engine.pushEventHandler([&unit](const SDL_Event& event){
+		double scale = 1.0;
+
+		engine.pushEventHandler([&unit, &scale](const SDL_Event& event){
 			switch (event.type) {
 				case SDL_MOUSEBUTTONDOWN: {
 					int x, y;
@@ -43,6 +45,10 @@ int main() {
 						}
 					}
 				} break;
+				case SDL_MOUSEWHEEL:
+					scale += 0.25 * event.wheel.y;
+					unit->setScale(scale);
+					break;
 				default:
 					break;
 			}

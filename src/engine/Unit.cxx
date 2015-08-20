@@ -16,7 +16,8 @@ Unit::Unit():
 	m_currentAnimation(),
 	m_animations(),
 	m_direction(0.0),
-	m_speed(10.0) {
+	m_speed(10.0),
+	m_scale(1.0) {
 	m_stateMachine->setCurrentState(new UnitIdleState);
 }
 
@@ -39,7 +40,8 @@ void Unit::draw(Renderer* renderer) {
 	// TODO забирать через интерфейс анимации
 	SDL_Rect source = {0, 0, 0, 0};
 	SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w), &(source.h));
-	SDL_Rect dest = {m_x, m_y, source.w, source.h};
+	SDL_Rect dest = {m_x, m_y, static_cast<int>(source.w * m_scale),
+					 static_cast<int>(source.h * m_scale)};
 	renderer->drawTexture(frame, &source, &dest);
 }
 
@@ -68,6 +70,10 @@ void Unit::setDirection(double direction) {
 		direction += 360.0;
 	}
 	m_direction = direction;
+}
+
+void Unit::setScale(double scale) {
+	m_scale = scale;
 }
 
 void Unit::moveTo(int x, int y) {

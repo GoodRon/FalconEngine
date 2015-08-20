@@ -57,14 +57,14 @@ bool Engine::loadConfig(const std::string& file) {
 
 int Engine::execute() {
 	// TODO dynamic framerate
-	m_timers->addTimer(m_frameFrequency, [this](TimerPool::id_t) {
-		if (!m_renderer || !m_objectManager) {
-			return;
-		}
-		m_renderer->clearViewport();
-		m_objectManager->drawAllObjects();
-		SDL_RenderPresent(m_renderer->getContext());
-	});
+//	m_timers->addTimer(m_frameFrequency, [this](TimerPool::id_t) {
+//		if (!m_renderer || !m_objectManager) {
+//			return;
+//		}
+//		m_renderer->clearViewport();
+//		m_objectManager->drawAllObjects();
+//		SDL_RenderPresent(m_renderer->getContext());
+//	});
 
 	m_timers->addTimer(m_logicFrequency, [this](TimerPool::id_t) {
 		if (!m_objectManager) {
@@ -84,7 +84,11 @@ int Engine::execute() {
 
 	while (m_run) {
 		m_timers->check();
-		SDL_Delay(10);
+//		SDL_Delay(10);
+
+		m_renderer->clearViewport();
+		m_objectManager->drawAllObjects();
+		SDL_RenderPresent(m_renderer->getContext());
 	}
 	eventsThread.join();
 	return m_returnCode;

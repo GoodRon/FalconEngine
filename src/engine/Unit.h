@@ -46,6 +46,8 @@ public:
 	// временно,
 	void setDirection(double direction);
 
+	void setScale(double scale);
+
 	virtual void moveTo(int x, int y);
 
 	// добавить параметр weapon
@@ -79,6 +81,8 @@ private:
 	double m_direction;
 
 	double m_speed;
+
+	double m_scale;
 
 	// weapon/item с приоритетом отрисовки в зависимости от направления
 	// инвентарь
