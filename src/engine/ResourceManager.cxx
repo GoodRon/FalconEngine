@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
@@ -25,8 +26,8 @@ ResourceManager::~ResourceManager() {
 }
 
 TexturePointer ResourceManager::loadTexture(const string& name) {
-	if (m_textures.find(name) != m_textures.end()) {
-		return m_textures.at(name);
+	if (m_textureCache.find(name) != m_textureCache.end()) {
+		return m_textureCache.at(name);
 	}
 
 	TexturePointer ptr;
@@ -41,8 +42,8 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 		return ptr;
 	}
 
-	SDL_Texture* texture = SDL_CreateTextureFromSurface(m_renderer->getContext(),
-														surface);
+	auto texture = SDL_CreateTextureFromSurface(m_renderer->getContext(),
+												surface);
 	if (texture == nullptr) {
 		cerr << "Unable to create texture from image " << name << ". Error: "
 			 << SDL_GetError() << endl;
@@ -52,7 +53,7 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 
 	SDL_FreeSurface(surface);
 	ptr.reset(texture, SDL_DestroyTexture);
-	m_textures.emplace(name, ptr);
+	m_textureCache.emplace(name, ptr);
 	return ptr;
 }
 
@@ -80,9 +81,6 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 	}
 
 	auto name = root.get("name", "null").asString();
-	if (m_animations.find(name) != m_animations.end()) {
-		return m_animations.at(name);
-	}
 
 	// TODO добавить обработку "animation"
 	if (root.get("type", "null").asString() != "directedAnimation") {
@@ -123,14 +121,27 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 
 		vector<TexturePointer> frames;
 		for (int col = 0; col < cols; ++col) {
+			stringstream stream;
+			stream << textureFile << "_w" << width << "_h" << height
+				   << "_c" << col << "_r" << row;
+			string cachedFrameName;
+			stream >> cachedFrameName;
+
+			if (m_textureCache.find(cachedFrameName) != m_textureCache.end()) {
+				frames.push_back(m_textureCache.at(cachedFrameName));
+				continue;
+			}
+
 			TexturePointer frame(SDL_CreateTexture(m_renderer->getContext(),
-								   format, SDL_TEXTUREACCESS_TARGET, width * scale, 
-								   height * scale), SDL_DestroyTexture);
+												  format, SDL_TEXTUREACCESS_TARGET,
+												  width * scale, height * scale),
+								 SDL_DestroyTexture);
 			SDL_Rect crop = {static_cast<int>(col * width),
 							 static_cast<int>(row * height),
 							 width, height};
 			m_renderer->clearTexture(frame);
 			m_renderer->drawTextureToTexture(texture, frame, &crop, nullptr);
+			m_textureCache.emplace(cachedFrameName, frame);
 			frames.push_back(frame);
 		}
 
@@ -140,20 +151,13 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 
 	DirectedAnimation* directedAnimation = new DirectedAnimation(animations);
 	animationPtr.reset(dynamic_cast<IAnimation*>(directedAnimation));
-
-	m_animations.emplace(name, animationPtr);
 	return animationPtr;
 }
 
 void ResourceManager::freeUnused() {
-	for (auto texture = m_textures.begin(); texture != m_textures.end(); ++texture) {
+	for (auto texture = m_textureCache.begin(); texture != m_textureCache.end(); ++texture) {
 		if ((*texture).second.use_count() <= 1) {
-			m_textures.erase(texture);
-		}
-	}
-	for (auto animation = m_animations.begin(); animation != m_animations.end(); ++animation) {
-		if ((*animation).second.use_count() <= 1) {
-			m_animations.erase(animation);
+			m_textureCache.erase(texture);
 		}
 	}
 }

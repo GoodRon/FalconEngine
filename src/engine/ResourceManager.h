@@ -91,14 +91,9 @@ private:
 	Renderer* m_renderer;
 
 	/**
-	 * @brief Мэп текстур
+	 * @brief Кэш текстур
 	 */
-	std::unordered_map<std::string, TexturePointer> m_textures;
-
-	/**
-	 * @brief Мэп анимаций
-	 */
-	std::unordered_map<std::string, AnimationPointer> m_animations;
+	std::unordered_map<std::string, TexturePointer> m_textureCache;
 };
 
 #endif // RESOURCEMANAGER_H
