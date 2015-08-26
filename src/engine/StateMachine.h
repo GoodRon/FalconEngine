@@ -125,11 +125,11 @@ void StateMachine<ObjectType>::updateState() const {
 template <typename ObjectType>
 void StateMachine<ObjectType>::handleEvent(const Event& event) const {
 	if (m_globalState) {
-		m_globalState->onEvent(m_object);
+		m_globalState->onEvent(m_object, event);
 	}
 
 	if (m_currentState) {
-		m_currentState->onEvent(m_object);
+		m_currentState->onEvent(m_object, event);
 	}
 }
 
