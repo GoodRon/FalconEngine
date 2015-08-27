@@ -96,6 +96,7 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 		return animationPtr;
 	}
 
+	// TODO сделать загрузку отдельными фреймами, а не целыми линиями
 	auto width = root.get("width", 0).asInt();
 	auto height = root.get("height", 0).asInt();
 	auto cols = root.get("cols", 0).asInt();
@@ -149,8 +150,7 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 		animations.emplace_back(direction, animation);
 	}
 
-	DirectedAnimation* directedAnimation = new DirectedAnimation(animations);
-	animationPtr.reset(dynamic_cast<IAnimation*>(directedAnimation));
+	animationPtr.reset(dynamic_cast<IAnimation*>(new DirectedAnimation(animations)));
 	return animationPtr;
 }
 
