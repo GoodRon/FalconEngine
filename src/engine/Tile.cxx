@@ -26,7 +26,7 @@ void Tile::draw(Renderer* renderer) {
 		return;
 	}
 
-	if (!getVisibility()) {
+	if (!isVisible()) {
 		return;
 	}
 

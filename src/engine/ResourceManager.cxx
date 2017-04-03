@@ -102,7 +102,7 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 	auto cols = root.get("cols", 0).asInt();
 	auto rows = root.get("rows", 0).asInt();
 	auto scale = root.get("scale", 0).asInt();
-	chrono::milliseconds period(root.get("periodMs", 0).asInt());
+	chrono::milliseconds period(root.get("period_ms", 0).asInt());
 
 	if ((width <= 0) || (height <= 0) || (cols <= 0) || (rows <= 0)) {
 		cerr << "Can't create animation from " << json << endl;

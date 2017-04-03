@@ -55,7 +55,6 @@ public:
 	bool drawTexture(TexturePointer& texture, SDL_Rect* source = nullptr,
 					 SDL_Rect* destination = nullptr);
 
-
 	/**
 	 * @brief Отрисовать текстуру в текстуру
 	 *

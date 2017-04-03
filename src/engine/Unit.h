@@ -26,7 +26,6 @@ typedef std::shared_ptr<IAnimation> AnimationPointer;
  */
 class Unit : public WorldObject {
 public:
-	// TODO сделать загрузку из json 
 	Unit();
 
 	virtual ~Unit();
@@ -34,8 +33,6 @@ public:
 	virtual void doLogic() override;
 
 	virtual void draw(Renderer* renderer) override;
-
-	virtual void executeCommand(Command* command) override;
 
 	void setSpeed(double speed);
 

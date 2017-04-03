@@ -45,13 +45,6 @@ void Unit::draw(Renderer* renderer) {
 	renderer->drawTexture(frame, &source, &dest);
 }
 
-void Unit::executeCommand(Command* command) {
-	if (command == nullptr) {
-		return;
-	}
-	command->execute(this);
-}
-
 void Unit::setSpeed(double speed) {
 	m_speed = speed;
 }

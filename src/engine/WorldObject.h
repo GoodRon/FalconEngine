@@ -114,7 +114,11 @@ public:
 	 *
 	 * @return bool
 	 */
-	bool getVisibility() const;
+	bool isVisible() const;
+
+	void setCollidability(bool isCollidable);
+
+	bool isCollidable() const;
 
 protected:
 	/**
@@ -146,6 +150,8 @@ protected:
 	 * @brief Признак видимости
 	 */
 	bool m_isVisible;
+
+	bool m_isCollidable;
 };
 
 #endif // WORLDOBJECT_H

@@ -10,11 +10,13 @@
 
 using namespace std;
 
+static const std::string windowHeader = "Falcon Engine";
+
 Renderer::Renderer(int width, int height) :
 	m_window(nullptr),
 	m_renderer(nullptr),
 	m_viewport({0, 0, width, height}) {
-	m_window = SDL_CreateWindow("Falcon Engine",
+	m_window = SDL_CreateWindow(windowHeader.c_str(),
 								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 								m_viewport.w, m_viewport.h, SDL_WINDOW_SHOWN);
 

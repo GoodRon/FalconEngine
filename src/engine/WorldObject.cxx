@@ -71,6 +71,14 @@ void WorldObject::setVisibility(bool isVisible) {
 	m_isVisible = isVisible;
 }
 
-bool WorldObject::getVisibility() const {
+bool WorldObject::isVisible() const {
 	return m_isVisible;
+}
+
+void WorldObject::setCollidability(bool isCollidable) {
+	m_isCollidable = isCollidable;
+}
+
+bool WorldObject::isCollidable() const {
+	return m_isCollidable;
 }

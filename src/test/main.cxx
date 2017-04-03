@@ -48,7 +48,7 @@ int main() {
 					if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
 						auto object = engine.getObjectManager()->getObjectByCoordinates(x, y);
 						if (object) {
-							object->setVisibility(!object->getVisibility());
+							object->setVisibility(!object->isVisible());
 						}
 					}
 				} break;
