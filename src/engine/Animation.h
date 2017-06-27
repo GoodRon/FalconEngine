@@ -99,6 +99,10 @@ public:
 	 */
 	double getSpeed() const;
 
+	void setDirection(double direction);
+
+	double getDirection() const;
+
 private:
 	/**
 	 * @brief Пересчитать временные интервалы
@@ -142,6 +146,8 @@ private:
 	 * @brief Модификатор скорости анимации
 	 */
 	double m_speed;
+
+	double m_direction;
 };
 
 #endif // ANIMATION_H

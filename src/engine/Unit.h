@@ -7,6 +7,7 @@
 #define UNIT_H
 
 #include <map>
+#include <vector>
 
 #include "WorldObject.h"
 #include "StateMachine.h"
@@ -21,69 +22,77 @@ class Command;
  */
 typedef std::shared_ptr<IAnimation> AnimationPointer;
 
+typedef std::vector<AnimationPointer> AnimationArray;
+
+namespace engine {
+    class WorldBuilder;
+}
+
 /**
  * @brief Класс юнита
  */
 class Unit : public WorldObject {
 public:
-	Unit();
+    friend engine::WorldBuilder;
 
-	virtual ~Unit();
+    Unit();
 
-	virtual void doLogic() override;
+    virtual ~Unit();
 
-	virtual void draw(Renderer* renderer) override;
+    virtual void doLogic() override;
 
-	void setSpeed(double speed);
+    virtual void draw(Renderer* renderer) override;
 
-	double getSpeed() const;
+    void setSpeed(double speed);
 
-	// временно, пока не реализован нормальный конструктор или фабрика
-	void setAnimation(AnimationType type, const AnimationPointer& animation);
-	// временно,
-	void setDirection(double direction);
+    double getSpeed() const;
 
-	void setScale(double scale);
+    // временно, пока не реализован нормальный конструктор или фабрика
+    //void setAnimation(AnimationType type, const AnimationPointer& animation);
+    // временно,
+    void setDirection(double direction);
 
-	virtual void moveTo(int x, int y);
+    void setScale(double scale);
 
-	// добавить параметр weapon
-	virtual void attack(WorldObject& object);
+    virtual void moveTo(int x, int y);
 
-	void changeState(State<Unit>* state);
+    // добавить параметр weapon
+    virtual void attack(WorldObject& object);
 
-	void backToPreviousState();
+    void changeState(State<Unit>* state);
 
-	void changeAnimation(AnimationType type);
+    void backToPreviousState();
+
+    void changeAnimation(AnimationType type);
 
 private:
-	/**
-	 * @brief Машина состояний
-	 */
-	StateMachine<Unit>* m_stateMachine;
+    /**
+     * @brief Машина состояний
+     */
+    StateMachine<Unit>* m_stateMachine;
 
-	/**
-	 * @brief Текущая анимация
-	 */
-	AnimationPointer m_currentAnimation;
+    /**
+     * @brief Текущая анимация
+     */
+    AnimationArray m_currentAnimation;
 
-	/**
-	 * @brief Мэп анимаций
-	 */
-	std::map<AnimationType, AnimationPointer> m_animations;
+    /**
+     * @brief Мэп анимаций
+     */
+    std::map<AnimationType, AnimationArray> m_animations;
 
-	/**
-	 * @brief Направление
-	 */
-	double m_direction;
+    /**
+     * @brief Направление
+     */
+    double m_direction;
 
-	double m_speed;
+    double m_speed;
 
-	double m_scale;
+    double m_scale;
 
-	// weapon/item с приоритетом отрисовки в зависимости от направления
-	// инвентарь
-	// контроллер для управления персонажем
+    // weapon/item с приоритетом отрисовки в зависимости от направления
+    // инвентарь
+    // контроллер для управления персонажем
 };
 
 #endif // UNIT_H

@@ -15,6 +15,7 @@
 #include "Renderer.h"
 #include "Animation.h"
 #include "DirectedAnimation.h"
+#include "helpers.h"
 
 using namespace std;
 
@@ -37,8 +38,8 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 
 	SDL_Surface* surface = IMG_Load(name.c_str());
 	if (surface == nullptr) {
-		cerr << "Unable to load image " << name << ". Error: " << IMG_GetError()
-			 << endl;
+		cerr << "Unable to load image " << name << ". Error: " 
+			 << IMG_GetError() << endl;
 		return ptr;
 	}
 
@@ -57,43 +58,63 @@ TexturePointer ResourceManager::loadTexture(const string& name) {
 	return ptr;
 }
 
-AnimationPointer ResourceManager::loadAnimation(const string& json) {
-	AnimationPointer animationPtr;
+TexturePointer ResourceManager::frameFromTexture(const std::string& 
+	textureName, SDL_Rect rect, int scale) {
+	stringstream stream;
+	string cachedFrameName;
 
-	ifstream jsonFile;
-	jsonFile.open(json);
-	if (!jsonFile.good()) {
-		cerr << "Can't open json file " << json << endl;
+	stream << textureName << "_w" << rect.w << "_h" << rect.h
+	   	   << "_x" << rect.x << "_y" << rect.y << "_s" << scale;
+	stream >> cachedFrameName;
+
+	if (m_textureCache.find(cachedFrameName) != m_textureCache.end()) {
+		return m_textureCache.at(cachedFrameName);
 	}
 
-	string line;
-	string jsonContent;
-	while (getline(jsonFile, line)) {
-		jsonContent += line;
+	auto texture = loadTexture(textureName);
+
+	if (!texture) {
+		cerr << "Can't create frame from " << textureName << endl;
+		return TexturePointer();
 	}
+
+	Uint32 format;
+	int access, textureWidth, textureHeight;
+	SDL_QueryTexture(texture.get(), &format, &access, 
+					 &textureWidth, &textureHeight);
+
+	TexturePointer frame(SDL_CreateTexture(m_renderer->getContext(),
+						 format, SDL_TEXTUREACCESS_TARGET, 
+						 rect.w * scale, rect.h * scale),
+						 SDL_DestroyTexture);
+
+	m_renderer->clearTexture(frame);
+	m_renderer->drawTextureToTexture(texture, frame, &rect, nullptr);
+	m_textureCache.emplace(cachedFrameName, frame);
+	return frame;
+}
+
+AnimationArray ResourceManager::loadAnimation(const string& json) {
+	AnimationArray array;
+
+	auto content = engine::helpers::readFile(json);
 
 	Json::Value root;
 	Json::Reader reader;
 
-	if (!reader.parse(jsonContent, root)) {
+	if (!reader.parse(content, root)) {
 		cerr << "Can't parse json from " << json << endl;
-		return animationPtr;
+		return array;
 	}
 
-	auto name = root.get("name", "null").asString();
-
-	// TODO добавить обработку "animation"
-	if (root.get("type", "null").asString() != "directedAnimation") {
-		cerr << "Can't create animation from " << json << endl;
-		return animationPtr;
-	}
-
-	auto textureFile = root.get("texture", "null").asString();
+	auto name = root.get("name", "").asString();
+	auto textureFile = root.get("texture", "").asString();
 	auto texture = loadTexture(textureFile);
 
 	if (!texture) {
-		cerr << "Can't create animation from " << json << " '" << textureFile << "'" << endl;
-		return animationPtr;
+		cerr << "Can't create animation from " << json << " '" 
+			 << textureFile << "'" << endl;
+		return array;
 	}
 
 	// TODO сделать загрузку отдельными фреймами, а не целыми линиями
@@ -106,56 +127,32 @@ AnimationPointer ResourceManager::loadAnimation(const string& json) {
 
 	if ((width <= 0) || (height <= 0) || (cols <= 0) || (rows <= 0)) {
 		cerr << "Can't create animation from " << json << endl;
-		return animationPtr;
+		return array;
 	}
 
-	Uint32 format;
-	int access, textureWidth, textureHeight;
-	SDL_QueryTexture(texture.get(), &format, &access, &textureWidth, &textureHeight);
-	vector<pair<double, Animation>> animations;
-
 	// TODO make it better
-	Json::Value animationSets = root["animations"];
-	for (int index = 0; static_cast<size_t>(index) < animationSets.size(); ++index) {
-		auto direction = animationSets[index].get("direction", 0.0).asDouble();
-		auto row = animationSets[index].get("row", 0).asInt();
+	Json::Value animationSet = root["frames"];
+	for (size_t index = 0; index < animationSet.size(); ++index) {
+		auto direction = animationSet[index].get("direction", 0.0).asDouble();
+		auto row = animationSet[index].get("row", 0).asInt();
 
 		vector<TexturePointer> frames;
 		for (int col = 0; col < cols; ++col) {
-			stringstream stream;
-			stream << textureFile << "_w" << width << "_h" << height
-				   << "_c" << col << "_r" << row;
-			string cachedFrameName;
-			stream >> cachedFrameName;
-
-			if (m_textureCache.find(cachedFrameName) != m_textureCache.end()) {
-				frames.push_back(m_textureCache.at(cachedFrameName));
-				continue;
-			}
-
-			TexturePointer frame(SDL_CreateTexture(m_renderer->getContext(),
-												  format, SDL_TEXTUREACCESS_TARGET,
-												  width * scale, height * scale),
-								 SDL_DestroyTexture);
-			SDL_Rect crop = {static_cast<int>(col * width),
-							 static_cast<int>(row * height),
-							 width, height};
-			m_renderer->clearTexture(frame);
-			m_renderer->drawTextureToTexture(texture, frame, &crop, nullptr);
-			m_textureCache.emplace(cachedFrameName, frame);
+			SDL_Rect rect = {col * width, row * height, width, height};
+			auto frame = frameFromTexture(textureFile, rect, scale);
 			frames.push_back(frame);
 		}
 
-		Animation animation(frames, period);
-		animations.emplace_back(direction, animation);
+		AnimationPointer animation(new Animation(frames, period));
+		dynamic_pointer_cast<Animation>(animation)->setDirection(direction);
+		array.push_back(animation);
 	}
-
-	animationPtr.reset(dynamic_cast<IAnimation*>(new DirectedAnimation(animations)));
-	return animationPtr;
+	return array;
 }
 
 void ResourceManager::freeUnused() {
-	for (auto texture = m_textureCache.begin(); texture != m_textureCache.end(); ++texture) {
+	for (auto texture = m_textureCache.begin(); texture != m_textureCache.end(); 
+		++texture) {
 		if ((*texture).second.use_count() <= 1) {
 			m_textureCache.erase(texture);
 		}

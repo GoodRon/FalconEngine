@@ -16,6 +16,10 @@ class ResourceManager;
 class TimerPool;
 class ObjectManager;
 
+namespace engine {
+
+class WorldBuilder;
+
 /**
  * @brief Класс игрового движка
  */
@@ -79,6 +83,8 @@ public:
 	 * @return ObjectManager*
 	 */
 	ObjectManager* getObjectManager() const;
+
+	WorldBuilder* getWorldBuilder() const;
 
 	/**
 	 * @brief Вернуть указатель на пул таймеров
@@ -146,6 +152,8 @@ private:
 	 */
 	ObjectManager* m_objectManager;
 
+	WorldBuilder* m_worldBuilder;
+
 	/**
 	 * @brief Пул таймеров
 	 */
@@ -156,5 +164,7 @@ private:
 	 */
 	std::vector<eventHandler> m_eventHandlers;
 };
+
+}
 
 #endif // ENGINE_H

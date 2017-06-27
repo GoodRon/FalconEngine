@@ -20,18 +20,13 @@ using namespace std;
 
 int main() {
 	try {
-		Engine engine(500, 500);
+		engine::Engine engine(500, 500);
 
-		auto unit = new Unit;
-		unit->setAnimation(atIdle, engine.getResourceManager()->
-			loadAnimation("resources/boystand.json"));
-		unit->setAnimation(atMovement, engine.getResourceManager()->
-			loadAnimation("resources/boywalk.json"));
-		unit->changeState(new UnitIdleState);
+		auto worldBuilder = engine->getWorldBuilder();
+		auto unit = worldBuilder->buildUnit("resources/boy.json");
 		unit->setSpeed(150);
-		WorldObjectPointer unitPtr(unit);
 
-		engine.getObjectManager()->pushObject(unitPtr);
+		engine.getObjectManager()->pushObject(unit);
 
 		double scale = 1.0;
 

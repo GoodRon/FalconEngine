@@ -1,0 +1,13 @@
+{
+	"unit_type": "humanoid",
+	"animations": [
+		{
+			"state": "stop",
+			"file": "resources/boy_stand_animation.json"
+		},
+		{
+			"state": "walk",
+			"file": "resources/boy_walk_animation.json"
+		}
+	]
+}

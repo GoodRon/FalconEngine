@@ -53,9 +53,9 @@ double Unit::getSpeed() const {
 	return m_speed;
 }
 
-void Unit::setAnimation(AnimationType type, const AnimationPointer& animation) {
-	m_animations[type] = animation;
-}
+//void Unit::setAnimation(AnimationType type, const AnimationPointer& animation) {
+//	m_animations[type] = animation;
+//}
 
 void Unit::setDirection(double direction) {
 	direction = fmod(direction, 360.0);

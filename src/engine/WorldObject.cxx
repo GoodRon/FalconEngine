@@ -57,8 +57,8 @@ SDL_Rect WorldObject::getPosition() const {
 	return rect;
 }
 
-void WorldObject::executeCommand(Command* command) {
-}
+//void WorldObject::executeCommand(Command* command) {
+//}
 
 void WorldObject::doLogic() {
 }

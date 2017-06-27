@@ -1,14 +1,13 @@
 {
-  "texture": "resources/boystand.png",
-  "type": "directedAnimation",
-  "name": "boyStand",
+  "texture": "resources/boy_walk.png",
+  "name": "boy_walk",
   "width": 32,
   "height": 48,
-  "scale": 2,
-  "cols": 1,
+  "cols": 3,
   "rows": 4,
-  "periodMs": 1000,
-  "animations": [
+  "scale": 2,
+  "period_ms": 1000,
+  "frames": [
     {
       "row": 0,
       "direction": 180.0

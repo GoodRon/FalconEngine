@@ -83,7 +83,7 @@ public:
 	 *
 	 * @param command
 	 */
-	virtual void executeCommand(Command* command);
+	//virtual void executeCommand(Command* command);
 
 	/**
 	 * @brief Работа внутренней логики объекта

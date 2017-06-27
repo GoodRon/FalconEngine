@@ -114,3 +114,11 @@ void Animation::setSpeed(double speed) {
 double Animation::getSpeed() const {
 	return m_speed;
 }
+
+void Animation::setDirection(double direction) {
+	m_direction = direction;
+}
+
+double Animation::getDirection() const {
+	return m_direction;
+}

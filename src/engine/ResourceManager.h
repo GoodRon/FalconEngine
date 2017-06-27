@@ -31,6 +31,8 @@ typedef std::vector<std::vector<TexturePointer>> TextureMap;
  */
 typedef std::shared_ptr<IAnimation> AnimationPointer;
 
+typedef std::vector<AnimationPointer> AnimationArray;
+
 /**
  * @brief Менеджер ресурсов
  */
@@ -56,13 +58,16 @@ public:
 	 */
 	TexturePointer loadTexture(const std::string& name);
 
+	TexturePointer frameFromTexture(const std::string& textureName, 
+		SDL_Rect rect, int scale);
+
 	/**
 	 * @brief Загрузка анимации по описанию из json-файла
 	 *
 	 * @param json путь к файлу описани
-	 * @return AnimationPointer
+	 * @return AnimationArray
 	 */
-	AnimationPointer loadAnimation(const std::string& json);
+	AnimationArray loadAnimation(const std::string& json);
 
 	/**
 	 * @brief Освободить неиспользуемые текстуры

@@ -14,10 +14,11 @@
 #include "Renderer.h"
 #include "EngineException.h"
 #include "ObjectManager.h"
+#include "WorldBuilder.h"
 
 using namespace std;
 
-Engine::Engine(unsigned width, unsigned height) :
+engine::Engine::Engine(unsigned width, unsigned height) :
 	m_run(true),
 	m_returnCode(0),
 	m_frameFrequency(33),
@@ -25,6 +26,7 @@ Engine::Engine(unsigned width, unsigned height) :
 	m_renderer(nullptr),
 	m_resourceManager(nullptr),
 	m_objectManager(nullptr),
+	m_worldBuilder(nullptr),
 	m_timers(new TimerPool),
 	m_eventHandlers() {
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -34,16 +36,18 @@ Engine::Engine(unsigned width, unsigned height) :
 	m_renderer = new Renderer(width, height);
 	m_resourceManager = new ResourceManager(m_renderer);
 	m_objectManager = new ObjectManager(m_renderer);
+	m_worldBuilder = new WorldBuilder(m_resourceManager);
 }
 
-Engine::Engine() :
+engine::Engine::Engine() :
 	Engine(0, 0) {
 }
 
-Engine::~Engine() {
+engine::Engine::~Engine() {
 	delete m_objectManager;
 	delete m_resourceManager;
 	delete m_renderer;
+	delete m_worldBuilder;
 	delete m_timers;
 	SDL_Quit();
 }
@@ -55,7 +59,7 @@ bool Engine::loadConfig(const std::string& file) {
 }
 */
 
-int Engine::execute() {
+int engine::Engine::execute() {
 	// TODO dynamic framerate
 //	m_timers->addTimer(m_frameFrequency, [this](TimerPool::id_t) {
 //		if (!m_renderer || !m_objectManager) {
@@ -94,31 +98,35 @@ int Engine::execute() {
 	return m_returnCode;
 }
 
-Renderer* Engine::getRenderer() const {
+Renderer* engine::Engine::getRenderer() const {
 	return m_renderer;
 }
 
-ResourceManager* Engine::getResourceManager() const {
+ResourceManager* engine::Engine::getResourceManager() const {
 	return m_resourceManager;
 }
 
-ObjectManager* Engine::getObjectManager() const {
+ObjectManager* engine::Engine::getObjectManager() const {
 	return m_objectManager;
 }
 
-TimerPool* Engine::getTimersPool() const {
+WorldBuilder* engine::getWorldBuilder() const {
+	return m_worldBuilder;
+}
+
+TimerPool* engine::Engine::getTimersPool() const {
 	return m_timers;
 }
 
-void Engine::pushEventHandler(const eventHandler& handler) {
+void engine::Engine::pushEventHandler(const eventHandler& handler) {
 	m_eventHandlers.push_back(handler);
 }
 
-void Engine::clearEventHandlers() {
+void engine::Engine::clearEventHandlers() {
 	m_eventHandlers.clear();
 }
 
-void Engine::onEvent(const SDL_Event& event) {
+void engine::Engine::onEvent(const SDL_Event& event) {
 	// Дефолтный обработчик
 	switch (event.type) {
 		case SDL_QUIT:

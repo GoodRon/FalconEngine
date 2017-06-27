@@ -3,8 +3,10 @@
  * All rights reserved
  */
 
-#ifndef ANIMATIONTYPES_H
-#define ANIMATIONTYPES_H
+#ifndef ANIMATION_TYPES_H
+#define ANIMATION_TYPES_H
+
+#include <string>
 
 /**
  * @brief Типы анимаций
@@ -26,6 +28,12 @@ enum AnimationType {
 	atMovement = 2
 };
 
+namespace engine {
+
+AnimationType anymationTypeFromString(const std::string& name);
+
+}
+
 //enum AnimationType {
 //	AnimationStand,
 //	AnimationWalk,
@@ -36,4 +44,4 @@ enum AnimationType {
 //	AnimationTalk
 //}
 
-#endif // ANIMATIONTYPES_H
+#endif // ANIMATION_TYPES_H

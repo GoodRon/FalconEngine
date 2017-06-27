@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2017, Roman Meyta <theshrodingerscat@gmail.com>
+ * All rights reserved
+ */
+
 #ifndef WORLD_BUILDER_H
 #define WORLD_BUILDER_H
 
@@ -10,6 +15,8 @@ class Unit;
 // class UnitBuilder;
 class IAnimation;
 
+std::shared_ptr<Unit> UnitPointer;
+
 namespace engine {
 	class WorldBuilder {
 	public:
@@ -17,10 +24,7 @@ namespace engine {
 
 		~WorldBuilder();
 
-		std::shared_ptr<Unit> buildUnit(const std::string& jsonRecipe);
-
-	private:
-		IAnimation* loadAnimation(const std::string& json);
+		UnitPointer buildUnit(const std::string& jsonRecipe);
 
 	private:
 		ResourceManager* m_resourceManager;
