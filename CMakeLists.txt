@@ -20,6 +20,12 @@ endif()
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
 
+find_package(SDL2_image REQUIRED)
+include_directories(${SDL2_IMAGE_INCLUDE_DIR})
+
+find_package(jsoncpp REQUIRED)
+include_directories(${JSONCPP_INCLUDE_DIR})
+
 add_definitions(-Wall -Wextra)
 add_definitions(-D_REENTRANT)
 add_definitions(-std=c++0x)
