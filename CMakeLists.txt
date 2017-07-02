@@ -1,6 +1,8 @@
 project(FalconEngine)
 cmake_minimum_required(VERSION 2.8)
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+
 # doxygen staff
 configure_file( Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile )
 include(FindDoxygen)
@@ -14,6 +16,9 @@ if( DOXYGEN_FOUND )
 		COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
 	)
 endif()
+
+find_package(SDL2 REQUIRED)
+include_directories(${SDL2_INCLUDE_DIR})
 
 add_definitions(-Wall -Wextra)
 add_definitions(-D_REENTRANT)
