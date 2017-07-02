@@ -23,7 +23,7 @@ include_directories(${SDL2_INCLUDE_DIR})
 find_package(SDL2_image REQUIRED)
 include_directories(${SDL2_IMAGE_INCLUDE_DIR})
 
-find_package(jsoncpp REQUIRED)
+find_package(Jsoncpp REQUIRED)
 include_directories(${JSONCPP_INCLUDE_DIR})
 
 add_definitions(-Wall -Wextra)
