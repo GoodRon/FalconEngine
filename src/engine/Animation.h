@@ -7,15 +7,30 @@
 #define ANIMATION_H
 
 #include <vector>
+#include <map>
 #include <chrono>
 
-#include "IAnimation.h"
+//#include "IAnimation.h"
+
+typedef std::shared_ptr<SDL_Texture> Texture;
+typedef std::vector<Texture> Frames;
 
 /**
  * @brief Класс анимации
  */
-class Animation : public IAnimation {
+class Animation {//: public IAnimation {
 public:
+	enum class Direction {
+		Up,
+		UpRight,
+		Right,
+		DownRight,
+		Down,
+		DownLeft,
+		Left,
+		UpLeft
+	}
+
 	/**
 	 * @brief Конструктор
 	 *
@@ -23,44 +38,48 @@ public:
 	 * @param period период анимации
 	 * @param isLooped признак цикличности
 	 */
-	Animation(const std::vector<TexturePointer>& frames,
-			  const std::chrono::milliseconds& period,
-			  bool isLooped = true);
+	//Animation(const std::vector<TexturePointer>& frames,
+	//		  const std::chrono::milliseconds& period,
+	//		  bool isLooped = true);
+
+	Animation(const std::map<Direction, Frames>& frames,
+		const std::chrono::milliseconds& period,
+		bool isLooped = true);
 
 	/**
 	 * @brief Деструктор
 	 */
-	virtual ~Animation();
+	~Animation();
 
 	/**
 	 * @overload
 	 */
-	virtual void play(bool fromStart = false) override;
+	void play(bool fromStart = false);
 
 	/**
 	 * @overload
 	 */
-	virtual void pause() override;
+	void pause();
 
 	/**
 	 * @overload
 	 */
-	virtual bool isPaused() override;
+	bool isPaused() const;
 
 	/**
 	 * @overload
 	 */
-	virtual void setLoop(bool isLooped = true) override;
+	void setLoop(bool isLooped = true);
 
 	/**
 	 * @overload
 	 */
-	virtual bool isLooped() const override;
+	bool isLooped() const;
 
 	/**
 	 * @overload
 	 */
-	virtual TexturePointer getFrame() override;
+	Texture getFrame(Direction direction);
 
 	/**
 	 * @brief Установить период для анимации
@@ -90,18 +109,14 @@ public:
 	 * @param speed
 	 * @return void
 	 */
-	void setSpeed(double speed);
+	void setSpeedModificator(double speedModificator);
 
 	/**
 	 * @brief Вернуть скорость анимации
 	 *
 	 * @return double
 	 */
-	double getSpeed() const;
-
-	void setDirection(double direction);
-
-	double getDirection() const;
+	double getSpeedModificator() const;
 
 private:
 	/**
@@ -115,39 +130,37 @@ private:
 	/**
 	 * @brief Фреймы
 	 */
-	std::vector<TexturePointer> m_frames;
+	sstd::map<Direction, Frames> _frames;
 
 	/**
 	 * @brief Признак цикличности
 	 */
-	bool m_isLooped;
+	bool _isLooped;
 
 	/**
 	 * @brief Период всей анимации
 	 */
-	std::chrono::milliseconds m_period;
+	std::chrono::milliseconds _period;
 
 	/**
 	 * @brief Точка отсчета
 	 */
-	std::chrono::steady_clock::time_point m_startTimepoint;
+	std::chrono::steady_clock::time_point _startTimepoint;
 
 	/**
 	 * @brief Смещение от точки отсчета
 	 */
-	std::chrono::milliseconds m_timeOffset;
+	std::chrono::milliseconds _timeOffset;
 
 	/**
 	 * @brief Признак остановки анимации
 	 */
-	bool m_isPaused;
+	bool _isPaused;
 
 	/**
 	 * @brief Модификатор скорости анимации
 	 */
-	double m_speed;
-
-	double m_direction;
+	double _speedModificator;
 };
 
 #endif // ANIMATION_H

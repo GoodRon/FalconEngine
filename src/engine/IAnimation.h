@@ -74,6 +74,7 @@ public:
 	 */
 	virtual TexturePointer getFrame() = 0;
 
+	// TODO к черту градусы, заменить на Enum с заданными направлениями
 	/**
 	 * @brief Вернуть текущий фрейм по направлению
 	 *

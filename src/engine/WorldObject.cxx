@@ -12,12 +12,12 @@
 using namespace std;
 
 WorldObject::WorldObject(int x, int y) :
-	m_id(),
-	m_x(x),
-	m_y(y),
-	m_width(0),
-	m_height(0),
-	m_isVisible(true) {
+	_id(),
+	_x(x),
+	_y(y),
+	_width(0),
+	_height(0),
+	_isVisible(true) {
 	random_device rd;
 	mt19937 gen(rd());
 	uniform_int_distribution<int> dis;
@@ -32,12 +32,12 @@ WorldObject::~WorldObject() {
 }
 
 int WorldObject::getId() const {
-	return m_id;
+	return _id;
 }
 
 void WorldObject::setPosition(int x, int y) {
-	m_x = x;
-	m_y = y;
+	_x = x;
+	_y = y;
 }
 
 SDL_Rect WorldObject::getPositionAndProfile() const {
@@ -48,12 +48,12 @@ SDL_Rect WorldObject::getPositionAndProfile() const {
 }
 
 SDL_Rect WorldObject::getProfile() const {
-	SDL_Rect rect = {0, 0, m_width, m_height};
+	SDL_Rect rect = {0, 0, _width, _height};
 	return rect;
 }
 
 SDL_Rect WorldObject::getPosition() const {
-	SDL_Rect rect = {m_x, m_y, 0, 0};
+	SDL_Rect rect = {_x, _y, 0, 0};
 	return rect;
 }
 
@@ -68,17 +68,17 @@ int WorldObject::getDrawPriority() {
 }
 
 void WorldObject::setVisibility(bool isVisible) {
-	m_isVisible = isVisible;
+	_isVisible = isVisible;
 }
 
 bool WorldObject::isVisible() const {
-	return m_isVisible;
+	return _isVisible;
 }
 
 void WorldObject::setCollidability(bool isCollidable) {
-	m_isCollidable = isCollidable;
+	_isCollidable = isCollidable;
 }
 
 bool WorldObject::isCollidable() const {
-	return m_isCollidable;
+	return _isCollidable;
 }

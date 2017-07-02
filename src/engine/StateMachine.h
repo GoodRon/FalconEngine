@@ -19,40 +19,45 @@ public:
 	 *
 	 * @param object
 	 */
-	StateMachine(ObjectType* object);
+	//StateMachine(ObjectType* object);
+	StateMachine(State<ObjectType>* baseState = nullptr);
+
+	~StateMachine();
 
 	/**
 	 * @brief Установить текущее состояние
 	 *
 	 * @param state
 	 */
-	void setCurrentState(State<ObjectType>* state);
+	//void setCurrentState(State<ObjectType>* state);
 
 	/**
 	 * @brief Установить предыдущее состояние
 	 *
 	 * @param state
 	 */
-	void setPreviousState(State<ObjectType>* state);
+	//void setPreviousState(State<ObjectType>* state);
 
 	/**
 	 * @brief Установить глобальное состояние
 	 *
 	 * @param state
 	 */
-	void setGlobalState(State<ObjectType>* state);
+	//void setGlobalState(State<ObjectType>* state);
 
 	/**
 	 * @brief Обновить логику состояния
 	 */
 	void updateState() const;
 
+	int getStateType() const;
+
 	/**
 	 * @brief Обработчик событий
 	 *
 	 * @param event
 	 */
-	void handleEvent(const Event& event) const;
+	//void handleEvent(const Event& event) const;
 
 	/**
 	 * @brief Сменить состояние
@@ -64,18 +69,18 @@ public:
 	/**
 	 * @brief Вернуться к предыдущему состоянию
 	 */
-	void backToPreviousState();
+	//void backToPreviousState();
 
 private:
 	/**
 	 * @brief Указатель на объект
 	 */
-	ObjectType* m_object;
+	//ObjectType* m_object;
 
 	/**
 	 * @brief Указатель на текущее состояние
 	 */
-	State<ObjectType>* m_currentState;
+	State<ObjectType>* _currentState;
 
 	/**
 	 * @brief Указатель на предыдущее состояние
@@ -85,17 +90,23 @@ private:
 	/**
 	 * @brief Указатель на глобальное состояние
 	 */
-	State<ObjectType>* m_globalState;
+	//State<ObjectType>* m_globalState;
 };
 
 template <typename ObjectType>
-StateMachine<ObjectType>::StateMachine(ObjectType* object):
-	m_object(object),
-	m_currentState(nullptr),
-	m_previousState(nullptr),
-	m_globalState(nullptr) {
+StateMachine<ObjectType>::StateMachine(State<ObjectType>* baseState = nullptr):
+	//m_object(object),
+	_currentState(baseState) {
+	//m_previousState(nullptr),
+	//m_globalState(nullptr) {
 }
 
+template <typename ObjectType>
+StateMachine<ObjectType>::~StateMachine() {
+	delete _currentState;
+}
+
+/*
 template <typename ObjectType>
 void StateMachine<ObjectType>::setCurrentState(State<ObjectType>* state) {
 	m_currentState = state;
@@ -110,18 +121,20 @@ template <typename ObjectType>
 void StateMachine<ObjectType>::setGlobalState(State<ObjectType>* state) {
 	m_globalState = state;
 }
+*/
 
 template <typename ObjectType>
 void StateMachine<ObjectType>::updateState() const {
-	if (m_globalState) {
-		m_globalState->doLogic(m_object);
-	}
+//	if (m_globalState) {
+//		m_globalState->doLogic(m_object);
+//	}
 
 	if (m_currentState) {
 		m_currentState->doLogic(m_object);
 	}
 }
 
+/*
 template <typename ObjectType>
 void StateMachine<ObjectType>::handleEvent(const Event& event) const {
 	if (m_globalState) {
@@ -132,6 +145,7 @@ void StateMachine<ObjectType>::handleEvent(const Event& event) const {
 		m_currentState->onEvent(m_object, event);
 	}
 }
+*/
 
 template <typename ObjectType>
 void StateMachine<ObjectType>::changeState(State<ObjectType>* state) {
@@ -141,14 +155,16 @@ void StateMachine<ObjectType>::changeState(State<ObjectType>* state) {
 
 	delete m_previousState;
 	m_previousState = m_currentState;
-	m_currentState->onExit(m_object);
+	m_currentState->onExit();
 	m_currentState = state;
-	m_currentState->onEnter(m_object);
+	m_currentState->onEnter();
 }
 
+/*
 template <typename ObjectType>
 void StateMachine<ObjectType>::backToPreviousState() {
 	changeState(m_previousState);
 }
+*/
 
 #endif // STATEMACHINE_H

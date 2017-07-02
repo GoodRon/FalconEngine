@@ -7,33 +7,34 @@
 #define UNIT_H
 
 #include <map>
-#include <vector>
 
 #include "WorldObject.h"
 #include "StateMachine.h"
-#include "AnimationTypes.h"
-#include "IAnimation.h"
+//#include "AnimationTypes.h"
+#include "Animation.h"
 
-class IAnimation;
-class Command;
+//class IAnimation;
+//class Command;
 
 /**
  * @brief Умный указатель на объект анимации
  */
-typedef std::shared_ptr<IAnimation> AnimationPointer;
+//typedef std::shared_ptr<IAnimation> AnimationPointer;
 
-typedef std::vector<AnimationPointer> AnimationArray;
+//typedef std::vector<AnimationPointer> AnimationArray;
 
+/*
 namespace engine {
     class WorldBuilder;
 }
+*/
 
 /**
  * @brief Класс юнита
  */
 class Unit : public WorldObject {
 public:
-    friend engine::WorldBuilder;
+//    friend engine::WorldBuilder;
 
     Unit();
 
@@ -59,36 +60,31 @@ public:
     // добавить параметр weapon
     virtual void attack(WorldObject& object);
 
-    void changeState(State<Unit>* state);
-
-    void backToPreviousState();
-
-    void changeAnimation(AnimationType type);
-
 private:
     /**
      * @brief Машина состояний
      */
-    StateMachine<Unit>* m_stateMachine;
+    StateMachine<Unit>* _stateMachine;
 
     /**
      * @brief Текущая анимация
      */
-    AnimationArray m_currentAnimation;
+    //AnimationArray _currentAnimation;
 
     /**
      * @brief Мэп анимаций
      */
-    std::map<AnimationType, AnimationArray> m_animations;
+    //std::map<AnimationType, AnimationArray> m_animations;
+    std::map<int, Animation> _animations;
 
     /**
      * @brief Направление
      */
-    double m_direction;
+    double _direction;
 
-    double m_speed;
+    double _speed;
 
-    double m_scale;
+    double _scale;
 
     // weapon/item с приоритетом отрисовки в зависимости от направления
     // инвентарь

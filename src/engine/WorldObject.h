@@ -124,34 +124,34 @@ protected:
 	/**
 	 * @brief Идентификатор объекта
 	 */
-	int m_id;
+	int _id;
 
 	/**
 	 * @brief Координата x
 	 */
-	int m_x;
+	int _x;
 
 	/**
 	 * @brief Координата y
 	 */
-	int m_y;
+	int _y;
 
 	/**
 	 * @brief Ширина
 	 */
-	int m_width;
+	int _width;
 
 	/**
 	 * @brief Высота
 	 */
-	int m_height;
+	int _height;
 
 	/**
 	 * @brief Признак видимости
 	 */
-	bool m_isVisible;
+	bool _isVisible;
 
-	bool m_isCollidable;
+	bool _isCollidable;
 };
 
 #endif // WORLDOBJECT_H

@@ -10,17 +10,16 @@
 using namespace std;
 using namespace chrono;
 
-Animation::Animation(const vector<TexturePointer>& frames,
+Animation::Animation(const map<Direction, Frames>& frames,
 					 const milliseconds& period,
 					 bool isLooped) :
-	IAnimation(),
-	m_frames(frames),
-	m_isLooped(isLooped),
-	m_period(period),
-	m_startTimepoint(steady_clock::now()),
-	m_timeOffset(0),
-	m_isPaused(true),
-	m_speed(1.0) {
+	_frames(frames),
+	_isLooped(isLooped),
+	_period(period),
+	_startTimepoint(steady_clock::now()),
+	_timeOffset(milliseconds(0)),
+	_isPaused(true),
+	_speedModificator(1.0) {
 }
 
 Animation::~Animation() {
@@ -28,97 +27,80 @@ Animation::~Animation() {
 
 void Animation::play(bool fromStart) {
 	if (fromStart) {
-		m_timeOffset = milliseconds(0);
-		m_startTimepoint = steady_clock::now();
+		_timeOffset = milliseconds(0);
+		_startTimepoint = steady_clock::now();
 	}
 
-	if (m_isPaused) {
-		m_isPaused = false;
-		m_startTimepoint = steady_clock::now() - m_timeOffset;
+	if (_isPaused) {
+		_isPaused = false;
+		_startTimepoint = steady_clock::now() - _timeOffset;
 	}
 }
 
 void Animation::pause() {
 	recalculateTimes();
-	m_isPaused = true;
+	_isPaused = true;
 }
 
-bool Animation::isPaused() {
-	recalculateTimes();
-	return m_isPaused;
+bool Animation::isPaused() const {
+	return _isPaused;
 }
 
 void Animation::setLoop(bool isLooped) {
-	m_isLooped = isLooped;
+	_isLooped = isLooped;
 }
 
 bool Animation::isLooped() const {
-	return m_isLooped;
+	return _isLooped;
 }
 
-TexturePointer Animation::getFrame() {
-	if (m_frames.empty()) {
+Texture Animation::getFrame(Direction direction) {
+	if (_frames.find(direction) == _frames.end()) {
 		// WARNING check!
-		return TexturePointer();
+		return Texture();
 	}
 
 	recalculateTimes();
 
-	unsigned frameNumber = m_timeOffset * m_frames.size() / (m_period * m_speed);
-	if (frameNumber >= m_frames.size()) {
-		frameNumber = m_frames.size() - 1;
+	auto frames = _frames[direction];
+
+	unsigned frameNumber = _timeOffset * frames.size() / (_period * _speed);
+	if (frameNumber >= frames.size()) {
+		frameNumber = frames.size() - 1;
 	}
-	return m_frames[frameNumber];
+	return frames[frameNumber];
 }
 
 void Animation::setPeriod(const milliseconds& period) {
-	m_period = period;
+	_period = period;
 	recalculateTimes();
 }
 
 milliseconds Animation::getPeriod() const {
-	return m_period;
+	return _period;
 }
 
 milliseconds Animation::getRemainingTime() {
 	recalculateTimes();
-	return duration_cast<milliseconds>(m_period * m_speed) - m_timeOffset;
+	return duration_cast<milliseconds>(_period * _speed) - _timeOffset;
 }
 
 void Animation::recalculateTimes() {
-	if (m_isPaused) {
+	if (_isPaused) {
 		return;
 	}
 
-	m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
+	_timeOffset = duration_cast<milliseconds>(steady_clock::now() - _startTimepoint);
 
-	if (m_isLooped) {
-		m_timeOffset = m_timeOffset % duration_cast<milliseconds>(m_period * m_speed);
-		m_startTimepoint = steady_clock::now() - m_timeOffset;
+	if (_isLooped) {
+		_timeOffset = _timeOffset % duration_cast<milliseconds>(_period * _speed);
+		_startTimepoint = steady_clock::now() - _timeOffset;
+		return;
 	}
 
 	// Если мы не зациклены - остановимся
-	if (m_timeOffset > duration_cast<milliseconds>(m_period * m_speed)) {
-		m_timeOffset = duration_cast<milliseconds>(m_period * m_speed);
-		m_isPaused = true;
+	if (_timeOffset > duration_cast<milliseconds>(_period * _speed)) {
+		_timeOffset = duration_cast<milliseconds>(_period * _speed);
+		_isPaused = true;
 	}
-}
-
-void Animation::setSpeed(double speed) {
-	if (speed <= 0.0) {
-		return;
-	}
-	m_speed = speed;
-}
-
-double Animation::getSpeed() const {
-	return m_speed;
-}
-
-void Animation::setDirection(double direction) {
-	m_direction = direction;
-}
-
-double Animation::getDirection() const {
-	return m_direction;
 }

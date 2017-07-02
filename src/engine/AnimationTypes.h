@@ -11,7 +11,7 @@
 /**
  * @brief Типы анимаций
  */
-enum AnimationType {
+enum class AnimationType {
 	/**
 	 * @brief Нет типа
 	 */

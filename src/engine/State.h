@@ -17,7 +17,9 @@ public:
 	/**
 	 * @brief Конструктор
 	 */
-	State() {}
+	State(Object* object) : _object(object), _type(0) {}
+
+	int getType() const;
 
 	/**
 	 * @brief Деструктор
@@ -29,14 +31,14 @@ public:
 	 *
 	 * @param object
 	 */
-	virtual void onEnter(Object* object) = 0;
+	virtual void onEnter() = 0;
 
 	/**
 	 * @brief Обработчик выхода из состояния
 	 *
 	 * @param object
 	 */
-	virtual void onExit(Object* object) = 0;
+	virtual void onExit() = 0;
 
 	/**
 	 * @brief Обработчик событий
@@ -44,14 +46,18 @@ public:
 	 * @param object
 	 * @param event
 	 */
-	virtual void onEvent(Object* object, const Event& event) {}
+	//virtual void onEvent(const Event& event) {}
 
 	/**
 	 * @brief Обновить логику
 	 *
 	 * @param object
 	 */
-	virtual void doLogic(Object* object) = 0;
+	virtual void doLogic() = 0;
+
+protected:
+	Object * _object;
+	int _type;
 };
 
 #endif // STATE_H
