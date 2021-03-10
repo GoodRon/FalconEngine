@@ -3,8 +3,8 @@
  * All rights reserved
  */
 
-#ifndef DYNAMIC_STATE_H
-#define DYNAMIC_STATE_H
+#ifndef FALCON_DYNAMIC_STATE_H
+#define FALCON_DYNAMIC_STATE_H
 
 #include <string>
 #include <functional>
@@ -13,116 +13,61 @@
 
 struct SDL_Event;
 
-/**
- * @brief Динамический класс состояния
- */
+namespace falcon {
+
 template <class Object>
 class DynamicState : public State<Object> {
 public:
-	/**
-	 * @brief Функция-обработчик
-	 */
-	typedef std::function<void (Object* object)> CommonHandler;
+	using CommonHandler = std::function<void (Object* object)>;
+	using EventHandler = std::function<void (Object* object, const SDL_Event& event)>;
 
-	/**
-	 * @brief Функция-обработчик событий типа SDL_Event
-	 */
-	typedef std::function<void (Object* object, const SDL_Event& event)> EventHandler;
-
-	/**
-	 * @brief Конструктор
-	 *
-	 * @param name
-	 * @param onEnter
-	 * @param doLogic
-	 * @param onEvent
-	 * @param onExit
-	 */
 	DynamicState(const std::string& name,
 		  		 const State::CommonHandler& onEnter,
 		  		 const State::CommonHandler& doLogic,
 		  		 const State::EventHandler& onEvent,
 		  		 const State::CommonHandler& onExit) : State<Object>(name), 
-													   m_onEnter(onEnter),
-													   m_doLogic(doLogic),
-													   m_onEvent(onEvent),
-													   m_onExit(onExit) {}
+													   _onEnter(onEnter),
+													   _doLogic(doLogic),
+													   _onEvent(onEvent),
+													   _onExit(onExit) {}
 
-	/**
-	 * @brief Деструктор
-	 */
 	virtual ~DynamicState() {}
 
-	/**
-	 * @brief Обработчик входа в состояние
-	 * 
-	 * @param object
-	 */
 	virtual void onEnter(Object* object) {
-		if (!m_onEnter) {
+		if (!_onEnter) {
 			return;
 		}
-		m_onEnter(object);
+		_onEnter(object);
 	}
 
-	/**
-	 * @brief Обновить логику
-	 * 
-	 * @param object
-	 */
 	virtual void doLogic(Object* object) {
-		if (!m_doLogic) {
+		if (!_doLogic) {
 			return;
 		}
-		m_doLogic(object);
+		_doLogic(object);
 	}
 
-
-	/**
-	 * @brief Обработчик событий
-	 * 
-	 * @param object
-	 * @param event
-	 */
 	virtual void onEvent(Object* object, const SDL_Event& event) {
-		if (!m_onEvent) {
+		if (!_onEvent) {
 			return;
 		}
-		m_onEvent(object, event);
+		_onEvent(object, event);
 	}
 
-	/**
-	 * @brief Обработчик выхода из состояния
-	 * 
-	 * @param object
-	 */
 	virtual void onExit(Object* object) {
-		if (!m_onExit) {
+		if (!_onExit) {
 			return;
 		}
-		m_onExit(object);
+		_onExit(object);
 	}
 
 private:
-	/**
-	 * @brief Обработчик входа в состояние
-	 */
-	CommonHandler m_onEnter;
-
-	/**
-	 * @brief Обработчик обновления логики
-	 */
-	CommonHandler m_doLogic;
-
-	/**
-	 * @brief Обработчик событий
-	 */
-	EventHandler m_onEvent;
-
-	/**
-	 * @brief Обработчик выхода из состояния
-	 */
-	CommonHandler m_onExit;
+	CommonHandler _onEnter;
+	CommonHandler _doLogic;
+	EventHandler _onEvent;
+	CommonHandler _onExit;
 };
 
-#endif // DYNAMIC_STATE_H
+}
+
+#endif // FALCON_DYNAMIC_STATE_H

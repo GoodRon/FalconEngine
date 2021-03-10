@@ -20,35 +20,37 @@
 
 int main() {
     try {
-        Engine engine(1280, 768);
+        falcon::Engine engine(1280, 768);
     
         // Конструируем поле (пока руками)
         SDL_Rect tileSize = {0, 0, 128, 64};
-        std::shared_ptr<Tile> grassTile(new Tile(engine.getResourceManager()->
-        								loadTexture("resources/grass3.png")));
-        std::vector<std::vector<std::shared_ptr<Tile>>> tiles;
+        std::shared_ptr<falcon::Tile> grassTile(
+            new falcon::Tile(engine.getResourceManager()->
+                loadTexture("resources/grass3.png")));
+        std::vector<std::vector<std::shared_ptr<falcon::Tile>>> tiles;
         for (int i = 0; i < 9; ++i) {
-            std::vector<std::shared_ptr<Tile>> row;
+            std::vector<std::shared_ptr<falcon::Tile>> row;
             tiles.push_back(row);
             for (int j = 0; j < 5; ++j) {
                 tiles[i].push_back(grassTile);
             }
         }
         
-        std::shared_ptr<IsometricField> grassField(new IsometricField(tiles, tileSize));
+        std::shared_ptr<falcon::IsometricField> grassField(
+            new falcon::IsometricField(tiles, tileSize));
         engine.getObjectManager()->pushObject(
-            std::dynamic_pointer_cast<WorldObject>(grassField));
+            std::dynamic_pointer_cast<falcon::WorldObject>(grassField));
         
-        engine.getTimersPool()->addTimer(33, [&engine, grassField](TimerPool::id_t) {
+        engine.getTimersPool()->addTimer(33, [&engine, grassField](falcon::TimerPool::id_t) {
             engine.getRenderer()->clearViewport();
-            engine.getObjectManager()->drawAllObjects();
+            engine.getObjectManager()->drawObjects();
             //SDL_Rect fieldPosition = grassField->getPosition();
             //fieldPosition.x += 1;
             //grassField->setPosition(fieldPosition.x, fieldPosition.y);
         });
         
         return engine.execute();
-    } catch (EngineException& exception) {
+    } catch (falcon::EngineException& exception) {
         std::cout << "Exception caught: " << exception.what() << std::endl;
     }
     return -1;

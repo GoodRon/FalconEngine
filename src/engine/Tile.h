@@ -3,50 +3,34 @@
  * All rights reserved
  */
 
-#ifndef TILE_H
-#define TILE_H
+#ifndef FALCON_TILE_H
+#define FALCON_TILE_H
 
 #include <memory>
 
-#include <WorldObject.h>
+#include "WorldObject.h"
 
 struct SDL_Texture;
 struct SDL_Rect;
 
-/**
- * @brief Умный указатель на объект текстуры
- */
-typedef std::shared_ptr<SDL_Texture> TexturePointer;
+namespace falcon {
 
-/**
- * @brief Класс тайла
- */
-class Tile : public WorldObject {
+using TexturePointer = std::shared_ptr<SDL_Texture>;
+
+class Tile: public WorldObject {
 public:
-	/**
-	 * @brief Конструктор
-	 *
-	 * @param texture текстура
-	 */
-	Tile(TexturePointer texture);
+	Tile(const TexturePointer& texture);
 
-	/**
-	 * @brief Вернуть текстуру тайла
-	 *
-	 * @return TexturePointer
-	 */
+	~Tile() override;
+
 	TexturePointer getTexture() const;
 
-	/**
-	 * @brief overload
-	 */
-	virtual void draw(Renderer* renderer);
+	void draw(Renderer* renderer) override;
 
 private:
-	/**
-	 * @brief Текстура тайла
-	 */
-	TexturePointer m_texture;
+	TexturePointer _texture;
 };
 
-#endif // TILE_H
+}
+
+#endif // FALCON_TILE_H

@@ -2,9 +2,9 @@ project(FalconEngine)
 cmake_minimum_required(VERSION 2.8)
 
 # doxygen staff
-configure_file( Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile )
+configure_file(Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 include(FindDoxygen)
-if( DOXYGEN_FOUND )
+if(DOXYGEN_FOUND)
 	# для ручного запуска, CI делает через плагин
 	add_custom_target(
 		doc
@@ -15,9 +15,11 @@ if( DOXYGEN_FOUND )
 	)
 endif()
 
-add_definitions(-Wall -Wextra)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_definitions(-Wall) 
 add_definitions(-D_REENTRANT)
-add_definitions(-std=c++0x)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/engine)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/game)

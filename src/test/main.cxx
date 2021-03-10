@@ -20,7 +20,7 @@ using namespace std;
 
 int main() {
 	try {
-		Engine engine;
+		falcon::Engine engine(0, 0);
 		engine.pushEventHandler([&engine](const SDL_Event& event) {
 			switch (event.type) {
 				case SDL_KEYDOWN:
@@ -57,20 +57,20 @@ int main() {
 			}
 		});
 
-		TexturePointer texture =
+		falcon::TexturePointer texture =
 				engine.getResourceManager()->loadTexture("resources/ship.png");
-		WorldObjectPointer ship(new Tile(texture));
+		falcon::WorldObjectPointer ship(new falcon::Tile(texture));
 		engine.getObjectManager()->pushObject(ship);
 
-		engine.getTimersPool()->addTimer(33, [&engine](TimerPool::id_t) {
+		engine.getTimersPool()->addTimer(33, [&engine](falcon::TimerPool::id_t) {
 			engine.getRenderer()->clearViewport();
-			engine.getObjectManager()->drawAllObjects();
+			engine.getObjectManager()->drawObjects();
 		});
 
 //		SDL_ShowCursor(SDL_ENABLE);
 
 		return engine.execute();
-	} catch (EngineException& exception) {
+	} catch (falcon::EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;
 	}
 	return -1;

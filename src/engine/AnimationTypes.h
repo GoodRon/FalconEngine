@@ -3,37 +3,17 @@
  * All rights reserved
  */
 
-#ifndef ANIMATIONTYPES_H
-#define ANIMATIONTYPES_H
+#ifndef FALCON_ANIMATION_TYPES_H
+#define FALCON_ANIMATION_TYPES_H
 
-/**
- * @brief Типы анимаций
- */
-enum AnimationType {
-	/**
-	 * @brief Нет типа
-	 */
-	atNone = 0,
+namespace falcon {
 
-	/**
-	 * @brief Простой
-	 */
-	atIdle = 1,
-
-	/**
-	 * @brief Обычное движение
-	 */
-	atMovement = 2
+enum class AnimationType: int {
+	None = 0,
+	Idle = 1,
+	Movement = 2
 };
 
-//enum AnimationType {
-//	AnimationStand,
-//	AnimationWalk,
-//	AnimationRun,
-//	AnimationAtackMele,
-//	AnimationAtackRanged,
-//	AnimationDeath,
-//	AnimationTalk
-//}
+}
 
-#endif // ANIMATIONTYPES_H
+#endif // FALCON_ANIMATION_TYPES_H

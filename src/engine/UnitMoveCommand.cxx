@@ -6,10 +6,12 @@
 #include "UnitMoveCommand.h"
 #include "Unit.h"
 
+namespace falcon {
+
 UnitMoveCommand::UnitMoveCommand(int x, int y):
 	Command(),
-	m_x(x),
-	m_y(y) {
+	_x(x),
+	_y(y) {
 }
 
 UnitMoveCommand::~UnitMoveCommand() {
@@ -17,8 +19,10 @@ UnitMoveCommand::~UnitMoveCommand() {
 
 void UnitMoveCommand::execute(WorldObject* object) {
 	auto unit = dynamic_cast<Unit*>(object);
-	if (unit == nullptr) {
+	if (!unit) {
 		return;
 	}
-	unit->moveTo(m_x, m_y);
+	unit->moveTo(_x, _y);
+}
+
 }

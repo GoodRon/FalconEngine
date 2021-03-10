@@ -3,7 +3,6 @@
  * All rights reserved
  */
 
-#include <iostream>
 #include <thread>
 
 #include <SDL2/SDL.h>
@@ -12,39 +11,32 @@
 #include "TimerPool.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "EngineException.h"
 #include "ObjectManager.h"
+#include "EngineException.h"
 
-using namespace std;
+namespace falcon {
 
-Engine::Engine(unsigned width, unsigned height) :
-	m_run(true),
-	m_returnCode(0),
-	m_frameFrequency(33),
-	m_logicFrequency(10),
-	m_renderer(nullptr),
-	m_resourceManager(nullptr),
-	m_objectManager(nullptr),
-	m_timers(new TimerPool),
-	m_eventHandlers() {
+Engine::Engine(int width, int height) :
+	_isRunning(true),
+	_returnCode(0),
+	_logicPeriod(10),
+	_renderer(),
+	_resourceManager(),
+	_objectManager(),
+	_timerPool(),
+	_eventHandlers() {
+
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
 	}
 
-	m_renderer = new Renderer(width, height);
-	m_resourceManager = new ResourceManager(m_renderer);
-	m_objectManager = new ObjectManager(m_renderer);
-}
-
-Engine::Engine() :
-	Engine(0, 0) {
+	_renderer.reset(new Renderer(width, height));
+	_resourceManager.reset(new ResourceManager(_renderer.get()));
+	_objectManager.reset(new ObjectManager(_renderer.get()));
+	_timerPool.reset(new TimerPool);
 }
 
 Engine::~Engine() {
-	delete m_objectManager;
-	delete m_resourceManager;
-	delete m_renderer;
-	delete m_timers;
 	SDL_Quit();
 }
 
@@ -56,78 +48,68 @@ bool Engine::loadConfig(const std::string& file) {
 */
 
 int Engine::execute() {
-	// TODO dynamic framerate
-//	m_timers->addTimer(m_frameFrequency, [this](TimerPool::id_t) {
-//		if (!m_renderer || !m_objectManager) {
-//			return;
-//		}
-//		m_renderer->clearViewport();
-//		m_objectManager->drawAllObjects();
-//		SDL_RenderPresent(m_renderer->getContext());
-//	});
 
-	m_timers->addTimer(m_logicFrequency, [this](TimerPool::id_t) {
-		if (!m_objectManager) {
+	_timerPool->addTimer(_logicPeriod.count(), [this](TimerPool::id_t) {
+		if (!_objectManager) {
 			return;
 		}
-		m_objectManager->doObjectsLogic();
+		_objectManager->doObjectsLogic();
 	});
 
-	thread eventsThread([this](){
+	std::thread eventsThread([this](){
 		SDL_Event event;
-		while (m_run) {
+		while (_isRunning) {
 			if (SDL_WaitEvent(&event) != 0) {
 				onEvent(event);
 			}
 		}
 	});
 
-	while (m_run) {
-		m_timers->check();
+	while (_isRunning) {
+		_timerPool->check();
 //		SDL_Delay(10);
 
-		m_renderer->clearViewport();
-		m_objectManager->drawAllObjects();
-		SDL_RenderPresent(m_renderer->getContext());
+		_renderer->clearViewport();
+		_objectManager->drawObjects();
+		SDL_RenderPresent(_renderer->getContext());
 	}
 	eventsThread.join();
-	return m_returnCode;
+	return _returnCode;
 }
 
 Renderer* Engine::getRenderer() const {
-	return m_renderer;
+	return _renderer.get();
 }
 
 ResourceManager* Engine::getResourceManager() const {
-	return m_resourceManager;
+	return _resourceManager.get();
 }
 
 ObjectManager* Engine::getObjectManager() const {
-	return m_objectManager;
+	return _objectManager.get();
 }
 
 TimerPool* Engine::getTimersPool() const {
-	return m_timers;
+	return _timerPool.get();
 }
 
 void Engine::pushEventHandler(const eventHandler& handler) {
-	m_eventHandlers.push_back(handler);
+	_eventHandlers.push_back(handler);
 }
 
 void Engine::clearEventHandlers() {
-	m_eventHandlers.clear();
+	_eventHandlers.clear();
 }
 
 void Engine::onEvent(const SDL_Event& event) {
-	// Дефолтный обработчик
 	switch (event.type) {
 		case SDL_QUIT:
-			m_run = false;
+			_isRunning = false;
 			break;
 		case SDL_KEYDOWN:
 			switch (event.key.keysym.sym) {
 				case SDLK_ESCAPE:
-					m_run = false;
+					_isRunning = false;
 					break;
 				default:
 					break;
@@ -137,8 +119,9 @@ void Engine::onEvent(const SDL_Event& event) {
 			break;
 	}
 
-	// Остальные обработчики
-	for (auto &handler: m_eventHandlers) {
+	for (auto &handler: _eventHandlers) {
 		handler(event);
 	}
+}
+
 }

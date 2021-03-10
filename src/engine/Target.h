@@ -3,13 +3,16 @@
  * All rights reserved
  */
 
-#ifndef TARGET_H
-#define TARGET_H
+#ifndef FALCON_TARGET_H
+#define FALCON_TARGET_H
 
 #include <memory>
 
-class WorldObject;
 struct SDL_Rect;
+
+namespace falcon {
+
+class WorldObject;
 
 class Target {
 public:
@@ -20,9 +23,11 @@ public:
 	SDL_Rect getPosition();
 
 private:
-	std::shared_ptr<WorldObject> m_object;
-	int m_x;
-	int m_y;
+	std::shared_ptr<WorldObject> _object;
+	int _x;
+	int _y;
 };
 
-#endif // TARGET_H
+}
+
+#endif // FALCON_TARGET_H

@@ -8,22 +8,25 @@
 #include "Target.h"
 #include "WorldObject.h"
 
+namespace falcon {
+
 Target::Target(std::shared_ptr<WorldObject> object):
-	m_object(object),
-	m_x(0),
-	m_y(0) {
+	_object(object),
+	_x(0),
+	_y(0) {
 }
 
 Target::Target(int x, int y):
-	m_object(),
-	m_x(x),
-	m_y(y) {
+	_object(),
+	_x(x),
+	_y(y) {
 }
 
 SDL_Rect Target::getPosition() {
-	if (m_object) {
-		return m_object->getPosition();
+	if (_object) {
+		return _object->getPosition();
 	}
-	SDL_Rect coordinates = {m_x, m_y, 0, 0};
-	return coordinates;
+	return SDL_Rect{_x, _y, 0, 0};
+}
+
 }

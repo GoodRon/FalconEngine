@@ -7,110 +7,131 @@
 
 #include "Animation.h"
 
-using namespace std;
-using namespace chrono;
+namespace falcon {
 
-Animation::Animation(const vector<TexturePointer>& frames,
-					 const milliseconds& period,
+Animation::Animation(const std::vector<TexturePointer>& frames,
+					 const std::chrono::milliseconds& period,
 					 bool isLooped) :
 	IAnimation(),
-	m_frames(frames),
-	m_isLooped(isLooped),
-	m_period(period),
-	m_startTimepoint(steady_clock::now()),
-	m_timeOffset(0),
-	m_isPaused(true),
-	m_speed(1.0) {
+	_frames(frames),
+	_isLooped(isLooped),
+	_speed(1.0),
+	_period(period),
+	_duration(0),
+	_startTimepoint(std::chrono::steady_clock::now()),
+	_timeOffset(0),
+	_isPaused(false),
+	_isEnded(true) {
+
+	calculateDuration();
 }
 
 Animation::~Animation() {
 }
 
-void Animation::play(bool fromStart) {
-	if (fromStart) {
-		m_timeOffset = milliseconds(0);
-		m_startTimepoint = steady_clock::now();
+void Animation::play() {
+	if (_isEnded) {
+		_isEnded = false;
+		_startTimepoint = std::chrono::steady_clock::now();
+		_timeOffset = std::chrono::milliseconds(0);
 	}
 
-	if (m_isPaused) {
-		m_isPaused = false;
-		m_startTimepoint = steady_clock::now() - m_timeOffset;
+	if (_isPaused) {
+		_startTimepoint = std::chrono::steady_clock::now() - _timeOffset;
 	}
+
+	_isPaused = false;
 }
 
 void Animation::pause() {
-	recalculateTimes();
-	m_isPaused = true;
+	updateTimepoint();
+	_isPaused = true;
 }
 
 bool Animation::isPaused() {
-	recalculateTimes();
-	return m_isPaused;
+	updateTimepoint();
+	return _isPaused;
 }
 
 void Animation::setLoop(bool isLooped) {
-	m_isLooped = isLooped;
+	_isLooped = isLooped;
 }
 
 bool Animation::isLooped() const {
-	return m_isLooped;
+	return _isLooped;
 }
 
 TexturePointer Animation::getFrame() {
-	if (m_frames.empty()) {
-		// WARNING check!
+	if (_frames.empty()) {
 		return TexturePointer();
 	}
 
-	recalculateTimes();
+	updateTimepoint();
 
-	unsigned frameNumber = m_timeOffset * m_frames.size() / (m_period * m_speed);
-	if (frameNumber >= m_frames.size()) {
-		frameNumber = m_frames.size() - 1;
+	unsigned frameNumber = _timeOffset.count() * _frames.size() / _duration.count();
+	if (frameNumber >= _frames.size()) {
+		frameNumber = _frames.size() - 1;
 	}
-	return m_frames[frameNumber];
+	return _frames[frameNumber];
 }
 
-void Animation::setPeriod(const milliseconds& period) {
-	m_period = period;
-	recalculateTimes();
+void Animation::setPeriod(const std::chrono::milliseconds& period) {
+	_period = period;
+	calculateDuration();
+	updateTimepoint();
 }
 
-milliseconds Animation::getPeriod() const {
-	return m_period;
+std::chrono::milliseconds Animation::getPeriod() const {
+	return _period;
 }
 
-milliseconds Animation::getRemainingTime() {
-	recalculateTimes();
-	return duration_cast<milliseconds>(m_period * m_speed) - m_timeOffset;
+std::chrono::milliseconds Animation::getDuration() const {
+	return _duration;
 }
 
-void Animation::recalculateTimes() {
-	if (m_isPaused) {
+std::chrono::milliseconds Animation::getRemainingTime() {
+	updateTimepoint();
+	return std::chrono::duration_cast<std::chrono::milliseconds>(
+		_period * _speed) - _timeOffset;
+}
+
+void Animation::updateTimepoint() {
+	if (_isPaused) {
 		return;
 	}
 
-	m_timeOffset = duration_cast<milliseconds>(steady_clock::now() - m_startTimepoint);
+	_timeOffset = std::chrono::duration_cast<std::chrono::milliseconds>(
+		std::chrono::steady_clock::now() - _startTimepoint);
 
-	if (m_isLooped) {
-		m_timeOffset = m_timeOffset % duration_cast<milliseconds>(m_period * m_speed);
-		m_startTimepoint = steady_clock::now() - m_timeOffset;
+	if (_isLooped) {
+		_timeOffset = _timeOffset % _duration;
+		_startTimepoint = std::chrono::steady_clock::now() - _timeOffset;
+		return;
 	}
 
 	// Если мы не зациклены - остановимся
-	if (m_timeOffset > duration_cast<milliseconds>(m_period * m_speed)) {
-		m_timeOffset = duration_cast<milliseconds>(m_period * m_speed);
-		m_isPaused = true;
+	if (_timeOffset > _duration) {
+		_isPaused = true;
+		_isEnded = true;
 	}
+}
+
+void Animation::calculateDuration() {
+	_duration = std::chrono::duration_cast<std::chrono::milliseconds>(_period * _speed);
 }
 
 void Animation::setSpeed(double speed) {
 	if (speed <= 0.0) {
 		return;
 	}
-	m_speed = speed;
+
+	_speed = speed;
+	calculateDuration();
+	updateTimepoint();
 }
 
 double Animation::getSpeed() const {
-	return m_speed;
+	return _speed;
+}
+
 }

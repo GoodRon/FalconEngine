@@ -3,20 +3,25 @@
  * All rights reserved
  */
 
-#ifndef UNITMOVECOMMAND_H
-#define UNITMOVECOMMAND_H
+#ifndef FALCON_UNIT_MOVE_COMMAND_H
+#define FALCON_UNIT_MOVE_COMMAND_H
 
 #include "Command.h"
 
-class UnitMoveCommand : public Command {
+namespace falcon {
+
+class UnitMoveCommand: public Command {
 public:
 	UnitMoveCommand(int x, int y);
-    virtual ~UnitMoveCommand();
-    virtual void execute(WorldObject* object) override;
+    ~UnitMoveCommand() override;
+
+    void execute(WorldObject* object) override;
 
 private:
-	int m_x;
-	int m_y;
+	int _x;
+	int _y;
 };
 
-#endif // UNITMOVECOMMAND_H
+}
+
+#endif // FALCON_UNIT_MOVE_COMMAND_H

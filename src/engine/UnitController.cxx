@@ -8,7 +8,10 @@
 #include "UnitController.h"
 #include "Unit.h"
 
-UnitController::UnitController(WorldObject* object): Controller(object) {
+namespace falcon {
+
+UnitController::UnitController(WorldObject* object): 
+	Controller(object) {
 }
 
 UnitController::~UnitController() {
@@ -19,7 +22,7 @@ void UnitController::onEvent(const SDL_Event& event) {
 		case SDL_MOUSEBUTTONDOWN: {
 			int x, y;
 			if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-				auto unit = dynamic_cast<Unit*>(m_object);
+				auto unit = dynamic_cast<Unit*>(_object);
 				if (unit != nullptr) {
 					unit->moveTo(x, y);
 				}
@@ -30,3 +33,4 @@ void UnitController::onEvent(const SDL_Event& event) {
 	}
 }
 
+}

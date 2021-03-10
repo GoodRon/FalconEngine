@@ -3,8 +3,8 @@
  * All rights reserved
  */
 
-#ifndef RESOURCEMANAGER_H
-#define RESOURCEMANAGER_H
+#ifndef FALCON_RESOURCE_MANAGER_H
+#define FALCON_RESOURCE_MANAGER_H
 
 #include <string>
 #include <memory>
@@ -13,87 +13,34 @@
 
 struct SDL_Texture;
 struct SDL_Rect;
+
+namespace falcon {
+
 class Renderer;
 class IAnimation;
 
-/**
- * @brief Умный указатель на объект текстуры
- */
-typedef std::shared_ptr<SDL_Texture> TexturePointer;
+using TexturePointer = std::shared_ptr<SDL_Texture>;
+using AnimationPointer = std::shared_ptr<IAnimation>;
 
-/**
- * @brief Текстурная карта. Двумерный массив текстур
- */
-typedef std::vector<std::vector<TexturePointer>> TextureMap;
-
-/**
- * @brief Умный указатель на объект анимации
- */
-typedef std::shared_ptr<IAnimation> AnimationPointer;
-
-/**
- * @brief Менеджер ресурсов
- */
 class ResourceManager {
 public:
-	/**
-	 * @brief Конструктор
-	 *
-	 * @param renderer указатель на объект рендерера
-	 */
 	ResourceManager(Renderer* renderer);
 
-	/**
-	 * @brief Деструктор
-	 */
 	~ResourceManager();
 
-	/**
-	 * @brief Загрузка текстуры
-	 *
-	 * @param name имя текстуры
-	 * @return TexturePointer
-	 */
-	TexturePointer loadTexture(const std::string& name);
+	ResourceManager(const ResourceManager&) = delete;
+	ResourceManager& operator=(ResourceManager&) = delete;
 
-	/**
-	 * @brief Загрузка анимации по описанию из json-файла
-	 *
-	 * @param json путь к файлу описани
-	 * @return AnimationPointer
-	 */
+	TexturePointer loadTexture(const std::string& name);
 	AnimationPointer loadAnimation(const std::string& json);
 
-	/**
-	 * @brief Освободить неиспользуемые текстуры
-	 */
 	void freeUnused();
 
 private:
-	/**
-	 * @brief Копирующий конструктор
-	 *
-	 * @param other
-	 */
-	ResourceManager(const ResourceManager& other) = delete;
-
-	/**
-	 * @brief Оператор присваивания
-	 *
-	 * @param other
-	 */
-	ResourceManager& operator=(ResourceManager& other) = delete;
-
-private:
-	/**
-	 * @brief Указатель на объект рендерера
-	 */
-	Renderer* m_renderer;
-
-	/**
-	 * @brief Кэш текстур
-	 */
-	std::unordered_map<std::string, TexturePointer> m_textureCache;
+	Renderer* _renderer;
+	std::unordered_map<std::string, TexturePointer> _textureCache;
 };
 
-#endif // RESOURCEMANAGER_H
+}
+
+#endif // FALCON_RESOURCE_MANAGER_H

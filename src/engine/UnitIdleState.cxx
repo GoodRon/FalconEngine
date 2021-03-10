@@ -6,25 +6,20 @@
 #include "UnitIdleState.h"
 #include "Unit.h"
 
+namespace falcon {
+
 UnitIdleState::UnitIdleState() :
 	State<Unit>() {
 }
 
 UnitIdleState::~UnitIdleState() {
-
 }
 
 void UnitIdleState::onEnter(Unit* object) {
 	if (!object) {
 		return;
 	}
-	object->changeAnimation(atIdle);
+	object->changeAnimation(AnimationType::Idle);
 }
-
-void UnitIdleState::onExit(Unit* object) {
-
-}
-
-void UnitIdleState::doLogic(Unit* object) {
 
 }

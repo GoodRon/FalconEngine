@@ -11,65 +11,67 @@
 #include "UnitIdleState.h"
 #include "Unit.h"
 
-using namespace std;
-using namespace chrono;
+namespace falcon {
 
 UnitMovementState::UnitMovementState(int x, int y) :
 	State<Unit>(),
-	m_destinationX(x),
-	m_destinationY(y),
-	m_deltaX(0.0),
-	m_deltaY(0.0),
-	m_startTime() {
-	m_startTime = steady_clock::now();
+	_destinationX(x),
+	_destinationY(y),
+	_deltaX(0.0),
+	_deltaY(0.0),
+	_startTime() {
+
+	_startTime = std::chrono::steady_clock::now();
 }
 
 UnitMovementState::~UnitMovementState() {
-
 }
 
 void UnitMovementState::onEnter(Unit* object) {
 	if (!object) {
 		return;
 	}
-	object->changeAnimation(atMovement);
+	object->changeAnimation(AnimationType::Movement);
 }
 
-void UnitMovementState::onExit(Unit* object) {
-
-}
-
-#include <iostream>
+//#include <iostream>
 void UnitMovementState::doLogic(Unit* object) {
 	if (!object) {
 		return;
 	}
 	auto pos = object->getPosition();
-	double distance = sqrt((m_destinationX - pos.x) * (m_destinationX - pos.x) + 
-		(m_destinationY - pos.y) * (m_destinationY - pos.y));
+	double distance = sqrt((_destinationX - pos.x) * (_destinationX - pos.x) + 
+		(_destinationY - pos.y) * (_destinationY - pos.y));
 
-	double deltaX = m_destinationX - pos.x;
-	double deltaY = m_destinationY - pos.y;
+	double deltaX = _destinationX - pos.x;
+	double deltaY = _destinationY - pos.y;
 	double angle = atan2(deltaY, deltaX) * 180.0 / M_PI;
 	object->setDirection(90.0 + angle);
 
-	auto currentTime = steady_clock::now();
-	auto deltaTime = duration_cast<milliseconds>(currentTime - m_startTime);
-	m_startTime = currentTime;
+	auto currentTime = std::chrono::steady_clock::now();
+	auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(
+		currentTime - _startTime);
+	_startTime = currentTime;
 
 	double path = object->getSpeed() * deltaTime.count() / 1000.0;
-	m_deltaX = path * cos(angle * M_PI / 180.0);
-	m_deltaY = path * sin(angle * M_PI / 180.0);
-	double x = pos.x + m_deltaX;
-	double y = pos.y + m_deltaY;
+	_deltaX = path * cos(angle * M_PI / 180.0);
+	_deltaY = path * sin(angle * M_PI / 180.0);
+	double x = pos.x + _deltaX;
+	double y = pos.y + _deltaY;
 	object->setPosition(x, y);
 
+	/*
+	// TODO remove debug!
 	cout << "distance: " << distance << " angle " << angle << " path " << path
-		 << " dx: " << m_deltaX
-		 << " dy: " << m_deltaY << " angle " << angle << " sin " << sin(angle * M_PI / 180.0)
+		 << " dx: " << _deltaX
+		 << " dy: " << _deltaY << " angle " << angle << " sin " << sin(angle * M_PI / 180.0)
 		 << " cos " << cos(angle * M_PI / 180.0) << endl;
+	*/
 
 	if (distance - path < 0.0) {
-		object->changeState(new UnitIdleState);
+		std::unique_ptr<State<Unit>> state(new UnitIdleState);
+		object->changeState(std::move(state));
 	}
+}
+
 }

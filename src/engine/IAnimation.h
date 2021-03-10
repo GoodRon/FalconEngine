@@ -3,89 +3,41 @@
  * All rights reserved
  */
 
-#ifndef IANIMATION_H
-#define IANIMATION_H
+#ifndef FALCON_IANIMATION_H
+#define FALCON_IANIMATION_H
 
 #include <memory>
 
 struct SDL_Texture;
 
-/**
- * @brief Умный указатель на объект текстуры
- */
-typedef std::shared_ptr<SDL_Texture> TexturePointer;
+namespace falcon {
 
-/**
- * @brief Интерфейс анимации
- */
+using TexturePointer = std::shared_ptr<SDL_Texture>;
+
 class IAnimation {
 public:
-	/**
-	 * @brief Конструктор
-	 */
 	IAnimation() {}
 
-	/**
-	 * @brief Деструктор
-	 */
 	virtual ~IAnimation() {}
 
-	/**
-	 * @brief Начать или продолжить воспроизведение
-	 *
-	 * @param fromStart признак необходимости начать сначала
-	 * @return void
-	 */
-	virtual void play(bool fromStart = false) = 0;
+	virtual void play() = 0;
 
-	/**
-	 * @brief Приостановить воспроизведение
-	 *
-	 * @return void
-	 */
 	virtual void pause() = 0;
 
-	/**
-	 * @brief Вернуть признак остановки воспроизведения
-	 *
-	 * @return bool
-	 */
 	virtual bool isPaused() = 0;
 
-	/**
-	 * @brief Установить признак цикличности
-	 *
-	 * @param isLooped
-	 * @return void
-	 */
-	virtual void setLoop(bool isLooped = true) = 0;
+	virtual void setLoop(bool isLooped) = 0;
 
-	/**
-	 * @brief Вернуть признак цикличности
-	 *
-	 * @return bool
-	 */
 	virtual bool isLooped() const = 0;
 
-	/**
-	 * @brief Вернуть текущий фрейм
-	 *
-	 * @return TexturePointer фрейм
-	 */
 	virtual TexturePointer getFrame() = 0;
 
-	/**
-	 * @brief Вернуть текущий фрейм по направлению
-	 *
-	 * @param direction направление от 0 до 360 градусов
-	 * @return TexturePointer фрейм
-	 */
 	virtual TexturePointer getFrame(double direction) {
 		direction = direction;
 		return getFrame();
 	}
-
-	// добавить модификатор скорости
 };
 
-#endif // IANIMATION_H
+}
+
+#endif // FALCON_IANIMATION_H

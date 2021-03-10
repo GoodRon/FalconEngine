@@ -3,48 +3,28 @@
  * All rights reserved
  */
 
-#ifndef EVENT_H
-#define EVENT_H
+#ifndef FALCON_EVENT_H
+#define FALCON_EVENT_H
 
-/**
- * @brief Перечисление типов событий
- **/
-enum EventType {
+namespace falcon {
 
-	etDummy = 0,
-
-	etSdlEvent = 1
+enum class EventType: int {
+	Dummy = 0,
+	SdlEvent = 1
 };
 
-/**
- * @brief Абстрактный класс события
- **/
 class Event {
 public:
-	/**
-	 * @brief Конструктор
-	 *
-	 * @param type тип события
-	 **/
 	Event(EventType type);
 
-	/**
-	 * @brief Деструктор
-	 **/
 	virtual ~Event() = 0;
 
-	/**
-	 * @brief Вернуть тип события
-	 *
-	 * @return EventType
-	 **/
-	EventType getType();
+	EventType getType() const;
 
 private:
-	/**
-	 * @brief Тип события
-	 **/
-	EventType m_type;
+	EventType _type;
 };
 
-#endif // EVENT_H
+}
+
+#endif // FALCON_EVENT_H

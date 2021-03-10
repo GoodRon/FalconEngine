@@ -3,152 +3,113 @@
  * All rights reserved
  */
 
-#ifndef STATEMACHINE_H
-#define STATEMACHINE_H
+#ifndef FALCON_STATE_MACHINE_H
+#define FALCON_STATE_MACHINE_H
+
+#include <memory>
 
 #include "State.h"
 
-/**
- * @brief Машина состояний
- */
+namespace falcon {
+
 template <typename ObjectType>
 class StateMachine {
 public:
-	/**
-	 * @brief Конструктор
-	 *
-	 * @param object
-	 */
 	StateMachine(ObjectType* object);
 
-	/**
-	 * @brief Установить текущее состояние
-	 *
-	 * @param state
-	 */
-	void setCurrentState(State<ObjectType>* state);
+	void setCurrentState(std::unique_ptr<State<ObjectType>>&& state);
 
-	/**
-	 * @brief Установить предыдущее состояние
-	 *
-	 * @param state
-	 */
-	void setPreviousState(State<ObjectType>* state);
+	void setPreviousState(std::unique_ptr<State<ObjectType>>&& state);
 
-	/**
-	 * @brief Установить глобальное состояние
-	 *
-	 * @param state
-	 */
-	void setGlobalState(State<ObjectType>* state);
+	void setGlobalState(std::unique_ptr<State<ObjectType>>&& state);
 
-	/**
-	 * @brief Обновить логику состояния
-	 */
+	void changeState(std::unique_ptr<State<ObjectType>>&& state);
+
 	void updateState() const;
 
-	/**
-	 * @brief Обработчик событий
-	 *
-	 * @param event
-	 */
-	void handleEvent(const Event& event) const;
-
-	/**
-	 * @brief Сменить состояние
-	 *
-	 * @param state
-	 */
-	void changeState(State<ObjectType>* state);
-
-	/**
-	 * @brief Вернуться к предыдущему состоянию
-	 */
 	void backToPreviousState();
 
+	void handleEvent(const Event& event) const;
+
 private:
-	/**
-	 * @brief Указатель на объект
-	 */
-	ObjectType* m_object;
-
-	/**
-	 * @brief Указатель на текущее состояние
-	 */
-	State<ObjectType>* m_currentState;
-
-	/**
-	 * @brief Указатель на предыдущее состояние
-	 */
-	State<ObjectType>* m_previousState;
-
-	/**
-	 * @brief Указатель на глобальное состояние
-	 */
-	State<ObjectType>* m_globalState;
+	ObjectType* _object;
+	std::unique_ptr<State<ObjectType>> _currentState;
+	std::unique_ptr<State<ObjectType>> _previousState;
+	std::unique_ptr<State<ObjectType>> _globalState;
 };
 
 template <typename ObjectType>
 StateMachine<ObjectType>::StateMachine(ObjectType* object):
-	m_object(object),
-	m_currentState(nullptr),
-	m_previousState(nullptr),
-	m_globalState(nullptr) {
+	_object(object),
+	_currentState(),
+	_previousState(),
+	_globalState() {
 }
 
 template <typename ObjectType>
-void StateMachine<ObjectType>::setCurrentState(State<ObjectType>* state) {
-	m_currentState = state;
+void StateMachine<ObjectType>::setCurrentState(
+	std::unique_ptr<State<ObjectType>>&& state) {
+
+	_currentState = std::move(state);
 }
 
 template <typename ObjectType>
-void StateMachine<ObjectType>::setPreviousState(State<ObjectType>* state) {
-	m_previousState = state;
+void StateMachine<ObjectType>::setPreviousState(
+	std::unique_ptr<State<ObjectType>>&& state) {
+
+	_previousState = std::move(state);
 }
 
 template <typename ObjectType>
-void StateMachine<ObjectType>::setGlobalState(State<ObjectType>* state) {
-	m_globalState = state;
+void StateMachine<ObjectType>::setGlobalState(
+	std::unique_ptr<State<ObjectType>>&& state) {
+
+	_globalState = std::move(state);
+}
+
+template <typename ObjectType>
+void StateMachine<ObjectType>::changeState(
+	std::unique_ptr<State<ObjectType>>&& state) {
+
+	_previousState = std::move(_currentState);
+	_currentState = std::move(state);
+
+	if (_previousState) {
+		_previousState->onExit(_object);
+	}
+
+	if (_currentState) {
+		_currentState->onEnter(_object);
+	}
 }
 
 template <typename ObjectType>
 void StateMachine<ObjectType>::updateState() const {
-	if (m_globalState) {
-		m_globalState->doLogic(m_object);
+	if (_globalState) {
+		_globalState->doLogic(_object);
 	}
 
-	if (m_currentState) {
-		m_currentState->doLogic(m_object);
+	if (_currentState) {
+		_currentState->doLogic(_object);
 	}
-}
-
-template <typename ObjectType>
-void StateMachine<ObjectType>::handleEvent(const Event& event) const {
-	if (m_globalState) {
-		m_globalState->onEvent(m_object, event);
-	}
-
-	if (m_currentState) {
-		m_currentState->onEvent(m_object, event);
-	}
-}
-
-template <typename ObjectType>
-void StateMachine<ObjectType>::changeState(State<ObjectType>* state) {
-	if (!state) {
-		return;
-	}
-
-	delete m_previousState;
-	m_previousState = m_currentState;
-	m_currentState->onExit(m_object);
-	m_currentState = state;
-	m_currentState->onEnter(m_object);
 }
 
 template <typename ObjectType>
 void StateMachine<ObjectType>::backToPreviousState() {
-	changeState(m_previousState);
+	changeState(std::move(_previousState));
 }
 
-#endif // STATEMACHINE_H
+template <typename ObjectType>
+void StateMachine<ObjectType>::handleEvent(const Event& event) const {
+	if (_globalState) {
+		_globalState->onEvent(_object, event);
+	}
+
+	if (_currentState) {
+		_currentState->onEvent(_object, event);
+	}
+}
+
+}
+
+#endif // FALCON_STATE_MACHINE_H

@@ -20,14 +20,14 @@ using namespace std;
 
 int main() {
 	try {
-		Engine engine(300, 300);
+		falcon::Engine engine(300, 300);
 
 		auto animation = engine.getResourceManager()->loadAnimation("resources/boywalk.json");
 		animation->play();
 
-		engine.getTimersPool()->addTimer(50, [&engine, &animation](TimerPool::id_t) {
+		engine.getTimersPool()->addTimer(50, [&engine, &animation](falcon::TimerPool::id_t) {
 			engine.getRenderer()->clearViewport();
-			TexturePointer frame = animation->getFrame(180.0);
+			falcon::TexturePointer frame = animation->getFrame(180.0);
 			SDL_Rect source = {0, 0, 0, 0};
 			SDL_QueryTexture(frame.get(), nullptr, nullptr, &(source.w),
 							 &(source.h));
@@ -62,7 +62,7 @@ int main() {
 			}
 		});
 		return engine.execute();
-	} catch (EngineException& exception) {
+	} catch (falcon::EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;
 	}
 	return -1;

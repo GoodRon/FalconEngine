@@ -3,17 +3,21 @@
  * All rights reserved
  */
 
-#ifndef UNITCONTROLLER_H
-#define UNITCONTROLLER_H
+#ifndef FALCON_UNIT_CONTROLLER_H
+#define FALCON_UNIT_CONTROLLER_H
 
 #include "Controller.h"
+
+namespace falcon {
 
 class UnitController: public Controller {
 public:
 	UnitController(WorldObject* object);
-	virtual ~UnitController();
+	~UnitController() override;
 
-	virtual void onEvent(const SDL_Event& event) override;
+	void onEvent(const SDL_Event& event) override;
 };
 
-#endif // UNITCONTROLLER_H
+}
+
+#endif // FALCON_UNIT_CONTROLLER_H

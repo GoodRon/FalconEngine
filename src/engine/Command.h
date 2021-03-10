@@ -3,8 +3,10 @@
  * All rights reserved
  */
 
-#ifndef COMMAND_H
-#define COMMAND_H
+#ifndef FALCON_COMMAND_H
+#define FALCON_COMMAND_H
+
+namespace falcon {
 
 class WorldObject;
 
@@ -14,4 +16,6 @@ public:
     virtual void execute(WorldObject* object) = 0;
 };
 
-#endif // COMMAND_H
+}
+
+#endif // FALCON_COMMAND_H

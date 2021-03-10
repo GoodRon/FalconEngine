@@ -3,55 +3,24 @@
  * All rights reserved
  */
 
-#ifndef STATE_H
-#define STATE_H
+#ifndef FALCON_STATE_H
+#define FALCON_STATE_H
+
+namespace falcon {
 
 class Event;
 
-/**
- * @brief Абстрактный класс состояния
- */
 template <typename Object>
 class State {
 public:
-	/**
-	 * @brief Конструктор
-	 */
-	State() {}
-
-	/**
-	 * @brief Деструктор
-	 */
 	virtual ~State() {}
 
-	/**
-	 * @brief Обработчик входа в состояние
-	 *
-	 * @param object
-	 */
-	virtual void onEnter(Object* object) = 0;
-
-	/**
-	 * @brief Обработчик выхода из состояния
-	 *
-	 * @param object
-	 */
-	virtual void onExit(Object* object) = 0;
-
-	/**
-	 * @brief Обработчик событий
-	 *
-	 * @param object
-	 * @param event
-	 */
+	virtual void onEnter(Object* object) {}
+	virtual void onExit(Object* object) {}
 	virtual void onEvent(Object* object, const Event& event) {}
-
-	/**
-	 * @brief Обновить логику
-	 *
-	 * @param object
-	 */
-	virtual void doLogic(Object* object) = 0;
+	virtual void doLogic(Object* object) {}
 };
 
-#endif // STATE_H
+}
+
+#endif // FALCON_STATE_H

@@ -3,15 +3,19 @@
  * All rights reserved
  */
 
-#ifndef ENGINEEXCEPTION_H
-#define ENGINEEXCEPTION_H
+#ifndef FALCON_ENGINE_EXCEPTION_H
+#define FALCON_ENGINE_EXCEPTION_H
 
 #include <stdexcept>
 #include <string>
+
+namespace falcon {
 
 class EngineException : public std::runtime_error {
 public:
 	EngineException(const std::string& what) : std::runtime_error(what) {}
 };
 
-#endif // ENGINEEXCEPTION_H
+}
+
+#endif // FALCON_ENGINE_EXCEPTION_H

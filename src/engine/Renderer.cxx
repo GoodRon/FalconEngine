@@ -8,44 +8,42 @@
 
 #include <SDL2/SDL.h>
 
-using namespace std;
+namespace falcon {
 
 Renderer::Renderer(int width, int height) :
-	m_window(nullptr),
-	m_renderer(nullptr),
-	m_viewport({0, 0, width, height}) {
-	m_window = SDL_CreateWindow("Falcon Engine",
-								SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-								m_viewport.w, m_viewport.h, SDL_WINDOW_SHOWN);
+	_window(nullptr),
+	_renderer(nullptr),
+	_viewport({0, 0, width, height}) {
 
-	if (m_window == nullptr) {
+	auto window = SDL_CreateWindow("Falcon Engine",
+		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+		_viewport.w, _viewport.h, SDL_WINDOW_SHOWN);
+
+	if (window == nullptr) {
 		throw EngineException(SDL_GetError());
 	}
 
-	m_renderer = SDL_CreateRenderer(m_window, -1, SDL_RENDERER_ACCELERATED |
-									SDL_RENDERER_PRESENTVSYNC);
+	_window.reset(window, SDL_DestroyWindow);
 
-	if (m_renderer == nullptr) {
-		SDL_DestroyWindow(m_window);
+	auto renderer = SDL_CreateRenderer(_window.get(), -1, 
+		SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+	if (renderer == nullptr) {
+		_window.reset();
 		throw EngineException(SDL_GetError());
 	}
+	_renderer.reset(renderer, SDL_DestroyRenderer);
 }
 
 Renderer::~Renderer() {
-	if (m_renderer) {
-		SDL_DestroyRenderer(m_renderer);
-	}
-
-	if (m_window) {
-		SDL_DestroyWindow(m_window);
-	}
+	_renderer.reset();
+	_window.reset();
 }
 
 bool Renderer::clearViewport() {
-	if (SDL_RenderClear(m_renderer) != 0) {
+	if (SDL_RenderClear(_renderer.get()) != 0) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -55,12 +53,11 @@ bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
 		return false;
 	}
 
-	// TODO check if inside viewport
+	// TODO check if texture is inside the viewport
 
-	if (SDL_RenderCopy(m_renderer, texture.get(), source, destination) != 0) {
+	if (SDL_RenderCopy(_renderer.get(), texture.get(), source, destination) != 0) {
 		return false;
 	}
-
 	return true;
 }
 
@@ -72,32 +69,32 @@ bool Renderer::drawTextureToTexture(TexturePointer& sourceTexture,
 		return false;
 	}
 
-	// WARNING check it!
-	SDL_Texture* screen = SDL_GetRenderTarget(m_renderer);
-	SDL_SetRenderTarget(m_renderer, destinationTexture.get());
+	SDL_Texture* screen = SDL_GetRenderTarget(_renderer.get());
+	SDL_SetRenderTarget(_renderer.get(), destinationTexture.get());
 	bool ret = drawTexture(sourceTexture, source, destination);
-	SDL_SetRenderTarget(m_renderer, screen);
+	SDL_SetRenderTarget(_renderer.get(), screen);
 	return ret;
 }
 
 bool Renderer::clearTexture(TexturePointer& texture) {
-	// WARNING check it!
-	SDL_Texture* screen = SDL_GetRenderTarget(m_renderer);
-	SDL_SetRenderTarget(m_renderer, texture.get());
+	SDL_Texture* screen = SDL_GetRenderTarget(_renderer.get());
+	SDL_SetRenderTarget(_renderer.get(), texture.get());
 	bool ret = clearViewport();
-	SDL_SetRenderTarget(m_renderer, screen);
+	SDL_SetRenderTarget(_renderer.get(), screen);
 	return ret;
 }
 
 SDL_Renderer* Renderer::getContext() const {
-	return m_renderer;
+	return _renderer.get();
 }
 
 SDL_Rect Renderer::getViewport() const {
-	return m_viewport;
+	return _viewport;
 }
 
 void Renderer::setViewport(const SDL_Rect& viewport) {
 	// TODO resize
-	m_viewport = viewport;
+	_viewport = viewport;
+}
+
 }

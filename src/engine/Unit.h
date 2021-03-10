@@ -3,90 +3,62 @@
  * All rights reserved
  */
 
-#ifndef UNIT_H
-#define UNIT_H
+#ifndef FALCON_UNIT_H
+#define FALCON_UNIT_H
 
 #include <map>
+#include <memory>
 
 #include "WorldObject.h"
 #include "StateMachine.h"
 #include "AnimationTypes.h"
-#include "IAnimation.h"
+
+namespace falcon {
 
 class IAnimation;
 class Command;
 
-/**
- * @brief Умный указатель на объект анимации
- */
-typedef std::shared_ptr<IAnimation> AnimationPointer;
+using AnimationPointer = std::shared_ptr<IAnimation>;
 
-/**
- * @brief Класс юнита
- */
-class Unit : public WorldObject {
+class Unit: public WorldObject {
 public:
-	// TODO сделать загрузку из json 
 	Unit();
 
-	virtual ~Unit();
+	~Unit() override;
 
-	virtual void doLogic() override;
+	void doLogic() override;
 
-	virtual void draw(Renderer* renderer) override;
+	void draw(Renderer* renderer) override;
 
-	virtual void executeCommand(Command* command) override;
+	void executeCommand(Command* command) override;
 
 	void setSpeed(double speed);
-
 	double getSpeed() const;
 
-	// временно, пока не реализован нормальный конструктор или фабрика
 	void setAnimation(AnimationType type, const AnimationPointer& animation);
-	// временно,
 	void setDirection(double direction);
 
 	void setScale(double scale);
 
 	virtual void moveTo(int x, int y);
 
-	// добавить параметр weapon
 	virtual void attack(WorldObject& object);
 
-	void changeState(State<Unit>* state);
+	void changeState(std::unique_ptr<State<Unit>>&& state);
 
 	void backToPreviousState();
 
 	void changeAnimation(AnimationType type);
 
 private:
-	/**
-	 * @brief Машина состояний
-	 */
-	StateMachine<Unit>* m_stateMachine;
-
-	/**
-	 * @brief Текущая анимация
-	 */
-	AnimationPointer m_currentAnimation;
-
-	/**
-	 * @brief Мэп анимаций
-	 */
-	std::map<AnimationType, AnimationPointer> m_animations;
-
-	/**
-	 * @brief Направление
-	 */
-	double m_direction;
-
-	double m_speed;
-
-	double m_scale;
-
-	// weapon/item с приоритетом отрисовки в зависимости от направления
-	// инвентарь
-	// контроллер для управления персонажем
+	std::unique_ptr<StateMachine<Unit>> _stateMachine;
+	AnimationPointer _currentAnimation;
+	std::map<AnimationType, AnimationPointer> _animations;
+	double _direction;
+	double _speed;
+	double _scale;
 };
 
-#endif // UNIT_H
+}
+
+#endif // FALCON_UNIT_H

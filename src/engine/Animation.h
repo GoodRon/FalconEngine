@@ -3,145 +3,59 @@
  * All rights reserved
  */
 
-#ifndef ANIMATION_H
-#define ANIMATION_H
+#ifndef FALCON_ANIMATION_H
+#define FALCON_ANIMATION_H
 
 #include <vector>
 #include <chrono>
 
 #include "IAnimation.h"
 
-/**
- * @brief Класс анимации
- */
+namespace falcon {
+
 class Animation : public IAnimation {
 public:
-	/**
-	 * @brief Конструктор
-	 *
-	 * @param frames массив фреймов
-	 * @param period период анимации
-	 * @param isLooped признак цикличности
-	 */
 	Animation(const std::vector<TexturePointer>& frames,
 			  const std::chrono::milliseconds& period,
 			  bool isLooped = true);
 
-	/**
-	 * @brief Деструктор
-	 */
-	virtual ~Animation();
+	~Animation() override;
 
-	/**
-	 * @overload
-	 */
-	virtual void play(bool fromStart = false) override;
+	void play() override;
 
-	/**
-	 * @overload
-	 */
-	virtual void pause() override;
+	void pause() override;
+	bool isPaused() override;
 
-	/**
-	 * @overload
-	 */
-	virtual bool isPaused() override;
+	void setLoop(bool isLooped) override;
+	bool isLooped() const override;
 
-	/**
-	 * @overload
-	 */
-	virtual void setLoop(bool isLooped = true) override;
+	TexturePointer getFrame() override;
 
-	/**
-	 * @overload
-	 */
-	virtual bool isLooped() const override;
-
-	/**
-	 * @overload
-	 */
-	virtual TexturePointer getFrame() override;
-
-	/**
-	 * @brief Установить период для анимации
-	 *
-	 * @param period
-	 * @return void
-	 */
 	void setPeriod(const std::chrono::milliseconds& period);
-
-	/**
-	 * @brief Вернуть период анимации
-	 *
-	 * @return std::chrono::milliseconds
-	 */
 	std::chrono::milliseconds getPeriod() const;
 
-	/**
-	 * @brief Вернуть оставшееся время
-	 *
-	 * @return std::chrono::milliseconds
-	 */
+	std::chrono::milliseconds getDuration() const;
 	std::chrono::milliseconds getRemainingTime();
 
-	/**
-	 * @brief Установить скорость анимации
-	 *
-	 * @param speed
-	 * @return void
-	 */
 	void setSpeed(double speed);
-
-	/**
-	 * @brief Вернуть скорость анимации
-	 *
-	 * @return double
-	 */
 	double getSpeed() const;
 
 private:
-	/**
-	 * @brief Пересчитать временные интервалы
-	 *
-	 * @return void
-	 */
-	 void recalculateTimes();
+	void updateTimepoint();
+	void calculateDuration();
 
 private:
-	/**
-	 * @brief Фреймы
-	 */
-	std::vector<TexturePointer> m_frames;
-
-	/**
-	 * @brief Признак цикличности
-	 */
-	bool m_isLooped;
-
-	/**
-	 * @brief Период всей анимации
-	 */
-	std::chrono::milliseconds m_period;
-
-	/**
-	 * @brief Точка отсчета
-	 */
-	std::chrono::steady_clock::time_point m_startTimepoint;
-
-	/**
-	 * @brief Смещение от точки отсчета
-	 */
-	std::chrono::milliseconds m_timeOffset;
-
-	/**
-	 * @brief Признак остановки анимации
-	 */
-	bool m_isPaused;
-
-	/**
-	 * @brief Модификатор скорости анимации
-	 */
-	double m_speed;
+	std::vector<TexturePointer> _frames;
+	bool _isLooped;
+	double _speed;
+	std::chrono::milliseconds _period;
+	std::chrono::milliseconds _duration;
+	std::chrono::steady_clock::time_point _startTimepoint;
+	std::chrono::milliseconds _timeOffset;
+	bool _isPaused;
+	bool _isEnded;
 };
 
-#endif // ANIMATION_H
+}
+
+#endif // FALCON_ANIMATION_H

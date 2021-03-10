@@ -3,20 +3,27 @@
  * All rights reserved
  */
 
-#ifndef CONTROLLER_H
-#define CONTROLLER_H
+#ifndef FALCON_CONTROLLER_H
+#define FALCON_CONTROLLER_H
+
+union SDL_Event;
+
+namespace falcon {
 
 class WorldObject;
 
 class Controller {
 public:
-	Controller(WorldObject* object): m_object(object) {}
+	Controller(WorldObject* object): 
+		_object(object) {}
 	virtual ~Controller() {}
 
 	virtual void onEvent(const SDL_Event& event) = 0;
 
 protected:
-	WorldObject* m_object;
+	WorldObject* _object;
 };
 
-#endif // CONTROLLER_H
+}
+
+#endif // FALCON_CONTROLLER_H

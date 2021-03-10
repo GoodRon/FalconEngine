@@ -8,21 +8,27 @@
 #include "Tile.h"
 #include "Renderer.h"
 
-Tile::Tile(TexturePointer texture) :
+namespace falcon {
+
+Tile::Tile(const TexturePointer& texture):
 	WorldObject(),
-	m_texture(texture) {
+	_texture(texture) {
+
 	SDL_Rect profile = {0, 0, 0, 0};
-	SDL_QueryTexture(m_texture.get(), nullptr, nullptr, &(profile.w), &(profile.h));
-	m_width = profile.w;
-	m_height = profile.h;
+	SDL_QueryTexture(_texture.get(), nullptr, nullptr, &(profile.w), &(profile.h));
+	_width = profile.w;
+	_height = profile.h;
+}
+
+Tile::~Tile() {
 }
 
 TexturePointer Tile::getTexture() const {
-	return m_texture;
+	return _texture;
 }
 
 void Tile::draw(Renderer* renderer) {
-	if (renderer == nullptr) {
+	if (!renderer) {
 		return;
 	}
 
@@ -35,5 +41,7 @@ void Tile::draw(Renderer* renderer) {
 	profile.x += rdest.x;
 	profile.y += rdest.y;
 	renderer->clearViewport();
-	renderer->drawTexture(m_texture, nullptr, &profile);
+	renderer->drawTexture(_texture, nullptr, &profile);
+}
+
 }

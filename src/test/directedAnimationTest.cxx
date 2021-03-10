@@ -20,18 +20,20 @@ using namespace std;
 
 int main() {
 	try {
-		Engine engine(500, 500);
+		falcon::Engine engine(500, 500);
 
-		auto unit = new Unit;
-		unit->setAnimation(atIdle, engine.getResourceManager()->
+		std::shared_ptr<falcon::Unit> unit(new falcon::Unit);
+
+		unit->setAnimation(falcon::AnimationType::Idle, engine.getResourceManager()->
 			loadAnimation("resources/boystand.json"));
-		unit->setAnimation(atMovement, engine.getResourceManager()->
+		unit->setAnimation(falcon::AnimationType::Movement, engine.getResourceManager()->
 			loadAnimation("resources/boywalk.json"));
-		unit->changeState(new UnitIdleState);
-		unit->setSpeed(150);
-		WorldObjectPointer unitPtr(unit);
 
-		engine.getObjectManager()->pushObject(unitPtr);
+		std::unique_ptr<falcon::State<falcon::Unit>> state(new falcon::UnitIdleState);
+		unit->changeState(std::move(state));
+		unit->setSpeed(150);
+		
+		engine.getObjectManager()->pushObject(unit);
 
 		double scale = 1.0;
 
@@ -55,7 +57,7 @@ int main() {
 		});
 
 		return engine.execute();
-	} catch (EngineException& exception) {
+	} catch (falcon::EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;
 	}
 	return -1;

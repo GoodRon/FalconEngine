@@ -7,12 +7,12 @@
 
 #include "DirectedAnimation.h"
 
-using namespace std;
+namespace falcon {
 
-DirectedAnimation::DirectedAnimation(const vector<pair<double, Animation>>& animations):
+DirectedAnimation::DirectedAnimation(const std::vector<std::pair<double, Animation>>& animations):
 	IAnimation(),
-	m_animations(animations),
-	m_lastDirection(0.0) {
+	_animations(animations),
+	_lastDirection(0.0) {
 }
 
 DirectedAnimation::~DirectedAnimation() {
@@ -23,48 +23,47 @@ void DirectedAnimation::pushAnimation(const Animation& animation, double directi
 	if (direction < 0.0) {
 		direction += 360.0;
 	}
-	m_animations.emplace_back(direction, animation);
+	_animations.emplace_back(direction, animation);
 }
 
-void DirectedAnimation::play(bool fromStart) {
-	for (auto &animation: m_animations) {
-		animation.second.play(fromStart);
+void DirectedAnimation::play() {
+	for (auto &animation: _animations) {
+		animation.second.play();
 	}
 }
 
 void DirectedAnimation::pause() {
-	for (auto &animation: m_animations) {
+	for (auto &animation: _animations) {
 		animation.second.pause();
 	}
 }
 
 bool DirectedAnimation::isPaused() {
-	if (!m_animations.empty()) {
-		return m_animations.begin()->second.isPaused();
+	if (!_animations.empty()) {
+		return _animations.begin()->second.isPaused();
 	}
 	return true;
 }
 
 void DirectedAnimation::setLoop(bool isLooped) {
-	for (auto &animation: m_animations) {
+	for (auto &animation: _animations) {
 		animation.second.setLoop(isLooped);
 	}
 }
 
 bool DirectedAnimation::isLooped() const {
-	if (!m_animations.empty()) {
-		return m_animations.begin()->second.isLooped();
+	if (!_animations.empty()) {
+		return _animations.begin()->second.isLooped();
 	}
 	return false;
 }
 
 TexturePointer DirectedAnimation::getFrame() {
-	return getFrame(m_lastDirection);
+	return getFrame(_lastDirection);
 }
 
 TexturePointer DirectedAnimation::getFrame(double direction) {
-	if (m_animations.empty()) {
-		// WARNING check!
+	if (_animations.empty()) {
 		return TexturePointer();
 	}
 
@@ -73,11 +72,11 @@ TexturePointer DirectedAnimation::getFrame(double direction) {
 		direction += 360.0;
 	}
 
-	m_lastDirection = direction;
+	_lastDirection = direction;
 	double delta = 360.0;
-	auto result = *m_animations.begin();
+	auto result = *_animations.begin();
 
-	for (auto &animation: m_animations) {
+	for (auto &animation: _animations) {
 		double fromZero = fabs(direction - animation.first);
 		double fromPi = 360.0 - fabs(direction - animation.first);
 		double currentDelta = (fromZero < fromPi) ? fromZero : fromPi;
@@ -88,4 +87,6 @@ TexturePointer DirectedAnimation::getFrame(double direction) {
 		}
 	}
 	return result.second.getFrame();
+}
+
 }

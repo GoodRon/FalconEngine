@@ -3,158 +3,61 @@
  * All rights reserved
  */
 
-#ifndef ENGINE_H
-#define ENGINE_H
+#ifndef FALCON_ENGINE_H
+#define FALCON_ENGINE_H
 
-#include <string>
 #include <vector>
 #include <functional>
+#include <memory>
+#include <chrono>
 
 union SDL_Event;
+
+namespace falcon {
+
 class Renderer;
 class ResourceManager;
 class TimerPool;
 class ObjectManager;
 
-/**
- * @brief Класс игрового движка
- */
 class Engine {
 public:
-	/**
-	 * @brief Описатель обработчика событий
-	 */
-	typedef std::function<void(const SDL_Event&)> eventHandler;
+	using eventHandler = std::function<void(const SDL_Event&)>;
 
-	/**
-	 * @brief Конструктор
-	 *
-	 * @param width ширина порта вывода
-	 * @param height выоста порта вывода
-	 */
-	Engine(unsigned width, unsigned height);
-
-	/**
-	 * @brief Конструктор
-	 */
-	Engine();
-
-	/**
-	 * @brief Деструктор
-	 */
+	Engine(int width, int height);
+	
 	~Engine();
 
-	/**
-	 * @brief Обработка конфигурационного файла
-	 *
-	 * @param file путь к файлу
-	 * @return bool
-	 */
+	Engine(const Engine&) = delete;
+	Engine& operator=(const Engine& other) = delete;
+
 	// bool loadConfig(const std::string& file);
 
-	/**
-	 * @brief Основной рабочий цикл
-	 *
-	 * @return int
-	 */
 	int execute();
 
-	/**
-	 * @brief Вернуть указатель на рендерер
-	 *
-	 * @return Renderer*
-	 */
 	Renderer* getRenderer() const;
-
-	/**
-	 * @brief Вернуть указатель на менеджер ресурсов
-	 *
-	 * @return ResourceManager*
-	 */
 	ResourceManager* getResourceManager() const;
-
-	/**
-	 * @brief Вернуть указатель на менеджер объектов
-	 *
-	 * @return ObjectManager*
-	 */
 	ObjectManager* getObjectManager() const;
-
-	/**
-	 * @brief Вернуть указатель на пул таймеров
-	 *
-	 * @return TimerPool*
-	 */
 	TimerPool* getTimersPool() const;
 
-	/**
-	 * @brief Добавить обработчик событий в стек
-	 *
-	 * @param handler
-	 * @return void
-	 */
 	void pushEventHandler(const eventHandler& handler);
 
-	/**
-	 * @brief Очистить стек обработчиков событий
-	 *
-	 * @return void
-	 */
 	void clearEventHandlers();
 
 private:
-	/**
-	 * @brief Обработчик событий
-	 *
-	 * @param event
-	 */
 	void onEvent(const SDL_Event& event);
 
 private:
-	/**
-	 * @brief Флаг работы движка
-	 */
-	bool m_run;
-
-	/**
-	 * @brief Возвращаемое значение
-	 */
-	int m_returnCode;
-
-	/**
-	 * @brief Частота обновления кадров
-	 */
-	uint32_t m_frameFrequency;
-
-	/**
-	 * @brief Частота обновления логики
-	 */
-	uint32_t m_logicFrequency;
-
-	/**
-	 * @brief Рендерер
-	 */
-	Renderer* m_renderer;
-
-	/**
-	 * @brief Менеджер ресурсов
-	 */
-	ResourceManager* m_resourceManager;
-
-	/**
-	 * @brief Менеджер объектов
-	 */
-	ObjectManager* m_objectManager;
-
-	/**
-	 * @brief Пул таймеров
-	 */
-	TimerPool* m_timers;
-
-	/**
-	 * @brief Стек обработчиков событий
-	 */
-	std::vector<eventHandler> m_eventHandlers;
+	bool _isRunning;
+	int _returnCode;
+	std::chrono::milliseconds _logicPeriod;
+	std::unique_ptr<Renderer> _renderer;
+	std::unique_ptr<ResourceManager> _resourceManager;
+	std::unique_ptr<ObjectManager> _objectManager;
+	std::unique_ptr<TimerPool> _timerPool;
+	std::vector<eventHandler> _eventHandlers;
 };
 
-#endif // ENGINE_H
+}
+
+#endif // FALCON_ENGINE_H
