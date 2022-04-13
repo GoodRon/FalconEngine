@@ -9,7 +9,9 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-#include <json/json.h>
+//#include <json/json.h>
+
+#include "rapidjson/document.h"
 
 #include "ResourceManager.h"
 #include "Renderer.h"
@@ -72,22 +74,19 @@ AnimationPointer ResourceManager::loadAnimation(const std::string& json) {
 		jsonContent += line;
 	}
 
-	Json::Value root;
-	Json::Reader reader;
+	rapidjson::Document document;
 
-	if (!reader.parse(jsonContent, root)) {
-		//cerr << "Can't parse json from " << json << endl;
-		return nullptr;
-	}
+	document.Parse(jsonContent.c_str());
 
-	auto name = root.get("name", "null").asString();
+	auto name = std::string(document["name"].GetString());
 
-	if (root.get("type", "null").asString() != "directedAnimation") {
+	auto animationType = std::string(document["type"].GetString());
+	if (animationType != "directedAnimation") {
 		//cerr << "Can't create animation from " << json << endl;
 		return nullptr;
 	}
 
-	auto textureFile = root.get("texture", "null").asString();
+	auto textureFile = std::string(document["texture"].GetString());
 	auto texture = loadTexture(textureFile);
 
 	if (!texture) {
@@ -95,12 +94,12 @@ AnimationPointer ResourceManager::loadAnimation(const std::string& json) {
 		return nullptr;
 	}
 
-	auto width = root.get("width", 0).asInt();
-	auto height = root.get("height", 0).asInt();
-	auto cols = root.get("cols", 0).asInt();
-	auto rows = root.get("rows", 0).asInt();
-	auto scale = root.get("scale", 0).asInt();
-	std::chrono::milliseconds period(root.get("periodMs", 0).asInt());
+	auto width = document["width"].GetInt();
+	auto height = document["height"].GetInt();
+	auto cols = document["cols"].GetInt();
+	auto rows = document["rows"].GetInt();
+	auto scale = document["scale"].GetInt();
+	std::chrono::milliseconds period(document["periodMs"].GetInt());
 
 	if ((width <= 0) || (height <= 0) || (cols <= 0) || (rows <= 0)) {
 		//cerr << "Can't create animation from " << json << endl;
@@ -112,17 +111,15 @@ AnimationPointer ResourceManager::loadAnimation(const std::string& json) {
 	SDL_QueryTexture(texture.get(), &format, &access, &textureWidth, &textureHeight);
 	std::vector<std::pair<double, Animation>> animations;
 
-	// TODO make it better
-	Json::Value animationSets = root["animations"];
-	for (int index = 0; index < static_cast<int>(animationSets.size()); ++index) {
-		auto direction = animationSets[index].get("direction", 0.0).asDouble();
-		auto row = animationSets[index].get("row", 0).asInt();
+	for (auto& animationSet: document["animations"].GetArray()) {
+		auto direction = animationSet["direction"].GetDouble();
+		auto row = animationSet["row"].GetInt();
 
 		std::vector<TexturePointer> frames;
 		for (int col = 0; col < cols; ++col) {
 			std::stringstream stream;
 			stream << textureFile << "_w" << width << "_h" << height
-				   << "_c" << col << "_r" << row;
+				<< "_c" << col << "_r" << row;
 			std::string cachedFrameName;
 			stream >> cachedFrameName;
 
@@ -132,12 +129,12 @@ AnimationPointer ResourceManager::loadAnimation(const std::string& json) {
 			}
 
 			TexturePointer frame(SDL_CreateTexture(_renderer->getContext(),
-												  format, SDL_TEXTUREACCESS_TARGET,
-												  width * scale, height * scale),
-								 SDL_DestroyTexture);
-			SDL_Rect crop = {static_cast<int>(col * width),
+				format, SDL_TEXTUREACCESS_TARGET,
+				width * scale, height * scale),
+				SDL_DestroyTexture);
+			SDL_Rect crop = { static_cast<int>(col * width),
 							 static_cast<int>(row * height),
-							 width, height};
+							 width, height };
 			_renderer->clearTexture(frame);
 			_renderer->drawTextureToTexture(texture, frame, &crop, nullptr);
 			_textureCache.emplace(cachedFrameName, frame);
