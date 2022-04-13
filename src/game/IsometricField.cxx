@@ -3,7 +3,7 @@
  * All rights reserved
  */
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "IsometricField.h"
 #include "Tile.h"

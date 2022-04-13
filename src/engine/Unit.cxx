@@ -3,7 +3,7 @@
  * All rights reserved
  */
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "Unit.h"
 #include "UnitIdleState.h"

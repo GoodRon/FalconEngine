@@ -5,7 +5,7 @@
 
 #include <thread>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "Engine.h"
 #include "TimerPool.h"

@@ -5,7 +5,7 @@
 
 #include <random>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "WorldObject.h"
 

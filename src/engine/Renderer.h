@@ -8,7 +8,7 @@
 
 #include <memory>
 
-#include <SDL2/SDL_rect.h>
+#include <SDL_rect.h>
 
 struct SDL_Window;
 struct SDL_Renderer;

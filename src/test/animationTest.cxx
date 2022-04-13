@@ -7,7 +7,7 @@
 #include <chrono>
 #include <iostream>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "Engine.h"
 #include "EngineException.h"

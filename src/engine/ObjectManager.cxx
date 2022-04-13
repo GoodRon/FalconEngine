@@ -5,7 +5,7 @@
 
 #include <algorithm>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "ObjectManager.h"
 #include "WorldObject.h"

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "Engine.h"
 #include "Renderer.h"

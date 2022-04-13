@@ -5,6 +5,7 @@
 #include <functional>
 #include <forward_list>
 #include <chrono>
+#include <winsock.h>
 
 namespace falcon {
 

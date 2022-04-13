@@ -7,3 +7,7 @@ doc/
 *.bak
 *.autosave
 *.idea
+./vs*
+CMakeSettings.json
+out/*
+.vs/*

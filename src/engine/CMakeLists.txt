@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.1)
 
 add_library(engine 
 	STATIC
@@ -17,4 +17,5 @@ add_library(engine
 	UnitMovementState.cxx 
 	UnitMoveCommand.cxx 
 	UnitController.cxx)
-target_link_libraries(engine SDL2 SDL2_image jsoncpp pthread)
+
+target_link_libraries(engine ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${jsoncpp_LIBRARY})# pthread)

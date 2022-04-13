@@ -3,7 +3,7 @@
  * All rights reserved
  */
 
-#include <SDL2/SDL_events.h>
+#include <SDL_events.h>
 
 #include "UnitController.h"
 #include "Unit.h"

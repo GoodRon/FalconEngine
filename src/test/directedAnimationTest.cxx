@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "Engine.h"
 #include "EngineException.h"
@@ -16,9 +16,13 @@
 #include "UnitMovementState.h"
 #include "Unit.h"
 
+#include <windows.h>
+
 using namespace std;
 
-int main() {
+INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+	PSTR lpCmdLine, INT nCmdShow) {
+//int main() {
 	try {
 		falcon::Engine engine(500, 500);
 

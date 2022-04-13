@@ -5,7 +5,7 @@
 
 #include <cmath>
 
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "UnitMovementState.h"
 #include "UnitIdleState.h"
