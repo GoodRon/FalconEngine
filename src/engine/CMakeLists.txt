@@ -18,4 +18,4 @@ add_library(engine
 	UnitMoveCommand.cxx 
 	UnitController.cxx)
 
-target_link_libraries(engine ${SDL2_LIBRARY} ${SDL2_IMAGE_LIBRARY} ${jsoncpp_LIBRARY})# pthread)
+target_link_libraries(engine SDL2::Core SDL2::Image ${jsoncpp_LIBRARY})# pthread)

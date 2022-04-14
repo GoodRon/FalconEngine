@@ -16,13 +16,9 @@
 #include "UnitMovementState.h"
 #include "Unit.h"
 
-#include <windows.h>
-
 using namespace std;
 
-INT WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-	PSTR lpCmdLine, INT nCmdShow) {
-//int main() {
+int main(int argc, char** argv) {
 	try {
 		falcon::Engine engine(500, 500);
 

@@ -56,6 +56,7 @@ int Engine::execute() {
 		_objectManager->doObjectsLogic();
 	});
 
+	/*
 	std::thread eventsThread([this](){
 		SDL_Event event;
 		while (_isRunning) {
@@ -64,6 +65,7 @@ int Engine::execute() {
 			}
 		}
 	});
+	*/
 
 	while (_isRunning) {
 		_timerPool->check();
@@ -72,8 +74,13 @@ int Engine::execute() {
 		_renderer->clearViewport();
 		_objectManager->drawObjects();
 		SDL_RenderPresent(_renderer->getContext());
+
+		SDL_Event event;
+		while (SDL_PollEvent(&event) != 0) {
+			onEvent(event);
+		}
 	}
-	eventsThread.join();
+	//eventsThread.join();
 	return _returnCode;
 }
 

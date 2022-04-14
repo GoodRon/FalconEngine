@@ -18,7 +18,7 @@
 #include "IsometricField.h"
 #include "ObjectManager.h"
 
-int main() {
+int main(int argc, char** argv) {
     try {
         falcon::Engine engine(1280, 768);
     

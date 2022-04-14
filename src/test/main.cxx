@@ -18,7 +18,7 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
 	try {
 		falcon::Engine engine(0, 0);
 		engine.pushEventHandler([&engine](const SDL_Event& event) {

@@ -18,7 +18,7 @@
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
 	try {
 		falcon::Engine engine(300, 300);
 
