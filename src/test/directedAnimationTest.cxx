@@ -20,7 +20,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
 	try {
-		falcon::Engine engine(500, 500);
+		auto& engine = falcon::Engine::instance();
+		engine.initialize(500, 500);
 
 		std::shared_ptr<falcon::Unit> unit(new falcon::Unit);
 

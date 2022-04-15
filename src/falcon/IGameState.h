@@ -12,7 +12,7 @@ class Engine;
 
 class IGameState {
 public:
-	IGameState(Engine* engine);
+	IGameState();
 	virtual ~IGameState() = 0;
 
 	virtual void loadResources() {}
@@ -24,10 +24,8 @@ public:
 
 protected:
 	void setResourcesLoaded(bool isLoaded);
-	Engine* getEngine() const;
 
 private:
-	Engine* _engine;
 	bool _isResourcesLoaded;
 };
 

@@ -26,13 +26,17 @@ using EventHandler = std::function<bool(const SDL_Event&)>;
 
 class Engine {
 public:
-	Engine(int width, int height);
+	static Engine& instance() {
+		static Engine engine;
+		return engine;
+	}
+
 	~Engine();
 
-	Engine(const Engine&) = delete;
-	Engine& operator=(const Engine& other) = delete;
-
 	// bool loadConfig(const std::string& file);
+
+	bool initialize(int width, int height);
+	bool isInitialized() const;
 
 	int run();
 	void stop();
@@ -50,9 +54,15 @@ public:
 	void clearEventHandlers();
 
 private:
+	Engine();
+	
+	Engine(const Engine&) = delete;
+	Engine& operator=(const Engine& other) = delete;
+
 	void onEvent(const SDL_Event& event);
 
 private:
+	std::atomic<bool> _isInitialized;
 	std::atomic<bool> _isRunning;
 	int _returnCode;
 	std::unique_ptr<Renderer> _renderer;

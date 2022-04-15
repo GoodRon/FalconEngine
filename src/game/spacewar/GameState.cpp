@@ -36,8 +36,8 @@ public:
 	}
 };
 
-GameState::GameState(falcon::Engine* engine):
-	falcon::IGameState(engine),
+GameState::GameState():
+	falcon::IGameState(),
 	_impl(new Impl(this)) {
 }
 

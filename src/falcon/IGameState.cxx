@@ -2,8 +2,7 @@
 
 namespace falcon {
 
-IGameState::IGameState(Engine* engine):
-	_engine(engine),
+IGameState::IGameState():
 	_isResourcesLoaded(false) {
 }
 
@@ -16,10 +15,6 @@ bool IGameState::isResourcesLoaded() const {
 
 void IGameState::setResourcesLoaded(bool isLoaded) {
 	_isResourcesLoaded = isLoaded;
-}
-
-Engine* IGameState::getEngine() const {
-	return _engine;
 }
 
 }

@@ -12,7 +12,7 @@
 
 class GameState: public falcon::IGameState {
 public:
-	GameState(falcon::Engine* engine);
+	GameState();
 	~GameState() override;
 
 	GameState(GameState&&) = default;

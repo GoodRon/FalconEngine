@@ -18,18 +18,10 @@ namespace falcon {
 
 constexpr size_t maxQueuedEvents = 1024;
 
-Engine::Engine(int width, int height):
-	_isRunning(true),
-	_returnCode(0),
-	_renderer(),
-	_resourceManager(),
-	_objectManager(),
-	_timerPool(),
-	_eventHandlers(),
-	_handlersMutex(),
-	_eventQueue(),
-	_eventMutex(),
-	_isEventReceived(false) {
+bool Engine::initialize(int width, int height) {
+	if (_isInitialized) {
+		return _isInitialized;
+	}
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
@@ -46,10 +38,32 @@ Engine::Engine(int width, int height):
 		}
 		_objectManager->updateAll();
 	});
+
+	return _isInitialized;
+}
+
+bool Engine::isInitialized() const {
+	return _isInitialized;
+}
+
+Engine::Engine():
+	_isInitialized(false),
+	_isRunning(true),
+	_returnCode(0),
+	_renderer(),
+	_resourceManager(),
+	_objectManager(),
+	_timerPool(),
+	_eventHandlers(),
+	_handlersMutex(),
+	_eventQueue(),
+	_eventMutex(),
+	_isEventReceived(false) {
 }
 
 Engine::~Engine() {
 	SDL_Quit();
+	_isInitialized = false;
 }
 
 /*
@@ -60,6 +74,9 @@ bool Engine::loadConfig(const std::string& file) {
 */
 
 int Engine::run() {
+	if (!_isInitialized) {
+		return _returnCode;
+	}
 	
 	std::thread logicThread([this](){
 		// TODO use accurate timers here
@@ -137,6 +154,10 @@ TimerPool* Engine::getTimersPool() const {
 }
 
 void Engine::pushEventHandler(const EventHandler& handler) {
+	if (!_isInitialized) {
+		return;
+	}
+
 	std::lock_guard<std::mutex> locker(_handlersMutex);
 	_eventHandlers.push_back(handler);
 }
