@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
@@ -19,21 +19,20 @@ using WorldObjectPointer = std::shared_ptr<WorldObject>;
 class ObjectManager {
 public:
 	ObjectManager(Renderer* renderer);
-
 	~ObjectManager();
 
 	ObjectManager(const ObjectManager&) = delete;
 	ObjectManager& operator=(ObjectManager&) = delete;
 
-	void pushObject(const WorldObjectPointer& object);
+	void push(const WorldObjectPointer& object);
 
-	void doObjectsLogic();
+	void updateAll();
 
-	void drawObjects();
+	void drawAll();
 
-	WorldObjectPointer getObjectByCoordinates(int x, int y);
+	WorldObjectPointer getByCordinates(int x, int y);
 
-	WorldObjectPointer getObjectById(int id);
+	WorldObjectPointer getById(int id);
 
 	void clear();
 

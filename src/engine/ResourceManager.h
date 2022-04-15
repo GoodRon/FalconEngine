@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
@@ -25,7 +25,6 @@ using AnimationPointer = std::shared_ptr<IAnimation>;
 class ResourceManager {
 public:
 	ResourceManager(Renderer* renderer);
-
 	~ResourceManager();
 
 	ResourceManager(const ResourceManager&) = delete;

@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
 
 		double animationSpeed = 1.0;
 		engine.pushEventHandler([&engine, &animationSpeed, &animation]
-								(const SDL_Event& event) {
+								(const SDL_Event& event)->bool {
 			double delta = 0.1;
 			switch (event.type) {
 				case SDL_KEYDOWN:
@@ -60,8 +60,9 @@ int main(int argc, char** argv) {
 				default:
 					break;
 			}
+			return false;
 		});
-		return engine.execute();
+		return engine.run();
 	} catch (falcon::EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;
 	}

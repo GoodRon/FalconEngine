@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
@@ -21,7 +21,7 @@ ObjectManager::ObjectManager(Renderer* renderer) :
 ObjectManager::~ObjectManager() {
 }
 
-void ObjectManager::pushObject(const WorldObjectPointer& object) {
+void ObjectManager::push(const WorldObjectPointer& object) {
 	if (!object) {
 		return;
 	}
@@ -30,7 +30,7 @@ void ObjectManager::pushObject(const WorldObjectPointer& object) {
 	sortByDrawPriority();
 }
 
-void ObjectManager::doObjectsLogic() {
+void ObjectManager::updateAll() {
 	for (auto &object: _objects) {
 		if (object) {
 			object->doLogic();
@@ -38,7 +38,7 @@ void ObjectManager::doObjectsLogic() {
 	}
 }
 
-void ObjectManager::drawObjects() {
+void ObjectManager::drawAll() {
 	for (auto &object: _objects) {
 		if (object) {
 			object->draw(_renderer);
@@ -46,12 +46,13 @@ void ObjectManager::drawObjects() {
 	}
 }
 
-WorldObjectPointer ObjectManager::getObjectByCoordinates(int x, int y) {
+WorldObjectPointer ObjectManager::getByCordinates(int x, int y) {
 	WorldObjectPointer result;
 	if (!_renderer) {
 		return result;
 	}
 
+	// TODO improve this
 	for (auto &object: _objects) {
 		if (!object) {
 			continue;
@@ -68,7 +69,7 @@ WorldObjectPointer ObjectManager::getObjectByCoordinates(int x, int y) {
 	return result;
 }
 
-WorldObjectPointer ObjectManager::getObjectById(int id) {
+WorldObjectPointer ObjectManager::getById(int id) {
 	WorldObjectPointer result;
 	// TODO make map
 	for (auto &object: _objects) {
@@ -85,6 +86,7 @@ void ObjectManager::clear() {
 }
 
 void ObjectManager::sortByDrawPriority() {
+	// TODO improve it
 	std::sort(_objects.begin(), _objects.end(), [](
 		const WorldObjectPointer& left, const WorldObjectPointer& right) {
 

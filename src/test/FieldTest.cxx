@@ -38,18 +38,18 @@ int main(int argc, char** argv) {
         
         std::shared_ptr<falcon::IsometricField> grassField(
             new falcon::IsometricField(tiles, tileSize));
-        engine.getObjectManager()->pushObject(
+        engine.getObjectManager()->push(
             std::dynamic_pointer_cast<falcon::WorldObject>(grassField));
         
         engine.getTimersPool()->addTimer(33, [&engine, grassField](falcon::TimerPool::id_t) {
             engine.getRenderer()->clearViewport();
-            engine.getObjectManager()->drawObjects();
+            engine.getObjectManager()->drawAll();
             //SDL_Rect fieldPosition = grassField->getPosition();
             //fieldPosition.x += 1;
             //grassField->setPosition(fieldPosition.x, fieldPosition.y);
         });
         
-        return engine.execute();
+        return engine.run();
     } catch (falcon::EngineException& exception) {
         std::cout << "Exception caught: " << exception.what() << std::endl;
     }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
@@ -33,30 +33,32 @@ int main(int argc, char** argv) {
 		unit->changeState(std::move(state));
 		unit->setSpeed(150);
 		
-		engine.getObjectManager()->pushObject(unit);
+		engine.getObjectManager()->push(unit);
 
 		double scale = 1.0;
 
-		engine.pushEventHandler([&unit, &scale](const SDL_Event& event){
+		engine.pushEventHandler([&unit, &scale](const SDL_Event& event)->bool{
 			switch (event.type) {
 				case SDL_MOUSEBUTTONDOWN: {
 					int x, y;
 					if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
 						if (unit != nullptr) {
 							unit->moveTo(x, y);
+							return true;
 						}
 					}
 				} break;
 				case SDL_MOUSEWHEEL:
 					scale += 0.25 * event.wheel.y;
 					unit->setScale(scale);
-					break;
+					return true;
 				default:
 					break;
 			}
+			return false;
 		});
 
-		return engine.execute();
+		return engine.run();
 	} catch (falcon::EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
@@ -15,6 +15,7 @@ Renderer::Renderer(int width, int height) :
 	_renderer(nullptr),
 	_viewport({0, 0, width, height}) {
 
+	// TODO pass the header string here
 	auto window = SDL_CreateWindow("Falcon Engine",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		_viewport.w, _viewport.h, SDL_WINDOW_SHOWN);

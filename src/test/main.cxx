@@ -21,7 +21,7 @@ using namespace std;
 int main(int argc, char** argv) {
 	try {
 		falcon::Engine engine(0, 0);
-		engine.pushEventHandler([&engine](const SDL_Event& event) {
+		engine.pushEventHandler([&engine](const SDL_Event& event)->bool {
 			switch (event.type) {
 				case SDL_KEYDOWN:
 					switch (event.key.keysym.sym) {
@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 				case SDL_MOUSEBUTTONDOWN: {
 					int x, y;
 					if (SDL_GetMouseState(&x, &y) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-						auto object = engine.getObjectManager()->getObjectByCoordinates(x, y);
+						auto object = engine.getObjectManager()->getByCordinates(x, y);
 						if (object) {
 							object->setVisibility(!object->getVisibility());
 						}
@@ -55,21 +55,22 @@ int main(int argc, char** argv) {
 				default:
 					break;
 			}
+			return false;
 		});
 
 		falcon::TexturePointer texture =
 				engine.getResourceManager()->loadTexture("resources/ship.png");
 		falcon::WorldObjectPointer ship(new falcon::Tile(texture));
-		engine.getObjectManager()->pushObject(ship);
+		engine.getObjectManager()->push(ship);
 
 		engine.getTimersPool()->addTimer(33, [&engine](falcon::TimerPool::id_t) {
 			engine.getRenderer()->clearViewport();
-			engine.getObjectManager()->drawObjects();
+			engine.getObjectManager()->drawAll();
 		});
 
 //		SDL_ShowCursor(SDL_ENABLE);
 
-		return engine.execute();
+		return engine.run();
 	} catch (falcon::EngineException& exception) {
 		cout << "Exception caught: " << exception.what() << endl;
 	}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
@@ -9,7 +9,6 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
-//#include <json/json.h>
 
 #include "rapidjson/document.h"
 

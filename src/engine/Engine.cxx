@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
@@ -16,10 +16,10 @@
 
 namespace falcon {
 
-Engine::Engine(int width, int height) :
+Engine::Engine(int width, int height):
 	_isRunning(true),
 	_returnCode(0),
-	_logicPeriod(10),
+	_logicPeriodMs(10),
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
@@ -34,6 +34,13 @@ Engine::Engine(int width, int height) :
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
 	_objectManager.reset(new ObjectManager(_renderer.get()));
 	_timerPool.reset(new TimerPool);
+
+	_timerPool->addTimer(_logicPeriodMs.count(), [this](TimerPool::id_t) {
+		if (!_objectManager) {
+			return;
+		}
+		_objectManager->updateAll();
+	});
 }
 
 Engine::~Engine() {
@@ -47,15 +54,7 @@ bool Engine::loadConfig(const std::string& file) {
 }
 */
 
-int Engine::execute() {
-
-	_timerPool->addTimer(_logicPeriod.count(), [this](TimerPool::id_t) {
-		if (!_objectManager) {
-			return;
-		}
-		_objectManager->doObjectsLogic();
-	});
-
+int Engine::run() {
 	/*
 	std::thread eventsThread([this](){
 		SDL_Event event;
@@ -67,21 +66,30 @@ int Engine::execute() {
 	});
 	*/
 
+	SDL_Event event;
+
 	while (_isRunning) {
 		_timerPool->check();
 //		SDL_Delay(10);
 
 		_renderer->clearViewport();
-		_objectManager->drawObjects();
+		_objectManager->drawAll();
 		SDL_RenderPresent(_renderer->getContext());
-
-		SDL_Event event;
+		
 		while (SDL_PollEvent(&event) != 0) {
 			onEvent(event);
 		}
 	}
 	//eventsThread.join();
 	return _returnCode;
+}
+
+void Engine::stop() {
+	_isRunning = false;
+}
+	
+bool Engine::isRunning() const {
+	return _isRunning;
 }
 
 Renderer* Engine::getRenderer() const {
@@ -100,7 +108,7 @@ TimerPool* Engine::getTimersPool() const {
 	return _timerPool.get();
 }
 
-void Engine::pushEventHandler(const eventHandler& handler) {
+void Engine::pushEventHandler(const EventHandler& handler) {
 	_eventHandlers.push_back(handler);
 }
 
@@ -127,7 +135,9 @@ void Engine::onEvent(const SDL_Event& event) {
 	}
 
 	for (auto &handler: _eventHandlers) {
-		handler(event);
+		if (handler(event)) {
+			break;
+		}
 	}
 }
 
