@@ -16,15 +16,20 @@
 
 namespace falcon {
 
+constexpr size_t maxQueuedEvents = 1024;
+
 Engine::Engine(int width, int height):
 	_isRunning(true),
 	_returnCode(0),
-	_logicPeriodMs(10),
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
 	_timerPool(),
-	_eventHandlers() {
+	_eventHandlers(),
+	_handlersMutex(),
+	_eventQueue(),
+	_eventMutex(),
+	_isEventReceived(false) {
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
@@ -35,7 +40,7 @@ Engine::Engine(int width, int height):
 	_objectManager.reset(new ObjectManager(_renderer.get()));
 	_timerPool.reset(new TimerPool);
 
-	_timerPool->addTimer(_logicPeriodMs.count(), [this](TimerPool::id_t) {
+	_timerPool->addTimer(10, [this](TimerPool::id_t) {
 		if (!_objectManager) {
 			return;
 		}
@@ -55,32 +60,55 @@ bool Engine::loadConfig(const std::string& file) {
 */
 
 int Engine::run() {
-	/*
-	std::thread eventsThread([this](){
-		SDL_Event event;
+	
+	std::thread logicThread([this](){
+		// TODO use accurate timers here
+
+		const Uint32 delayMs = 5;
+		std::queue<SDL_Event> events;
+
 		while (_isRunning) {
-			if (SDL_WaitEvent(&event) != 0) {
-				onEvent(event);
+
+			_timerPool->check();
+
+			if (_isEventReceived) {
+				std::lock_guard<std::mutex> locker(_eventMutex);
+				events.swap(_eventQueue);
+				_isEventReceived = false;
 			}
+
+			while (!events.empty()) {
+				onEvent(events.front());
+				events.pop();
+			}
+
+			// TODO calculate delay instead of using the constant value
+			SDL_Delay(delayMs);
 		}
 	});
-	*/
-
+	
 	SDL_Event event;
 
+	// TODO make an option for restricting fps
 	while (_isRunning) {
-		_timerPool->check();
-//		SDL_Delay(10);
-
 		_renderer->clearViewport();
 		_objectManager->drawAll();
 		SDL_RenderPresent(_renderer->getContext());
 		
+		std::lock_guard<std::mutex> locker(_eventMutex);
 		while (SDL_PollEvent(&event) != 0) {
-			onEvent(event);
+			if (_eventQueue.size() >= maxQueuedEvents) {
+				_eventQueue.pop();
+			}
+
+			_eventQueue.push(std::move(event));
+		}
+
+		if (!_isEventReceived && !_eventQueue.empty()) {
+			_isEventReceived = true;
 		}
 	}
-	//eventsThread.join();
+	logicThread.join();
 	return _returnCode;
 }
 
@@ -109,10 +137,12 @@ TimerPool* Engine::getTimersPool() const {
 }
 
 void Engine::pushEventHandler(const EventHandler& handler) {
+	std::lock_guard<std::mutex> locker(_handlersMutex);
 	_eventHandlers.push_back(handler);
 }
 
 void Engine::clearEventHandlers() {
+	std::lock_guard<std::mutex> locker(_handlersMutex);
 	_eventHandlers.clear();
 }
 
@@ -134,6 +164,8 @@ void Engine::onEvent(const SDL_Event& event) {
 			break;
 	}
 
+	// TODO remove the locking here
+	std::lock_guard<std::mutex> locker(_handlersMutex);
 	for (auto &handler: _eventHandlers) {
 		if (handler(event)) {
 			break;
