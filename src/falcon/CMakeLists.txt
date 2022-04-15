@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.1)
 
-add_library(engine 
+add_library(falcon 
 	STATIC
 	ObjectManager.cxx 
 	Tile.cxx
@@ -14,8 +14,9 @@ add_library(engine
 	Target.cxx 
 	Unit.cxx 
 	UnitIdleState.cxx 
-	UnitMovementState.cxx 
+	UnitMovementState.cxx
 	UnitMoveCommand.cxx 
-	UnitController.cxx)
+	UnitController.cxx
+	IGameState.cxx)
 
-target_link_libraries(engine SDL2::Core SDL2::Image ${jsoncpp_LIBRARY})# pthread)
+target_link_libraries(falcon SDL2::Core SDL2::Image)

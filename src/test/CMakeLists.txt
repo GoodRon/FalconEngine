@@ -10,7 +10,7 @@ add_executable(animationTest WIN32 animationTest.cxx)
 target_link_libraries(animationTest game SDL2::Main)
 
 add_executable(directedAnimationTest WIN32 directedAnimationTest.cxx)
-target_link_libraries(directedAnimationTest game SDL2::Main)
+target_link_libraries(directedAnimationTest falcon SDL2::Main)
 
 install(TARGETS basicTest RUNTIME DESTINATION .)
 install(TARGETS fieldTest RUNTIME DESTINATION .)
