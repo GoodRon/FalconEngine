@@ -32,9 +32,13 @@ public:
 
 	SDL_Rect getSourceRect() const;
 
+	void setDurationMs(int durationMs);
+	int getDuration() const;
+
 private:
 	TexturePointer _texture;
 	SDL_Rect _sourceRect;
+	int _durationMs;
 };
 
 }

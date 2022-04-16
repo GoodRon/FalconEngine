@@ -14,8 +14,8 @@ class Position: public IComponent {
 public:
     Position(): IComponent("Position"), x(0), y(0) {}
 
-    IComponent* clone() const override {
-        return new Position;
+    std::shared_ptr<IComponent> clone() const override {
+        return std::shared_ptr<IComponent>(new Position);
     }
 
 	int x;

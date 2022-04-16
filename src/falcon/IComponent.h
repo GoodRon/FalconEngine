@@ -7,6 +7,7 @@
 #define FALCON_ICOMPONENT_H
 
 #include <string>
+#include <memory>
 
 namespace falcon {
 
@@ -17,7 +18,7 @@ public:
 	IComponent(const std::string& name);
 	virtual ~IComponent();
 
-	virtual IComponent* clone() const = 0;
+	virtual std::shared_ptr<IComponent> clone() const = 0;
 
 	const std::string getName() const;
 

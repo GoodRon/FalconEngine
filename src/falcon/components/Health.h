@@ -14,8 +14,8 @@ class Health: public IComponent {
 public:
     Health(): IComponent("Health"), max(0), current(0) {}
 
-    IComponent* clone() const override {
-        return new Health;
+    std::shared_ptr<IComponent> clone() const override {
+        return std::shared_ptr<IComponent>(new Health);
     }
 
 	int max;

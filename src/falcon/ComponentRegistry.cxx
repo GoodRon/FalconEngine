@@ -38,7 +38,7 @@ std::shared_ptr<IComponent> ComponentRegistry::makeComponent(ComponentID id) {
 	}
 
 	auto& prototype = _prototypes[id];
-	return std::shared_ptr<IComponent>(prototype->clone());
+	return prototype->clone();
 }
 
 void ComponentRegistry::clear() {
