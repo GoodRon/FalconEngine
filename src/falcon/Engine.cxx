@@ -38,7 +38,7 @@ bool Engine::initialize(int width, int height) {
 
 	_entityManager.reset(new EntityManager);
 	_componentRegistry.reset(new ComponentRegistry);
-	_systemManager.reset(new SystemManager);
+	_systemManager.reset(new SystemManager(_componentRegistry.get()));
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
 

@@ -35,10 +35,6 @@ bool IEntity::addComponent(const std::shared_ptr<IComponent>& component) {
 	return true;
 }
 
-void IEntity::removeComponent(ComponentID id) {
-	_components.erase(id);
-}
-
 std::shared_ptr<IComponent> IEntity::getComponent(ComponentID id) {
 	if (_components.find(id) == _components.end()) {
 		return nullptr;

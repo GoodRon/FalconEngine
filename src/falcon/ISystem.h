@@ -8,28 +8,42 @@
 
 #include <string>
 #include <memory>
+#include <unordered_set>
 
 namespace falcon {
 
 class IEvent;
+class IEntity;
+class ComponentRegistry;
 
 class ISystem {
 public:
-	ISystem(const std::string& name): _name(name) {}
-	virtual ~ISystem() {}
+	ISystem(const std::string& name);
 
-	const std::string getName() const {
-		return _name;
-	}
+	virtual ~ISystem();
 
-	virtual void processEntity(
-		const std::shared_ptr<IEvent>& entity) const = 0;
+	const std::string getName() const;
+
+	virtual bool resolveComponentIDs(
+		ComponentRegistry* componentRegistry) = 0;
+
+	bool isReady() const;
+
+	bool registerEntity(IEntity* entity);
+	void unregisterEntity(IEntity* entity);
 
 	virtual bool onEvent(
 		const std::shared_ptr<IEvent>& event) const = 0;
 
+protected:
+	virtual bool checkComponents(IEntity* entity) const = 0;
+
+	void setReady(bool isReady);
+
 private:
 	const std::string _name;
+	bool _isReady;
+	std::unordered_set<IEntity*> _entities;
 };
 
 }

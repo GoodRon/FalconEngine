@@ -25,7 +25,6 @@ public:
 	EntityID getId() const;
 
 	bool addComponent(const std::shared_ptr<IComponent>& component);
-	void removeComponent(ComponentID id);
 
 	std::shared_ptr<IComponent> getComponent(ComponentID id);
 

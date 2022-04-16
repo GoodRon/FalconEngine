@@ -4,7 +4,8 @@
 
 namespace falcon {
 
-SystemManager::SystemManager():
+SystemManager::SystemManager(ComponentRegistry* componentRegistry):
+	_componentRegistry(componentRegistry),
 	_systems() {
 }
 
@@ -16,13 +17,6 @@ bool SystemManager::hasSystem(const std::string& name) const {
 		return true;
 	}
 	return false;
-}
-
-void SystemManager::processEntity(
-	const std::shared_ptr<IEvent>& entity) const {
-	for (auto& sys: _systems) {
-		sys.second->processEntity(entity);
-	}
 }
 
 bool SystemManager::onEvent(

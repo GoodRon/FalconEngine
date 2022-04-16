@@ -14,10 +14,11 @@ namespace falcon {
 
 class ISystem;
 class IEvent;
+class ComponentRegistry;
 
 class SystemManager {
 public:
-	SystemManager();
+	SystemManager(ComponentRegistry* componentRegistry);
 	~SystemManager();
 
 	SystemManager(const SystemManager&) = delete;
@@ -32,14 +33,15 @@ public:
 			return false;
 		}
 
+		if (!sys->resolveComponentIDs(_componentRegistry)) {
+			return false;
+		}
+
 		_systems[name] = sys;
 		return true;
 	}
 
 	bool hasSystem(const std::string& name) const;
-
-	void processEntity(
-		const std::shared_ptr<IEvent>& entity) const;
 
 	bool onEvent(
 		const std::shared_ptr<IEvent>& event) const;
@@ -47,6 +49,7 @@ public:
 	void clear();
 
 private:
+	ComponentRegistry* const _componentRegistry;
 	std::unordered_map<std::string, std::unique_ptr<ISystem>> _systems;
 };
 

@@ -25,7 +25,7 @@ public:
 	void sendEvent(const std::shared_ptr<IEvent>& event) const;
 
 private:
-	const SystemManager* _systemManager;
+	SystemManager* const _systemManager;
 };
 
 }
