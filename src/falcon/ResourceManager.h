@@ -12,7 +12,6 @@
 #include <unordered_map>
 
 struct SDL_Texture;
-struct SDL_Rect;
 
 namespace falcon {
 
@@ -31,6 +30,8 @@ public:
 	ResourceManager& operator=(ResourceManager&) = delete;
 
 	TexturePointer loadTexture(const std::string& name);
+
+
 	AnimationPointer loadAnimation(const std::string& json);
 
 	void freeUnused();

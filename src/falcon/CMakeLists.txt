@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.1)
 
+add_subdirectory(json)
+
 add_library(falcon 
 	STATIC
 	ObjectManager.cxx 
@@ -17,6 +19,7 @@ add_library(falcon
 	UnitMovementState.cxx
 	UnitMoveCommand.cxx 
 	UnitController.cxx
-	IGameState.cxx)
+	IGameState.cxx
+	Frame.cxx)
 
 target_link_libraries(falcon SDL2::Core SDL2::Image)
