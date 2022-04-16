@@ -16,13 +16,13 @@ using ComponentID = int;
 
 class IComponent;
 
-class ComponentRegister {
+class ComponentRegistry {
 public:
-	ComponentRegister();
-	~ComponentRegister();
+	ComponentRegistry();
+	~ComponentRegistry();
 
-	ComponentRegister(const ComponentRegister&) = delete;
-	ComponentRegister& operator=(const ComponentRegister&) = delete;
+	ComponentRegistry(const ComponentRegistry&) = delete;
+	ComponentRegistry& operator=(const ComponentRegistry&) = delete;
 
 	template<class T, class... ARGS>
 	ComponentID registerComponent(ARGS&&... args) {

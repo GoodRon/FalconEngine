@@ -23,8 +23,9 @@ add_library(falcon
 	Frame.cxx
 	IEntity.cxx
 	EntityManager.cxx
-	ComponentRegister.cxx
+	ComponentRegistry.cxx
 	SystemManager.cxx
-	IEvent.cxx)
+	IEvent.cxx
+	IComponent.cxx)
 
 target_link_libraries(falcon SDL2::Core SDL2::Image)

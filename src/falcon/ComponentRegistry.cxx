@@ -1,30 +1,30 @@
-#include "ComponentRegister.h"
+#include "ComponentRegistry.h"
 
 #include "IComponent.h"
 
 namespace falcon {
 
-ComponentRegister::ComponentRegister():
+ComponentRegistry::ComponentRegistry():
 	_nextId(0),
 	_componentIds(),
 	_prototypes() {
 }
 
-ComponentRegister::~ComponentRegister() {
+ComponentRegistry::~ComponentRegistry() {
 }
 
 /*
-ComponentID ComponentRegister::addComponent(
+ComponentID ComponentRegistry::addComponent(
 	const std::unique_ptr<IComponent>& prototype) {
 
 }
 */
 
-void ComponentRegister::unregisterComponent(ComponentID id) {
+void ComponentRegistry::unregisterComponent(ComponentID id) {
 
 }
 
-ComponentID ComponentRegister::findComponentID(
+ComponentID ComponentRegistry::findComponentID(
 	const std::string& name) {
 	if (_componentIds.find(name) == _componentIds.end()) {
 		return -1;
@@ -32,7 +32,7 @@ ComponentID ComponentRegister::findComponentID(
 	return _componentIds[name];
 }
 
-std::shared_ptr<IComponent> ComponentRegister::makeComponent(ComponentID id) {
+std::shared_ptr<IComponent> ComponentRegistry::makeComponent(ComponentID id) {
 	if (_prototypes.find(id) == _prototypes.end()) {
 		return nullptr;
 	}
@@ -41,12 +41,12 @@ std::shared_ptr<IComponent> ComponentRegister::makeComponent(ComponentID id) {
 	return std::shared_ptr<IComponent>(prototype->clone());
 }
 
-void ComponentRegister::clear() {
+void ComponentRegistry::clear() {
 	_componentIds.clear();
 	_prototypes.clear();
 }
 
-ComponentID ComponentRegister::getNextId() {
+ComponentID ComponentRegistry::getNextId() {
 	return _nextId++;
 }
 

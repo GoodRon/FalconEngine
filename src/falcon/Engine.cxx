@@ -13,6 +13,9 @@
 #include "Renderer.h"
 #include "ObjectManager.h"
 #include "EngineException.h"
+#include "EntityManager.h"
+#include "ComponentRegistry.h"
+#include "SystemManager.h"
 
 namespace falcon {
 
@@ -31,6 +34,10 @@ bool Engine::initialize(int width, int height) {
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
 	_objectManager.reset(new ObjectManager(_renderer.get()));
 	_timerPool.reset(new TimerPool);
+
+	_entityManager.reset(new EntityManager);
+	_componentRegistry.reset(new ComponentRegistry);
+	_systemManager.reset(new SystemManager);
 
 	_timerPool->addTimer(10, [this](TimerPool::id_t) {
 		if (!_objectManager) {
@@ -53,6 +60,9 @@ Engine::Engine():
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
+	_entityManager(),
+	_componentRegistry(),
+	_systemManager(),
 	_timerPool(),
 	_eventHandlers(),
 	_handlersMutex(),
@@ -147,6 +157,18 @@ ResourceManager* Engine::getResourceManager() const {
 
 ObjectManager* Engine::getObjectManager() const {
 	return _objectManager.get();
+}
+
+EntityManager* Engine::getEntityManager() const {
+	return _entityManager.get();
+}
+
+ComponentRegistry* Engine::getComponentRegistry() const {
+	return _componentRegistry.get();
+}
+
+SystemManager* Engine::getSystemManager() const {
+	return _systemManager.get();
 }
 
 TimerPool* Engine::getTimersPool() const {
