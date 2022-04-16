@@ -7,21 +7,26 @@
 #define FALCON_ISYSTEM_H
 
 #include <string>
+#include <memory>
 
 namespace falcon {
 
-using ComponentID = int;
+class IEvent;
 
 class ISystem {
 public:
-	ISystem(const std::string& name);
-	virtual ~ISystem() = 0;
+	ISystem(const std::string& name): _name(name) {}
+	virtual ~ISystem() {}
 
-	const std::string getName() const;
+	const std::string getName() const {
+		return _name;
+	}
 
-	virtual void processEntity(IEntity* entity) const = 0;
+	virtual void processEntity(
+		const std::shared_ptr<IEvent>& entity) const = 0;
 
-	//virtual onEvent(const Event& event) const;
+	virtual bool onEvent(
+		const std::shared_ptr<IEvent>& event) const = 0;
 
 private:
 	const std::string _name;

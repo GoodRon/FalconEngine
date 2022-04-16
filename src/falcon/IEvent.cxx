@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2015, Roman Meyta <theshrodingerscat@gmail.com>
+ * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
  * All rights reserved
  */
 
-#include "Event.h"
+#include "IEvent.h"
 
 namespace falcon {
 
@@ -11,7 +11,7 @@ Event::Event(EventType type):
 	_type(type) {
 }
 
-EventType Event::getType() const {
+const EventType Event::getType() const {
 	return _type;
 }
 

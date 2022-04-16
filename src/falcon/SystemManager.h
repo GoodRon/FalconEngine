@@ -6,14 +6,14 @@
 #ifndef FALCON_SYSTEM_MANAGER_H
 #define FALCON_SYSTEM_MANAGER_H
 
+#include <string>
 #include <unordered_map>
 #include <memory>
 
 namespace falcon {
 
-using ComponentID = int;
-
-class IComponent;
+class ISystem;
+class IEvent;
 
 class SystemManager {
 public:
@@ -23,13 +23,31 @@ public:
 	SystemManager(const SystemManager&) = delete;
 	SystemManager& operator=(const SystemManager&) = delete;
 
-	
+	template<class T, class... ARGS>
+	bool registerSystem(ARGS&&... args) {
+		std::shared_ptr<T> sys(new T(std::forward<ARGS>(args)...));
+
+		auto name = sys->getName();
+		if (hasSystem(name)) {
+			return false;
+		}
+
+		_systems[name] = sys;
+		return true;
+	}
+
+	bool hasSystem(const std::string& name) const;
+
+	void processEntity(
+		const std::shared_ptr<IEvent>& entity) const;
+
+	bool onEvent(
+		const std::shared_ptr<IEvent>& event) const;
 
 	void clear();
 
 private:
-//	std::unordered_map<std::string, ComponentID> _names;
-//	std::unordered_map<ComponentID, std::unique_ptr<IComponent>> _components;
+	std::unordered_map<std::string, std::unique_ptr<ISystem>> _systems;
 };
 
 }
