@@ -21,6 +21,9 @@ add_library(falcon
 	UnitController.cxx
 	IGameState.cxx
 	Frame.cxx
-	IEntity.cxx)
+	IEntity.cxx
+	EntityManager.cxx
+	ComponentRegister.cxx
+	SystemManager.cxx)
 
 target_link_libraries(falcon SDL2::Core SDL2::Image)

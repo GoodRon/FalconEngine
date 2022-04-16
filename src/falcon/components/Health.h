@@ -14,6 +14,10 @@ class Health: public IComponent {
 public:
     Health(): IComponent("Health"), max(0), current(0) {}
 
+    IComponent* clone() const override {
+        return new Health;
+    }
+
 	int max;
 	int current;
 };

@@ -14,6 +14,10 @@ class Position: public IComponent {
 public:
     Position(): IComponent("Position"), x(0), y(0) {}
 
+    IComponent* clone() const override {
+        return new Position;
+    }
+
 	int x;
 	int y;
 };

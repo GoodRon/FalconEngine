@@ -15,7 +15,7 @@ using ComponentID = int;
 class ISystem {
 public:
 	ISystem(const std::string& name);
-	virtual ~ISystem() {}
+	virtual ~ISystem() = 0;
 
 	const std::string getName() const;
 

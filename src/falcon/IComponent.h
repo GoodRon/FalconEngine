@@ -15,7 +15,9 @@ using ComponentID = int;
 class IComponent {
 public:
 	IComponent(const std::string& name);
-	virtual ~IComponent() = 0;
+	virtual ~IComponent();
+
+	virtual IComponent* clone() const = 0;
 
 	const std::string getName() const;
 

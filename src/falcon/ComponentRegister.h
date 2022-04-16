@@ -14,6 +14,8 @@ namespace falcon {
 
 using ComponentID = int;
 
+class IComponent;
+
 class ComponentRegister {
 public:
 	ComponentRegister();
@@ -22,19 +24,40 @@ public:
 	ComponentRegister(const ComponentRegister&) = delete;
 	ComponentRegister& operator=(const ComponentRegister&) = delete;
 
-	// TODO template?
-	ComponentID addComponent(const std::unique_ptr<IComponent>& prototype);
-	void removeComponent(ComponentID id);
+	template<class T, class... ARGS>
+	ComponentID registerComponent(ARGS&&... args) {
+		std::shared_ptr<T> component(new T(std::forward<ARGS>(args)...));
 
-	bool findComponentID(const std::string& name, ComponentID& id) const;
+		auto name = component->getName();
+		EntityID id = findComponentID(name);
 
-	std::shared_ptr<IComponent> getComponent(ComponentID id) const;
+		if (id >= 0) {
+			return -1;
+		}
+
+		id = getNextId();
+
+		component->setId(id);
+		_componentNames[name] = id;
+		_prototypes[id] = component;
+		return id;
+	}
+
+	void unregisterComponent(ComponentID id);
+
+	ComponentID findComponentID(const std::string& name);
+
+	std::shared_ptr<IComponent> makeComponent(ComponentID id);
 
 	void clear();
 
 private:
-	std::unordered_map<std::string, ComponentID> _componentNames;
-	std::unordered_map<ComponentID, std::unique_ptr<IComponent>> _componentPrototypes;
+	ComponentID getNextId();
+
+private:
+	int _nextId;
+	std::unordered_map<std::string, ComponentID> _componentIds;
+	std::unordered_map<ComponentID, std::unique_ptr<IComponent>> _prototypes;
 };
 
 }
