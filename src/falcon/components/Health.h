@@ -6,9 +6,14 @@
 #ifndef FALCON_COMPONENT_HEALTH_H
 #define FALCON_COMPONENT_HEALTH_H
 
+#include "IComponent.h"
+
 namespace falcon {
 
-struct Health {
+class Health: public IComponent {
+public:
+    Health(): IComponent("Health"), max(0), current(0) {}
+
 	int max;
 	int current;
 };

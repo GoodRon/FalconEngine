@@ -8,9 +8,12 @@
 
 namespace falcon {
 
-struct Velocity {
-	int x;
-	int y;
+class Velocity: public IComponent {
+public:
+    Velocity(): IComponent("Velocity"), x(0), y(0) {}
+    
+    int x;
+    int y;
 };
 
 }

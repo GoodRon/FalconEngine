@@ -6,9 +6,14 @@
 #ifndef FALCON_COMPONENT_POSITION_H
 #define FALCON_COMPONENT_POSITION_H
 
+#include "IComponent.h"
+
 namespace falcon {
 
-struct Position {
+class Position: public IComponent {
+public:
+    Position(): IComponent("Position"), x(0), y(0) {}
+
 	int x;
 	int y;
 };
