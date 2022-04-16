@@ -16,6 +16,7 @@
 #include "EntityManager.h"
 #include "ComponentRegistry.h"
 #include "SystemManager.h"
+#include "EventManager.h"
 
 namespace falcon {
 
@@ -38,6 +39,8 @@ bool Engine::initialize(int width, int height) {
 	_entityManager.reset(new EntityManager);
 	_componentRegistry.reset(new ComponentRegistry);
 	_systemManager.reset(new SystemManager);
+
+	_eventManager.reset(new EventManager(_systemManager.get()));
 
 	_timerPool->addTimer(10, [this](TimerPool::id_t) {
 		if (!_objectManager) {
@@ -63,6 +66,7 @@ Engine::Engine():
 	_entityManager(),
 	_componentRegistry(),
 	_systemManager(),
+	_eventManager(),
 	_timerPool(),
 	_eventHandlers(),
 	_handlersMutex(),

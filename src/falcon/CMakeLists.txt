@@ -26,6 +26,7 @@ add_library(falcon
 	ComponentRegistry.cxx
 	SystemManager.cxx
 	IEvent.cxx
-	IComponent.cxx)
+	IComponent.cxx
+	EventManager.cxx)
 
 target_link_libraries(falcon SDL2::Core SDL2::Image)

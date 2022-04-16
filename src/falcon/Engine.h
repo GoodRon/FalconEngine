@@ -24,6 +24,7 @@ class ObjectManager;
 class EntityManager;
 class ComponentRegistry;
 class SystemManager;
+class EventManager;
 
 using EventHandler = std::function<bool(const SDL_Event&)>;
 
@@ -54,6 +55,8 @@ public:
 	ComponentRegistry* getComponentRegistry() const;
 	SystemManager* getSystemManager() const;
 
+	EventManager* getEventManager() const;
+
 	TimerPool* getTimersPool() const;
 
 	// TODO remove from here?
@@ -79,6 +82,7 @@ private:
 	std::unique_ptr<EntityManager> _entityManager;
 	std::unique_ptr<ComponentRegistry> _componentRegistry;
 	std::unique_ptr<SystemManager> _systemManager;
+	std::unique_ptr<EventManager> _eventManager;
 	std::unique_ptr<TimerPool> _timerPool;
 	std::vector<EventHandler> _eventHandlers;
 	std::mutex _handlersMutex;
