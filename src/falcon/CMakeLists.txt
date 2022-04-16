@@ -20,6 +20,7 @@ add_library(falcon
 	UnitMoveCommand.cxx 
 	UnitController.cxx
 	IGameState.cxx
-	Frame.cxx)
+	Frame.cxx
+	IEntity.cxx)
 
 target_link_libraries(falcon SDL2::Core SDL2::Image)
