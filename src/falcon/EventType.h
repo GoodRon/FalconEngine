@@ -13,7 +13,7 @@ enum class EventType: int {
 	Update,
 	Draw,
 	Collide,
-
+	Destroy,
 }
 
 }

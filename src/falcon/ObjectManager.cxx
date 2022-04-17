@@ -3,21 +3,56 @@
  * All rights reserved
  */
 
-#include <algorithm>
-
 #include "ObjectManager.h"
+
+#include "IGameObject.h"
 
 namespace falcon {
 
-ObjectManager::ObjectManager()
-	{
+ObjectManager::ObjectManager():
+    _objects() {
 }
 
 ObjectManager::~ObjectManager() {
 }
 
+bool ObjectManager::registerObject(IGameObject* object) {
+    if (!object) {
+        return false;
+    }
+
+    const auto id = object->getId();
+    if (_objects.find(id) != _objects.end()) {
+        return true;
+    }
+
+    _objects[id] = object;
+    return true;
+}
+
+void ObjectManager::unregisterObject(EntityID id) {
+    _objects.erase(id);
+}
+
+void ObjectManager::swapObjects(
+    std::vector<IGameObject>& objects) {
+
+}
+
+bool ObjectManager::sendEvent(
+    const std::shared_ptr<IEvent>& event) {
+    // TODO write me
+
+    for (auto& object: _objects) {
+        if (object.second->onEvent(event)) {
+            break;
+        }
+    }
+    return true;
+}
+
 void ObjectManager::clear() {
-	//_objects.clear();
+	_objects.clear();
 }
 
 }

@@ -21,7 +21,7 @@ EntityID EntityManager::registerEntity(const std::shared_ptr<IEntity>& entity) {
 		entity->setId(_nextId++);
 	}
 
-	auto id = entity->getId();
+	const auto id = entity->getId();
 
 	if (getEntity(id) == nullptr) {
 		_entities[id] = entity;

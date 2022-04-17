@@ -16,9 +16,11 @@ EntityID IGameObject::getId() const {
 	return _entity->getId();
 }
 
+/*
 std::shared_ptr<Entity> IGameObject::getEntity() const {
 	return _entity;
 }
+*/
 
 bool IGameObject::onEvent(const std::shared_ptr<IEvent>& event) {
 	// TODO write me

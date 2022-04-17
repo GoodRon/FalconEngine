@@ -7,13 +7,15 @@
 #define FALCON_OBJECT_MANAGER_H
 
 #include <vector>
+#include <unordered_map>
 #include <memory>
 
-//#include "Types.h"
+#include "Types.h"
 
 namespace falcon {
 
 class IGameObject;
+class IEvent;
 
 class ObjectManager {
 public:
@@ -23,18 +25,17 @@ public:
 	ObjectManager(const ObjectManager&) = delete;
 	ObjectManager& operator=(ObjectManager&) = delete;
 
-//	bool registerObject(IGameObject* object);
-//	void unregisterObject(EntityId id);
+	bool registerObject(IGameObject* object);
+	void unregisterObject(EntityID id);
 
-	
+	void swapObjects(std::vector<IGameObject>& objects);
+
+	bool sendEvent(const std::shared_ptr<IEvent>& event);
 
 	void clear();
 
 private:
-//	void sortByDrawPriority();
-
-private:
-//	std::unordered_map<EntityId, IGameObject*> _objects;
+	std::unordered_map<EntityID, IGameObject*> _objects;
 };
 
 }

@@ -23,7 +23,7 @@ public:
 	EntityID getId() const;
 
 	// NOTE do we need this?
-	std::shared_ptr<Entity> getEntity() const;
+	//std::shared_ptr<Entity> getEntity() const;
 
 	bool onEvent(const std::shared_ptr<IEvent>& event);
 
