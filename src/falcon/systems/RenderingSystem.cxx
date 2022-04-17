@@ -94,8 +94,7 @@ void RenderingSystem::draw(Position* positionComponent,
 
 	// TODO improve
 	SDL_Rect source = frame->getSourceRect();
-	SDL_Rect dest = {positionComponent->x, positionComponent->y, 
-		source.w, source.h};
+	SDL_Rect dest = positionComponent->toRect();
 	_renderer->drawTexture(frame->getTexture(), &source, &dest);
 }
 

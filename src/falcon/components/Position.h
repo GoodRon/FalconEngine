@@ -15,6 +15,12 @@ public:
     Position(): IComponent("Position") {}
     ~Position() override = default;
 
+    SDL_Rect toRect() {
+        return SDL_Rect{x, y, 
+            static_cast<int>(width * scale), 
+            static_cast<int>(height * scale)};
+    }
+
 	int x = 0;
 	int y = 0;
     int width = 0;
