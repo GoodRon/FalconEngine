@@ -6,14 +6,14 @@
 #ifndef FALCON_ENGINE_H
 #define FALCON_ENGINE_H
 
+#include <SDL.h>
+
 #include <vector>
 #include <functional>
 #include <memory>
 #include <atomic>
 #include <queue>
 #include <mutex>
-
-union SDL_Event;
 
 namespace falcon {
 

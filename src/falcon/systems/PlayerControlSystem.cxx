@@ -1,20 +1,20 @@
-#include "AnimationSystem.h"
+#include "PlayerControlSystem.h"
 
 #include "ComponentRegistry.h"
-#include "IEntity.h"
+#include "Entity.h"
 
 namespace falcon {
 
-AnimationSystem::AnimationSystem():
-	ISystem("Animation"),
-	_animationComponentId(-1) {
+PlayerControlSystem::PlayerControlSystem():
+	ISystem("PlayerControl"),
+	_playerComponentId(-1) {
 
 }
 
-AnimationSystem::~AnimationSystem() {
+PlayerControlSystem::~PlayerControlSystem() {
 }
 
-bool AnimationSystem::resolveComponentIDs(
+bool PlayerControlSystem::resolveComponentIDs(
     ComponentRegistry* componentRegistry) {
 
 	if (isReady()) {
@@ -25,26 +25,26 @@ bool AnimationSystem::resolveComponentIDs(
 		return false;
 	}
 
-	auto id = componentRegistry->findComponentID("Visual");
+	auto id = componentRegistry->findComponentID("Player");
 	if (id < 0) {
 		return false;
 	}
 
-	_animationComponentId = id;
+	_playerComponentId = id;
 
 	_isReady = true;
 
 	return true;
 }
 
-bool AnimationSystem::onEvent(
+bool PlayerControlSystem::onEvent(
     const std::shared_ptr<IEvent>& event) const {
 
 	// TODO write me
 	return true;
 }
 
-bool AnimationSystem::checkComponents(IEntity* entity) const {
+bool PlayerControlSystem::checkComponents(Entity* entity) const {
 	if (!isReady()) {
 		return false;
 	}
@@ -53,7 +53,7 @@ bool AnimationSystem::checkComponents(IEntity* entity) const {
 		return false;
 	}
 
-	auto component = entity->getComponent(_animationComponentId);
+	auto component = entity->getComponent(_playerComponentId);
 	if (!component) {
 		return false;
 	}

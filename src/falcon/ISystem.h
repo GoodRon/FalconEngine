@@ -34,8 +34,6 @@ public:
 	bool registerEntity(Entity* entity);
 	void unregisterEntity(EntityID id);
 
-	virtual void processEntity(EntityID id) = 0;
-
 	virtual bool onEvent(
 		const std::shared_ptr<IEvent>& event) const = 0;
 

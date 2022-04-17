@@ -3,8 +3,8 @@
  * All rights reserved
  */
 
-#ifndef FALCON_IGAME_OBJECT_H
-#define FALCON_IGAME_OBJECT_H
+#ifndef FALCON_GAME_OBJECT_H
+#define FALCON_GAME_OBJECT_H
 
 #include <memory>
 
@@ -15,10 +15,10 @@ using EntityID = int;
 class Entity;
 class IEvent;
 
-class IGameObject {
+class GameObject {
 public:
-	IGameObject(const std::shared_ptr<Entity>& entity);
-	virtual ~IGameObject();
+	GameObject(const std::shared_ptr<Entity>& entity);
+	virtual ~GameObject();
 
 	EntityID getId() const;
 
@@ -36,4 +36,4 @@ private:
 
 }
 
-#endif // FALCON_WORLD_OBJECT_H
+#endif // FALCON_GAME_OBJECT_H

@@ -5,7 +5,7 @@
 
 #include "ObjectManager.h"
 
-#include "IGameObject.h"
+#include "GameObject.h"
 
 namespace falcon {
 
@@ -17,7 +17,7 @@ ObjectManager::~ObjectManager() {
 }
 
 bool ObjectManager::registerObject(
-    const std::shared_ptr<IGameObject>& object) {
+    const std::shared_ptr<GameObject>& object) {
     if (!object) {
         return false;
     }
@@ -36,7 +36,7 @@ void ObjectManager::unregisterObject(EntityID id) {
 }
 
 void ObjectManager::swapObjects(
-    std::vector<IGameObject>& objects) {
+    std::vector<GameObject>& objects) {
 
 }
 

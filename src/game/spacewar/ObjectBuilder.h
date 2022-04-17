@@ -10,18 +10,21 @@
 #include <string>
 
 namespace falcon {
+	class Engine;
 	class IGameObject;
 }
 
 namespace spacewar {
 
-class UnitBuilder {
+class ObjectBuilder {
 public:
-	UnitBuilder();
-	~UnitBuilder();
+	ObjectBuilder(falcon::Engine* engine);
+	~ObjectBuilder();
 
 	std::shared_ptr<falcon::IGameObject> buildShip(const std::string& jsonConfig) const;
 
+private:
+	falcon::Engine* const _engine;
 };
 
 }

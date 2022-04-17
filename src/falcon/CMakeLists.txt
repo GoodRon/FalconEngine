@@ -17,6 +17,8 @@ add_library(falcon
 	IComponent.cxx
 	EventManager.cxx
 	ISystem.cxx
-	IGameObject.cxx)
+	GameObject.cxx
+	systems/RenderingSystem.cxx
+	systems/PlayerControlSystem.cxx)
 
 target_link_libraries(falcon SDL2::Core SDL2::Image)

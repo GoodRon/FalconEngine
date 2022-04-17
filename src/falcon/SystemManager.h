@@ -26,7 +26,7 @@ public:
 
 	template<class T, class... ARGS>
 	bool registerSystem(ARGS&&... args) {
-		std::shared_ptr<T> sys(new T(std::forward<ARGS>(args)...));
+		std::unique_ptr<T> sys(new T(std::forward<ARGS>(args)...));
 
 		auto name = sys->getName();
 		if (hasSystem(name)) {
@@ -37,7 +37,7 @@ public:
 			return false;
 		}
 
-		_systems[name] = sys;
+		_systems[name] = std::move(sys);
 		return true;
 	}
 

@@ -14,7 +14,7 @@
 
 namespace falcon {
 
-class IGameObject;
+class GameObject;
 class IEvent;
 
 class ObjectManager {
@@ -25,17 +25,17 @@ public:
 	ObjectManager(const ObjectManager&) = delete;
 	ObjectManager& operator=(ObjectManager&) = delete;
 
-	bool registerObject(const std::shared_ptr<IGameObject>& object);
+	bool registerObject(const std::shared_ptr<GameObject>& object);
 	void unregisterObject(EntityID id);
 
-	void swapObjects(std::vector<IGameObject>& objects);
+	void swapObjects(std::vector<GameObject>& objects);
 
 	bool sendEvent(const std::shared_ptr<IEvent>& event);
 
 	void clear();
 
 private:
-	std::unordered_map<EntityID, std::shared_ptr<IGameObject>> _objects;
+	std::unordered_map<EntityID, std::shared_ptr<GameObject>> _objects;
 };
 
 }

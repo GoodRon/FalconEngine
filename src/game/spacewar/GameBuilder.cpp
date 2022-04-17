@@ -4,9 +4,15 @@
 
 #include "falcon/Engine.h"
 #include "falcon/ComponentRegistry.h"
+#include "falcon/SystemManager.h"
+#include "falcon/ResourceManager.h"
 #include "falcon/components/Health.h"
 #include "falcon/components/Position.h"
 #include "falcon/components/Visual.h"
+#include "falcon/components/State.h"
+#include "falcon/components/Player.h"
+#include "falcon/systems/RenderingSystem.h"
+#include "falcon/systems/PlayerControlSystem.h"
 
 namespace spacewar {
 
@@ -29,28 +35,63 @@ public:
 	Impl& operator=(const Impl&) = delete;
 
 	bool buildGame() {
-		if (!_engine) {
-			return false;
-		}
-
 		if (_isBuilt) {
-			return true;
+			return _isBuilt;
 		}
 
-		_isBuilt = registerComponents(_engine->getComponentRegistry());
+		if (!_engine) {
+			return _isBuilt;
+		}
 
+		// TODO return some error code && clean the engine mb
+		if (!registerComponents()) {
+			return _isBuilt;
+		}
+
+		if (!registerSystems()) {
+			return _isBuilt;
+		}
+
+		if (!buildGameObjects()) {
+			return _isBuilt;
+		}
+
+		_isBuilt = true;
 		return _isBuilt;
 	}
 
 private:
-	bool registerComponents(falcon::ComponentRegistry* registry) {
-		if (!registry) {
+	bool registerComponents() const {
+		auto componentRegistry = _engine->getComponentRegistry();
+		if (!componentRegistry) {
 			return false;
 		}
 
-		registry->registerComponent<falcon::Health>();
-		registry->registerComponent<falcon::Position>();
-		registry->registerComponent<falcon::Visual>();
+		componentRegistry->registerComponent<falcon::Health>();
+		componentRegistry->registerComponent<falcon::Position>();
+		componentRegistry->registerComponent<falcon::Visual>();
+		componentRegistry->registerComponent<falcon::State>();
+		componentRegistry->registerComponent<falcon::Player>();
+
+		return true;
+	}
+
+	bool registerSystems() const {
+		auto systemManager = _engine->getSystemManager();
+		if (!systemManager) {
+			return false;
+		}
+
+		systemManager->registerSystem<falcon::RenderingSystem>();
+		systemManager->registerSystem<falcon::PlayerControlSystem>();
+		// TODO write me!
+
+		return true;
+	}
+
+	bool buildGameObjects() const {
+
+		// TODO write me
 
 		return true;
 	}
