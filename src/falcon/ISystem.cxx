@@ -1,5 +1,7 @@
 #include "ISystem.h"
 
+#include "IEntity.h"
+
 namespace falcon {
 
 ISystem::ISystem(const std::string& name): 
@@ -42,10 +44,6 @@ void ISystem::unregisterEntity(IEntity* entity) {
 	}
 
 	_entities.erase(entity);
-}
-
-void ISystem::setReady(bool isReady) {
-	_isReady = isReady;
 }
 
 }

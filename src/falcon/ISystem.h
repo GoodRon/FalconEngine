@@ -38,9 +38,7 @@ public:
 protected:
 	virtual bool checkComponents(IEntity* entity) const = 0;
 
-	void setReady(bool isReady);
-
-private:
+protected:
 	const std::string _name;
 	bool _isReady;
 	std::unordered_set<IEntity*> _entities;

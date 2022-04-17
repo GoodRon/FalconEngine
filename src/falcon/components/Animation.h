@@ -16,7 +16,8 @@ namespace falcon {
 class Animation: public IComponent {
 public:
     Animation(): IComponent("Animation"), 
-        states(), currentState(0), currentFrame(0) {}
+        states(), currentState(0), currentFrame(0),
+        isPaused(true), isLooped(false) {}
 
     std::shared_ptr<IComponent> clone() const override {
         return std::shared_ptr<IComponent>(new Animation);
@@ -30,6 +31,8 @@ public:
     std::unordered_map<State, AnimatedState> states;
     State currentState;
     size_t currentFrame;
+    bool isPaused;
+    bool isLooped;
 };
 
 }
