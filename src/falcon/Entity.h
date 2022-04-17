@@ -27,7 +27,7 @@ public:
 	EntityID getId() const;
 	const std::string getName() const;
 
-	bool addComponent(std::unique_ptr<IComponent>& component);
+	bool addComponent(std::unique_ptr<IComponent>&& component);
 
 	IComponent* getComponent(ComponentID id);
 

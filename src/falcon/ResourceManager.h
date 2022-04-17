@@ -16,10 +16,8 @@ struct SDL_Texture;
 namespace falcon {
 
 class Renderer;
-//class IAnimation;
 
 using TexturePointer = std::shared_ptr<SDL_Texture>;
-//using AnimationPointer = std::shared_ptr<IAnimation>;
 
 class ResourceManager {
 public:
@@ -30,9 +28,6 @@ public:
 	ResourceManager& operator=(ResourceManager&) = delete;
 
 	TexturePointer loadTexture(const std::string& name);
-
-
-//	AnimationPointer loadAnimation(const std::string& json);
 
 	void freeUnused();
 

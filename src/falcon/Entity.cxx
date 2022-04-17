@@ -26,7 +26,7 @@ const std::string Entity::getName() const {
 	return _name;
 }
 
-bool Entity::addComponent(std::unique_ptr<IComponent>& component) {
+bool Entity::addComponent(std::unique_ptr<IComponent>&& component) {
 	if (!component) {
 		return false;
 	}
@@ -37,7 +37,7 @@ bool Entity::addComponent(std::unique_ptr<IComponent>& component) {
 		return false;
 	}
 
-	_components[id].swap(component);
+	_components[id] = std::move(component);
 	return true;
 }
 

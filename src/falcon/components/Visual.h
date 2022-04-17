@@ -19,14 +19,14 @@ public:
     Visual(): IComponent("Visual") {}
     ~Visual() override = default;
 
-    using State = int;
+    using State = std::string;
     using Direction = int;
     using Frames = std::vector<std::shared_ptr<Frame>>;
     using AnimatedState = std::unordered_map<Direction, Frames>;
 	
-    std::shared_ptr<Frame> currentFrame;
     size_t frameIndex = 0;
-    State currentState = 0;
+    Direction currentDirection = 0;
+    State currentState;
     std::unordered_map<State, AnimatedState> states;
     bool isPaused = false;
     bool isLooped = true;

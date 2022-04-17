@@ -24,7 +24,7 @@ public:
 	ObjectBuilder(ObjectBuilder&&) = default;
 	ObjectBuilder& operator=(ObjectBuilder&&) = default;
 
-	std::shared_ptr<falcon::IGameObject> buildShip(
+	std::shared_ptr<falcon::IGameObject> buildObject(
 		const std::string& jsonConfig);
 
 private:

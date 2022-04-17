@@ -7,13 +7,11 @@
 				{
 					"name": "Idle",
 					"texture": "resources/boywalk.png",
-					"frame": {
-						"width": 32,
-						"height": 48,
-					},
+					"frame_width": 32,
+					"frame_height": 48,
 					"directions" : [
 						{
-							"direction": 0.0,
+							"direction": 0,
 							"row": 0,
 							"col": 0,
 							"frames": 3
@@ -23,13 +21,11 @@
 				{
 					"name": "Moving",
 					"texture": "resources/boywalk.png",
-					"frame": {
-						"width": 32,
-						"height": 48,
-					},
+					"frame_width": 32,
+					"frame_height": 48,
 					"directions" : [
 						{
-							"direction": 0.0,
+							"direction": 0,
 							"row": 1,
 							"col": 0,
 							"frames": 3
