@@ -12,7 +12,6 @@
 #include "falcon/components/Visual.h"
 #include "falcon/components/State.h"
 #include "falcon/components/Player.h"
-#include "falcon/systems/RenderingSystem.h"
 #include "falcon/systems/PlayerControlSystem.h"
 
 #include "EntityBuilder.h"
@@ -68,11 +67,9 @@ private:
 			return false;
 		}
 
-		std::unique_ptr<falcon::RenderingSystem> renderingSystem(new falcon::RenderingSystem);
-		systemManager->addSystem(std::move(renderingSystem));
-
-		std::unique_ptr<falcon::PlayerControlSystem> playerControlSystem(new falcon::PlayerControlSystem);
-		systemManager->addSystem(std::move(playerControlSystem));
+		std::shared_ptr<falcon::PlayerControlSystem> playerControlSystem(
+			new falcon::PlayerControlSystem(_engine));
+		systemManager->addSystem(playerControlSystem);
 		// TODO write me!
 
 		return true;

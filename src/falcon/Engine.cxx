@@ -15,6 +15,7 @@
 #include "EngineException.h"
 #include "SystemManager.h"
 #include "EventManager.h"
+#include "systems/RenderingSystem.h"
 
 namespace falcon {
 
@@ -45,6 +46,11 @@ bool Engine::initialize(int width, int height) {
 		//_objectManager->updateAll();
 	});
 
+	_renderingSystem.reset(
+		new falcon::RenderingSystem(this));
+	_systemManager->addSystem(_renderingSystem);
+
+	_isInitialized = true;
 	return _isInitialized;
 }
 
@@ -61,6 +67,7 @@ Engine::Engine():
 	_objectManager(),
 	_systemManager(),
 	_eventManager(),
+	_renderingSystem(),
 	_timerPool(),
 	_eventHandlers(),
 	_handlersMutex(),
@@ -118,6 +125,7 @@ int Engine::run() {
 	while (_isRunning) {
 		_renderer->clearViewport();
 		//_objectManager->drawAll();
+		_renderingSystem->drawEntites();
 		SDL_RenderPresent(_renderer->getContext());
 		
 		std::lock_guard<std::mutex> locker(_eventMutex);

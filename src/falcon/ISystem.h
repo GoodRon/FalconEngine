@@ -16,10 +16,12 @@ namespace falcon {
 
 class IEvent;
 class Entity;
+class Engine;
 
 class ISystem {
 public:
-	ISystem(const std::string& name);
+	ISystem(const std::string& name,
+		Engine* engine);
 
 	virtual ~ISystem();
 
@@ -33,9 +35,12 @@ public:
 
 protected:
 	virtual bool checkComponents(Entity* entity) const = 0;
+	virtual void lockEntities() const;
+	virtual void unlockEntities() const;
 
 protected:
 	const std::string _name;
+	Engine* const _engine;
 	std::unordered_map<EntityID, Entity*> _entities;
 };
 

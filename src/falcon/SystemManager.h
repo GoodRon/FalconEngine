@@ -26,7 +26,7 @@ public:
 	SystemManager(const SystemManager&) = delete;
 	SystemManager& operator=(const SystemManager&) = delete;
 
-	void addSystem(std::unique_ptr<ISystem>&& system);
+	void addSystem(const std::shared_ptr<ISystem>& system);
 
 	bool hasSystem(const std::string& name) const;
 
@@ -40,7 +40,7 @@ public:
 	void clear();
 
 private:
-	std::unordered_map<std::string, std::unique_ptr<ISystem>> _systems;
+	std::unordered_map<std::string, std::shared_ptr<ISystem>> _systems;
 };
 
 }

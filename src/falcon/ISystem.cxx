@@ -4,8 +4,10 @@
 
 namespace falcon {
 
-ISystem::ISystem(const std::string& name): 
+ISystem::ISystem(const std::string& name, 
+	Engine* engine): 
 	_name(name), 
+	_engine(engine),
 	_entities() {
 }
 		
@@ -26,18 +28,25 @@ bool ISystem::registerEntity(Entity* entity) {
 	}
 
 	auto id = entity->getId();
-	if (_entities.find(id) != _entities.end()) {
-		return false;
-	}
 
-	_entities[id] = entity;
+	lockEntities();
+	if (_entities.find(id) == _entities.end()) {
+		_entities[id] = entity;
+	}
+	unlockEntities();
 	return true;
 }
 
 void ISystem::unregisterEntity(EntityID id) {
+	lockEntities();
 	_entities.erase(id);
+	unlockEntities();
 }
 
+void ISystem::lockEntities() const {
+}
 
+void ISystem::unlockEntities() const {
+}
 
 }

@@ -28,7 +28,7 @@ public:
         bool isLooped = true;
     };
 
-    StateName currentState;
+    StateName currentState = "Idle";
     Direction currentDirection = 0;
     size_t frameIndex = 0; 
     std::unordered_map<StateName, State> states;

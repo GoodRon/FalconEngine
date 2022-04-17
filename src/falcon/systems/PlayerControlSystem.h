@@ -14,7 +14,7 @@ using ComponentID = int;
 
 class PlayerControlSystem: public ISystem {
 public:
-    PlayerControlSystem();
+    PlayerControlSystem(Engine* engine);
     ~PlayerControlSystem() override;
 
     bool onEvent(

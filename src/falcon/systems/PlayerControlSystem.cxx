@@ -5,8 +5,8 @@
 
 namespace falcon {
 
-PlayerControlSystem::PlayerControlSystem():
-	ISystem("PlayerControl"),
+PlayerControlSystem::PlayerControlSystem(Engine* engine):
+	ISystem("PlayerControl", engine),
 	_playerComponentId(getComponentId("Player")) {
 
 }

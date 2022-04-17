@@ -23,6 +23,7 @@ class TimerPool;
 class ObjectManager;
 class SystemManager;
 class EventManager;
+class RenderingSystem;
 
 using EventHandler = std::function<bool(const SDL_Event&)>;
 
@@ -77,6 +78,7 @@ private:
 	std::unique_ptr<ObjectManager> _objectManager;
 	std::unique_ptr<SystemManager> _systemManager;
 	std::unique_ptr<EventManager> _eventManager;
+	std::shared_ptr<falcon::RenderingSystem> _renderingSystem;
 	std::unique_ptr<TimerPool> _timerPool;
 	std::vector<EventHandler> _eventHandlers;
 	std::mutex _handlersMutex;

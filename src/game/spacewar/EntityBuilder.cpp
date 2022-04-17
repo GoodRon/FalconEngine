@@ -61,7 +61,7 @@ public:
 		rapidjson::Document document;
 		document.Parse(jsonContent.c_str());
 
-		const auto entityName = std::string(document["name"].GetString());
+		auto entityName = std::string(document["name"].GetString());
 
 		std::shared_ptr<falcon::Entity> entity(new falcon::Entity(entityName));
 
@@ -128,7 +128,7 @@ private:
 			falcon::Visual::State visualState;
 			visualState.isLooped = state["is_looped"].GetBool();
 
-			for (auto& frameLine: document["frames"].GetArray()) {
+			for (auto& frameLine: state["frames"].GetArray()) {
 				const int direction = frameLine["direction"].GetInt();
 				const int row = frameLine["row"].GetInt();
 				const int col = frameLine["col"].GetInt();
