@@ -14,22 +14,26 @@ namespace falcon {
 
 class Frame;
 
+
 class Visual: public IComponent {
 public:
     Visual(): IComponent("Visual") {}
     ~Visual() override = default;
 
-    using State = std::string;
+    using StateName = std::string;
     using Direction = int;
     using Frames = std::vector<std::shared_ptr<Frame>>;
-    using AnimatedState = std::unordered_map<Direction, Frames>;
 	
-    size_t frameIndex = 0;
+    struct State {
+        std::unordered_map<Direction, Frames> frames;
+        bool isLooped = true;
+    };
+
+    StateName currentState;
     Direction currentDirection = 0;
-    State currentState;
-    std::unordered_map<State, AnimatedState> states;
+    size_t frameIndex = 0; 
+    std::unordered_map<StateName, State> states;
     bool isPaused = false;
-    bool isLooped = true;
     bool isVisible = false;
     int zIndex = 0;
 };

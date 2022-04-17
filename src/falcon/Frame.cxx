@@ -3,10 +3,11 @@
 namespace falcon {
 
 Frame::Frame(const TexturePointer& texture, 
-	const SDL_Rect& sourceRect): 
+	const SDL_Rect& sourceRect,
+	int durationMs): 
 	_texture(texture),
 	_sourceRect(sourceRect),
-	_durationMs(0) {
+	_durationMs(durationMs) {
 }
 
 Frame::~Frame() {
@@ -18,10 +19,6 @@ TexturePointer Frame::getTexture() const {
 
 SDL_Rect Frame::getSourceRect() const {
 	return _sourceRect;
-}
-
-void Frame::setDurationMs(int durationMs) {
-	_durationMs = durationMs;
 }
 
 int Frame::getDuration() const {

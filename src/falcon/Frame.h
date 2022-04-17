@@ -19,7 +19,8 @@ using TexturePointer = std::shared_ptr<SDL_Texture>;
 class Frame {
 public:
 	Frame(const TexturePointer& texture, 
-		  const SDL_Rect& sourceRect);
+		  const SDL_Rect& sourceRect,
+		  int durationMs = 0);
 	~Frame();
 
 	Frame(const Frame&) = default;
@@ -29,10 +30,7 @@ public:
 	Frame& operator=(Frame&&) = default;
 
 	TexturePointer getTexture() const;
-
 	SDL_Rect getSourceRect() const;
-
-	void setDurationMs(int durationMs);
 	int getDuration() const;
 
 private:

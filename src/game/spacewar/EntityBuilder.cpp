@@ -1,4 +1,4 @@
-#include "ObjectBuilder.h"
+#include "EntityBuilder.h"
 
 #include <functional>
 #include <unordered_map>
@@ -15,7 +15,7 @@
 
 namespace spacewar {
 
-class ObjectBuilder::Impl {
+class EntityBuilder::Impl {
 private:
 	using componentBuilder = std::function<void(
 		falcon::Entity* entity,
@@ -30,11 +30,7 @@ public:
 		_engine(engine),
 		_componentBuilders() {
 
-		_componentBuilders["Visual"] = [this](
-			falcon::Entity* entity,
-			rapidjson::Value& document) {
-			buildVisualComponent(entity, document);
-		};	
+		registerComponentBuilders();
 	}
 
 	~Impl() {
@@ -43,7 +39,7 @@ public:
 	Impl(const Impl&) = delete;
 	Impl& operator=(const Impl&) = delete;
 
-	std::shared_ptr<falcon::IGameObject> buildObject(
+	std::shared_ptr<falcon::Entity> buildEntity(
 		const std::string& jsonConfig) {
 		if (!_engine) {
 			return nullptr;
@@ -80,14 +76,25 @@ public:
 			_componentBuilders[componentName](entity.get(), component);
 		}
 
-		return std::shared_ptr<falcon::IGameObject>();
+		return entity;
 	}
 
-
 private:
+	void registerComponentBuilders() {
+		_componentBuilders["Visual"] = [this](
+			falcon::Entity* entity,
+			rapidjson::Value& document) {
+			buildVisualComponent(entity, document);
+		};
+	}
+
 	bool buildVisualComponent(
 		falcon::Entity* entity,
 		rapidjson::Value& document) const {
+
+		if (!entity) {
+			return false;
+		}
 
 		auto resourceManager = _engine->getResourceManager();
 		if (!resourceManager) {
@@ -109,27 +116,31 @@ private:
 			SDL_Rect frameRect;
 			frameRect.w = state["frame_width"].GetInt();
 			frameRect.h = state["frame_height"].GetInt();
+			int duration = state["frame_duration"].GetInt();
 
-			falcon::Visual::AnimatedState animatedState;
+			falcon::Visual::State visualState;
+			visualState.isLooped = state["is_looped"].GetBool();
 
-			for (auto& direction: document["directions"].GetArray()) {
-				const int directionAngle = state["direction"].GetInt();
-				const int row = state["row"].GetInt();
-				const int col = state["col"].GetInt();
-				const int framesSize = state["frames"].GetInt();
+			for (auto& frameLine: document["frames"].GetArray()) {
+				const int direction = frameLine["direction"].GetInt();
+				const int row = frameLine["row"].GetInt();
+				const int col = frameLine["col"].GetInt();
+				const int amount = frameLine["amount"].GetInt();
 
 				falcon::Visual::Frames frames;
 
-				for (int i = 0; i < framesSize; ++i) {
-					frameRect.x = col * frameRect.w;
-					frameRect.y = row * frameRect.h;
-					frames.emplace_back(new falcon::Frame(texture, frameRect));
+				frameRect.y = row * frameRect.h;
+				for (int frameCount = 0; frameCount < amount; ++frameCount) {
+					frameRect.x = (col + frameCount) * frameRect.w;
+					
+					frames.emplace_back(
+						new falcon::Frame(texture, frameRect, duration));
 				}
 
-				animatedState[directionAngle] = std::move(frames);
+				visualState.frames[direction] = std::move(frames);
 			}
 
-			component->states[stateName] = std::move(animatedState);
+			component->states[stateName] = std::move(visualState);
 		}
 
 		entity->addComponent(std::move(component));
@@ -137,16 +148,16 @@ private:
 	}
 };
 
-ObjectBuilder::ObjectBuilder(falcon::Engine* engine):
+EntityBuilder::EntityBuilder(falcon::Engine* engine):
 	_impl(new Impl(engine)) {
 }
 
-ObjectBuilder::~ObjectBuilder() {
+EntityBuilder::~EntityBuilder() {
 }
 
-std::shared_ptr<falcon::IGameObject> 
-ObjectBuilder::buildObject(const std::string& jsonConfig) {
-	return _impl->buildObject(jsonConfig);
+std::shared_ptr<falcon::Entity> 
+EntityBuilder::buildEntity(const std::string& jsonConfig) {
+	return _impl->buildEntity(jsonConfig);
 }
 
 }

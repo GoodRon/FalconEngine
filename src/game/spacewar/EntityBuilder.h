@@ -11,20 +11,20 @@
 
 namespace falcon {
 	class Engine;
-	class IGameObject;
+	class Entity;
 }
 
 namespace spacewar {
 
-class ObjectBuilder {
+class EntityBuilder {
 public:
-	ObjectBuilder(falcon::Engine* engine);
-	~ObjectBuilder();
+	EntityBuilder(falcon::Engine* engine);
+	~EntityBuilder();
 
-	ObjectBuilder(ObjectBuilder&&) = default;
-	ObjectBuilder& operator=(ObjectBuilder&&) = default;
+	EntityBuilder(EntityBuilder&&) = default;
+	EntityBuilder& operator=(EntityBuilder&&) = default;
 
-	std::shared_ptr<falcon::IGameObject> buildObject(
+	std::shared_ptr<falcon::Entity> buildEntity(
 		const std::string& jsonConfig);
 
 private:

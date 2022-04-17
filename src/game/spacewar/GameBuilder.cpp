@@ -13,6 +13,8 @@
 #include "falcon/systems/RenderingSystem.h"
 #include "falcon/systems/PlayerControlSystem.h"
 
+#include "EntityBuilder.h"
+
 namespace spacewar {
 
 class GameBuilder::Impl {
@@ -72,8 +74,16 @@ private:
 	}
 
 	bool buildGameObjects() const {
+		auto objectManager = _engine->getObjectManager();
+		if (!objectManager) {
+			return false;
+		}
 
-		// TODO write me
+		std::shared_ptr<falcon::Entity> entity;
+		EntityBuilder builder(_engine);
+
+		entity = builder.buildEntity("resources/player1.json");
+		//objectManager->registerObject(object);
 
 		return true;
 	}
