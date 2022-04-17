@@ -16,7 +16,6 @@ namespace falcon {
 
 class IEvent;
 class Entity;
-class ComponentRegistry;
 
 class ISystem {
 public:
@@ -25,11 +24,6 @@ public:
 	virtual ~ISystem();
 
 	const std::string getName() const;
-
-	virtual bool resolveComponentIDs(
-		ComponentRegistry* componentRegistry) = 0;
-
-	bool isReady() const;
 
 	bool registerEntity(Entity* entity);
 	void unregisterEntity(EntityID id);
@@ -42,7 +36,6 @@ protected:
 
 protected:
 	const std::string _name;
-	bool _isReady;
 	std::unordered_map<EntityID, Entity*> _entities;
 };
 

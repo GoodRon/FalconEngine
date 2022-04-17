@@ -1,11 +1,27 @@
 #include "IComponent.h"
 
+#include "EngineException.h"
+
+#include <unordered_map>
+
 namespace falcon {
+
+static std::unordered_map<std::string, ComponentID> componentRegistry;
+static ComponentID nextComponentdId = 0;
+
+ComponentID getComponentId(const std::string& name) {
+	if (componentRegistry.find(name) != componentRegistry.end()) {
+		return componentRegistry[name];
+	}
+
+	auto id = nextComponentdId++;
+	componentRegistry[name] = id;
+	return id;
+}
 
 IComponent::IComponent(const std::string& name):
 	_name(name),
-	_id(-1) {
-
+	_id(getComponentId(name)) {
 }
 
 IComponent::~IComponent() {
@@ -13,10 +29,6 @@ IComponent::~IComponent() {
 
 const std::string IComponent::getName() const {
 	return _name;
-}
-
-void IComponent::setId(ComponentID id) {
-	_id = id;
 }
 
 ComponentID IComponent::getId() const {

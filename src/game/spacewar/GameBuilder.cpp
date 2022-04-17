@@ -3,7 +3,6 @@
 #include <SDL.h>
 
 #include "falcon/Engine.h"
-#include "falcon/ComponentRegistry.h"
 #include "falcon/SystemManager.h"
 #include "falcon/ResourceManager.h"
 #include "falcon/components/Health.h"
@@ -44,9 +43,6 @@ public:
 		}
 
 		// TODO return some error code && clean the engine mb
-		if (!registerComponents()) {
-			return _isBuilt;
-		}
 
 		if (!registerSystems()) {
 			return _isBuilt;
@@ -61,20 +57,6 @@ public:
 	}
 
 private:
-	bool registerComponents() const {
-		auto componentRegistry = _engine->getComponentRegistry();
-		if (!componentRegistry) {
-			return false;
-		}
-
-		componentRegistry->registerComponent<falcon::Health>();
-		componentRegistry->registerComponent<falcon::Position>();
-		componentRegistry->registerComponent<falcon::Visual>();
-		componentRegistry->registerComponent<falcon::State>();
-		componentRegistry->registerComponent<falcon::Player>();
-
-		return true;
-	}
 
 	bool registerSystems() const {
 		auto systemManager = _engine->getSystemManager();

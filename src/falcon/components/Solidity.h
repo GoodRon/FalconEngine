@@ -10,17 +10,13 @@
 
 namespace falcon {
 
-class Solidity: public IComponent {
+class Solidity: public IComponent final {
 public:
-    Solidity(): IComponent("Solidity"), 
-        isSolid(true), isDestructable(false) {}
+    Solidity(): IComponent("Solidity") {}
+    ~Solidity() override = default;
 
-    std::unique_ptr<IComponent> clone() const override {
-        return std::unique_ptr<IComponent>(new Solidity);
-    }
-
-	bool isSolid;
-    bool isDestructable;
+	bool isSolid = false;
+    bool isDestructable = false;
     // collision box
 };
 

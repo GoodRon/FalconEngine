@@ -8,16 +8,13 @@
 
 namespace falcon {
 
-class Velocity: public IComponent {
+class Velocity: public IComponent final {
 public:
-    Velocity(): IComponent("Velocity"), x(0), y(0) {}
-    
-    std::unique_ptr<IComponent> clone() const override {
-        return std::unique_ptr<IComponent>(new Velocity);
-    }
+    Velocity(): IComponent("Velocity") {}
+    ~Velocity() override = default;
 
-    int x;
-    int y;
+    int x = 0;
+    int y = 0;
     // acceleration?
 };
 

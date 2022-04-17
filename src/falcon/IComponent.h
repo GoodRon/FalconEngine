@@ -9,25 +9,23 @@
 #include <string>
 #include <memory>
 
+#include "Types.h"
+
 namespace falcon {
 
-using ComponentID = int;
+ComponentID getComponentId(const std::string& name);
 
 class IComponent {
 public:
 	IComponent(const std::string& name);
-	virtual ~IComponent();
-
-	virtual std::unique_ptr<IComponent> clone() const = 0;
+	virtual ~IComponent() = 0;
 
 	const std::string getName() const;
-
-	void setId(ComponentID id);
 	ComponentID getId() const;
 
 private:
 	const std::string _name;
-	ComponentID _id;
+	const ComponentID _id;
 };
 
 }

@@ -17,9 +17,6 @@ public:
     PlayerControlSystem();
     ~PlayerControlSystem() override;
 
-    bool resolveComponentIDs(
-        ComponentRegistry* componentRegistry) override;
-
     bool onEvent(
         const std::shared_ptr<IEvent>& event) const override;
 

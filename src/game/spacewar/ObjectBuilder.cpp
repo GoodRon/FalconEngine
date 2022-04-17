@@ -6,7 +6,6 @@
 
 #include "falcon/Engine.h"
 #include "falcon/ResourceManager.h"
-#include "falcon/ComponentRegistry.h"
 #include "falcon/Entity.h"
 #include "falcon/GameObject.h"
 
@@ -88,17 +87,13 @@ private:
 		falcon::Entity* entity,
 		rapidjson::Value& document) const {
 
-		auto componentRegistry = _engine->getComponentRegistry();
 		auto resourceManager = _engine->getResourceManager();
 
-		if (!resourceManager || !componentRegistry) {
+		if (!resourceManager) {
 			return false;
 		}
 
-		auto visualId = componentRegistry->findComponentID("Visual");
-		if (visualId < 0) {
-			return false;
-		}
+
 
 		//auto visualComponent = componentRegistry->makeComponent(visualId);
 

@@ -14,11 +14,10 @@ namespace falcon {
 
 class ISystem;
 class IEvent;
-class ComponentRegistry;
 
 class SystemManager {
 public:
-	SystemManager(ComponentRegistry* componentRegistry);
+	SystemManager();
 	~SystemManager();
 
 	SystemManager(const SystemManager&) = delete;
@@ -30,10 +29,6 @@ public:
 
 		auto name = sys->getName();
 		if (hasSystem(name)) {
-			return false;
-		}
-
-		if (!sys->resolveComponentIDs(_componentRegistry)) {
 			return false;
 		}
 
@@ -50,7 +45,6 @@ public:
 	void clear();
 
 private:
-	ComponentRegistry* const _componentRegistry;
 	std::unordered_map<std::string, std::unique_ptr<ISystem>> _systems;
 };
 

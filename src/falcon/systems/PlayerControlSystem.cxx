@@ -1,40 +1,17 @@
 #include "PlayerControlSystem.h"
 
-#include "ComponentRegistry.h"
+#include "IComponent.h"
 #include "Entity.h"
 
 namespace falcon {
 
 PlayerControlSystem::PlayerControlSystem():
 	ISystem("PlayerControl"),
-	_playerComponentId(-1) {
+	_playerComponentId(getComponentId("Player")) {
 
 }
 
 PlayerControlSystem::~PlayerControlSystem() {
-}
-
-bool PlayerControlSystem::resolveComponentIDs(
-    ComponentRegistry* componentRegistry) {
-
-	if (isReady()) {
-		return true;
-	}
-
-	if (!componentRegistry) {
-		return false;
-	}
-
-	auto id = componentRegistry->findComponentID("Player");
-	if (id < 0) {
-		return false;
-	}
-
-	_playerComponentId = id;
-
-	_isReady = true;
-
-	return true;
 }
 
 bool PlayerControlSystem::onEvent(
@@ -45,9 +22,6 @@ bool PlayerControlSystem::onEvent(
 }
 
 bool PlayerControlSystem::checkComponents(Entity* entity) const {
-	if (!isReady()) {
-		return false;
-	}
 
 	if (!entity) {
 		return false;

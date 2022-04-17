@@ -1,40 +1,16 @@
 #include "RenderingSystem.h"
 
-#include "ComponentRegistry.h"
+#include "IComponent.h"
 #include "Entity.h"
 
 namespace falcon {
 
 RenderingSystem::RenderingSystem():
 	ISystem("Rendering"),
-	_visualComponentId(-1) {
-
+	_visualComponentId(getComponentId("Visual")) {
 }
 
 RenderingSystem::~RenderingSystem() {
-}
-
-bool RenderingSystem::resolveComponentIDs(
-    ComponentRegistry* componentRegistry) {
-
-	if (isReady()) {
-		return true;
-	}
-
-	if (!componentRegistry) {
-		return false;
-	}
-
-	auto id = componentRegistry->findComponentID("Visual");
-	if (id < 0) {
-		return false;
-	}
-
-	_visualComponentId = id;
-
-	_isReady = true;
-
-	return true;
 }
 
 bool RenderingSystem::onEvent(
@@ -45,10 +21,6 @@ bool RenderingSystem::onEvent(
 }
 
 bool RenderingSystem::checkComponents(Entity* entity) const {
-	if (!isReady()) {
-		return false;
-	}
-
 	if (!entity) {
 		return false;
 	}

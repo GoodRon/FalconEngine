@@ -13,7 +13,6 @@
 #include "Renderer.h"
 #include "ObjectManager.h"
 #include "EngineException.h"
-#include "ComponentRegistry.h"
 #include "SystemManager.h"
 #include "EventManager.h"
 
@@ -35,8 +34,7 @@ bool Engine::initialize(int width, int height) {
 	_objectManager.reset(new ObjectManager);
 	_timerPool.reset(new TimerPool);
 
-	_componentRegistry.reset(new ComponentRegistry);
-	_systemManager.reset(new SystemManager(_componentRegistry.get()));
+	_systemManager.reset(new SystemManager());
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
 
@@ -61,7 +59,6 @@ Engine::Engine():
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
-	_componentRegistry(),
 	_systemManager(),
 	_eventManager(),
 	_timerPool(),
@@ -158,10 +155,6 @@ ResourceManager* Engine::getResourceManager() const {
 
 ObjectManager* Engine::getObjectManager() const {
 	return _objectManager.get();
-}
-
-ComponentRegistry* Engine::getComponentRegistry() const {
-	return _componentRegistry.get();
 }
 
 SystemManager* Engine::getSystemManager() const {

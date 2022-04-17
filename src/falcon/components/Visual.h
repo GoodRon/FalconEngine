@@ -16,13 +16,8 @@ class Frame;
 
 class Visual: public IComponent {
 public:
-    Visual(): IComponent("Visual"), 
-        currentFrame(), frameIndex(0), currentState(0), states(),
-        isPaused(true), isLooped(false), isVisible(false), zIndex(0) {}
-
-    std::unique_ptr<IComponent> clone() const override {
-        return std::unique_ptr<IComponent>(new Visual);
-    }
+    Visual(): IComponent("Visual") {}
+    ~Visual() override = default;
 
     using State = int;
     using Direction = int;
@@ -30,13 +25,13 @@ public:
     using AnimatedState = std::unordered_map<Direction, Frames>;
 	
     std::shared_ptr<Frame> currentFrame;
-    size_t frameIndex;
-    State currentState;
+    size_t frameIndex = 0;
+    State currentState = 0;
     std::unordered_map<State, AnimatedState> states;
-    bool isPaused;
-    bool isLooped;
-    bool isVisible;
-    int zIndex;
+    bool isPaused = false;
+    bool isLooped = true;
+    bool isVisible = false;
+    int zIndex = 0;
 };
 
 }

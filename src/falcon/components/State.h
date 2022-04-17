@@ -12,17 +12,13 @@ namespace falcon {
 
 class State: public IComponent {
 public:
-    State(): IComponent("State"),
-        id(0), previousId(0) {}
-
-    std::unique_ptr<IComponent> clone() const override {
-        return std::unique_ptr<IComponent>(new State);
-    }
+    State(): IComponent("State") {}
+    ~State() override = default;
 
     using StateID = int;
 	
-    StateID id;
-    StateID previousId;
+    StateID id = 0;
+    StateID previousId = 0;
 };
 
 }

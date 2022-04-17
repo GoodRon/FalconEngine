@@ -21,7 +21,6 @@ class Renderer;
 class ResourceManager;
 class TimerPool;
 class ObjectManager;
-class ComponentRegistry;
 class SystemManager;
 class EventManager;
 
@@ -50,7 +49,6 @@ public:
 	ResourceManager* getResourceManager() const;
 	ObjectManager* getObjectManager() const;
 	
-	ComponentRegistry* getComponentRegistry() const;
 	SystemManager* getSystemManager() const;
 
 	EventManager* getEventManager() const;
@@ -77,7 +75,6 @@ private:
 	std::unique_ptr<Renderer> _renderer;
 	std::unique_ptr<ResourceManager> _resourceManager;
 	std::unique_ptr<ObjectManager> _objectManager;
-	std::unique_ptr<ComponentRegistry> _componentRegistry;
 	std::unique_ptr<SystemManager> _systemManager;
 	std::unique_ptr<EventManager> _eventManager;
 	std::unique_ptr<TimerPool> _timerPool;

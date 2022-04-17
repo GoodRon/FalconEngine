@@ -12,13 +12,10 @@ namespace falcon {
 
 class Player: public IComponent {
 public:
-    Player(): IComponent("Player"), playerId(0) {}
+    Player(): IComponent("Player") {}
+    ~Player() override = default;
 
-    std::unique_ptr<IComponent> clone() const override {
-        return std::unique_ptr<IComponent>(new Player);
-    }
-
-	int playerId;
+	int playerId = 0;
 };
 
 }

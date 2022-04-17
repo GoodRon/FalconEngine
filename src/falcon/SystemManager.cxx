@@ -4,8 +4,7 @@
 
 namespace falcon {
 
-SystemManager::SystemManager(ComponentRegistry* componentRegistry):
-	_componentRegistry(componentRegistry),
+SystemManager::SystemManager():
 	_systems() {
 }
 

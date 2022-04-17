@@ -11,7 +11,6 @@ add_library(falcon
 	Renderer.cxx 
 	Frame.cxx
 	Entity.cxx
-	ComponentRegistry.cxx
 	SystemManager.cxx
 	IEvent.cxx
 	IComponent.cxx
