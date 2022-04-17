@@ -14,7 +14,6 @@ namespace falcon {
 
 class Frame;
 
-
 class Visual: public IComponent {
 public:
     Visual(): IComponent("Visual") {}

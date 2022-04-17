@@ -10,6 +10,7 @@
 #include "falcon/Frame.h"
 #include "falcon/GameObject.h"
 #include "falcon/components/Visual.h"
+#include "falcon/components/Position.h"
 
 #include "rapidjson/document.h"
 
@@ -17,7 +18,7 @@ namespace spacewar {
 
 class EntityBuilder::Impl {
 private:
-	using componentBuilder = std::function<void(
+	using componentBuilder = std::function<bool(
 		falcon::Entity* entity,
 		rapidjson::Value& document)>;
 
@@ -83,8 +84,14 @@ private:
 	void registerComponentBuilders() {
 		_componentBuilders["Visual"] = [this](
 			falcon::Entity* entity,
-			rapidjson::Value& document) {
-			buildVisualComponent(entity, document);
+			rapidjson::Value& document)->bool {
+			return buildVisualComponent(entity, document);
+		};
+
+		_componentBuilders["Position"] = [this](
+			falcon::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildPositionComponent(entity, document);
 		};
 	}
 
@@ -142,6 +149,22 @@ private:
 
 			component->states[stateName] = std::move(visualState);
 		}
+
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildPositionComponent(
+		falcon::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<falcon::Position> component(new falcon::Position);
+
+		component->x = document["x"].GetInt();
+		component->y = document["y"].GetInt();
+		component->width = document["width"].GetInt();
+		component->height = document["height"].GetInt();
+		component->scale = document["scale"].GetDouble();
 
 		entity->addComponent(std::move(component));
 		return true;

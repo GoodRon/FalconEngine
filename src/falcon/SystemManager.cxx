@@ -11,11 +11,32 @@ SystemManager::SystemManager():
 SystemManager::~SystemManager() {
 }
 
+void SystemManager::addSystem(std::unique_ptr<ISystem>&& system) {
+	if (!system) {
+		return;
+	}
+
+	const auto name = system->getName();
+	_systems[name] = std::move(system);
+}
+
 bool SystemManager::hasSystem(const std::string& name) const {
 	if (_systems.find(name) != _systems.end()) {
 		return true;
 	}
 	return false;
+}
+
+void SystemManager::registerEntity(Entity* entity) {
+	for (auto& sys: _systems) {
+		sys.second->registerEntity(entity);
+	}
+}
+
+void SystemManager::unregisterEntity(EntityID id) {
+	for (auto& sys: _systems) {
+		sys.second->unregisterEntity(id);
+	}
 }
 
 bool SystemManager::onEvent(

@@ -10,10 +10,13 @@
 #include <unordered_map>
 #include <memory>
 
+#include "Types.h"
+
 namespace falcon {
 
 class ISystem;
 class IEvent;
+class Entity;
 
 class SystemManager {
 public:
@@ -23,20 +26,12 @@ public:
 	SystemManager(const SystemManager&) = delete;
 	SystemManager& operator=(const SystemManager&) = delete;
 
-	template<class T, class... ARGS>
-	bool registerSystem(ARGS&&... args) {
-		std::unique_ptr<T> sys(new T(std::forward<ARGS>(args)...));
-
-		auto name = sys->getName();
-		if (hasSystem(name)) {
-			return false;
-		}
-
-		_systems[name] = std::move(sys);
-		return true;
-	}
+	void addSystem(std::unique_ptr<ISystem>&& system);
 
 	bool hasSystem(const std::string& name) const;
+
+	void registerEntity(Entity* entity);
+	void unregisterEntity(EntityID id);
 
 	// NOTE remove?
 	bool onEvent(

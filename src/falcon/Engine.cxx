@@ -29,12 +29,12 @@ bool Engine::initialize(int width, int height) {
 		throw EngineException(SDL_GetError());
 	}
 
+	_systemManager.reset(new SystemManager());
+
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
-	_objectManager.reset(new ObjectManager);
+	_objectManager.reset(new ObjectManager(_systemManager.get()));
 	_timerPool.reset(new TimerPool);
-
-	_systemManager.reset(new SystemManager());
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
 

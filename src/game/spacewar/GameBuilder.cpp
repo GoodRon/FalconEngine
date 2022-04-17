@@ -5,6 +5,8 @@
 #include "falcon/Engine.h"
 #include "falcon/SystemManager.h"
 #include "falcon/ResourceManager.h"
+#include "falcon/GameObject.h"
+#include "falcon/ObjectManager.h"
 #include "falcon/components/Health.h"
 #include "falcon/components/Position.h"
 #include "falcon/components/Visual.h"
@@ -66,8 +68,11 @@ private:
 			return false;
 		}
 
-		systemManager->registerSystem<falcon::RenderingSystem>();
-		systemManager->registerSystem<falcon::PlayerControlSystem>();
+		std::unique_ptr<falcon::RenderingSystem> renderingSystem(new falcon::RenderingSystem);
+		systemManager->addSystem(std::move(renderingSystem));
+
+		std::unique_ptr<falcon::PlayerControlSystem> playerControlSystem(new falcon::PlayerControlSystem);
+		systemManager->addSystem(std::move(playerControlSystem));
 		// TODO write me!
 
 		return true;
@@ -83,7 +88,10 @@ private:
 		EntityBuilder builder(_engine);
 
 		entity = builder.buildEntity("resources/player1.json");
-		//objectManager->registerObject(object);
+
+		// TODO improve
+		std::shared_ptr<falcon::GameObject> object(new falcon::GameObject(entity));
+		objectManager->registerObject(object);
 
 		return true;
 	}

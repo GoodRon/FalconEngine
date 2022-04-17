@@ -5,11 +5,14 @@
 
 #include "ObjectManager.h"
 
+#include "Entity.h"
+#include "SystemManager.h"
 #include "GameObject.h"
 
 namespace falcon {
 
-ObjectManager::ObjectManager():
+ObjectManager::ObjectManager(SystemManager* systemManager):
+    _systemManager(systemManager),
     _objects() {
 }
 
@@ -28,16 +31,27 @@ bool ObjectManager::registerObject(
     }
 
     _objects[id] = object;
+
+    _systemManager->registerEntity(object->getEntity().get());
     return true;
 }
 
 void ObjectManager::unregisterObject(EntityID id) {
+    auto it = _objects.find(id);
+    if (it == _objects.end()) {
+        return;
+    }
+
+    _systemManager->unregisterEntity((*it).second->getEntity()->getId());
     _objects.erase(id);
 }
 
 void ObjectManager::swapObjects(
     std::vector<GameObject>& objects) {
 
+
+    // TODO write me!
+    // register/unregister
 }
 
 bool ObjectManager::sendEvent(

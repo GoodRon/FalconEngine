@@ -16,10 +16,11 @@ namespace falcon {
 
 class GameObject;
 class IEvent;
+class SystemManager;
 
 class ObjectManager {
 public:
-	ObjectManager();
+	ObjectManager(SystemManager* systemManager);
 	~ObjectManager();
 
 	ObjectManager(const ObjectManager&) = delete;
@@ -35,6 +36,7 @@ public:
 	void clear();
 
 private:
+	SystemManager* const _systemManager;
 	std::unordered_map<EntityID, std::shared_ptr<GameObject>> _objects;
 };
 

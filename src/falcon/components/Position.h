@@ -18,7 +18,7 @@ public:
 	int x = 0;
 	int y = 0;
     int width = 0;
-    int heigth = 0;
+    int height = 0;
     double scale = 0.0;
 };
 
