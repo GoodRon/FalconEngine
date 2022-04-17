@@ -25,7 +25,7 @@ bool AnimationSystem::resolveComponentIDs(
 		return false;
 	}
 
-	auto id = componentRegistry->findComponentID("Animation");
+	auto id = componentRegistry->findComponentID("Visual");
 	if (id < 0) {
 		return false;
 	}

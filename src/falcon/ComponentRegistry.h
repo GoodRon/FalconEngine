@@ -47,7 +47,7 @@ public:
 
 	ComponentID findComponentID(const std::string& name);
 
-	std::shared_ptr<IComponent> makeComponent(ComponentID id);
+	std::unique_ptr<IComponent> makeComponent(ComponentID id);
 
 	void clear();
 

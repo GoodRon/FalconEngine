@@ -18,7 +18,7 @@ public:
 	IComponent(const std::string& name);
 	virtual ~IComponent();
 
-	virtual std::shared_ptr<IComponent> clone() const = 0;
+	virtual std::unique_ptr<IComponent> clone() const = 0;
 
 	const std::string getName() const;
 

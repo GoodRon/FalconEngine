@@ -24,13 +24,13 @@ public:
 	void setId(EntityID id);
 	EntityID getId() const;
 
-	bool addComponent(const std::shared_ptr<IComponent>& component);
+	bool addComponent(std::unique_ptr<IComponent>& component);
 
-	std::shared_ptr<IComponent> getComponent(ComponentID id);
+	IComponent* getComponent(ComponentID id);
 
 private:
 	EntityID _id;
-	std::unordered_map<ComponentID, std::shared_ptr<IComponent>> _components;
+	std::unordered_map<ComponentID, std::unique_ptr<IComponent>> _components;
 };
 
 }

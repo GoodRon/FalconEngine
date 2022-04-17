@@ -20,7 +20,7 @@ EntityID IEntity::getId() const {
 	return _id;
 }
 
-bool IEntity::addComponent(const std::shared_ptr<IComponent>& component) {
+bool IEntity::addComponent(std::unique_ptr<IComponent>& component) {
 	if (!component) {
 		return false;
 	}
@@ -31,16 +31,16 @@ bool IEntity::addComponent(const std::shared_ptr<IComponent>& component) {
 		return false;
 	}
 
-	_components[id] = component;
+	_components[id].swap(component);
 	return true;
 }
 
-std::shared_ptr<IComponent> IEntity::getComponent(ComponentID id) {
+IComponent* IEntity::getComponent(ComponentID id) {
 	if (_components.find(id) == _components.end()) {
 		return nullptr;
 	}
 
-	return _components[id];
+	return _components[id].get();
 }
 
 }

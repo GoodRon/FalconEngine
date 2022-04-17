@@ -12,12 +12,13 @@ class Velocity: public IComponent {
 public:
     Velocity(): IComponent("Velocity"), x(0), y(0) {}
     
-    std::shared_ptr<IComponent> clone() const override {
-        return std::shared_ptr<IComponent>(new Velocity);
+    std::unique_ptr<IComponent> clone() const override {
+        return std::unique_ptr<IComponent>(new Velocity);
     }
 
     int x;
     int y;
+    // acceleration?
 };
 
 }

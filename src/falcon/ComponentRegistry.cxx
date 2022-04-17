@@ -32,7 +32,7 @@ ComponentID ComponentRegistry::findComponentID(
 	return _componentIds[name];
 }
 
-std::shared_ptr<IComponent> ComponentRegistry::makeComponent(ComponentID id) {
+std::unique_ptr<IComponent> ComponentRegistry::makeComponent(ComponentID id) {
 	if (_prototypes.find(id) == _prototypes.end()) {
 		return nullptr;
 	}

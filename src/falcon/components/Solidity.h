@@ -14,8 +14,8 @@ class Solidity: public IComponent {
 public:
     Solidity(): IComponent("Solidity"), isSolid(true) {}
 
-    std::shared_ptr<IComponent> clone() const override {
-        return std::shared_ptr<IComponent>(new Solidity);
+    std::unique_ptr<IComponent> clone() const override {
+        return std::unique_ptr<IComponent>(new Solidity);
     }
 
 	bool isSolid;

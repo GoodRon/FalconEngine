@@ -12,14 +12,18 @@ namespace falcon {
 
 class Position: public IComponent {
 public:
-    Position(): IComponent("Position"), x(0), y(0) {}
+    Position(): IComponent("Position"), 
+        x(0), y(0), width(0), heigth(0), scale(1.0) {}
 
-    std::shared_ptr<IComponent> clone() const override {
-        return std::shared_ptr<IComponent>(new Position);
+    std::unique_ptr<IComponent> clone() const override {
+        return std::unique_ptr<IComponent>(new Position);
     }
 
 	int x;
 	int y;
+    int width;
+    int heigth;
+    double scale;
 };
 
 }
