@@ -1,6 +1,6 @@
 #include "ISystem.h"
 
-#include "IEntity.h"
+#include "Entity.h"
 
 namespace falcon {
 
@@ -21,7 +21,7 @@ bool ISystem::isReady() const {
 	return _isReady;
 }
 
-bool ISystem::registerEntity(IEntity* entity) {
+bool ISystem::registerEntity(Entity* entity) {
 	if (!entity) {
 		return false;
 	}
@@ -34,16 +34,19 @@ bool ISystem::registerEntity(IEntity* entity) {
 		return false;
 	}
 
-	_entities.insert(entity);
+	auto id = entity->getId();
+	if (_entities.find(id) != _entities.end()) {
+		return false;
+	}
+
+	_entities[id] = entity;
 	return true;
 }
 
-void ISystem::unregisterEntity(IEntity* entity) {
-	if (!entity) {
-		return;
-	}
-
-	_entities.erase(entity);
+void ISystem::unregisterEntity(EntityID id) {
+	_entities.erase(id);
 }
+
+
 
 }

@@ -12,13 +12,15 @@ namespace falcon {
 
 class Solidity: public IComponent {
 public:
-    Solidity(): IComponent("Solidity"), isSolid(true) {}
+    Solidity(): IComponent("Solidity"), 
+        isSolid(true), isDestructable(false) {}
 
     std::unique_ptr<IComponent> clone() const override {
         return std::unique_ptr<IComponent>(new Solidity);
     }
 
 	bool isSolid;
+    bool isDestructable;
 };
 
 }

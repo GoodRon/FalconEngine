@@ -8,12 +8,14 @@
 
 #include <string>
 #include <memory>
-#include <unordered_set>
+#include <unordered_map>
+
+#include "Types.h"
 
 namespace falcon {
 
 class IEvent;
-class IEntity;
+class Entity;
 class ComponentRegistry;
 
 class ISystem {
@@ -29,19 +31,21 @@ public:
 
 	bool isReady() const;
 
-	bool registerEntity(IEntity* entity);
-	void unregisterEntity(IEntity* entity);
+	bool registerEntity(Entity* entity);
+	void unregisterEntity(EntityID id);
+
+	virtual void processEntity(EntityID id) = 0;
 
 	virtual bool onEvent(
 		const std::shared_ptr<IEvent>& event) const = 0;
 
 protected:
-	virtual bool checkComponents(IEntity* entity) const = 0;
+	virtual bool checkComponents(Entity* entity) const = 0;
 
 protected:
 	const std::string _name;
 	bool _isReady;
-	std::unordered_set<IEntity*> _entities;
+	std::unordered_map<EntityID, Entity*> _entities;
 };
 
 }

@@ -13,6 +13,7 @@
 #include "Renderer.h"
 #include "ObjectManager.h"
 #include "EngineException.h"
+#include "EntityManager.h"
 #include "ComponentRegistry.h"
 #include "SystemManager.h"
 #include "EventManager.h"
@@ -32,9 +33,10 @@ bool Engine::initialize(int width, int height) {
 
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
-	_objectManager.reset(new ObjectManager);
+	_objectManager.reset(new ObjectManager(_renderer.get()));
 	_timerPool.reset(new TimerPool);
 
+	_entityManager.reset(new EntityManager);
 	_componentRegistry.reset(new ComponentRegistry);
 	_systemManager.reset(new SystemManager(_componentRegistry.get()));
 
@@ -44,7 +46,7 @@ bool Engine::initialize(int width, int height) {
 		if (!_objectManager) {
 			return;
 		}
-		//_objectManager->updateAll();
+		_objectManager->updateAll();
 	});
 
 	return _isInitialized;
@@ -61,6 +63,7 @@ Engine::Engine():
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
+	_entityManager(),
 	_componentRegistry(),
 	_systemManager(),
 	_eventManager(),
@@ -120,7 +123,7 @@ int Engine::run() {
 	// TODO make an option for restricting fps
 	while (_isRunning) {
 		_renderer->clearViewport();
-		//_objectManager->drawAll();
+		_objectManager->drawAll();
 		SDL_RenderPresent(_renderer->getContext());
 		
 		std::lock_guard<std::mutex> locker(_eventMutex);
@@ -158,6 +161,10 @@ ResourceManager* Engine::getResourceManager() const {
 
 ObjectManager* Engine::getObjectManager() const {
 	return _objectManager.get();
+}
+
+EntityManager* Engine::getEntityManager() const {
+	return _entityManager.get();
 }
 
 ComponentRegistry* Engine::getComponentRegistry() const {

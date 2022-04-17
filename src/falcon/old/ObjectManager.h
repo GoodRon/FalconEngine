@@ -9,32 +9,39 @@
 #include <vector>
 #include <memory>
 
-//#include "Types.h"
-
 namespace falcon {
 
-class IGameObject;
+class WorldObject;
+class Renderer;
+
+using WorldObjectPointer = std::shared_ptr<WorldObject>;
 
 class ObjectManager {
 public:
-	ObjectManager();
+	ObjectManager(Renderer* renderer);
 	~ObjectManager();
 
 	ObjectManager(const ObjectManager&) = delete;
 	ObjectManager& operator=(ObjectManager&) = delete;
 
-//	bool registerObject(IGameObject* object);
-//	void unregisterObject(EntityId id);
+	void push(const WorldObjectPointer& object);
 
-	
+	void updateAll();
+
+	void drawAll();
+
+	WorldObjectPointer getByCordinates(int x, int y);
+
+	WorldObjectPointer getById(int id);
 
 	void clear();
 
 private:
-//	void sortByDrawPriority();
+	void sortByDrawPriority();
 
 private:
-//	std::unordered_map<EntityId, IGameObject*> _objects;
+	Renderer* _renderer;
+	std::vector<WorldObjectPointer> _objects;
 };
 
 }

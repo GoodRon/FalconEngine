@@ -43,6 +43,7 @@ public:
 
 	bool hasSystem(const std::string& name) const;
 
+	// NOTE remove?
 	bool onEvent(
 		const std::shared_ptr<IEvent>& event) const;
 

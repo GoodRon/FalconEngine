@@ -14,8 +14,8 @@
 
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "Animation.h"
-#include "DirectedAnimation.h"
+//#include "Animation.h"
+//#include "DirectedAnimation.h"
 
 namespace falcon {
 
@@ -59,6 +59,7 @@ TexturePointer ResourceManager::loadTexture(const std::string& name) {
 	return ptr;
 }
 
+/*
 AnimationPointer ResourceManager::loadAnimation(const std::string& json) {
 	std::ifstream jsonFile;
 	jsonFile.open(json);
@@ -147,7 +148,7 @@ AnimationPointer ResourceManager::loadAnimation(const std::string& json) {
 	AnimationPointer animationPtr(new DirectedAnimation(animations));
 	return animationPtr;
 }
-
+*/
 void ResourceManager::freeUnused() {
 	for (auto texture = _textureCache.begin(); texture != _textureCache.end(); ++texture) {
 		if ((*texture).second.use_count() <= 1) {

@@ -32,7 +32,7 @@ public:
 	TexturePointer loadTexture(const std::string& name);
 
 
-	AnimationPointer loadAnimation(const std::string& json);
+//	AnimationPointer loadAnimation(const std::string& json);
 
 	void freeUnused();
 

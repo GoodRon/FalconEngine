@@ -9,9 +9,10 @@
 class UnitBuilder {
 public:
 	UnitBuilder();
-	~UnitBuilder() override {}
+	~UnitBuilder();
 
-	falcon::IGameState buildStates() const override;
+	Ship buildShip(const std::string& jsonConfig) const;
+
 };
 
 #endif // SW_UNIT_BUILDER_H

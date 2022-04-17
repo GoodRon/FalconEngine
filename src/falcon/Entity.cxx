@@ -1,26 +1,27 @@
-#include "IEntity.h"
+#include "Entity.h"
 
 #include "IComponent.h"
 
 namespace falcon {
 
-IEntity::IEntity():
-	_id(-1),
+static EntityID nextId() {
+	static EntityID nextId = 0;
+	return nextId++;
+}
+
+Entity::Entity():
+	_id(nextId()),
 	_components() {
 }
 
-IEntity::~IEntity() {
+Entity::~Entity() {
 }
 
-void IEntity::setId(EntityID id) {
-	_id = id;
-}
-
-EntityID IEntity::getId() const {
+EntityID Entity::getId() const {
 	return _id;
 }
 
-bool IEntity::addComponent(std::unique_ptr<IComponent>& component) {
+bool Entity::addComponent(std::unique_ptr<IComponent>& component) {
 	if (!component) {
 		return false;
 	}
@@ -35,7 +36,7 @@ bool IEntity::addComponent(std::unique_ptr<IComponent>& component) {
 	return true;
 }
 
-IComponent* IEntity::getComponent(ComponentID id) {
+IComponent* Entity::getComponent(ComponentID id) {
 	if (_components.find(id) == _components.end()) {
 		return nullptr;
 	}

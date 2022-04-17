@@ -3,25 +3,26 @@
  * All rights reserved
  */
 
-#ifndef FALCON_IENTITY_H
-#define FALCON_IENTITY_H
+#ifndef FALCON_ENTITY_H
+#define FALCON_ENTITY_H
 
 #include <memory>
 #include <unordered_map>
 
-namespace falcon {
+#include "Types.h"
 
-using EntityID = int;
-using ComponentID = int;
+namespace falcon {
 
 class IComponent;
 
-class IEntity {
+class Entity {
 public:
-	IEntity();
-	virtual ~IEntity() = 0;
+	Entity();
+	~Entity();
 
-	void setId(EntityID id);
+	Entity(Entity&&) = default;
+	Entity& operator=(Entity&&) = default;
+
 	EntityID getId() const;
 
 	bool addComponent(std::unique_ptr<IComponent>& component);
@@ -35,4 +36,4 @@ private:
 
 }
 
-#endif // FALCON_IENTITY_H
+#endif // FALCON_ENTITY_H

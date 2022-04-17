@@ -15,6 +15,7 @@ using EntityID = int;
 
 class IEntity;
 
+// NOTE do we need this?
 class EntityManager {
 public:
 	EntityManager();

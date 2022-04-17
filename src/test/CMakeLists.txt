@@ -9,10 +9,10 @@ cmake_minimum_required(VERSION 3.1)
 #add_executable(animationTest WIN32 animationTest.cxx)
 #target_link_libraries(animationTest game SDL2::Main)
 
-add_executable(directedAnimationTest WIN32 directedAnimationTest.cxx)
-target_link_libraries(directedAnimationTest falcon SDL2::Main)
+#add_executable(directedAnimationTest WIN32 directedAnimationTest.cxx)
+#target_link_libraries(directedAnimationTest falcon SDL2::Main)
 
 #install(TARGETS basicTest RUNTIME DESTINATION .)
 #install(TARGETS fieldTest RUNTIME DESTINATION .)
 #install(TARGETS animationTest RUNTIME DESTINATION .)
-install(TARGETS directedAnimationTest RUNTIME DESTINATION .)
+#install(TARGETS directedAnimationTest RUNTIME DESTINATION .)
