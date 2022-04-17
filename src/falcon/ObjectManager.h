@@ -25,7 +25,7 @@ public:
 	ObjectManager(const ObjectManager&) = delete;
 	ObjectManager& operator=(ObjectManager&) = delete;
 
-	bool registerObject(IGameObject* object);
+	bool registerObject(const std::shared_ptr<IGameObject>& object);
 	void unregisterObject(EntityID id);
 
 	void swapObjects(std::vector<IGameObject>& objects);
@@ -35,7 +35,7 @@ public:
 	void clear();
 
 private:
-	std::unordered_map<EntityID, IGameObject*> _objects;
+	std::unordered_map<EntityID, std::shared_ptr<IGameObject>> _objects;
 };
 
 }

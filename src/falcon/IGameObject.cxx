@@ -28,4 +28,9 @@ bool IGameObject::onEvent(const std::shared_ptr<IEvent>& event) {
 	return processEvent(event);
 }
 
+bool IGameObject::processEvent(const std::shared_ptr<IEvent>& event) {
+	// TODO write me
+	return false;
+}
+
 }

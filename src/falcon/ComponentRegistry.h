@@ -10,9 +10,9 @@
 #include <memory>
 #include <unordered_map>
 
-namespace falcon {
+#include "Types.h"
 
-using ComponentID = int;
+namespace falcon {
 
 class IComponent;
 
@@ -26,20 +26,20 @@ public:
 
 	template<class T, class... ARGS>
 	ComponentID registerComponent(ARGS&&... args) {
-		std::shared_ptr<T> component(new T(std::forward<ARGS>(args)...));
+		std::unique_ptr<T> component(new T(std::forward<ARGS>(args)...));
 
 		auto name = component->getName();
-		EntityID id = findComponentID(name);
+		falcon::EntityID id = findComponentID(name);
 
 		if (id >= 0) {
-			return -1;
+			return id;
 		}
 
 		id = getNextId();
 
 		component->setId(id);
-		_componentNames[name] = id;
-		_prototypes[id] = component;
+		_componentIds[name] = id;
+		_prototypes[id] = std::move(component);
 		return id;
 	}
 

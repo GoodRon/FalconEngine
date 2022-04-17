@@ -16,7 +16,8 @@ ObjectManager::ObjectManager():
 ObjectManager::~ObjectManager() {
 }
 
-bool ObjectManager::registerObject(IGameObject* object) {
+bool ObjectManager::registerObject(
+    const std::shared_ptr<IGameObject>& object) {
     if (!object) {
         return false;
     }

@@ -9,9 +9,16 @@
 
 #include <iostream>
 
+#include "falcon/Engine.h"
+
+#include "GameBuilder.h"
+
 int main(int argc, char** argv) {
 
-    std::cout << "Hello spacewars!" << std::endl;
+    auto& engine = falcon::Engine::instance();
+
+    spacewar::GameBuilder gameBuilder(&engine);
+    gameBuilder.buildGame();
 
     return 0;
 }
