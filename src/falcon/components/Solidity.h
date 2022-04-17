@@ -21,6 +21,7 @@ public:
 
 	bool isSolid;
     bool isDestructable;
+    // collision box
 };
 
 }

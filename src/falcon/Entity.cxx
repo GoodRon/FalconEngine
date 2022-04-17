@@ -9,8 +9,9 @@ static EntityID nextId() {
 	return nextId++;
 }
 
-Entity::Entity():
+Entity::Entity(const std::string& name):
 	_id(nextId()),
+	_name(name),
 	_components() {
 }
 
@@ -19,6 +20,10 @@ Entity::~Entity() {
 
 EntityID Entity::getId() const {
 	return _id;
+}
+
+const std::string Entity::getName() const {
+	return _name;
 }
 
 bool Entity::addComponent(std::unique_ptr<IComponent>& component) {

@@ -16,10 +16,10 @@ struct SDL_Texture;
 namespace falcon {
 
 class Renderer;
-class IAnimation;
+//class IAnimation;
 
 using TexturePointer = std::shared_ptr<SDL_Texture>;
-using AnimationPointer = std::shared_ptr<IAnimation>;
+//using AnimationPointer = std::shared_ptr<IAnimation>;
 
 class ResourceManager {
 public:

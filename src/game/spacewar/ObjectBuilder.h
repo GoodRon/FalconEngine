@@ -21,10 +21,15 @@ public:
 	ObjectBuilder(falcon::Engine* engine);
 	~ObjectBuilder();
 
-	std::shared_ptr<falcon::IGameObject> buildShip(const std::string& jsonConfig) const;
+	ObjectBuilder(ObjectBuilder&&) = default;
+	ObjectBuilder& operator=(ObjectBuilder&&) = default;
+
+	std::shared_ptr<falcon::IGameObject> buildShip(
+		const std::string& jsonConfig);
 
 private:
-	falcon::Engine* const _engine;
+	class Impl;
+	std::unique_ptr<Impl> _impl;
 };
 
 }
