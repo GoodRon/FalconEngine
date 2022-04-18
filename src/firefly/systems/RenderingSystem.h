@@ -16,7 +16,7 @@ class Renderer;
 class Position;
 class Visual;
 
-class RenderingSystem: public ISystem {
+class RenderingSystem final: public ISystem {
 public:
     RenderingSystem(Engine* engine);
     ~RenderingSystem() override;

@@ -45,6 +45,9 @@ void ISystem::unregisterEntity(EntityID id) {
 	unlockEntities();
 }
 
+void ISystem::update() {
+}
+
 bool ISystem::checkComponents(Entity* entity) const {
 	if (!entity) {
 		return false;

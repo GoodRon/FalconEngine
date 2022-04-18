@@ -7,6 +7,8 @@
 #include <firefly/ResourceManager.h>
 #include <firefly/GameObject.h>
 #include <firefly/ObjectManager.h>
+#include <firefly/systems/VelocitySystem.h>
+#include <firefly/systems/PositioningSystem.h>
 
 #include "EntityBuilder.h"
 #include "systems/PlayerControlSystem.h"
@@ -62,9 +64,16 @@ private:
 			return false;
 		}
 
-		std::shared_ptr<PlayerControlSystem> playerControlSystem(
-			new PlayerControlSystem(_engine));
-		systemManager->addSystem(playerControlSystem);
+		std::shared_ptr<firefly::ISystem> systemPtr;
+
+		systemPtr.reset(new PlayerControlSystem(_engine));
+		systemManager->addSystem(std::move(systemPtr));
+
+		systemPtr.reset(new firefly::VelocitySystem(_engine));
+		systemManager->addSystem(std::move(systemPtr));
+
+		systemPtr.reset(new firefly::PositioningSystem(_engine));
+		systemManager->addSystem(std::move(systemPtr));
 		
 		// TODO write me!
 

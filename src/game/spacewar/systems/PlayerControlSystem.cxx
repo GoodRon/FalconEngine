@@ -9,187 +9,179 @@
 
 namespace spacewar {
 
-PlayerControlSystem::PlayerControlSystem(
-	firefly::Engine* engine):
-	firefly::ISystem("PlayerControl", engine) {
+	PlayerControlSystem::PlayerControlSystem(
+		firefly::Engine* engine) :
+		firefly::ISystem("PlayerControlSystem", engine) {
 
-	_requiredComponents.push_front(firefly::Player::ComponentName);
-	_requiredComponents.push_front(firefly::Velocity::ComponentName);
-}
-
-PlayerControlSystem::~PlayerControlSystem() {
-}
-
-bool PlayerControlSystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) const {
-	if (!event) {
-		return false;
+		_requiredComponents.push_front(firefly::Player::ComponentName);
+		_requiredComponents.push_front(firefly::Velocity::ComponentName);
 	}
 
-	if (event->getType() != firefly::EventType::NativeEvent) {
-		return false;
+	PlayerControlSystem::~PlayerControlSystem() {
 	}
 
-	auto nativeEvent = std::dynamic_pointer_cast<firefly::NativeEvent>(event);
-
-	if (onPlayerOneInput(nativeEvent)) {
-		return true;
-	}
-
-	if (onPlayerTwoInput(nativeEvent)) {
-		return true;
-	}
-
-	return false;
-}
-
-bool PlayerControlSystem::onPlayerOneInput(
-	const std::shared_ptr<firefly::NativeEvent>& event) const {
-
-	const int playerId = 1;
-	const double accelerationX = 10.0;
-	const double accelerationY = 10.0;
-
-	auto sdlEvent = event->getSDLEvent();
-	switch (sdlEvent.type) {
-		case SDL_KEYDOWN:
-			switch (sdlEvent.key.keysym.sym) {
-				case SDLK_w:
-					setAccelerationY(playerId, accelerationY);
-					return true;
-				case SDLK_a:
-					setAccelerationX(playerId, -accelerationX);
-					return true;
-				case SDLK_s:
-					setAccelerationY(playerId, -accelerationY);
-					return true;
-				case SDLK_d:
-					setAccelerationX(playerId, accelerationX);
-					return true;
-				default:
-					break;
-			}
-			break;
-
-		case SDL_KEYUP:
-			switch (sdlEvent.key.keysym.sym) {
-				case SDLK_w:
-					setAccelerationY(playerId, 0.0);
-					return true;
-				case SDLK_a:
-					setAccelerationX(playerId, 0.0);
-					return true;
-				case SDLK_s:
-					setAccelerationY(playerId, 0.0);
-					return true;
-				case SDLK_d:
-					setAccelerationX(playerId, 0.0);
-					return true;
-				default:
-					break;
-			}
-			break;
-
-		default:
-			break;
-	}
-	return false;
-}
-
-bool PlayerControlSystem::onPlayerTwoInput(
-	const std::shared_ptr<firefly::NativeEvent>& event) const {
-
-	const int playerId = 2;
-	const double accelerationX = 10.0;
-	const double accelerationY = 10.0;
-
-	auto sdlEvent = event->getSDLEvent();
-	switch (sdlEvent.type) {
-		case SDL_KEYDOWN:
-			switch (sdlEvent.key.keysym.sym) {
-				case SDLK_i:
-					setAccelerationY(playerId, accelerationY);
-					return true;
-				case SDLK_j:
-					setAccelerationX(playerId, -accelerationX);
-					return true;
-				case SDLK_k:
-					setAccelerationY(playerId, -accelerationY);
-					return true;
-				case SDLK_l:
-					setAccelerationX(playerId, accelerationX);
-					return true;
-				default:
-					break;
-			}
-			break;
-
-		case SDL_KEYUP:
-			switch (sdlEvent.key.keysym.sym) {
-				case SDLK_i:
-					setAccelerationY(playerId, 0.0);
-					return true;
-				case SDLK_j:
-					setAccelerationX(playerId, 0.0);
-					return true;
-				case SDLK_k:
-					setAccelerationY(playerId, 0.0);
-					return true;
-				case SDLK_l:
-					setAccelerationX(playerId, 0.0);
-					return true;
-				default:
-					break;
-			}
-			break;
-
-		default:
-			break;
-	}
-	return false;
-}
-
-firefly::Entity* PlayerControlSystem::findPlayer(int playerId) const {
-	for (auto& entity: _entities) {
-		auto playerComponent = static_cast<firefly::Player*>(
-			entity.second->getComponent(
-				firefly::getComponentId(firefly::Player::ComponentName)));
-
-		if (playerComponent->playerId == playerId) {
-			return entity.second;
+	bool PlayerControlSystem::onEvent(
+		const std::shared_ptr<firefly::IEvent>& event) const {
+		if (!event) {
+			return false;
 		}
-	}
-	return nullptr;
-}
 
-void PlayerControlSystem::setAccelerationX(
-	int playerId, double accelerationX) const {
+		if (event->getType() != firefly::EventType::NativeEvent) {
+			return false;
+		}
 
-	firefly::Entity* playerEntity = findPlayer(playerId);
-	if (!playerEntity) {
-		return;
-	}
+		auto nativeEvent = std::dynamic_pointer_cast<firefly::NativeEvent>(event);
 
-	auto velocityComponent = static_cast<firefly::Velocity*>(
-		playerEntity->getComponent(
-			firefly::getComponentId(firefly::Velocity::ComponentName)));
+		if (onPlayerOneInput(nativeEvent)) {
+			return true;
+		}
 
-	velocityComponent->accelerationX = accelerationX;
-}
+		if (onPlayerTwoInput(nativeEvent)) {
+			return true;
+		}
 
-void PlayerControlSystem::setAccelerationY(
-	int playerId, double accelerationY) const {
-
-	firefly::Entity* playerEntity = findPlayer(playerId);
-	if (!playerEntity) {
-		return;
+		return false;
 	}
 
-	auto velocityComponent = static_cast<firefly::Velocity*>(
-		playerEntity->getComponent(
-			firefly::getComponentId(firefly::Velocity::ComponentName)));
+	bool PlayerControlSystem::onPlayerOneInput(
+		const std::shared_ptr<firefly::NativeEvent>& event) const {
 
-	velocityComponent->accelerationY = accelerationY;
-}
+		const int playerId = 1;
+		const double speedX = 10.0;
+		const double speedY = 10.0;
+
+		auto velocityComponent = getVelocity(playerId);
+		if (!velocityComponent) {
+			return false;
+		}
+
+		auto sdlEvent = event->getSDLEvent();
+		switch (sdlEvent.type) {
+		case SDL_KEYDOWN:
+			switch (sdlEvent.key.keysym.sym) {
+			case SDLK_w:
+				velocityComponent->speedY = speedY;
+				return true;
+			case SDLK_a:
+				velocityComponent->speedX = -speedX;
+				return true;
+			case SDLK_s:
+				velocityComponent->speedY = -speedY;
+				return true;
+			case SDLK_d:
+				velocityComponent->speedX = speedX;
+				return true;
+			default:
+				break;
+			}
+			break;
+
+		case SDL_KEYUP:
+			switch (sdlEvent.key.keysym.sym) {
+			case SDLK_w:
+				velocityComponent->speedY = 0.0;
+				return true;
+			case SDLK_a:
+				velocityComponent->speedX = 0.0;
+				return true;
+			case SDLK_s:
+				velocityComponent->speedY = 0.0;
+				return true;
+			case SDLK_d:
+				velocityComponent->speedX = 0.0;
+				return true;
+			default:
+				break;
+			}
+			break;
+
+		default:
+			break;
+		}
+		return false;
+	}
+
+	bool PlayerControlSystem::onPlayerTwoInput(
+		const std::shared_ptr<firefly::NativeEvent>& event) const {
+
+		const int playerId = 2;
+		const double speedX = 10.0;
+		const double speedY = 10.0;
+
+		auto velocityComponent = getVelocity(playerId);
+		if (!velocityComponent) {
+			return false;
+		}
+
+		auto sdlEvent = event->getSDLEvent();
+		switch (sdlEvent.type) {
+		case SDL_KEYDOWN:
+			switch (sdlEvent.key.keysym.sym) {
+			case SDLK_i:
+				velocityComponent->speedY = speedY;
+				return true;
+			case SDLK_j:
+				velocityComponent->speedX = -speedX;
+				return true;
+			case SDLK_k:
+				velocityComponent->speedY = -speedY;
+				return true;
+			case SDLK_l:
+				velocityComponent->speedX = speedX;
+				return true;
+			default:
+				break;
+			}
+			break;
+
+		case SDL_KEYUP:
+			switch (sdlEvent.key.keysym.sym) {
+			case SDLK_i:
+				velocityComponent->speedY = 0.0;
+				return true;
+			case SDLK_j:
+				velocityComponent->speedX = 0.0;
+				return true;
+			case SDLK_k:
+				velocityComponent->speedY = 0.0;
+				return true;
+			case SDLK_l:
+				velocityComponent->speedX = 0.0;
+				return true;
+			default:
+				break;
+			}
+			break;
+
+		default:
+			break;
+		}
+		return false;
+	}
+
+	firefly::Entity* PlayerControlSystem::findPlayer(int playerId) const {
+		for (auto& entity : _entities) {
+			auto playerComponent = static_cast<firefly::Player*>(
+				entity.second->getComponent(
+					firefly::getComponentId(firefly::Player::ComponentName)));
+
+			if (playerComponent->playerId == playerId) {
+				return entity.second;
+			}
+		}
+		return nullptr;
+	}
+
+	firefly::Velocity* PlayerControlSystem::getVelocity(int playerId) const {
+		firefly::Entity* playerEntity = findPlayer(playerId);
+		if (!playerEntity) {
+			return nullptr;
+		}
+
+		auto velocityComponent = static_cast<firefly::Velocity*>(
+			playerEntity->getComponent(
+				firefly::getComponentId(firefly::Velocity::ComponentName)));
+		return velocityComponent;
+	}
 
 }

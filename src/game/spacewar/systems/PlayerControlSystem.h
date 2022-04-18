@@ -10,6 +10,7 @@
 
 namespace firefly {
 	class Entity;
+	class Velocity;
 	class NativeEvent;
 }
 
@@ -34,11 +35,7 @@ private:
 
 	firefly::Entity* findPlayer(int playerId) const;
 
-	void setAccelerationX(
-		int playerId, double accelerationX) const;
-
-	void setAccelerationY(
-		int playerId, double accelerationY) const;
+	firefly::Velocity* getVelocity(int playerId) const;
 };
 
 }

@@ -10,7 +10,9 @@
 
 namespace firefly {
 
-class VelocitySystem: public ISystem {
+class Velocity;
+
+class VelocitySystem final: public ISystem {
 public:
     VelocitySystem(Engine* engine);
     ~VelocitySystem() override;
@@ -18,11 +20,13 @@ public:
     VelocitySystem(const VelocitySystem&) = delete;
     VelocitySystem& operator=(const VelocitySystem&) = delete;
 
+    void update() override;
+
     bool onEvent(
         const std::shared_ptr<IEvent>& event) const override;
 
 private:
-    
+    void processVelocity(Velocity* velocity) const;
 };
 
 }

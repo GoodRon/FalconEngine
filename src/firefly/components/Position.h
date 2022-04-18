@@ -6,6 +6,8 @@
 #ifndef FIREFLY_COMPONENT_POSITION_H
 #define FIREFLY_COMPONENT_POSITION_H
 
+#include <SDL_rect.h>
+
 #include "IComponent.h"
 
 namespace firefly {

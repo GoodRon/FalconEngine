@@ -11,7 +11,7 @@
 namespace firefly {
 
 RenderingSystem::RenderingSystem(Engine* engine):
-	ISystem("Rendering", engine),
+	ISystem("RenderingSystem", engine),
 	_entityMutex(),
 	_renderer(engine->getRenderer()) {
 

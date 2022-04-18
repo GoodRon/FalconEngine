@@ -6,6 +6,8 @@
 #ifndef FIREFLY_COMPONENT_VELOCITY_H
 #define FIREFLY_COMPONENT_VELOCITY_H
 
+#include "IComponent.h"
+
 namespace firefly {
 
 class Velocity final: public IComponent {
@@ -15,12 +17,12 @@ public:
     Velocity(): IComponent(ComponentName) {}
     ~Velocity() override = default;
 
+    // TODO improve
     double speedX = 0.0;
     double speedY = 0.0;
-    double maxSpeedX = 0.0;
-    double maxSpeedY = 0.0;
     double accelerationX = 0.0;
     double accelerationY = 0.0;
+    //double maxSpeed = 0.0;
 };
 
 }
