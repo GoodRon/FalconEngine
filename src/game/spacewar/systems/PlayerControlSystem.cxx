@@ -13,6 +13,8 @@ namespace spacewar {
 	const int playerId = 1;
 	const double speedX = 90.0;
 	const double speedY = 90.0;
+	const double accelerationX = 15.0;
+	const double accelerationY = 15.0;
 
 	PlayerControlSystem::PlayerControlSystem(
 		firefly::Engine* engine) :
@@ -156,12 +158,12 @@ namespace spacewar {
 		}
 
 		if (_isDownPressed && _isUpPressed) {
-			velocityComponent->speedY = 0.0;
+			setAccelerationY(0.0);
 			return;
 		}
 
 		if (_isUpPressed) {
-			velocityComponent->speedY = -speedY;
+			setAccelerationY(-accelerationY);
 			return;	
 		}
 
@@ -170,7 +172,7 @@ namespace spacewar {
 			return;
 		}
 
-		velocityComponent->speedY = 0.0;
+		setAccelerationY(0.0);
 	}
 
 	void PlayerControlSystem::onLeftPressed(bool isPressed) {
@@ -182,12 +184,12 @@ namespace spacewar {
 		}
 
 		if (_isLeftPressed && _isRightPressed) {
-			velocityComponent->speedX = 0.0;
+			setAccelerationX(0.0);
 			return;
 		}
 
 		if (_isLeftPressed) {
-			velocityComponent->speedX = -speedX;
+			setAccelerationX(-accelerationX);
 			return;	
 		}
 
@@ -196,7 +198,7 @@ namespace spacewar {
 			return;
 		}
 
-		velocityComponent->speedX = 0.0;
+		setAccelerationX(0.0);
 	}
 
 	void PlayerControlSystem::onDownPressed(bool isPressed) {
@@ -208,38 +210,33 @@ namespace spacewar {
 		}
 
 		if (_isDownPressed && _isUpPressed) {
-			velocityComponent->speedY = 0.0;
+			setAccelerationY(0.0);
 			return;
 		}
 
 		if (_isDownPressed) {
-			velocityComponent->speedY = speedY;
+			setAccelerationY(accelerationY);
 			return;	
 		}
 
 		if (_isUpPressed) {
-			onUpPressed(true);
+			setAccelerationY(true);
 			return;
 		}
 
-		velocityComponent->speedY = 0.0;
+		setAccelerationY(0.0);
 	}
 
 	void PlayerControlSystem::onRightPressed(bool isPressed) {
 		_isRightPressed = isPressed;
 
-		auto velocityComponent = getVelocity(playerId);
-		if (!velocityComponent) {
-			return;
-		}
-
 		if (_isLeftPressed && _isRightPressed) {
-			velocityComponent->speedX = 0.0;
+			setAccelerationX(0.0);
 			return;
 		}
 
 		if (_isRightPressed) {
-			velocityComponent->speedX = speedX;
+			setAccelerationX(accelerationX);
 			return;	
 		}
 
@@ -248,6 +245,42 @@ namespace spacewar {
 			return;
 		}
 
-		velocityComponent->speedX = 0.0;
+		setAccelerationX(0.0);
+	}
+
+	void PlayerControlSystem::setSpeedX(double speedX) {
+		auto velocityComponent = getVelocity(playerId);
+		if (!velocityComponent) {
+			return;
+		}
+
+		velocityComponent->speedX = speedX;
+	}
+
+	void PlayerControlSystem::setSpeedY(double speedY) {
+		auto velocityComponent = getVelocity(playerId);
+		if (!velocityComponent) {
+			return;
+		}
+
+		velocityComponent->speedY = speedY;
+	}
+
+	void PlayerControlSystem::setAccelerationX(double accelerationX) {
+		auto velocityComponent = getVelocity(playerId);
+		if (!velocityComponent) {
+			return;
+		}
+
+		velocityComponent->accelerationX = accelerationX;
+	}
+
+	void PlayerControlSystem::setAccelerationY(double accelerationY) {
+		auto velocityComponent = getVelocity(playerId);
+		if (!velocityComponent) {
+			return;
+		}
+
+		velocityComponent->accelerationY = accelerationY;
 	}
 }

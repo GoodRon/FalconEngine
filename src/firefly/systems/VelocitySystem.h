@@ -26,7 +26,7 @@ public:
         const std::shared_ptr<IEvent>& event) override;
 
 private:
-    void processVelocity(Velocity* velocity) const;
+    void processVelocity(Velocity* velocity, uint64_t elapsedMs) const;
 };
 
 }

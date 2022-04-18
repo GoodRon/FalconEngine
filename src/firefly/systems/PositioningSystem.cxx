@@ -1,7 +1,6 @@
 #include "PositioningSystem.h"
 
 #include <SDL_timer.h>
-#include <SDL_log.h>
 
 #include "Entity.h"
 
@@ -21,12 +20,12 @@ PositioningSystem::~PositioningSystem() {
 }
 
 void PositioningSystem::update() {
-	Position* position = nullptr;
-	Velocity* velocity = nullptr;
-
 	const uint64_t timepoint = SDL_GetTicks64();
 	const uint64_t elapsedMs = timepoint - _updateTimepoint;
 	_updateTimepoint = timepoint;
+
+	Position* position = nullptr;
+	Velocity* velocity = nullptr;
 
 	for (auto& entity: _entities) {
 		position = static_cast<Position*>(
@@ -57,10 +56,6 @@ void PositioningSystem::processPosition(
 
 	position->x += velocity->speedX * elapsedMs / 1000.0;
 	position->y += velocity->speedY * elapsedMs / 1000.0;
-
-	//if (velocity->speedX > 0.0)
-	//	SDL_Log("speedX %f", velocity->speedX);
-
 }
 
 }

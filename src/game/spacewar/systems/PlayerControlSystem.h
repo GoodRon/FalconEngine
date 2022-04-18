@@ -42,6 +42,12 @@ private:
 	void onDownPressed(bool isPressed);
 	void onRightPressed(bool isPressed);
 
+	void setSpeedX(double speedX);
+	void setSpeedY(double speedY);
+
+	void setAccelerationX(double accelerationX);
+	void setAccelerationY(double accelerationY);
+
 private:
 	int _keyCodeUp;
 	int _keyCodeLeft;

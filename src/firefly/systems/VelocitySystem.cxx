@@ -1,5 +1,7 @@
 #include "VelocitySystem.h"
 
+#include <SDL_timer.h>
+
 #include "Entity.h"
 
 #include "components/Velocity.h"
@@ -16,6 +18,10 @@ VelocitySystem::~VelocitySystem() {
 }
 
 void VelocitySystem::update() {
+	const uint64_t timepoint = SDL_GetTicks64();
+	const uint64_t elapsedMs = timepoint - _updateTimepoint;
+	_updateTimepoint = timepoint;
+
 	Velocity* velocity = nullptr;
 
 	for (auto& entity: _entities) {
@@ -23,7 +29,7 @@ void VelocitySystem::update() {
 			entity.second->getComponent(
 				getComponentId(Velocity::ComponentName)));
 
-		processVelocity(velocity);
+		processVelocity(velocity, elapsedMs);
 	}
 }
 
@@ -35,15 +41,21 @@ bool VelocitySystem::onEvent(
 	return false;
 }
 
-void VelocitySystem::processVelocity(Velocity* velocity) const {
+void VelocitySystem::processVelocity(
+	Velocity* velocity, uint64_t elapsedMs) const {
 	if (!velocity) {
 		return;
 	}
 
-	// TODO Improve
+	const double epsilon = 0.0001;
 
-	velocity->speedX += velocity->accelerationX;
-	velocity->speedY += velocity->accelerationY;
+	if (velocity->accelerationX > epsilon || velocity->accelerationX < -epsilon) {
+		velocity->speedX += velocity->accelerationX * elapsedMs / 1000.0;
+	}
+
+	if (velocity->accelerationY > epsilon || velocity->accelerationY < -epsilon) {
+		velocity->speedY += velocity->accelerationY * elapsedMs / 1000.0;
+	}
 }
 
 }
