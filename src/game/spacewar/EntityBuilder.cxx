@@ -4,13 +4,13 @@
 #include <unordered_map>
 #include <fstream>
 
-#include "falcon/Engine.h"
-#include "falcon/ResourceManager.h"
-#include "falcon/Entity.h"
-#include "falcon/Frame.h"
-#include "falcon/GameObject.h"
-#include "falcon/components/Visual.h"
-#include "falcon/components/Position.h"
+#include "firefly/Engine.h"
+#include "firefly/ResourceManager.h"
+#include "firefly/Entity.h"
+#include "firefly/Frame.h"
+#include "firefly/GameObject.h"
+#include "firefly/components/Visual.h"
+#include "firefly/components/Position.h"
 
 #include "rapidjson/document.h"
 
@@ -19,15 +19,15 @@ namespace spacewar {
 class EntityBuilder::Impl {
 private:
 	using componentBuilder = std::function<bool(
-		falcon::Entity* entity,
+		firefly::Entity* entity,
 		rapidjson::Value& document)>;
 
-	falcon::Engine* const _engine;
+	firefly::Engine* const _engine;
 	std::unordered_map<std::string, componentBuilder> _componentBuilders;
 
 public:
 
-	Impl(falcon::Engine* engine):
+	Impl(firefly::Engine* engine):
 		_engine(engine),
 		_componentBuilders() {
 
@@ -40,7 +40,7 @@ public:
 	Impl(const Impl&) = delete;
 	Impl& operator=(const Impl&) = delete;
 
-	std::shared_ptr<falcon::Entity> buildEntity(
+	std::shared_ptr<firefly::Entity> buildEntity(
 		const std::string& jsonConfig) {
 		if (!_engine) {
 			return nullptr;
@@ -63,7 +63,7 @@ public:
 
 		auto entityName = std::string(document["name"].GetString());
 
-		std::shared_ptr<falcon::Entity> entity(new falcon::Entity(entityName));
+		std::shared_ptr<firefly::Entity> entity(new firefly::Entity(entityName));
 
 		for (auto& component: document["components"].GetArray()) {
 			const auto componentName = std::string(component["name"].GetString());
@@ -83,13 +83,13 @@ public:
 private:
 	void registerComponentBuilders() {
 		_componentBuilders["Visual"] = [this](
-			falcon::Entity* entity,
+			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildVisualComponent(entity, document);
 		};
 
 		_componentBuilders["Position"] = [this](
-			falcon::Entity* entity,
+			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildPositionComponent(entity, document);
 		};
@@ -97,7 +97,7 @@ private:
 
 	// TODO move to a separate functions
 	bool buildVisualComponent(
-		falcon::Entity* entity,
+		firefly::Entity* entity,
 		rapidjson::Value& document) const {
 
 		if (!entity) {
@@ -109,7 +109,7 @@ private:
 			return false;
 		}
 
-		std::unique_ptr<falcon::Visual> component(new falcon::Visual);
+		std::unique_ptr<firefly::Visual> component(new firefly::Visual);
 
 		for (auto& state: document["states"].GetArray()) {
 			const auto stateName = std::string(state["name"].GetString());
@@ -126,7 +126,7 @@ private:
 			frameRect.h = state["frame_height"].GetInt();
 			int duration = state["frame_duration"].GetInt();
 
-			falcon::Visual::State visualState;
+			firefly::Visual::State visualState;
 			visualState.isLooped = state["is_looped"].GetBool();
 
 			for (auto& frameLine: state["frames"].GetArray()) {
@@ -135,14 +135,14 @@ private:
 				const int col = frameLine["col"].GetInt();
 				const int amount = frameLine["amount"].GetInt();
 
-				falcon::Visual::Frames frames;
+				firefly::Visual::Frames frames;
 
 				frameRect.y = row * frameRect.h;
 				for (int frameCount = 0; frameCount < amount; ++frameCount) {
 					frameRect.x = (col + frameCount) * frameRect.w;
 					
 					frames.emplace_back(
-						new falcon::Frame(texture, frameRect, duration));
+						new firefly::Frame(texture, frameRect, duration));
 				}
 
 				visualState.frames[direction] = std::move(frames);
@@ -156,10 +156,10 @@ private:
 	}
 
 	bool buildPositionComponent(
-		falcon::Entity* entity,
+		firefly::Entity* entity,
 		rapidjson::Value& document) const {
 
-		std::unique_ptr<falcon::Position> component(new falcon::Position);
+		std::unique_ptr<firefly::Position> component(new firefly::Position);
 
 		component->x = document["x"].GetInt();
 		component->y = document["y"].GetInt();
@@ -172,14 +172,14 @@ private:
 	}
 };
 
-EntityBuilder::EntityBuilder(falcon::Engine* engine):
+EntityBuilder::EntityBuilder(firefly::Engine* engine):
 	_impl(new Impl(engine)) {
 }
 
 EntityBuilder::~EntityBuilder() {
 }
 
-std::shared_ptr<falcon::Entity> 
+std::shared_ptr<firefly::Entity> 
 EntityBuilder::buildEntity(const std::string& jsonConfig) {
 	return _impl->buildEntity(jsonConfig);
 }

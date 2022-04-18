@@ -6,23 +6,23 @@
 #ifndef SW_SYSTEMS_PLAYER_CONTROL_H
 #define SW_SYSTEMS_PLAYER_CONTROL_H
 
-#include "falcon/systems/ISystem.h"
+#include "firefly/systems/ISystem.h"
 
 namespace spacewar {
 
-class PlayerControlSystem: public falcon::ISystem {
+class PlayerControlSystem: public firefly::ISystem {
 public:
-	PlayerControlSystem(falcon::Engine* engine);
+	PlayerControlSystem(firefly::Engine* engine);
 	~PlayerControlSystem() override;
 
 	PlayerControlSystem(const PlayerControlSystem&) = delete;
 	PlayerControlSystem& operator=(const PlayerControlSystem&) = delete;
 
 	bool onEvent(
-		const std::shared_ptr<falcon::IEvent>& event) const override;
+		const std::shared_ptr<firefly::IEvent>& event) const override;
 
 private:
-	bool checkComponents(falcon::Entity* entity) const override;
+	bool checkComponents(firefly::Entity* entity) const override;
 };
 
 }

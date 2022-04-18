@@ -9,13 +9,13 @@
 
 #include <iostream>
 
-#include "falcon/Engine.h"
+#include "firefly/Engine.h"
 
 #include "GameBuilder.h"
 
 int main(int argc, char** argv) {
 
-    auto& engine = falcon::Engine::instance();
+    auto& engine = firefly::Engine::instance();
     engine.initialize(500, 500);
 
     spacewar::GameBuilder gameBuilder(&engine);

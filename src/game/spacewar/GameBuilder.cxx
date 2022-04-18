@@ -2,17 +2,17 @@
 
 #include <SDL.h>
 
-#include "falcon/Engine.h"
-#include "falcon/SystemManager.h"
-#include "falcon/ResourceManager.h"
-#include "falcon/GameObject.h"
-#include "falcon/ObjectManager.h"
-#include "falcon/components/Health.h"
-#include "falcon/components/Position.h"
-#include "falcon/components/Visual.h"
-#include "falcon/components/State.h"
-#include "falcon/components/Player.h"
-#include "falcon/systems/PlayerControlSystem.h"
+#include "firefly/Engine.h"
+#include "firefly/SystemManager.h"
+#include "firefly/ResourceManager.h"
+#include "firefly/GameObject.h"
+#include "firefly/ObjectManager.h"
+#include "firefly/components/Health.h"
+#include "firefly/components/Position.h"
+#include "firefly/components/Visual.h"
+#include "firefly/components/State.h"
+#include "firefly/components/Player.h"
+#include "firefly/systems/PlayerControlSystem.h"
 
 #include "EntityBuilder.h"
 
@@ -20,11 +20,11 @@ namespace spacewar {
 
 class GameBuilder::Impl {
 private:
-	falcon::Engine* const _engine;
+	firefly::Engine* const _engine;
 	bool _isBuilt;
 
 public:
-	Impl(falcon::Engine* engine):
+	Impl(firefly::Engine* engine):
 		_engine(engine),
 		_isBuilt(false) {
 
@@ -67,8 +67,8 @@ private:
 			return false;
 		}
 
-		std::shared_ptr<falcon::PlayerControlSystem> playerControlSystem(
-			new falcon::PlayerControlSystem(_engine));
+		std::shared_ptr<firefly::PlayerControlSystem> playerControlSystem(
+			new firefly::PlayerControlSystem(_engine));
 		systemManager->addSystem(playerControlSystem);
 		// TODO write me!
 
@@ -81,20 +81,20 @@ private:
 			return false;
 		}
 
-		std::shared_ptr<falcon::Entity> entity;
+		std::shared_ptr<firefly::Entity> entity;
 		EntityBuilder builder(_engine);
 
 		entity = builder.buildEntity("resources/player1.json");
 
 		// TODO improve
-		std::shared_ptr<falcon::GameObject> object(new falcon::GameObject(entity));
+		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
 
 		return true;
 	}
 };
 
-GameBuilder::GameBuilder(falcon::Engine* engine):
+GameBuilder::GameBuilder(firefly::Engine* engine):
 	_impl(new Impl(engine)) {
 }
 

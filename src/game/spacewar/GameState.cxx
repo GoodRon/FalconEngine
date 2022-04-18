@@ -37,7 +37,7 @@ public:
 };
 
 GameState::GameState():
-	falcon::IGameState(),
+	firefly::IGameState(),
 	_impl(new Impl(this)) {
 }
 

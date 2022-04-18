@@ -8,7 +8,7 @@
 
 #include <memory>
 
-namespace falcon {
+namespace firefly {
 	class Engine;
 }
 
@@ -16,7 +16,7 @@ namespace spacewar {
 
 class GameBuilder {
 public:
-	GameBuilder(falcon::Engine* engine);
+	GameBuilder(firefly::Engine* engine);
 	~GameBuilder();
 
 	GameBuilder(const GameBuilder&) = delete;

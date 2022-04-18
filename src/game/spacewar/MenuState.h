@@ -6,9 +6,9 @@
 #ifndef SW_MENU_STATE_H
 #define SW_MENU_STATE_H
 
-#include "falcon/IGameState.h"
+#include "firefly/IGameState.h"
 
-class MenuState: public falcon::IGameState {
+class MenuState: public firefly::IGameState {
 public:
 	MenuState();
 	~MenuState() override;

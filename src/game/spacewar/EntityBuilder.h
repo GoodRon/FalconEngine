@@ -9,7 +9,7 @@
 #include <memory>
 #include <string>
 
-namespace falcon {
+namespace firefly {
 	class Engine;
 	class Entity;
 }
@@ -18,13 +18,13 @@ namespace spacewar {
 
 class EntityBuilder {
 public:
-	EntityBuilder(falcon::Engine* engine);
+	EntityBuilder(firefly::Engine* engine);
 	~EntityBuilder();
 
 	EntityBuilder(EntityBuilder&&) = default;
 	EntityBuilder& operator=(EntityBuilder&&) = default;
 
-	std::shared_ptr<falcon::Entity> buildEntity(
+	std::shared_ptr<firefly::Entity> buildEntity(
 		const std::string& jsonConfig);
 
 private:

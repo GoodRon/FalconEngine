@@ -10,6 +10,6 @@ add_executable(spacewars WIN32
 	GameBuilder.cxx
 	EntityBuilder.cxx
 	systems/PlayerControlSystem.cxx)
-target_link_libraries(spacewars falcon SDL2::Main)
+target_link_libraries(spacewars firefly SDL2::Main)
 
 install(TARGETS spacewars RUNTIME DESTINATION .)

@@ -8,9 +8,9 @@
 
 #include <memory>
 
-#include "falcon/IGameState.h"
+#include "firefly/IGameState.h"
 
-class GameState: public falcon::IGameState {
+class GameState: public firefly::IGameState {
 public:
 	GameState();
 	~GameState() override;

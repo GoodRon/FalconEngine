@@ -32,10 +32,10 @@ include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
 include_directories(${jsoncpp_INCLUDE_DIRS})
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/falcon)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/firefly)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/game)
 
-link_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/falcon)
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/firefly)
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/game)
 
 add_subdirectory(src)

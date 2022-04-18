@@ -3,8 +3,8 @@
 namespace spacewar {
 
 PlayerControlSystem::PlayerControlSystem(
-	falcon::Engine* engine):
-	falcon::ISystem("PlayerControl", engine) {
+	firefly::Engine* engine):
+	firefly::ISystem("PlayerControl", engine) {
 
 }
 
@@ -13,7 +13,7 @@ PlayerControlSystem::~PlayerControlSystem() {
 }
 
 bool PlayerControlSystem::onEvent(
-	const std::shared_ptr<falcon::IEvent>& event) const {
+	const std::shared_ptr<firefly::IEvent>& event) const {
 
 	// TODO write me
 
@@ -21,7 +21,7 @@ bool PlayerControlSystem::onEvent(
 }
 
 bool PlayerControlSystem::checkComponents(
-	falcon::Entity* entity) const {
+	firefly::Entity* entity) const {
 
 	// TODO write me
 
