@@ -10,7 +10,6 @@ namespace firefly {
 
 using EntityID = int;
 using ComponentID = int;
-using EventType = int;
 
 }
 

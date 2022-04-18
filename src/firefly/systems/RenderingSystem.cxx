@@ -12,10 +12,11 @@ namespace firefly {
 
 RenderingSystem::RenderingSystem(Engine* engine):
 	ISystem("Rendering", engine),
-	_visualComponentId(getComponentId(Visual::ComponentName)),
-	_positionComponentId(getComponentId(Position::ComponentName)),
 	_entityMutex(),
 	_renderer(engine->getRenderer()) {
+
+	_requiredComponents.push_front(Visual::ComponentName);
+	_requiredComponents.push_front(Position::ComponentName);
 }
 
 RenderingSystem::~RenderingSystem() {
@@ -30,10 +31,12 @@ void RenderingSystem::drawEntites() const {
 	
 	for (auto& entity: _entities) {
 		auto positionComponent = static_cast<Position*>(
-			entity.second->getComponent(_positionComponentId));
+			entity.second->getComponent(
+				getComponentId(Position::ComponentName)));
 
 		auto visualComponent = static_cast<Visual*>(
-			entity.second->getComponent(_visualComponentId));
+			entity.second->getComponent(
+				getComponentId(Visual::ComponentName)));
 
 		draw(positionComponent, visualComponent);
 	}
@@ -45,23 +48,6 @@ bool RenderingSystem::onEvent(
     const std::shared_ptr<IEvent>& event) const {
 
 	// TODO write me
-	return true;
-}
-
-bool RenderingSystem::checkComponents(Entity* entity) const {
-	if (!entity) {
-		return false;
-	}
-
-	auto component = entity->getComponent(_visualComponentId);
-	if (!component) {
-		return false;
-	}
-
-	component = entity->getComponent(_positionComponentId);
-	if (!component) {
-		return false;
-	}
 	return true;
 }
 

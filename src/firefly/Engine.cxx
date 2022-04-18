@@ -15,7 +15,9 @@
 #include "EngineException.h"
 #include "SystemManager.h"
 #include "EventManager.h"
+
 #include "systems/RenderingSystem.h"
+#include "events/NativeEvent.h"
 
 namespace firefly {
 
@@ -111,7 +113,7 @@ int Engine::run() {
 			}
 
 			while (!events.empty()) {
-				onEvent(events.front());
+				onSDLEvent(events.front());
 				events.pop();
 			}
 
@@ -190,7 +192,7 @@ void Engine::clearEventHandlers() {
 }
 */
 
-void Engine::onEvent(const SDL_Event& event) {
+void Engine::onSDLEvent(const SDL_Event& event) {
 
 	// TODO divide and move to the default handler
 	switch (event.type) {
@@ -219,7 +221,8 @@ void Engine::onEvent(const SDL_Event& event) {
 		}
 	}
 	*/
-
+	std::shared_ptr<IEvent> nativeEvent(new NativeEvent(event));
+	_eventManager->sendEvent(nativeEvent);
 }
 
 }

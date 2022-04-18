@@ -1,6 +1,7 @@
 #include "ISystem.h"
 
 #include "Entity.h"
+#include "components/IComponent.h"
 
 namespace firefly {
 
@@ -8,6 +9,7 @@ ISystem::ISystem(const std::string& name,
 	Engine* engine): 
 	_name(name), 
 	_engine(engine),
+	_requiredComponents(),
 	_entities() {
 }
 		
@@ -41,6 +43,23 @@ void ISystem::unregisterEntity(EntityID id) {
 	lockEntities();
 	_entities.erase(id);
 	unlockEntities();
+}
+
+bool ISystem::checkComponents(Entity* entity) const {
+	if (!entity) {
+		return false;
+	}
+
+	IComponent* component = nullptr;
+
+	for (auto& componentName: _requiredComponents) {
+		component = entity->getComponent(
+			getComponentId(componentName));
+		if (!component) {
+			return false;
+		}
+	}
+	return true;
 }
 
 void ISystem::lockEntities() const {

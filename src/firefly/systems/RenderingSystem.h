@@ -30,7 +30,6 @@ public:
         const std::shared_ptr<IEvent>& event) const override;
 
 private:
-    bool checkComponents(Entity* entity) const override;
     void lockEntities() const override;
     void unlockEntities() const override;
 
@@ -38,8 +37,6 @@ private:
         Visual* visualComponent) const;
 
 private:
-    ComponentID _visualComponentId;
-    ComponentID _positionComponentId;
     mutable std::mutex _entityMutex;
     Renderer* const _renderer;
 };

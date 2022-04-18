@@ -10,11 +10,10 @@
 
 namespace firefly {
 
-class Event {
+class IEvent {
 public:
-	Event(EventType type);
-
-	virtual ~Event() = 0;
+	IEvent(EventType type);
+	virtual ~IEvent() = 0;
 
 	const EventType getType() const;
 

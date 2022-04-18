@@ -13,6 +13,7 @@ add_library(firefly
 	EventManager.cxx
 	GameObject.cxx
 	events/IEvent.cxx
+	events/NativeEvent.cxx
 	components/IComponent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx

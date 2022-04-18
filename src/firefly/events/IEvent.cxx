@@ -7,11 +7,14 @@
 
 namespace firefly {
 
-Event::Event(EventType type):
+IEvent::IEvent(EventType type):
 	_type(type) {
 }
 
-const EventType Event::getType() const {
+IEvent::~IEvent() {
+}
+
+const EventType IEvent::getType() const {
 	return _type;
 }
 

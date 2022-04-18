@@ -19,12 +19,6 @@ public:
 
     bool onEvent(
         const std::shared_ptr<IEvent>& event) const override;
-
-private:
-    bool checkComponents(Entity* entity) const override;
-
-private:
-    ComponentID _playerComponentId;
 };
 
 }

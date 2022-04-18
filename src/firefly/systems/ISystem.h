@@ -9,6 +9,7 @@
 #include <string>
 #include <memory>
 #include <unordered_map>
+#include <forward_list>
 
 #include "Types.h"
 
@@ -34,13 +35,14 @@ public:
 		const std::shared_ptr<IEvent>& event) const = 0;
 
 protected:
-	virtual bool checkComponents(Entity* entity) const = 0;
+	bool checkComponents(Entity* entity) const;
 	virtual void lockEntities() const;
 	virtual void unlockEntities() const;
 
 protected:
 	const std::string _name;
 	Engine* const _engine;
+	std::forward_list<std::string> _requiredComponents;
 	std::unordered_map<EntityID, Entity*> _entities;
 };
 

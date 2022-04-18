@@ -67,7 +67,7 @@ private:
 	Engine(const Engine&) = delete;
 	Engine& operator=(const Engine& other) = delete;
 
-	void onEvent(const SDL_Event& event);
+	void onSDLEvent(const SDL_Event& event);
 
 private:
 	std::atomic<bool> _isInitialized;

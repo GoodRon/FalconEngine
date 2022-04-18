@@ -6,7 +6,7 @@
 #ifndef SW_SYSTEMS_PLAYER_CONTROL_H
 #define SW_SYSTEMS_PLAYER_CONTROL_H
 
-#include "firefly/systems/ISystem.h"
+#include <firefly/systems/ISystem.h>
 
 namespace spacewar {
 
@@ -20,9 +20,6 @@ public:
 
 	bool onEvent(
 		const std::shared_ptr<firefly::IEvent>& event) const override;
-
-private:
-	bool checkComponents(firefly::Entity* entity) const override;
 };
 
 }
