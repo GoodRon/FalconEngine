@@ -10,9 +10,9 @@ add_library(falcon
 	Frame.cxx
 	Entity.cxx
 	SystemManager.cxx
-	IEvent.cxx
 	EventManager.cxx
 	GameObject.cxx
+	events/IEvent.cxx
 	components/IComponent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx

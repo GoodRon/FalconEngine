@@ -18,6 +18,7 @@ class GameObject;
 class IEvent;
 class SystemManager;
 
+// TODO change to EntityManager
 class ObjectManager {
 public:
 	ObjectManager(SystemManager* systemManager);

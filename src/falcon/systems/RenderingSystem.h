@@ -21,6 +21,9 @@ public:
     RenderingSystem(Engine* engine);
     ~RenderingSystem() override;
 
+    RenderingSystem(const RenderingSystem&) = delete;
+    RenderingSystem& operator=(const RenderingSystem&) = delete;
+
     void drawEntites() const;
 
     bool onEvent(

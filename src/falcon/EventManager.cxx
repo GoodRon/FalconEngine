@@ -1,7 +1,7 @@
 #include "EventManager.h"
 
-#include "IEvent.h"
 #include "SystemManager.h"
+#include "events/IEvent.h"
 
 namespace falcon {
 

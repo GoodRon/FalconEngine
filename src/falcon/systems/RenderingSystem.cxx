@@ -10,13 +10,10 @@
 
 namespace falcon {
 
-const std::string visualComponentName("Visual");
-const std::string positionComponentName("Position");
-
 RenderingSystem::RenderingSystem(Engine* engine):
 	ISystem("Rendering", engine),
-	_visualComponentId(getComponentId(visualComponentName)),
-	_positionComponentId(getComponentId(positionComponentName)),
+	_visualComponentId(getComponentId(Visual::ComponentName)),
+	_positionComponentId(getComponentId(Position::ComponentName)),
 	_entityMutex(),
 	_renderer(engine->getRenderer()) {
 }

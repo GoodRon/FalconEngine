@@ -10,7 +10,9 @@ namespace falcon {
 
 class Velocity: public IComponent final {
 public:
-    Velocity(): IComponent("Velocity") {}
+    inline static const std::string ComponentName = "Velocity";
+    
+    Velocity(): IComponent(ComponentName) {}
     ~Velocity() override = default;
 
     int x = 0;

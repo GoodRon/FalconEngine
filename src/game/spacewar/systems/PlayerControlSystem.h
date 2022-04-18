@@ -6,27 +6,23 @@
 #ifndef SW_SYSTEMS_PLAYER_CONTROL_H
 #define SW_SYSTEMS_PLAYER_CONTROL_H
 
-#include <memory>
-
-namespace falcon {
-	class Engine;
-}
+#include "falcon/systems/ISystem.h"
 
 namespace spacewar {
 
-class GameBuilder {
+class PlayerControlSystem: public falcon::ISystem {
 public:
-	GameBuilder(falcon::Engine* engine);
-	~GameBuilder();
+	PlayerControlSystem(falcon::Engine* engine);
+	~PlayerControlSystem() override;
 
-	GameBuilder(const GameBuilder&) = delete;
-	GameBuilder& operator=(const GameBuilder&) = delete;
+	PlayerControlSystem(const PlayerControlSystem&) = delete;
+	PlayerControlSystem& operator=(const PlayerControlSystem&) = delete;
 
-	bool buildGame();
+	bool onEvent(
+		const std::shared_ptr<falcon::IEvent>& event) const override;
 
 private:
-	class Impl;
-	std::unique_ptr<Impl> _impl;
+	bool checkComponents(falcon::Entity* entity) const override;
 };
 
 }

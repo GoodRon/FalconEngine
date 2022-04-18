@@ -12,7 +12,9 @@ namespace falcon {
 
 class Solidity: public IComponent final {
 public:
-    Solidity(): IComponent("Solidity") {}
+    inline static const std::string ComponentName = "Solidity";
+    
+    Solidity(): IComponent(ComponentName) {}
     ~Solidity() override = default;
 
 	bool isSolid = false;

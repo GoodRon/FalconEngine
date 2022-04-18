@@ -16,7 +16,9 @@ class Frame;
 
 class Visual: public IComponent {
 public:
-    Visual(): IComponent("Visual") {}
+    inline static const std::string ComponentName = "Visual";
+
+    Visual(): IComponent(ComponentName) {}
     ~Visual() override = default;
 
     using StateName = std::string;

@@ -39,6 +39,7 @@ bool Engine::initialize(int width, int height) {
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
 
+	// TODO fix this
 	_timerPool->addTimer(10, [this](TimerPool::id_t) {
 		if (!_objectManager) {
 			return;
@@ -69,11 +70,11 @@ Engine::Engine():
 	_eventManager(),
 	_renderingSystem(),
 	_timerPool(),
-	_eventHandlers(),
-	_handlersMutex(),
-	_eventQueue(),
+	//_eventHandlers(),
+	//_handlersMutex(),
 	_eventMutex(),
-	_isEventReceived(false) {
+	_eventQueue(),
+	_isEventAwaiting(false) {
 }
 
 Engine::~Engine() {
@@ -103,10 +104,10 @@ int Engine::run() {
 
 			_timerPool->check();
 
-			if (_isEventReceived) {
+			if (_isEventAwaiting) {
 				std::lock_guard<std::mutex> locker(_eventMutex);
 				events.swap(_eventQueue);
-				_isEventReceived = false;
+				_isEventAwaiting = false;
 			}
 
 			while (!events.empty()) {
@@ -137,8 +138,8 @@ int Engine::run() {
 			_eventQueue.push(std::move(event));
 		}
 
-		if (!_isEventReceived && !_eventQueue.empty()) {
-			_isEventReceived = true;
+		if (!_isEventAwaiting && !_eventQueue.empty()) {
+			_isEventAwaiting = true;
 		}
 	}
 	logicThread.join();
@@ -173,6 +174,7 @@ TimerPool* Engine::getTimersPool() const {
 	return _timerPool.get();
 }
 
+/*
 void Engine::pushEventHandler(const EventHandler& handler) {
 	if (!_isInitialized) {
 		return;
@@ -186,8 +188,11 @@ void Engine::clearEventHandlers() {
 	std::lock_guard<std::mutex> locker(_handlersMutex);
 	_eventHandlers.clear();
 }
+*/
 
 void Engine::onEvent(const SDL_Event& event) {
+
+	// TODO divide and move to the default handler
 	switch (event.type) {
 		case SDL_QUIT:
 			_isRunning = false;
@@ -206,12 +211,15 @@ void Engine::onEvent(const SDL_Event& event) {
 	}
 
 	// TODO remove the locking here
+	/*
 	std::lock_guard<std::mutex> locker(_handlersMutex);
 	for (auto &handler: _eventHandlers) {
 		if (handler(event)) {
 			break;
 		}
 	}
+	*/
+
 }
 
 }

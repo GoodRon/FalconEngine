@@ -25,10 +25,11 @@ class SystemManager;
 class EventManager;
 class RenderingSystem;
 
-using EventHandler = std::function<bool(const SDL_Event&)>;
+//using EventHandler = std::function<bool(const SDL_Event&)>;
 
 class Engine {
 public:
+	// TODO remove signleton?
 	static Engine& instance() {
 		static Engine engine;
 		return engine;
@@ -51,15 +52,14 @@ public:
 	ObjectManager* getObjectManager() const;
 	
 	SystemManager* getSystemManager() const;
-
 	EventManager* getEventManager() const;
 
 	TimerPool* getTimersPool() const;
 
 	// TODO remove from here?
-	void pushEventHandler(const EventHandler& handler);
+	//void pushEventHandler(const EventHandler& handler);
 
-	void clearEventHandlers();
+	//void clearEventHandlers();
 
 private:
 	Engine();
@@ -80,11 +80,11 @@ private:
 	std::unique_ptr<EventManager> _eventManager;
 	std::shared_ptr<falcon::RenderingSystem> _renderingSystem;
 	std::unique_ptr<TimerPool> _timerPool;
-	std::vector<EventHandler> _eventHandlers;
-	std::mutex _handlersMutex;
-	std::queue<SDL_Event> _eventQueue;
+	//std::vector<EventHandler> _eventHandlers;
+	//std::mutex _handlersMutex;
 	std::mutex _eventMutex;
-	std::atomic<bool> _isEventReceived;
+	std::queue<SDL_Event> _eventQueue;
+	std::atomic<bool> _isEventAwaiting;
 };
 
 }

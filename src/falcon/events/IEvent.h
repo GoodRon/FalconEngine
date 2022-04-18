@@ -6,9 +6,9 @@
 #ifndef FALCON_IEVENT_H
 #define FALCON_IEVENT_H
 
-namespace falcon {
+#include "EventType.h"
 
-using EventType = int;
+namespace falcon {
 
 class Event {
 public:

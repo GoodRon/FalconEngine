@@ -12,7 +12,9 @@ namespace falcon {
 
 class State: public IComponent {
 public:
-    State(): IComponent("State") {}
+    inline static const std::string ComponentName = "State";
+
+    State(): IComponent(ComponentName) {}
     ~State() override = default;
 
     using StateID = int;

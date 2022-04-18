@@ -12,7 +12,9 @@ namespace falcon {
 
 class Position: public IComponent {
 public:
-    Position(): IComponent("Position") {}
+    inline static const std::string ComponentName = "Position";
+    
+    Position(): IComponent(ComponentName) {}
     ~Position() override = default;
 
     SDL_Rect toRect() {

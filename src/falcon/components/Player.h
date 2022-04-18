@@ -12,7 +12,9 @@ namespace falcon {
 
 class Player: public IComponent {
 public:
-    Player(): IComponent("Player") {}
+    inline static const std::string ComponentName = "Player";
+    
+    Player(): IComponent(ComponentName) {}
     ~Player() override = default;
 
 	int playerId = 0;
