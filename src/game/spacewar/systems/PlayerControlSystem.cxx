@@ -155,8 +155,9 @@ namespace spacewar {
 			return;
 		}
 
-		if (_isUpPressed && _isDownPressed) {
-			_isDownPressed = false;
+		if (_isDownPressed && _isUpPressed) {
+			velocityComponent->speedY = 0.0;
+			return;
 		}
 
 		if (_isUpPressed) {
@@ -164,9 +165,12 @@ namespace spacewar {
 			return;	
 		}
 
-		if (!_isDownPressed) {
-			velocityComponent->speedY = 0.0;
+		if (_isDownPressed) {
+			onDownPressed(true);
+			return;
 		}
+
+		velocityComponent->speedY = 0.0;
 	}
 
 	void PlayerControlSystem::onLeftPressed(bool isPressed) {
@@ -178,7 +182,8 @@ namespace spacewar {
 		}
 
 		if (_isLeftPressed && _isRightPressed) {
-			_isRightPressed = false;
+			velocityComponent->speedX = 0.0;
+			return;
 		}
 
 		if (_isLeftPressed) {
@@ -186,9 +191,12 @@ namespace spacewar {
 			return;	
 		}
 
-		if (!_isRightPressed) {
-			velocityComponent->speedX = 0.0;
+		if (_isRightPressed) {
+			onRightPressed(true);
+			return;
 		}
+
+		velocityComponent->speedX = 0.0;
 	}
 
 	void PlayerControlSystem::onDownPressed(bool isPressed) {
@@ -199,8 +207,9 @@ namespace spacewar {
 			return;
 		}
 
-		if (_isUpPressed && _isDownPressed) {
-			_isUpPressed = false;
+		if (_isDownPressed && _isUpPressed) {
+			velocityComponent->speedY = 0.0;
+			return;
 		}
 
 		if (_isDownPressed) {
@@ -208,9 +217,12 @@ namespace spacewar {
 			return;	
 		}
 
-		if (!_isUpPressed) {
-			velocityComponent->speedY = 0.0;
+		if (_isUpPressed) {
+			onUpPressed(true);
+			return;
 		}
+
+		velocityComponent->speedY = 0.0;
 	}
 
 	void PlayerControlSystem::onRightPressed(bool isPressed) {
@@ -222,16 +234,20 @@ namespace spacewar {
 		}
 
 		if (_isLeftPressed && _isRightPressed) {
-			_isLeftPressed = false;
+			velocityComponent->speedX = 0.0;
+			return;
 		}
 
 		if (_isRightPressed) {
 			velocityComponent->speedX = speedX;
+			return;	
+		}
+
+		if (_isLeftPressed) {
+			onLeftPressed(true);
 			return;
 		}
 
-		if (!_isLeftPressed) {
-			velocityComponent->speedX = 0.0;
-		}
+		velocityComponent->speedX = 0.0;
 	}
 }
