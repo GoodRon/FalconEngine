@@ -1,6 +1,6 @@
 #include "SystemManager.h"
 
-#include "ISystem.h"
+#include "systems/ISystem.h"
 
 namespace falcon {
 

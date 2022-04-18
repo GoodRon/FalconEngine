@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.1)
 
-add_subdirectory(json)
-
 add_library(falcon 
 	STATIC
 	ObjectManager.cxx 
@@ -13,10 +11,10 @@ add_library(falcon
 	Entity.cxx
 	SystemManager.cxx
 	IEvent.cxx
-	IComponent.cxx
 	EventManager.cxx
-	ISystem.cxx
 	GameObject.cxx
+	components/IComponent.cxx
+	systems/ISystem.cxx
 	systems/RenderingSystem.cxx
 	systems/PlayerControlSystem.cxx)
 

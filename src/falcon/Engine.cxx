@@ -124,7 +124,7 @@ int Engine::run() {
 	// TODO make an option for restricting fps
 	while (_isRunning) {
 		_renderer->clearViewport();
-		//_objectManager->drawAll();
+		// TODO improve
 		_renderingSystem->drawEntites();
 		SDL_RenderPresent(_renderer->getContext());
 		

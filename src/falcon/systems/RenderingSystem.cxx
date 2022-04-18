@@ -1,6 +1,5 @@
 #include "RenderingSystem.h"
 
-#include "IComponent.h"
 #include "Entity.h"
 #include "Engine.h"
 #include "Frame.h"

@@ -95,6 +95,7 @@ private:
 		};
 	}
 
+	// TODO move to a separate functions
 	bool buildVisualComponent(
 		falcon::Entity* entity,
 		rapidjson::Value& document) const {

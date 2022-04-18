@@ -1,6 +1,6 @@
 #include "Entity.h"
 
-#include "IComponent.h"
+#include "components/IComponent.h"
 
 namespace falcon {
 

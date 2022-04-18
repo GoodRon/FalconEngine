@@ -1,7 +1,8 @@
 #include "PlayerControlSystem.h"
 
-#include "IComponent.h"
 #include "Entity.h"
+
+#include "components/IComponent.h"
 
 namespace falcon {
 
