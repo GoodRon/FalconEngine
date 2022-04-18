@@ -35,10 +35,10 @@ private:
 	firefly::Entity* findPlayer(int playerId) const;
 
 	void setAccelerationX(
-		int playerId, int accelerationX) const;
+		int playerId, double accelerationX) const;
 
 	void setAccelerationY(
-		int playerId, int accelerationY) const;
+		int playerId, double accelerationY) const;
 };
 
 }

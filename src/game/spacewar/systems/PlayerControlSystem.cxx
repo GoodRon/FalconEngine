@@ -47,8 +47,8 @@ bool PlayerControlSystem::onPlayerOneInput(
 	const std::shared_ptr<firefly::NativeEvent>& event) const {
 
 	const int playerId = 1;
-	const int accelerationX = 10;
-	const int accelerationY = 10;
+	const double accelerationX = 10.0;
+	const double accelerationY = 10.0;
 
 	auto sdlEvent = event->getSDLEvent();
 	switch (sdlEvent.type) {
@@ -74,16 +74,16 @@ bool PlayerControlSystem::onPlayerOneInput(
 		case SDL_KEYUP:
 			switch (sdlEvent.key.keysym.sym) {
 				case SDLK_w:
-					setAccelerationY(playerId, 0);
+					setAccelerationY(playerId, 0.0);
 					return true;
 				case SDLK_a:
-					setAccelerationX(playerId, 0);
+					setAccelerationX(playerId, 0.0);
 					return true;
 				case SDLK_s:
-					setAccelerationY(playerId, 0);
+					setAccelerationY(playerId, 0.0);
 					return true;
 				case SDLK_d:
-					setAccelerationX(playerId, 0);
+					setAccelerationX(playerId, 0.0);
 					return true;
 				default:
 					break;
@@ -100,8 +100,8 @@ bool PlayerControlSystem::onPlayerTwoInput(
 	const std::shared_ptr<firefly::NativeEvent>& event) const {
 
 	const int playerId = 2;
-	const int accelerationX = 10;
-	const int accelerationY = 10;
+	const double accelerationX = 10.0;
+	const double accelerationY = 10.0;
 
 	auto sdlEvent = event->getSDLEvent();
 	switch (sdlEvent.type) {
@@ -127,16 +127,16 @@ bool PlayerControlSystem::onPlayerTwoInput(
 		case SDL_KEYUP:
 			switch (sdlEvent.key.keysym.sym) {
 				case SDLK_i:
-					setAccelerationY(playerId, 0);
+					setAccelerationY(playerId, 0.0);
 					return true;
 				case SDLK_j:
-					setAccelerationX(playerId, 0);
+					setAccelerationX(playerId, 0.0);
 					return true;
 				case SDLK_k:
-					setAccelerationY(playerId, 0);
+					setAccelerationY(playerId, 0.0);
 					return true;
 				case SDLK_l:
-					setAccelerationX(playerId, 0);
+					setAccelerationX(playerId, 0.0);
 					return true;
 				default:
 					break;
@@ -163,7 +163,7 @@ firefly::Entity* PlayerControlSystem::findPlayer(int playerId) const {
 }
 
 void PlayerControlSystem::setAccelerationX(
-	int playerId, int accelerationX) const {
+	int playerId, double accelerationX) const {
 
 	firefly::Entity* playerEntity = findPlayer(playerId);
 	if (!playerEntity) {
@@ -178,7 +178,7 @@ void PlayerControlSystem::setAccelerationX(
 }
 
 void PlayerControlSystem::setAccelerationY(
-	int playerId, int accelerationY) const {
+	int playerId, double accelerationY) const {
 
 	firefly::Entity* playerEntity = findPlayer(playerId);
 	if (!playerEntity) {
