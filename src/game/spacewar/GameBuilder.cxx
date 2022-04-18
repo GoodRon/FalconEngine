@@ -2,19 +2,14 @@
 
 #include <SDL.h>
 
-#include "firefly/Engine.h"
-#include "firefly/SystemManager.h"
-#include "firefly/ResourceManager.h"
-#include "firefly/GameObject.h"
-#include "firefly/ObjectManager.h"
-#include "firefly/components/Health.h"
-#include "firefly/components/Position.h"
-#include "firefly/components/Visual.h"
-#include "firefly/components/State.h"
-#include "firefly/components/Player.h"
-#include "firefly/systems/PlayerControlSystem.h"
+#include <firefly/Engine.h>
+#include <firefly/SystemManager.h>
+#include <firefly/ResourceManager.h>
+#include <firefly/GameObject.h>
+#include <firefly/ObjectManager.h>
 
 #include "EntityBuilder.h"
+#include "systems/PlayerControlSystem.h"
 
 namespace spacewar {
 
@@ -67,9 +62,10 @@ private:
 			return false;
 		}
 
-		std::shared_ptr<firefly::PlayerControlSystem> playerControlSystem(
-			new firefly::PlayerControlSystem(_engine));
+		std::shared_ptr<PlayerControlSystem> playerControlSystem(
+			new PlayerControlSystem(_engine));
 		systemManager->addSystem(playerControlSystem);
+		
 		// TODO write me!
 
 		return true;
@@ -80,6 +76,8 @@ private:
 		if (!objectManager) {
 			return false;
 		}
+
+		// TODO while on a json list
 
 		std::shared_ptr<firefly::Entity> entity;
 		EntityBuilder builder(_engine);

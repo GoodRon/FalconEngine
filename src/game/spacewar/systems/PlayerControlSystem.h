@@ -8,6 +8,11 @@
 
 #include <firefly/systems/ISystem.h>
 
+namespace firefly {
+	class Entity;
+	class NativeEvent;
+}
+
 namespace spacewar {
 
 class PlayerControlSystem: public firefly::ISystem {
@@ -20,6 +25,20 @@ public:
 
 	bool onEvent(
 		const std::shared_ptr<firefly::IEvent>& event) const override;
+
+private:
+	bool onPlayerOneInput(
+		const std::shared_ptr<firefly::NativeEvent>& event) const;
+	bool onPlayerTwoInput(
+		const std::shared_ptr<firefly::NativeEvent>& event) const;
+
+	firefly::Entity* findPlayer(int playerId) const;
+
+	void setAccelerationX(
+		int playerId, int accelerationX) const;
+
+	void setAccelerationY(
+		int playerId, int accelerationY) const;
 };
 
 }

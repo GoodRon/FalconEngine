@@ -8,16 +8,17 @@
 
 namespace firefly {
 
-class Velocity: public IComponent final {
+class Velocity final: public IComponent {
 public:
     inline static const std::string ComponentName = "Velocity";
     
     Velocity(): IComponent(ComponentName) {}
     ~Velocity() override = default;
 
-    int x = 0;
-    int y = 0;
-    // acceleration?
+    int speedX = 0;
+    int speedY = 0;
+    int accelerationX = 0;
+    int accelerationY = 0;
 };
 
 }
