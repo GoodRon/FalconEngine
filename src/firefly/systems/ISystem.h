@@ -34,7 +34,7 @@ public:
 	virtual void update();
 
 	virtual bool onEvent(
-		const std::shared_ptr<IEvent>& event) const = 0;
+		const std::shared_ptr<IEvent>& event) = 0;
 
 protected:
 	bool checkComponents(Entity* entity) const;
@@ -46,6 +46,7 @@ protected:
 	Engine* const _engine;
 	std::forward_list<std::string> _requiredComponents;
 	std::unordered_map<EntityID, Entity*> _entities;
+	uint64_t _updateTimepoint;
 };
 
 }

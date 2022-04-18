@@ -9,8 +9,11 @@
 #include "firefly/Entity.h"
 #include "firefly/Frame.h"
 #include "firefly/GameObject.h"
+
 #include "firefly/components/Visual.h"
 #include "firefly/components/Position.h"
+#include "firefly/components/Velocity.h"
+#include "firefly/components/Player.h"
 
 #include "rapidjson/document.h"
 
@@ -82,16 +85,28 @@ public:
 
 private:
 	void registerComponentBuilders() {
-		_componentBuilders["Visual"] = [this](
+		_componentBuilders[firefly::Visual::ComponentName] = [this](
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildVisualComponent(entity, document);
 		};
 
-		_componentBuilders["Position"] = [this](
+		_componentBuilders[firefly::Position::ComponentName] = [this](
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildPositionComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::Velocity::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildVelocityComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::Player::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildPlayerComponent(entity, document);
 		};
 	}
 
@@ -161,11 +176,38 @@ private:
 
 		std::unique_ptr<firefly::Position> component(new firefly::Position);
 
-		component->x = document["x"].GetInt();
-		component->y = document["y"].GetInt();
-		component->width = document["width"].GetInt();
-		component->height = document["height"].GetInt();
+		component->x = document["x"].GetDouble();
+		component->y = document["y"].GetDouble();
+		component->width = document["width"].GetDouble();
+		component->height = document["height"].GetDouble();
 		component->scale = document["scale"].GetDouble();
+
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildVelocityComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::Velocity> component(new firefly::Velocity);
+
+		component->speedX = document["speedX"].GetDouble();
+		component->speedY = document["speedY"].GetDouble();
+		component->accelerationX = document["accelerationX"].GetDouble();
+		component->accelerationY = document["accelerationY"].GetDouble();
+
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildPlayerComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::Player> component(new firefly::Player);
+
+		component->playerId = document["playerId"].GetInt();
 
 		entity->addComponent(std::move(component));
 		return true;

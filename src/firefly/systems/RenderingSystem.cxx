@@ -45,10 +45,10 @@ void RenderingSystem::drawEntites() const {
 }
 
 bool RenderingSystem::onEvent(
-    const std::shared_ptr<IEvent>& event) const {
+    const std::shared_ptr<IEvent>& event) {
 
 	// TODO write me
-	return true;
+	return false;
 }
 
 void RenderingSystem::lockEntities() const {

@@ -24,18 +24,33 @@ public:
 	PlayerControlSystem(const PlayerControlSystem&) = delete;
 	PlayerControlSystem& operator=(const PlayerControlSystem&) = delete;
 
+	void setKeyCodes(int keyUp, int keyLeft, int keyDown, int keyRight);
+
 	bool onEvent(
-		const std::shared_ptr<firefly::IEvent>& event) const override;
+		const std::shared_ptr<firefly::IEvent>& event) override;
 
 private:
-	bool onPlayerOneInput(
-		const std::shared_ptr<firefly::NativeEvent>& event) const;
-	bool onPlayerTwoInput(
-		const std::shared_ptr<firefly::NativeEvent>& event) const;
+	bool onPlayerInput(
+		const std::shared_ptr<firefly::NativeEvent>& event);
 
 	firefly::Entity* findPlayer(int playerId) const;
 
 	firefly::Velocity* getVelocity(int playerId) const;
+
+	void onUpPressed(bool isPressed);
+	void onLeftPressed(bool isPressed);
+	void onDownPressed(bool isPressed);
+	void onRightPressed(bool isPressed);
+
+private:
+	int _keyCodeUp;
+	int _keyCodeLeft;
+	int _keyCodeDown;
+	int _keyCodeRight;
+	bool _isUpPressed;
+	bool _isLeftPressed;
+	bool _isDownPressed;
+	bool _isRightPressed;
 };
 
 }

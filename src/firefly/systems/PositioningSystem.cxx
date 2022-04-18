@@ -1,5 +1,8 @@
 #include "PositioningSystem.h"
 
+#include <SDL_timer.h>
+#include <SDL_log.h>
+
 #include "Entity.h"
 
 #include "components/Position.h"
@@ -21,6 +24,10 @@ void PositioningSystem::update() {
 	Position* position = nullptr;
 	Velocity* velocity = nullptr;
 
+	const uint64_t timepoint = SDL_GetTicks64();
+	const uint64_t elapsedMs = timepoint - _updateTimepoint;
+	_updateTimepoint = timepoint;
+
 	for (auto& entity: _entities) {
 		position = static_cast<Position*>(
 			entity.second->getComponent(
@@ -30,12 +37,12 @@ void PositioningSystem::update() {
 			entity.second->getComponent(
 				getComponentId(Velocity::ComponentName)));
 
-		processPosition(position, velocity);
+		processPosition(position, velocity, elapsedMs);
 	}
 }
 
 bool PositioningSystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) const {
+	const std::shared_ptr<firefly::IEvent>& event) {
 
 	// TODO write me!
 
@@ -43,13 +50,17 @@ bool PositioningSystem::onEvent(
 }
 
 void PositioningSystem::processPosition(
-        Position* position, Velocity* velocity) const {
+        Position* position, Velocity* velocity, uint64_t elapsedMs) const {
 	if (!position || !velocity) {
 		return;
 	}
 
-	position->x += velocity->speedX;
-	position->y += velocity->speedY;
+	position->x += velocity->speedX * elapsedMs / 1000.0;
+	position->y += velocity->speedY * elapsedMs / 1000.0;
+
+	//if (velocity->speedX > 0.0)
+	//	SDL_Log("speedX %f", velocity->speedX);
+
 }
 
 }

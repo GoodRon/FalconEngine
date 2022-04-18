@@ -24,11 +24,12 @@ public:
     void update() override;
 
     bool onEvent(
-        const std::shared_ptr<IEvent>& event) const override;
+        const std::shared_ptr<IEvent>& event) override;
 
 private:
     void processPosition(
-        Position* position, Velocity* velocity) const;
+        Position* position, Velocity* velocity, 
+        uint64_t elapsedMs) const;
 };
 
 }

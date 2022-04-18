@@ -39,8 +39,14 @@ void SystemManager::unregisterEntity(EntityID id) {
 	}
 }
 
+void SystemManager::update() {
+	for (auto& sys: _systems) {
+		sys.second->update();
+	}
+}
+
 bool SystemManager::onEvent(
-		const std::shared_ptr<IEvent>& event) const {
+		const std::shared_ptr<IEvent>& event) {
 	for (auto& sys: _systems) {
 		if (sys.second->onEvent(event)) {
 			return true;

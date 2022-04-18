@@ -28,7 +28,7 @@ void VelocitySystem::update() {
 }
 
 bool VelocitySystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) const {
+	const std::shared_ptr<firefly::IEvent>& event) {
 
 	// TODO write me!
 
@@ -42,8 +42,8 @@ void VelocitySystem::processVelocity(Velocity* velocity) const {
 
 	// TODO Improve
 
-	velocity->speedX += velocity->speedX;
-	velocity->speedY += velocity->speedY;
+	velocity->speedX += velocity->accelerationX;
+	velocity->speedY += velocity->accelerationY;
 }
 
 }

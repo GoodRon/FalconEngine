@@ -20,15 +20,17 @@ public:
     ~Position() override = default;
 
     SDL_Rect toRect() {
-        return SDL_Rect{x, y, 
+        return SDL_Rect{ 
+            static_cast<int>(x), 
+            static_cast<int>(y),
             static_cast<int>(width * scale), 
             static_cast<int>(height * scale)};
     }
 
-	int x = 0;
-	int y = 0;
-    int width = 0;
-    int height = 0;
+	double x = 0.0;
+	double y = 0.0;
+    double width = 0.0;
+    double height = 0.0;
     double scale = 0.0;
 };
 

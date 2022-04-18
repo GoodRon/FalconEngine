@@ -1,5 +1,7 @@
 #include "ISystem.h"
 
+#include <SDL_timer.h>
+
 #include "Entity.h"
 #include "components/IComponent.h"
 
@@ -10,7 +12,8 @@ ISystem::ISystem(const std::string& name,
 	_name(name), 
 	_engine(engine),
 	_requiredComponents(),
-	_entities() {
+	_entities(),
+	_updateTimepoint(SDL_GetTicks64()) {
 }
 		
 ISystem::~ISystem() {
@@ -46,6 +49,7 @@ void ISystem::unregisterEntity(EntityID id) {
 }
 
 void ISystem::update() {
+	_updateTimepoint = SDL_GetTicks64();
 }
 
 bool ISystem::checkComponents(Entity* entity) const {

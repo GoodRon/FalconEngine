@@ -42,12 +42,14 @@ bool Engine::initialize(int width, int height) {
 	_eventManager.reset(new EventManager(_systemManager.get()));
 
 	// TODO fix this
+	/*
 	_timerPool->addTimer(10, [this](TimerPool::id_t) {
 		if (!_objectManager) {
 			return;
 		}
 		//_objectManager->updateAll();
 	});
+	*/
 
 	_renderingSystem.reset(
 		new firefly::RenderingSystem(this));
@@ -99,12 +101,13 @@ int Engine::run() {
 	std::thread logicThread([this](){
 		// TODO use accurate timers here
 
-		const Uint32 delayMs = 5;
+		const Uint32 delayMs = 33;
 		std::queue<SDL_Event> events;
 
 		while (_isRunning) {
 
 			_timerPool->check();
+			_systemManager->update();
 
 			if (_isEventAwaiting) {
 				std::lock_guard<std::mutex> locker(_eventMutex);
@@ -118,7 +121,8 @@ int Engine::run() {
 			}
 
 			// TODO calculate delay instead of using the constant value
-			SDL_Delay(delayMs);
+			//SDL_Delay(delayMs);
+			SDL_Delay(1);
 		}
 	});
 	

@@ -33,8 +33,10 @@ public:
 	void registerEntity(Entity* entity);
 	void unregisterEntity(EntityID id);
 
+	void update();
+
 	bool onEvent(
-		const std::shared_ptr<IEvent>& event) const;
+		const std::shared_ptr<IEvent>& event);
 
 	void clear();
 

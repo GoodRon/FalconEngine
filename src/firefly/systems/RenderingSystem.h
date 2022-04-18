@@ -27,7 +27,7 @@ public:
     void drawEntites() const;
 
     bool onEvent(
-        const std::shared_ptr<IEvent>& event) const override;
+        const std::shared_ptr<IEvent>& event) override;
 
 private:
     void lockEntities() const override;
