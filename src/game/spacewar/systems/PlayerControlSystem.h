@@ -29,6 +29,8 @@ public:
 
 	void setKeyCodes(int keyUp, int keyLeft, int keyDown, int keyRight);
 
+	void update() override;
+
 	bool onEvent(
 		const std::shared_ptr<firefly::IEvent>& event) override;
 
@@ -41,10 +43,11 @@ private:
 	firefly::Velocity* getVelocity(int playerId) const;
 	firefly::Position* getPosition(int playerId) const;
 
-	void onUpPressed(bool isPressed);
-	void onLeftPressed(bool isPressed);
-	void onDownPressed(bool isPressed);
-	void onRightPressed(bool isPressed);
+	void processPressed(uint64_t elapsedMs);
+	void onUpPressed(uint64_t elapsedMs);
+	void onLeftPressed(uint64_t elapsedMs);
+	void onDownPressed(uint64_t elapsedMs);
+	void onRightPressed(uint64_t elapsedMs);
 
 	void setSpeedX(double speedX);
 	void setSpeedY(double speedY);

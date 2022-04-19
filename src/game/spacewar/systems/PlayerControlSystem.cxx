@@ -1,6 +1,7 @@
 #include "PlayerControlSystem.h"
 
 #include <SDL_events.h>
+#include <SDL_timer.h>
 
 #include <firefly/Entity.h>
 #include <firefly/events/NativeEvent.h>
@@ -13,7 +14,7 @@ namespace spacewar {
 	// TODO remove from here
 	const double speed = 90.0;
 	const double acceleration = 15.0;
-	const double angleDelta = 5.0;
+	const double angleDelta = 45.0;
 
 	PlayerControlSystem::PlayerControlSystem(
 		firefly::Engine* engine, int playerId, const std::string suffix) :
@@ -42,10 +43,18 @@ namespace spacewar {
 		_keyCodeDown = keyDown;
 		_keyCodeRight = keyRight;
 
-		onUpPressed(false);
-		onLeftPressed(false);
-		onDownPressed(false);
-		onRightPressed(false);
+		_isUpPressed = false;
+		_isLeftPressed = false;
+		_isDownPressed = false;
+		_isRightPressed = false;
+	}
+
+	void PlayerControlSystem::update() {
+		const uint64_t timepoint = SDL_GetTicks64();
+		const uint64_t elapsedMs = timepoint - _updateTimepoint;
+		_updateTimepoint = timepoint;
+
+		processPressed(elapsedMs);
 	}
 
 	bool PlayerControlSystem::onEvent(
@@ -76,22 +85,22 @@ namespace spacewar {
 		case SDL_KEYDOWN:
 			keyCode = sdlEvent.key.keysym.sym;
 			if (_keyCodeUp == keyCode) {
-				onUpPressed(true);
+				_isUpPressed = true;
 				return true;
 			}
 			
 			if (_keyCodeLeft == keyCode) {
-				onLeftPressed(true);
+				_isLeftPressed = true;
 				return true;
 			}
 
 			if (_keyCodeDown == keyCode) {
-				onDownPressed(true);
+				_isDownPressed = true;
 				return true;
 			}
 
 			if (_keyCodeRight == keyCode) {
-				onRightPressed(true);
+				_isRightPressed = true;
 				return true;
 			}
 			break;
@@ -99,22 +108,22 @@ namespace spacewar {
 		case SDL_KEYUP:
 			keyCode = sdlEvent.key.keysym.sym;
 			if (_keyCodeUp == keyCode) {
-				onUpPressed(false);
+				_isUpPressed = false;
 				return true;
 			}
 			
 			if (_keyCodeLeft == keyCode) {
-				onLeftPressed(false);
+				_isLeftPressed = false;
 				return true;
 			}
 			
 			if (_keyCodeDown == keyCode) {
-				onDownPressed(false);
+				_isDownPressed = false;
 				return true;
 			}
 
 			if (_keyCodeRight == keyCode) {
-				onRightPressed(false);
+				_isRightPressed = false;
 				return true;
 			}
 			break;
@@ -162,9 +171,14 @@ namespace spacewar {
 		return component;
 	}
 
-	void PlayerControlSystem::onUpPressed(bool isPressed) {
-		_isUpPressed = isPressed;
+	void PlayerControlSystem::processPressed(uint64_t elapsedMs) {
+		onUpPressed(elapsedMs);
+		onLeftPressed(elapsedMs);
+		onDownPressed(elapsedMs);
+		onRightPressed(elapsedMs);
+	}
 
+	void PlayerControlSystem::onUpPressed(uint64_t elapsedMs) {
 		if (_isUpPressed) {
 			setAcceleration(acceleration);
 			return;	
@@ -173,43 +187,39 @@ namespace spacewar {
 		setAcceleration(0.0);
 	}
 
-	void PlayerControlSystem::onLeftPressed(bool isPressed) {
-		_isLeftPressed = isPressed;
-
+	void PlayerControlSystem::onLeftPressed(uint64_t elapsedMs) {
 		if (_isLeftPressed && _isRightPressed) {
 			return;
 		}
 
 		if (_isLeftPressed) {
-			rotate(-angleDelta);
+			rotate(-angleDelta * elapsedMs / 1000.0);
 			return;	
 		}
 
 		if (_isRightPressed) {
-			onRightPressed(true);
+			onRightPressed(elapsedMs);
 			return;
 		}
 	}
 
-	void PlayerControlSystem::onDownPressed(bool isPressed) {
-		_isDownPressed = isPressed;
+	void PlayerControlSystem::onDownPressed(uint64_t elapsedMs) {
 
 	}
 
-	void PlayerControlSystem::onRightPressed(bool isPressed) {
-		_isRightPressed = isPressed;
+	void PlayerControlSystem::onRightPressed(uint64_t elapsedMs) {
 
 		if (_isLeftPressed && _isRightPressed) {
 			return;
 		}
 
 		if (_isRightPressed) {
-			rotate(angleDelta);
+			rotate(angleDelta * elapsedMs / 1000.0);
 			return;	
 		}
 
 		if (_isLeftPressed) {
-			onLeftPressed(true);
+			onLeftPressed(elapsedMs);
 			return;
 		}
 	}
