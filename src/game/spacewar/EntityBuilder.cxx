@@ -49,6 +49,8 @@ public:
 			return nullptr;
 		}
 
+		// TODO check if the document is a valid json
+
 		std::ifstream jsonFile;
 		jsonFile.open(jsonConfig);
 		if (!jsonFile.good()) {
@@ -125,6 +127,7 @@ private:
 		}
 
 		std::unique_ptr<firefly::Visual> component(new firefly::Visual);
+		component->zIndex = document["zIndex"].GetInt();
 
 		for (auto& state: document["states"].GetArray()) {
 			const auto stateName = std::string(state["name"].GetString());
@@ -137,12 +140,12 @@ private:
 			}
 
 			SDL_Rect frameRect;
-			frameRect.w = state["frame_width"].GetInt();
-			frameRect.h = state["frame_height"].GetInt();
-			int duration = state["frame_duration"].GetInt();
+			frameRect.w = state["frameWidth"].GetInt();
+			frameRect.h = state["frameHeight"].GetInt();
+			int duration = state["frameDuration"].GetInt();
 
 			firefly::Visual::State visualState;
-			visualState.isLooped = state["is_looped"].GetBool();
+			visualState.isLooped = state["isLooped"].GetBool();
 
 			for (auto& frameLine: state["frames"].GetArray()) {
 				const int direction = frameLine["direction"].GetInt();

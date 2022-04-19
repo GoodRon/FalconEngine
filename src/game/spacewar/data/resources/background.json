@@ -1,0 +1,38 @@
+{
+	"name": "background",
+	"components": [
+		{
+			"name": "Visual",
+			"zIndex": -1,
+			"states": [
+				{
+					"name": "Idle",
+					"texture": "resources/background.png",
+					"frameWidth": 1664,
+					"frameHeight": 1149,
+					"frameDuration": 0,
+					"isLooped": true,
+					"frames" : [
+						{
+							"direction": 0,
+							"row": 0,
+							"col": 0,
+							"amount": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Position",
+			"x": 0.0,
+			"y": 0.0,
+			"centerX": 0.0,
+			"centerY": 0.0,
+			"width": 1664.0,
+			"height": 1149.0,
+			"scale": 1,
+			"angle": 0.0
+		}
+	]
+}

@@ -12,6 +12,7 @@ namespace firefly {
 	class Entity;
 	class Velocity;
 	class Position;
+	class Visual;
 	class NativeEvent;
 }
 
@@ -42,6 +43,7 @@ private:
 
 	firefly::Velocity* getVelocity(int playerId) const;
 	firefly::Position* getPosition(int playerId) const;
+	firefly::Visual* getVisual(int playerId) const;
 
 	void processPressed(uint64_t elapsedMs);
 	void onUpPressed(uint64_t elapsedMs);

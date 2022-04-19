@@ -8,6 +8,7 @@
 #include <firefly/components/Player.h>
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Position.h>
+#include <firefly/components/Visual.h>
 
 namespace spacewar {
 
@@ -171,6 +172,18 @@ namespace spacewar {
 		return component;
 	}
 
+	firefly::Visual* PlayerControlSystem::getVisual(int playerId) const {
+		firefly::Entity* playerEntity = findPlayer(playerId);
+		if (!playerEntity) {
+			return nullptr;
+		}
+
+		auto component = static_cast<firefly::Visual*>(
+			playerEntity->getComponent(
+				firefly::getComponentId(firefly::Visual::ComponentName)));
+		return component;
+	}
+
 	void PlayerControlSystem::processPressed(uint64_t elapsedMs) {
 		onUpPressed(elapsedMs);
 		onLeftPressed(elapsedMs);
@@ -179,12 +192,23 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::onUpPressed(uint64_t elapsedMs) {
+		// TODO move from here
+		auto visualComponent = getVisual(_playerId);
+
 		if (_isUpPressed) {
 			setAcceleration(acceleration);
-			return;	
-		}
+
+			if (visualComponent) {
+				visualComponent->currentState = "Moving";
+			}
+			return;
+		} 
 
 		setAcceleration(0.0);
+		
+		if (visualComponent) {
+			visualComponent->currentState = "Idle";
+		}
 	}
 
 	void PlayerControlSystem::onLeftPressed(uint64_t elapsedMs) {

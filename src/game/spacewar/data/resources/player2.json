@@ -3,14 +3,15 @@
 	"components": [
 		{
 			"name": "Visual",
+			"zIndex": 0,
 			"states": [
 				{
 					"name": "Idle",
 					"texture": "resources/player2.png",
-					"frame_width": 66,
-					"frame_height": 88,
-					"frame_duration": 1000,
-					"is_looped": true,
+					"frameWidth": 66,
+					"frameHeight": 88,
+					"frameDuration": 1000,
+					"isLooped": true,
 					"frames" : [
 						{
 							"direction": 0,
@@ -23,10 +24,10 @@
 				{
 					"name": "Moving",
 					"texture": "resources/player2.png",
-					"frame_width": 66,
-					"frame_height": 88,
-					"frame_duration": 1000,
-					"is_looped": true,
+					"frameWidth": 66,
+					"frameHeight": 88,
+					"frameDuration": 1000,
+					"isLooped": true,
 					"frames" : [
 						{
 							"direction": 0,
@@ -46,7 +47,7 @@
 			"centerY": 32.0,
 			"width": 66.0,
 			"height": 88.0,
-			"scale": 0.8,
+			"scale": 0.5,
 			"angle": 270.0
 		},
 		{

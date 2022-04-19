@@ -95,12 +95,16 @@ private:
 		// TODO while on a json list
 
 		std::shared_ptr<firefly::Entity> entity;
+		std::shared_ptr<firefly::GameObject> object;
 		EntityBuilder builder(_engine);
 
-		entity = builder.buildEntity("resources/player1.json");
-
 		// TODO improve
-		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(entity));
+		entity = builder.buildEntity("resources/background.json");
+		object.reset(new firefly::GameObject(entity));
+		objectManager->registerObject(object);
+
+		entity = builder.buildEntity("resources/player1.json");
+		object.reset(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
 
 		entity = builder.buildEntity("resources/player2.json");
