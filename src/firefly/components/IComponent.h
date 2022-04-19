@@ -13,12 +13,18 @@
 
 namespace firefly {
 
+// TODO remove
 ComponentID getComponentId(const std::string& name);
 
 class IComponent {
 public:
 	IComponent(const std::string& name);
-	virtual ~IComponent() = 0;
+	virtual ~IComponent() = default;
+
+	IComponent(const IComponent&) = default;
+	IComponent& operator=(const IComponent&) = default;
+
+	virtual IComponent* clone() const = 0;
 
 	const std::string getName() const;
 	ComponentID getId() const;

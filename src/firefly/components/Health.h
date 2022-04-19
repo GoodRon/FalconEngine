@@ -12,10 +12,17 @@ namespace firefly {
 
 class Health final: public IComponent {
 public:
-    inline static const std::string ComponentName = "Health";
-    
-    Health(): IComponent(ComponentName) {}
-    ~Health() override = default;
+	inline static const std::string ComponentName = "Health";
+	
+	Health(): IComponent(ComponentName) {}
+	~Health() override = default;
+
+	Health(const Health&) = default;
+	Health& operator=(const Health&) = default;
+
+	IComponent* clone() const override {
+		return new Health;
+	}
 
 	int max = 0;
 	int current = 0;

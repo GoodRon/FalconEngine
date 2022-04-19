@@ -17,6 +17,13 @@ public:
 	Solidity(): IComponent(ComponentName) {}
 	~Solidity() override = default;
 
+	Solidity(const Solidity&) = default;
+	Solidity& operator=(const Solidity&) = default;
+
+	IComponent* clone() const override {
+		return new Solidity;
+	}
+
 	bool isSolid = false;
 	bool isDestructable = false;
 	// collision box

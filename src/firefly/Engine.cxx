@@ -8,6 +8,7 @@
 #include <SDL.h>
 
 #include "Engine.h"
+#include "Entity.h"
 #include "TimerPool.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
@@ -15,9 +16,11 @@
 #include "EngineException.h"
 #include "SystemManager.h"
 #include "EventManager.h"
+#include "EntityRegistry.h"
 
 #include "systems/RenderingSystem.h"
 #include "events/NativeEvent.h"
+#include "components/IComponent.h"
 
 namespace firefly {
 
@@ -37,6 +40,7 @@ bool Engine::initialize(int width, int height) {
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
 	_objectManager.reset(new ObjectManager(_systemManager.get()));
+	_entityRegistry.reset(new EntityRegistry);
 	_timerPool.reset(new TimerPool);
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
@@ -70,6 +74,7 @@ Engine::Engine():
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
+	_entityRegistry(),
 	_systemManager(),
 	_eventManager(),
 	_renderingSystem(),
@@ -170,6 +175,10 @@ ResourceManager* Engine::getResourceManager() const {
 
 ObjectManager* Engine::getObjectManager() const {
 	return _objectManager.get();
+}
+
+EntityRegistry* Engine::getEntityRegistry() const {
+	return _entityRegistry.get();
 }
 
 SystemManager* Engine::getSystemManager() const {

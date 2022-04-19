@@ -17,6 +17,13 @@ public:
 	Gravity(): IComponent(ComponentName) {}
 	~Gravity() override = default;
 
+	Gravity(const Gravity&) = default;
+	Gravity& operator=(const Gravity&) = default;
+
+	IComponent* clone() const override {
+		return new Gravity;
+	}
+
 	bool hasGravity = false;
 	bool emitGravity = false;
 	double mass = 100000000.0;

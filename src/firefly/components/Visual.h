@@ -16,27 +16,34 @@ class Frame;
 
 class Visual final: public IComponent {
 public:
-    inline static const std::string ComponentName = "Visual";
+	inline static const std::string ComponentName = "Visual";
 
-    Visual(): IComponent(ComponentName) {}
-    ~Visual() override = default;
+	Visual(): IComponent(ComponentName) {}
+	~Visual() override = default;
 
-    using StateName = std::string;
-    using Direction = int;
-    using Frames = std::vector<std::shared_ptr<Frame>>;
+	Visual(const Visual&) = default;
+	Visual& operator=(const Visual&) = default;
+
+	IComponent* clone() const override {
+		return new Visual;
+	}
+
+	using StateName = std::string;
+	using Direction = int;
+	using Frames = std::vector<std::shared_ptr<Frame>>;
 	
-    struct State {
-        std::unordered_map<Direction, Frames> frames;
-        bool isLooped = true;
-    };
+	struct State {
+		std::unordered_map<Direction, Frames> frames;
+		bool isLooped = true;
+	};
 
-    StateName currentState = "Idle";
-    Direction currentDirection = 0;
-    size_t frameIndex = 0; 
-    std::unordered_map<StateName, State> states;
-    bool isPaused = false;
-    bool isVisible = false;
-    int zIndex = 0;
+	StateName currentState = "Idle";
+	Direction currentDirection = 0;
+	size_t frameIndex = 0; 
+	std::unordered_map<StateName, State> states;
+	bool isPaused = false;
+	bool isVisible = false;
+	int zIndex = 0;
 };
 
 }

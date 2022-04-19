@@ -24,9 +24,6 @@ IComponent::IComponent(const std::string& name):
 	_id(getComponentId(name)) {
 }
 
-IComponent::~IComponent() {
-}
-
 const std::string IComponent::getName() const {
 	return _name;
 }

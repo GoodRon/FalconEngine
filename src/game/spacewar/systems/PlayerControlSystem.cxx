@@ -228,7 +228,7 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::onDownPressed(uint64_t elapsedMs) {
-
+		//shootRocket();
 	}
 
 	void PlayerControlSystem::onRightPressed(uint64_t elapsedMs) {
@@ -274,6 +274,16 @@ namespace spacewar {
 
 		velocityComponent->acceleration = acceleration;
 	}
+
+	/*
+	void PlayerControlSystem::shootRocket() {
+		auto positionComponent = getPosition(_playerId);
+		if (!positionComponent) {
+			return;
+		}
+
+		
+	}*/
 
 	void PlayerControlSystem::rotate(double angle) {
 		auto positionComponent = getPosition(_playerId);

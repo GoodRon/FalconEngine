@@ -15,7 +15,26 @@ Entity::Entity(const std::string& name):
 	_components() {
 }
 
-Entity::~Entity() {
+// TODO check
+Entity::Entity(const Entity& other) {
+	operator=(other);
+}
+
+Entity& Entity::operator=(const Entity& other) {
+	if (&other == this) {
+		return *this;
+	}
+
+	_id = nextId();
+	_name = other._name;
+	_components.clear();
+
+	std::unique_ptr<IComponent> ptr;
+	for (auto& component: other._components) {
+		ptr.reset(component.second->clone());
+		_components[component.first] = std::move(ptr);
+	}
+	return *this;
 }
 
 EntityID Entity::getId() const {

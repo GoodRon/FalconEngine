@@ -12,15 +12,22 @@ namespace firefly {
 
 class State: public IComponent {
 public:
-    inline static const std::string ComponentName = "State";
+	inline static const std::string ComponentName = "State";
 
-    State(): IComponent(ComponentName) {}
-    ~State() override = default;
+	State(): IComponent(ComponentName) {}
+	~State() override = default;
 
-    using StateID = int;
+	State(const State&) = default;
+	State& operator=(const State&) = default;
+
+	IComponent* clone() const override {
+		return new State;
+	}
+
+	using StateID = int;
 	
-    StateID id = 0;
-    StateID previousId = 0;
+	StateID id = 0;
+	StateID previousId = 0;
 };
 
 }

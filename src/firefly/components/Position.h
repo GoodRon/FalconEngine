@@ -14,34 +14,41 @@ namespace firefly {
 
 class Position final: public IComponent {
 public:
-    inline static const std::string ComponentName = "Position";
-    
-    Position(): IComponent(ComponentName) {}
-    ~Position() override = default;
+	inline static const std::string ComponentName = "Position";
+	
+	Position(): IComponent(ComponentName) {}
+	~Position() override = default;
 
-    SDL_Rect toRect() {
-        return SDL_Rect{ 
-            static_cast<int>(x), 
-            static_cast<int>(y),
-            static_cast<int>(width * scale), 
-            static_cast<int>(height * scale)};
-    }
+	Position(const Position&) = default;
+	Position& operator=(const Position&) = default;
 
-    SDL_Point center() {
-        return SDL_Point{
-            static_cast<int>(centerX * scale),
-            static_cast<int>(centerY * scale)
-        };
-    }
+	IComponent* clone() const override {
+		return new Position;
+	}
+
+	SDL_Rect toRect() {
+		return SDL_Rect{ 
+			static_cast<int>(x), 
+			static_cast<int>(y),
+			static_cast<int>(width * scale), 
+			static_cast<int>(height * scale)};
+	}
+
+	SDL_Point center() {
+		return SDL_Point{
+			static_cast<int>(centerX * scale),
+			static_cast<int>(centerY * scale)
+		};
+	}
 
 	double x = 0.0;
 	double y = 0.0;
-    double width = 0.0;
-    double height = 0.0;
-    double centerX = 0.0;
-    double centerY = 0.0;
-    double scale = 0.0;
-    double angle = 0.0;
+	double width = 0.0;
+	double height = 0.0;
+	double centerX = 0.0;
+	double centerY = 0.0;
+	double scale = 0.0;
+	double angle = 0.0;
 };
 
 }

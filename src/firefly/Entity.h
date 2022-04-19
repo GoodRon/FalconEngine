@@ -19,7 +19,10 @@ class IComponent;
 class Entity {
 public:
 	Entity(const std::string& name = "");
-	~Entity();
+	~Entity() = default;
+
+	Entity(const Entity& other);
+	Entity& operator=(const Entity& other);
 
 	Entity(Entity&&) = default;
 	Entity& operator=(Entity&&) = default;
@@ -33,7 +36,7 @@ public:
 
 private:
 	EntityID _id;
-	const std::string _name;
+	std::string _name;
 	std::unordered_map<ComponentID, std::unique_ptr<IComponent>> _components;
 };
 
