@@ -8,10 +8,10 @@
 #include <firefly/GameObject.h>
 #include <firefly/ObjectManager.h>
 #include <firefly/systems/VelocitySystem.h>
-#include <firefly/systems/PositioningSystem.h>
 
 #include "EntityBuilder.h"
 #include "systems/PlayerControlSystem.h"
+#include "systems/PositioningSystem.h"
 
 namespace spacewar {
 
@@ -78,7 +78,7 @@ private:
 		systemPtr.reset(new firefly::VelocitySystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 
-		systemPtr.reset(new firefly::PositioningSystem(_engine));
+		systemPtr.reset(new PositioningSystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 		
 		// TODO write me!

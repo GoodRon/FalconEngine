@@ -17,7 +17,6 @@ add_library(firefly
 	components/IComponent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx
-	systems/VelocitySystem.cxx
-	systems/PositioningSystem.cxx)
+	systems/VelocitySystem.cxx)
 
 target_link_libraries(firefly SDL2::Core SDL2::Image)
