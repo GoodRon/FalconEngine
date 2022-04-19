@@ -18,11 +18,14 @@ public:
     ~Velocity() override = default;
 
     // TODO improve
+    double speed = 0.0;
+    double speedAngle = 0.0;
+    double maxSpeed = 0.0;
+    double acceleration = 0.0;
+    double accelerationAngle = 0.0;
+
     double speedX = 0.0;
     double speedY = 0.0;
-    double accelerationX = 0.0;
-    double accelerationY = 0.0;
-    //double maxSpeed = 0.0;
 };
 
 }

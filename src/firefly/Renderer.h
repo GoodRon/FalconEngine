@@ -32,6 +32,9 @@ public:
 	bool drawTexture(TexturePointer& texture, SDL_Rect* source = nullptr,
 					 SDL_Rect* destination = nullptr);
 
+	bool drawTexture(TexturePointer& texture, SDL_Rect* source,
+					 SDL_Rect* destination, double angle, SDL_Point* center);
+
 	bool drawTextureToTexture(TexturePointer& sourceTexture,
 							  TexturePointer& destinationTexture,
 							  SDL_Rect* source,

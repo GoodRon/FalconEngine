@@ -11,6 +11,7 @@
 namespace firefly {
 	class Entity;
 	class Velocity;
+	class Position;
 	class NativeEvent;
 }
 
@@ -36,6 +37,7 @@ private:
 	firefly::Entity* findPlayer(int playerId) const;
 
 	firefly::Velocity* getVelocity(int playerId) const;
+	firefly::Position* getPosition(int playerId) const;
 
 	void onUpPressed(bool isPressed);
 	void onLeftPressed(bool isPressed);
@@ -45,8 +47,8 @@ private:
 	void setSpeedX(double speedX);
 	void setSpeedY(double speedY);
 
-	void setAccelerationX(double accelerationX);
-	void setAccelerationY(double accelerationY);
+	void setAcceleration(double acceleration);
+	void rotate(double angle);
 
 private:
 	int _keyCodeUp;

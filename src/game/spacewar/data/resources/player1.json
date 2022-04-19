@@ -42,16 +42,20 @@
 			"name": "Position",
 			"x": 40.0,
 			"y": 40.0,
+			"centerX": 16.0,
+			"centerY": 24.0,
 			"width": 32.0,
 			"height": 48.0,
-			"scale": 3.0
+			"scale": 1.5,
+			"angle": 90.0
 		},
 		{
 			"name": "Velocity",
-			"speedX": 0.0,
-			"speedY": 0.0,
-			"accelerationX": 0.0,
-			"accelerationY": 0.0
+			"speed": 0.0,
+			"speedAngle": 0.0,
+			"acceleration": 0.0,
+			"accelerationAngle": 0.0,
+			"maxSpeed": 0.0
 		},
 		{
 			"name": "Player",

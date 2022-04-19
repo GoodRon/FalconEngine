@@ -27,11 +27,21 @@ public:
             static_cast<int>(height * scale)};
     }
 
+    SDL_Point center() {
+        return SDL_Point{
+            static_cast<int>(centerX * scale),
+            static_cast<int>(centerY * scale)
+        };
+    }
+
 	double x = 0.0;
 	double y = 0.0;
     double width = 0.0;
     double height = 0.0;
+    double centerX = 0.0;
+    double centerY = 0.0;
     double scale = 0.0;
+    double angle = 0.0;
 };
 
 }

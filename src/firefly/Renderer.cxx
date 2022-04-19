@@ -49,14 +49,24 @@ bool Renderer::clearViewport() {
 }
 
 bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
-						   SDL_Rect* destination) {
-	if (!texture) {
-		return false;
-	}
+	SDL_Rect* destination) {
 
 	// TODO check if texture is inside the viewport
 
 	if (SDL_RenderCopy(_renderer.get(), texture.get(), source, destination) != 0) {
+		return false;
+	}
+	return true;
+}
+
+bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
+	SDL_Rect* destination, double angle, SDL_Point* center) {
+
+	// TODO check if texture is inside the viewport
+	// TODO pass flip
+
+	if (SDL_RenderCopyEx(_renderer.get(), texture.get(), source, destination,
+		angle, center, SDL_FLIP_NONE) != 0) {
 		return false;
 	}
 	return true;

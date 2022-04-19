@@ -6,15 +6,15 @@
 #include <firefly/events/NativeEvent.h>
 #include <firefly/components/Player.h>
 #include <firefly/components/Velocity.h>
+#include <firefly/components/Position.h>
 
 namespace spacewar {
 
 	// TODO remove from here
 	const int playerId = 1;
-	const double speedX = 90.0;
-	const double speedY = 90.0;
-	const double accelerationX = 15.0;
-	const double accelerationY = 15.0;
+	const double speed = 90.0;
+	const double acceleration = 15.0;
+	const double angleDelta = 5.0;
 
 	PlayerControlSystem::PlayerControlSystem(
 		firefly::Engine* engine) :
@@ -29,6 +29,7 @@ namespace spacewar {
 		_isRightPressed(false) {
 
 		_requiredComponents.push_front(firefly::Player::ComponentName);
+		_requiredComponents.push_front(firefly::Position::ComponentName);
 		_requiredComponents.push_front(firefly::Velocity::ComponentName);
 	}
 
@@ -143,53 +144,44 @@ namespace spacewar {
 			return nullptr;
 		}
 
-		auto velocityComponent = static_cast<firefly::Velocity*>(
+		auto component = static_cast<firefly::Velocity*>(
 			playerEntity->getComponent(
 				firefly::getComponentId(firefly::Velocity::ComponentName)));
-		return velocityComponent;
+		return component;
+	}
+
+	firefly::Position* PlayerControlSystem::getPosition(int playerId) const {
+		firefly::Entity* playerEntity = findPlayer(playerId);
+		if (!playerEntity) {
+			return nullptr;
+		}
+
+		auto component = static_cast<firefly::Position*>(
+			playerEntity->getComponent(
+				firefly::getComponentId(firefly::Position::ComponentName)));
+		return component;
 	}
 
 	void PlayerControlSystem::onUpPressed(bool isPressed) {
 		_isUpPressed = isPressed;
 
-		auto velocityComponent = getVelocity(playerId);
-		if (!velocityComponent) {
-			return;
-		}
-
-		if (_isDownPressed && _isUpPressed) {
-			setAccelerationY(0.0);
-			return;
-		}
-
 		if (_isUpPressed) {
-			setAccelerationY(-accelerationY);
+			setAcceleration(acceleration);
 			return;	
 		}
 
-		if (_isDownPressed) {
-			onDownPressed(true);
-			return;
-		}
-
-		setAccelerationY(0.0);
+		setAcceleration(0.0);
 	}
 
 	void PlayerControlSystem::onLeftPressed(bool isPressed) {
 		_isLeftPressed = isPressed;
 
-		auto velocityComponent = getVelocity(playerId);
-		if (!velocityComponent) {
-			return;
-		}
-
 		if (_isLeftPressed && _isRightPressed) {
-			setAccelerationX(0.0);
 			return;
 		}
 
 		if (_isLeftPressed) {
-			setAccelerationX(-accelerationX);
+			rotate(-angleDelta);
 			return;	
 		}
 
@@ -197,46 +189,22 @@ namespace spacewar {
 			onRightPressed(true);
 			return;
 		}
-
-		setAccelerationX(0.0);
 	}
 
 	void PlayerControlSystem::onDownPressed(bool isPressed) {
 		_isDownPressed = isPressed;
 
-		auto velocityComponent = getVelocity(playerId);
-		if (!velocityComponent) {
-			return;
-		}
-
-		if (_isDownPressed && _isUpPressed) {
-			setAccelerationY(0.0);
-			return;
-		}
-
-		if (_isDownPressed) {
-			setAccelerationY(accelerationY);
-			return;	
-		}
-
-		if (_isUpPressed) {
-			setAccelerationY(true);
-			return;
-		}
-
-		setAccelerationY(0.0);
 	}
 
 	void PlayerControlSystem::onRightPressed(bool isPressed) {
 		_isRightPressed = isPressed;
 
 		if (_isLeftPressed && _isRightPressed) {
-			setAccelerationX(0.0);
 			return;
 		}
 
 		if (_isRightPressed) {
-			setAccelerationX(accelerationX);
+			rotate(angleDelta);
 			return;	
 		}
 
@@ -244,8 +212,6 @@ namespace spacewar {
 			onLeftPressed(true);
 			return;
 		}
-
-		setAccelerationX(0.0);
 	}
 
 	void PlayerControlSystem::setSpeedX(double speedX) {
@@ -266,21 +232,39 @@ namespace spacewar {
 		velocityComponent->speedY = speedY;
 	}
 
-	void PlayerControlSystem::setAccelerationX(double accelerationX) {
+	void PlayerControlSystem::setAcceleration(double acceleration) {
 		auto velocityComponent = getVelocity(playerId);
 		if (!velocityComponent) {
 			return;
 		}
 
-		velocityComponent->accelerationX = accelerationX;
+		velocityComponent->acceleration = acceleration;
 	}
 
-	void PlayerControlSystem::setAccelerationY(double accelerationY) {
+	void PlayerControlSystem::rotate(double angle) {
+		auto positionComponent = getPosition(playerId);
+		if (!positionComponent) {
+			return;
+		}
+
 		auto velocityComponent = getVelocity(playerId);
 		if (!velocityComponent) {
 			return;
 		}
 
-		velocityComponent->accelerationY = accelerationY;
+		velocityComponent->accelerationAngle += angle;
+		/*
+		if (velocityComponent->accelerationAngle > 360.0) {
+			velocityComponent->accelerationAngle = 
+				fmod(velocityComponent->accelerationAngle, 360.0);
+		}*/
+
+		positionComponent->angle += angle;
+		/*
+		if (positionComponent->angle > 360.0) {
+			positionComponent->angle = 
+				fmod(positionComponent->angle, 360.0);
+		}
+		*/
 	}
 }
