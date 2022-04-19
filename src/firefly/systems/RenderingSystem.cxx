@@ -7,6 +7,7 @@
 
 #include "components/Visual.h"
 #include "components/Position.h"
+#include "components/Velocity.h"
 
 namespace firefly {
 
@@ -37,6 +38,18 @@ void RenderingSystem::drawEntites() const {
 		auto visualComponent = static_cast<Visual*>(
 			entity.second->getComponent(
 				getComponentId(Visual::ComponentName)));
+
+		// TODO remove from here, just testing
+		auto velocityComponent = static_cast<Velocity*>(
+			entity.second->getComponent(
+				getComponentId(Velocity::ComponentName)));
+
+		const double epsilon = 0.0001;
+		if (velocityComponent->acceleration > epsilon) {
+			visualComponent->currentState = "Moving";
+		} else {
+			visualComponent->currentState = "Idle";
+		}
 
 		draw(positionComponent, visualComponent);
 	}

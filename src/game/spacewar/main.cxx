@@ -17,7 +17,7 @@ int main(int argc, char** argv) {
 
     // TODO catch exceptions
     auto& engine = firefly::Engine::instance();
-    engine.initialize(1000, 700);
+    engine.initialize(1500, 900);
 
     spacewar::GameBuilder gameBuilder(&engine);
     gameBuilder.buildGame();

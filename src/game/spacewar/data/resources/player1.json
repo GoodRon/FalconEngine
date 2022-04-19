@@ -6,9 +6,9 @@
 			"states": [
 				{
 					"name": "Idle",
-					"texture": "resources/boywalk.png",
-					"frame_width": 32,
-					"frame_height": 48,
+					"texture": "resources/player1.png",
+					"frame_width": 66,
+					"frame_height": 88,
 					"frame_duration": 1000,
 					"is_looped": true,
 					"frames" : [
@@ -16,23 +16,23 @@
 							"direction": 0,
 							"row": 0,
 							"col": 0,
-							"amount": 3
+							"amount": 1
 						}
 					]
 				},
 				{
 					"name": "Moving",
-					"texture": "resources/boywalk.png",
-					"frame_width": 32,
-					"frame_height": 48,
+					"texture": "resources/player1.png",
+					"frame_width": 66,
+					"frame_height": 88,
 					"frame_duration": 1000,
 					"is_looped": true,
 					"frames" : [
 						{
 							"direction": 0,
-							"row": 1,
-							"col": 0,
-							"amount": 3
+							"row": 0,
+							"col": 1,
+							"amount": 1
 						}
 					]
 				}
@@ -40,13 +40,13 @@
 		},
 		{
 			"name": "Position",
-			"x": 40.0,
-			"y": 40.0,
-			"centerX": 16.0,
-			"centerY": 24.0,
-			"width": 32.0,
-			"height": 48.0,
-			"scale": 1.5,
+			"x": 140.0,
+			"y": 140.0,
+			"centerX": 33.0,
+			"centerY": 32.0,
+			"width": 66.0,
+			"height": 88.0,
+			"scale": 0.8,
 			"angle": 90.0
 		},
 		{
