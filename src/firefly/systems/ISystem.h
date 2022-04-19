@@ -37,7 +37,7 @@ public:
 		const std::shared_ptr<IEvent>& event) = 0;
 
 protected:
-	bool checkComponents(Entity* entity) const;
+	virtual bool checkComponents(Entity* entity) const;
 	virtual void lockEntities() const;
 	virtual void unlockEntities() const;
 	virtual void onRegisterEntity(Entity* entity);

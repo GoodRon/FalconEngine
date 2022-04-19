@@ -3,7 +3,7 @@
 	"components": [
 		{
 			"name": "Visual",
-			"zIndex": 1,
+			"zIndex": 2,
 			"states": [
 				{
 					"name": "Idle",
@@ -65,9 +65,12 @@
 		{
 			"name": "Solidity",
 			"isSolid": true,
-			"isDestructable": true,
-			"mass": 20,
-			"hasGravity": false
+			"isDestructable": true
+		},
+		{
+			"name": "Gravity",
+			"hasGravity": false,
+			"emitGravity": false
 		}
 	]
 }

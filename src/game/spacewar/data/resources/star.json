@@ -45,9 +45,12 @@
 		{
 			"name": "Solidity",
 			"isSolid": true,
-			"isDestructable": false,
-			"mass": 20,
-			"hasGravity": true
+			"isDestructable": false
+		},
+		{
+			"name": "Gravity",
+			"hasGravity": false,
+			"emitGravity": true
 		}
 	]
 }

@@ -4,17 +4,18 @@
 #include <unordered_map>
 #include <fstream>
 
-#include "firefly/Engine.h"
-#include "firefly/ResourceManager.h"
-#include "firefly/Entity.h"
-#include "firefly/Frame.h"
-#include "firefly/GameObject.h"
+#include <firefly/Engine.h>
+#include <firefly/ResourceManager.h>
+#include <firefly/Entity.h>
+#include <firefly/Frame.h>
+#include <firefly/GameObject.h>
 
-#include "firefly/components/Visual.h"
-#include "firefly/components/Position.h"
-#include "firefly/components/Velocity.h"
-#include "firefly/components/Player.h"
-#include "firefly/components/Solidity.h"
+#include <firefly/components/Visual.h>
+#include <firefly/components/Position.h>
+#include <firefly/components/Velocity.h>
+#include <firefly/components/Player.h>
+#include <firefly/components/Solidity.h>
+#include <firefly/components/Gravity.h>
 
 #include "rapidjson/document.h"
 
@@ -116,6 +117,12 @@ private:
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildSolidityComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::Gravity::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildGravityComponent(entity, document);
 		};
 	}
 
@@ -235,8 +242,19 @@ private:
 
 		component->isSolid = document["isSolid"].GetBool();
 		component->isDestructable = document["isDestructable"].GetBool();
+
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildGravityComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::Gravity> component(new firefly::Gravity);
+
 		component->hasGravity = document["hasGravity"].GetBool();
-		component->mass = document["mass"].GetDouble();
+		component->emitGravity = document["emitGravity"].GetBool();
 
 		entity->addComponent(std::move(component));
 		return true;

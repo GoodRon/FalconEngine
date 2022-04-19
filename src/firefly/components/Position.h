@@ -12,7 +12,7 @@
 
 namespace firefly {
 
-class Position: public IComponent {
+class Position final: public IComponent {
 public:
     inline static const std::string ComponentName = "Position";
     

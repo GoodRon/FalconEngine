@@ -10,9 +10,11 @@
 
 namespace firefly {
 
-class Health: public IComponent {
+class Health final: public IComponent {
 public:
-    Health(): IComponent("Health") {}
+    inline static const std::string ComponentName = "Health";
+    
+    Health(): IComponent(ComponentName) {}
     ~Health() override = default;
 
 	int max = 0;

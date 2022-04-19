@@ -10,7 +10,7 @@
 
 namespace firefly {
 
-class Player: public IComponent {
+class Player final: public IComponent {
 public:
     inline static const std::string ComponentName = "Player";
     

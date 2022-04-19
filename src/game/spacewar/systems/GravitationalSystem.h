@@ -17,13 +17,13 @@ namespace firefly {
 
 namespace spacewar {
 
-class GravitationSystem final: public firefly::ISystem {
+class GravitationalSystem final: public firefly::ISystem {
 public:
-    GravitationSystem(firefly::Engine* engine);
-    ~GravitationSystem() override;
+    GravitationalSystem(firefly::Engine* engine);
+    ~GravitationalSystem() override;
 
-    GravitationSystem(const GravitationSystem&) = delete;
-    GravitationSystem& operator=(const GravitationSystem&) = delete;
+    GravitationalSystem(const GravitationalSystem&) = delete;
+    GravitationalSystem& operator=(const GravitationalSystem&) = delete;
 
     void update() override;
 

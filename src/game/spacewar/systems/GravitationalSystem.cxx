@@ -1,4 +1,4 @@
-#include "GravitationSystem.h"
+#include "GravitationalSystem.h"
 
 #include <cmath>
 
@@ -10,35 +10,32 @@
 
 #include <firefly/components/Position.h>
 #include <firefly/components/Velocity.h>
-#include <firefly/components/Solidity.h>
+#include <firefly/components/Gravity.h>
 
 namespace spacewar {
 
-GravitationSystem::GravitationSystem(firefly::Engine* engine):
-	firefly::ISystem("GravitationSystem", engine) {
+GravitationalSystem::GravitationalSystem(firefly::Engine* engine):
+	firefly::ISystem("GravitationalSystem", engine) {
 
 	_requiredComponents.push_front(firefly::Position::ComponentName);
 	_requiredComponents.push_front(firefly::Velocity::ComponentName);
-	_requiredComponents.push_front(firefly::Solidity::ComponentName);
+	_requiredComponents.push_front(firefly::Gravity::ComponentName);
 }
 
-GravitationSystem::~GravitationSystem() {
+GravitationalSystem::~GravitationalSystem() {
 }
 
-void GravitationSystem::update() {
+void GravitationalSystem::update() {
 	const uint64_t timepoint = SDL_GetTicks64();
 	const uint64_t elapsedMs = timepoint - _updateTimepoint;
 	_updateTimepoint = timepoint;
-
-	firefly::Position* position = nullptr;
-	firefly::Solidity* solidity = nullptr;
 
 	for (auto& entity: _gravityEmitters) {
 		processGravity(entity.second, elapsedMs);
 	}
 }
 
-bool GravitationSystem::onEvent(
+bool GravitationalSystem::onEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
 
 	// TODO write me!
@@ -46,21 +43,21 @@ bool GravitationSystem::onEvent(
 	return false;
 }
 
-void GravitationSystem::onRegisterEntity(firefly::Entity* entity) {
+void GravitationalSystem::onRegisterEntity(firefly::Entity* entity) {
 	if (!entity) {
 		return;
 	}
 
-	auto solidity = static_cast<firefly::Solidity*>(
+	auto solidity = static_cast<firefly::Gravity*>(
 		entity->getComponent(
-			firefly::getComponentId(firefly::Solidity::ComponentName)));
+			firefly::getComponentId(firefly::Gravity::ComponentName)));
 
-	if (solidity->hasGravity) {
+	if (solidity->emitGravity) {
 		_gravityEmitters[entity->getId()] = entity;
 	}
 }
 
-void GravitationSystem::onUnregisterEntity(firefly::Entity* entity) {
+void GravitationalSystem::onUnregisterEntity(firefly::Entity* entity) {
 	if (!entity) {
 		return;
 	}
@@ -80,7 +77,9 @@ double normalizeAngle(double angle) {
 	return angle;
 }
 
-void GravitationSystem::processGravity(
+// TODO check components here
+
+void GravitationalSystem::processGravity(
         firefly::Entity* gravityEmitter,
         uint64_t elapsedMs) const {
 	

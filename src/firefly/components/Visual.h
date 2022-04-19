@@ -14,7 +14,7 @@ namespace firefly {
 
 class Frame;
 
-class Visual: public IComponent {
+class Visual final: public IComponent {
 public:
     inline static const std::string ComponentName = "Visual";
 

@@ -1,13 +1,13 @@
 {
-	"name": "Player_2",
+	"name": "Rocket",
 	"components": [
 		{
 			"name": "Visual",
-			"zIndex": 2,
+			"zIndex": 1,
 			"states": [
 				{
 					"name": "Idle",
-					"texture": "resources/player2.png",
+					"texture": "resources/player1.png",
 					"frameWidth": 66,
 					"frameHeight": 88,
 					"frameDuration": 1000,
@@ -20,52 +20,32 @@
 							"amount": 1
 						}
 					]
-				},
-				{
-					"name": "Moving",
-					"texture": "resources/player2.png",
-					"frameWidth": 66,
-					"frameHeight": 88,
-					"frameDuration": 1000,
-					"isLooped": true,
-					"frames" : [
-						{
-							"direction": 0,
-							"row": 0,
-							"col": 1,
-							"amount": 1
-						}
-					]
 				}
 			]
 		},
 		{
 			"name": "Position",
-			"x": 1360.0,
-			"y": 760.0,
+			"x": 0.0,
+			"y": 0.0,
 			"centerX": 33.0,
 			"centerY": 32.0,
 			"width": 66.0,
 			"height": 88.0,
 			"scale": 0.5,
-			"angle": 270.0
+			"angle": 90.0
 		},
 		{
 			"name": "Velocity",
 			"speed": 0.0,
 			"speedAngle": 0.0,
 			"acceleration": 0.0,
-			"accelerationAngle": 180.0,
+			"accelerationAngle": 0.0,
 			"maxSpeed": 600.0
-		},
-		{
-			"name": "Player",
-			"playerId": 2
 		},
 		{
 			"name": "Solidity",
 			"isSolid": true,
-			"isDestructable": true
+			"isDestructable": true,
 		},
 		{
 			"name": "Gravity",
