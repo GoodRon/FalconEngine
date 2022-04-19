@@ -64,11 +64,17 @@ private:
 			return false;
 		}
 
+		std::shared_ptr<PlayerControlSystem> playerControl;
+
+		playerControl.reset(new PlayerControlSystem(_engine, 1, "1"));
+		playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d);
+		systemManager->addSystem(std::move(playerControl));
+
+		playerControl.reset(new PlayerControlSystem(_engine, 2, "2"));
+		playerControl->setKeyCodes(SDLK_UP, SDLK_LEFT, SDLK_DOWN, SDLK_RIGHT);
+		systemManager->addSystem(std::move(playerControl));
+
 		std::shared_ptr<firefly::ISystem> systemPtr;
-
-		systemPtr.reset(new PlayerControlSystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-
 		systemPtr.reset(new firefly::VelocitySystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 
@@ -95,6 +101,10 @@ private:
 
 		// TODO improve
 		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(entity));
+		objectManager->registerObject(object);
+
+		entity = builder.buildEntity("resources/player2.json");
+		object.reset(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
 
 		return true;

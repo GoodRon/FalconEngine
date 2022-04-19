@@ -19,7 +19,9 @@ namespace spacewar {
 
 class PlayerControlSystem: public firefly::ISystem {
 public:
-	PlayerControlSystem(firefly::Engine* engine);
+	// TODO remove suffix, make unique name
+	PlayerControlSystem(firefly::Engine* engine, int playerId, 
+		const std::string suffix);
 	~PlayerControlSystem() override;
 
 	PlayerControlSystem(const PlayerControlSystem&) = delete;
@@ -51,6 +53,7 @@ private:
 	void rotate(double angle);
 
 private:
+	const int _playerId;
 	int _keyCodeUp;
 	int _keyCodeLeft;
 	int _keyCodeDown;

@@ -11,14 +11,14 @@
 namespace spacewar {
 
 	// TODO remove from here
-	const int playerId = 1;
 	const double speed = 90.0;
 	const double acceleration = 15.0;
 	const double angleDelta = 5.0;
 
 	PlayerControlSystem::PlayerControlSystem(
-		firefly::Engine* engine) :
-		firefly::ISystem("PlayerControlSystem", engine),
+		firefly::Engine* engine, int playerId, const std::string suffix) :
+		firefly::ISystem("PlayerControlSystem" + suffix, engine),
+		_playerId(playerId),
 		_keyCodeUp(SDLK_w),
 		_keyCodeLeft(SDLK_a),
 		_keyCodeDown(SDLK_s),
@@ -215,7 +215,7 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::setSpeedX(double speedX) {
-		auto velocityComponent = getVelocity(playerId);
+		auto velocityComponent = getVelocity(_playerId);
 		if (!velocityComponent) {
 			return;
 		}
@@ -224,7 +224,7 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::setSpeedY(double speedY) {
-		auto velocityComponent = getVelocity(playerId);
+		auto velocityComponent = getVelocity(_playerId);
 		if (!velocityComponent) {
 			return;
 		}
@@ -233,7 +233,7 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::setAcceleration(double acceleration) {
-		auto velocityComponent = getVelocity(playerId);
+		auto velocityComponent = getVelocity(_playerId);
 		if (!velocityComponent) {
 			return;
 		}
@@ -242,12 +242,12 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::rotate(double angle) {
-		auto positionComponent = getPosition(playerId);
+		auto positionComponent = getPosition(_playerId);
 		if (!positionComponent) {
 			return;
 		}
 
-		auto velocityComponent = getVelocity(playerId);
+		auto velocityComponent = getVelocity(_playerId);
 		if (!velocityComponent) {
 			return;
 		}

@@ -1,0 +1,65 @@
+{
+	"name": "Player_2",
+	"components": [
+		{
+			"name": "Visual",
+			"states": [
+				{
+					"name": "Idle",
+					"texture": "resources/player2.png",
+					"frame_width": 66,
+					"frame_height": 88,
+					"frame_duration": 1000,
+					"is_looped": true,
+					"frames" : [
+						{
+							"direction": 0,
+							"row": 0,
+							"col": 0,
+							"amount": 1
+						}
+					]
+				},
+				{
+					"name": "Moving",
+					"texture": "resources/player2.png",
+					"frame_width": 66,
+					"frame_height": 88,
+					"frame_duration": 1000,
+					"is_looped": true,
+					"frames" : [
+						{
+							"direction": 0,
+							"row": 0,
+							"col": 1,
+							"amount": 1
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Position",
+			"x": 740.0,
+			"y": 740.0,
+			"centerX": 33.0,
+			"centerY": 32.0,
+			"width": 66.0,
+			"height": 88.0,
+			"scale": 0.8,
+			"angle": 270.0
+		},
+		{
+			"name": "Velocity",
+			"speed": 0.0,
+			"speedAngle": 0.0,
+			"acceleration": 0.0,
+			"accelerationAngle": 180.0,
+			"maxSpeed": 0.0
+		},
+		{
+			"name": "Player",
+			"playerId": 2
+		}
+	]
+}
