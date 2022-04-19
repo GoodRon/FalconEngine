@@ -19,6 +19,7 @@ public:
 
 	bool hasGravity = false;
 	bool emitGravity = false;
+	double mass = 100000000.0;
 };
 
 }

@@ -50,7 +50,8 @@
 		{
 			"name": "Gravity",
 			"hasGravity": false,
-			"emitGravity": false
+			"emitGravity": false,
+			"mass": 0.0
 		}
 	]
 }

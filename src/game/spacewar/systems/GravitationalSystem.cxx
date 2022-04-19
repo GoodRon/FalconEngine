@@ -87,13 +87,18 @@ void GravitationalSystem::processGravity(
 		return;
 	}
 
-	auto gravityPosition = static_cast<firefly::Position*>(
+	auto emitterPosition = static_cast<firefly::Position*>(
 		gravityEmitter->getComponent(
 			firefly::getComponentId(firefly::Position::ComponentName)));
 
+	auto emitterGravity = static_cast<firefly::Gravity*>(
+		gravityEmitter->getComponent(
+			firefly::getComponentId(firefly::Gravity::ComponentName)));
 
 	// TODO improve, just testing
-	const double gravityAcceleration = 3000000.0;
+	constexpr double gConstant = 6.67430;
+	//constexpr double gDivider = 100000000000.0;
+	constexpr double gDivider = 1000.0;
 
 	firefly::Position* position = nullptr;
 	firefly::Velocity* velocity = nullptr;
@@ -112,18 +117,19 @@ void GravitationalSystem::processGravity(
 				firefly::getComponentId(firefly::Velocity::ComponentName)));
 
 		// TODO use centers!
-		const double distanceX = gravityPosition->x - position->x;
-		const double dsistanceY = gravityPosition->y - position->y;
+		const double distanceX = emitterPosition->x - position->x;
+		const double dsistanceY = emitterPosition->y - position->y;
 		const double squaredDistance = distanceX * distanceX + dsistanceY * dsistanceY;
 		const double distance = sqrt(squaredDistance);
 
 		double acceleration = 0.0;
-		const double epsilon = 0.0001;
+		constexpr double epsilon = 0.0001;
 
 		double accelerationRad = 0.0;
 
 		if (distance > epsilon) {
-			acceleration = gravityAcceleration / squaredDistance;
+			// TODO improve
+			acceleration = ((gConstant * emitterGravity->mass) / gDivider) / squaredDistance;
 
 			accelerationRad = acos(distanceX / distance);
 			if (dsistanceY < 0.0) {

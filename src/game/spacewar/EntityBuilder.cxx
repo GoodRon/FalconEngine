@@ -255,6 +255,7 @@ private:
 
 		component->hasGravity = document["hasGravity"].GetBool();
 		component->emitGravity = document["emitGravity"].GetBool();
+		component->mass = document["mass"].GetDouble();
 
 		entity->addComponent(std::move(component));
 		return true;
