@@ -23,6 +23,7 @@ const std::string ISystem::getName() const {
 	return _name;
 }
 
+// TODO improve
 bool ISystem::registerEntity(Entity* entity) {
 	if (!entity) {
 		return false;
@@ -37,14 +38,24 @@ bool ISystem::registerEntity(Entity* entity) {
 	lockEntities();
 	if (_entities.find(id) == _entities.end()) {
 		_entities[id] = entity;
+		onRegisterEntity(entity);
 	}
 	unlockEntities();
 	return true;
 }
 
+// TODO improve
 void ISystem::unregisterEntity(EntityID id) {
 	lockEntities();
+	auto it = _entities.find(id);
+	if (it == _entities.end()) {
+		unlockEntities();
+		return;
+	}
+
+	onUnregisterEntity((*it).second);
 	_entities.erase(id);
+
 	unlockEntities();
 }
 
@@ -73,6 +84,12 @@ void ISystem::lockEntities() const {
 }
 
 void ISystem::unlockEntities() const {
+}
+
+void ISystem::onRegisterEntity(Entity * entity) {
+}
+
+void ISystem::onUnregisterEntity(Entity* entity) {
 }
 
 }

@@ -72,7 +72,7 @@ void PositioningSystem::processPosition(
 		position->x = windowRect.w;
 	}
 
-	if ((position->y + position->centerY) > (windowRect.w + position->height)) {
+	if ((position->y + position->centerY) > (windowRect.h + position->height)) {
 		position->y = -position->height;
 	}
 

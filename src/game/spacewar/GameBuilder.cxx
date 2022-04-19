@@ -12,6 +12,7 @@
 #include "EntityBuilder.h"
 #include "systems/PlayerControlSystem.h"
 #include "systems/PositioningSystem.h"
+#include "systems/GravitationSystem.h"
 
 namespace spacewar {
 
@@ -75,7 +76,11 @@ private:
 		systemManager->addSystem(std::move(playerControl));
 
 		std::shared_ptr<firefly::ISystem> systemPtr;
+
 		systemPtr.reset(new firefly::VelocitySystem(_engine));
+		systemManager->addSystem(std::move(systemPtr));
+
+		systemPtr.reset(new GravitationSystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 
 		systemPtr.reset(new PositioningSystem(_engine));
@@ -108,6 +113,10 @@ private:
 		objectManager->registerObject(object);
 
 		entity = builder.buildEntity("resources/player2.json");
+		object.reset(new firefly::GameObject(entity));
+		objectManager->registerObject(object);
+
+		entity = builder.buildEntity("resources/star.json");
 		object.reset(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
 

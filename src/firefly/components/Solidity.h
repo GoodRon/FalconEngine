@@ -10,7 +10,7 @@
 
 namespace firefly {
 
-class Solidity: public IComponent final {
+class Solidity final: public IComponent {
 public:
     inline static const std::string ComponentName = "Solidity";
     
@@ -19,6 +19,8 @@ public:
 
 	bool isSolid = false;
     bool isDestructable = false;
+    double mass = 0.0;
+    bool hasGravity = false;
     // collision box
 };
 

@@ -43,6 +43,7 @@ bool VelocitySystem::onEvent(
 	return false;
 }
 
+// TODO move from here
 double normalizeAngle(double angle) {
 	if (fabs(angle) > 360.0) {
 		angle = fmod(angle, 360.0);
@@ -75,35 +76,35 @@ void VelocitySystem::processVelocity(
 	const double deltaY = deltaSpeed * sin(accelerationRad);
 
 	velocity->speedX = velocity->speed * cos(speedRad) + deltaX;
-    velocity->speedY = velocity->speed * sin(speedRad) + deltaY;
+	velocity->speedY = velocity->speed * sin(speedRad) + deltaY;
 
-    if (fabs(velocity->acceleration) < epsilon) {
-    	return;
-    }
+	if (fabs(velocity->acceleration) < epsilon) {
+		return;
+	}
 
-    // TODO optimize?
-    velocity->speed = sqrt(velocity->speedX * velocity->speedX + 
-    	velocity->speedY * velocity->speedY);
+	// TODO optimize?
+	velocity->speed = sqrt(velocity->speedX * velocity->speedX + 
+		velocity->speedY * velocity->speedY);
 
-    if (fabs(velocity->speed) < epsilon) {
-    	speedRad = 0.0;
-    } else {
-    	speedRad = acos(velocity->speedX / velocity->speed);
-    	if (velocity->speedY < 0.0) {
-    		speedRad = -speedRad;
-    	}
-    }
+	if (fabs(velocity->speed) < epsilon) {
+		speedRad = 0.0;
+	} else {
+		speedRad = acos(velocity->speedX / velocity->speed);
+		if (velocity->speedY < 0.0) {
+			speedRad = -speedRad;
+		}
+	}
 
-    velocity->speedAngle = speedRad * 180.0 / M_PI;
-    velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
+	velocity->speedAngle = speedRad * 180.0 / M_PI;
+	velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
 
-    if (velocity->maxSpeed > epsilon) {
-    	if (velocity->speed > velocity->maxSpeed) {
-    		velocity->speed = velocity->maxSpeed;
-    		velocity->speedX = velocity->speed * cos(speedRad);
-    		velocity->speedY = velocity->speed * sin(speedRad);
-    	}
-    }
+	if (velocity->maxSpeed > epsilon) {
+		if (velocity->speed > velocity->maxSpeed) {
+			velocity->speed = velocity->maxSpeed;
+			velocity->speedX = velocity->speed * cos(speedRad);
+			velocity->speedY = velocity->speed * sin(speedRad);
+		}
+	}
 }
 
 }

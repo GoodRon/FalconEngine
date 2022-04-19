@@ -40,6 +40,8 @@ protected:
 	bool checkComponents(Entity* entity) const;
 	virtual void lockEntities() const;
 	virtual void unlockEntities() const;
+	virtual void onRegisterEntity(Entity* entity);
+	virtual void onUnregisterEntity(Entity* entity);
 
 protected:
 	const std::string _name;

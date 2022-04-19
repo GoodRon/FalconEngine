@@ -3,7 +3,7 @@
 	"components": [
 		{
 			"name": "Visual",
-			"zIndex": 0,
+			"zIndex": 1,
 			"states": [
 				{
 					"name": "Idle",
@@ -56,11 +56,18 @@
 			"speedAngle": 0.0,
 			"acceleration": 0.0,
 			"accelerationAngle": 0.0,
-			"maxSpeed": 0.0
+			"maxSpeed": 600.0
 		},
 		{
 			"name": "Player",
 			"playerId": 1
+		},
+		{
+			"name": "Solidity",
+			"isSolid": true,
+			"isDestructable": true,
+			"mass": 20,
+			"hasGravity": false
 		}
 	]
 }
