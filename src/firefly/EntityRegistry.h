@@ -13,6 +13,7 @@ namespace firefly {
 
 class Entity;
 
+// TODO EntityPrototypes?
 class EntityRegistry {
 public:
 	EntityRegistry();
@@ -25,6 +26,8 @@ public:
 		std::unique_ptr<Entity>& prototype);
 
 	std::shared_ptr<Entity> makeEntity(const std::string& name);
+
+	bool hasEntity(const std::string& name) const;
 
 	void clear();
 
