@@ -48,12 +48,19 @@ private:
 	firefly::State* getState(int playerId) const;
 	firefly::Ammunition* getAmmunition(int playerId) const;
 
-	void processPressed(uint64_t elapsedMs);
-	void onUpPressed(uint64_t elapsedMs);
-	void onLeftPressed(uint64_t elapsedMs);
-	void onDownPressed(uint64_t elapsedMs);
-	void onRightPressed(uint64_t elapsedMs);
-	void onActionPressed(uint64_t elapsedMs);
+	void onUpPressed(bool isPressed);
+	void onLeftPressed(bool isPressed);
+	void onDownPressed(bool isPressed);
+	void onRightPressed(bool isPressed);
+	void onActionPressed(bool isPressed);
+
+	void processHold();
+
+	void onUpHold();
+	void onLeftHold();
+	void onDownHold();
+	void onRightHold();
+	void onActionHold();
 
 	void setAcceleration(double acceleration) const;
 	void rotate(double angle) const;

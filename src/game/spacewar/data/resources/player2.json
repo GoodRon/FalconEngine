@@ -86,7 +86,7 @@
 					"name": "RocketLauncher",
 					"projectile": "Rocket",
 					"rounds": 15,
-					"cooldownTimeMs": 5
+					"cooldownTimeMs": 1000
 				}
 			]
 		}

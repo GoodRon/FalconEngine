@@ -77,7 +77,8 @@ private:
 		systemManager->addSystem(std::move(playerControl));
 
 		playerControl.reset(new PlayerControlSystem(_engine, 2, "2"));
-		playerControl->setKeyCodes(SDLK_UP, SDLK_LEFT, SDLK_DOWN, SDLK_RIGHT, SDLK_RCTRL);
+		playerControl->setKeyCodes(SDLK_KP_8, SDLK_KP_4, 
+			SDLK_KP_5, SDLK_KP_6, SDLK_KP_ENTER);
 		systemManager->addSystem(std::move(playerControl));
 
 		std::shared_ptr<firefly::ISystem> systemPtr;

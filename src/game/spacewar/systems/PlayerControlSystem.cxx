@@ -64,11 +64,8 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::update() {
-		const uint64_t timepoint = SDL_GetTicks64();
-		const uint64_t elapsedMs = timepoint - _updateTimepoint;
-		_updateTimepoint = timepoint;
-
-		processPressed(elapsedMs);
+		processHold();
+		_updateTimepoint = SDL_GetTicks64();
 	}
 
 	bool PlayerControlSystem::onEvent(
@@ -99,27 +96,27 @@ namespace spacewar {
 		case SDL_KEYDOWN:
 			keyCode = sdlEvent.key.keysym.sym;
 			if (_keyCodeUp == keyCode) {
-				_isUpPressed = true;
+				onUpPressed(true);
 				return true;
 			}
 			
 			if (_keyCodeLeft == keyCode) {
-				_isLeftPressed = true;
+				onLeftPressed(true);
 				return true;
 			}
 
 			if (_keyCodeDown == keyCode) {
-				_isDownPressed = true;
+				onDownPressed(true);
 				return true;
 			}
 
 			if (_keyCodeRight == keyCode) {
-				_isRightPressed = true;
+				onRightPressed(true);
 				return true;
 			}
 
 			if (_keyCodeAction == keyCode) {
-				_isActionPressed = true;
+				onActionPressed(true);
 				return true;
 			}
 			break;
@@ -127,27 +124,27 @@ namespace spacewar {
 		case SDL_KEYUP:
 			keyCode = sdlEvent.key.keysym.sym;
 			if (_keyCodeUp == keyCode) {
-				_isUpPressed = false;
+				onUpPressed(false);
 				return true;
 			}
 			
 			if (_keyCodeLeft == keyCode) {
-				_isLeftPressed = false;
+				onLeftPressed(false);
 				return true;
 			}
 			
 			if (_keyCodeDown == keyCode) {
-				_isDownPressed = false;
+				onDownPressed(false);
 				return true;
 			}
 
 			if (_keyCodeRight == keyCode) {
-				_isRightPressed = false;
+				onRightPressed(false);
 				return true;
 			}
 
 			if (_keyCodeAction == keyCode) {
-				_isActionPressed = false;
+				onActionPressed(false);
 				return true;
 			}
 			break;
@@ -221,40 +218,21 @@ namespace spacewar {
 		return component;
 	}
 
-	void PlayerControlSystem::processPressed(uint64_t elapsedMs) {
-		onUpPressed(elapsedMs);
-		onLeftPressed(elapsedMs);
-		onDownPressed(elapsedMs);
-		onRightPressed(elapsedMs);
-		onActionPressed(elapsedMs);
+	void PlayerControlSystem::onUpPressed(bool isPressed) {
+		_isUpPressed = isPressed;
+
+		onUpHold();
 	}
 
-	void PlayerControlSystem::onUpPressed(uint64_t elapsedMs) {
-		if (_isUpPressed) {
-			setAcceleration(acceleration);
-			return;
-		} 
+	void PlayerControlSystem::onLeftPressed(bool isPressed) {
+		_isLeftPressed = isPressed;
 
-		setAcceleration(0.0);
+		onLeftHold();
 	}
 
-	void PlayerControlSystem::onLeftPressed(uint64_t elapsedMs) {
-		if (_isLeftPressed && _isRightPressed) {
-			return;
-		}
+	void PlayerControlSystem::onDownPressed(bool isPressed) {
+		_isDownPressed = isPressed;
 
-		if (_isLeftPressed) {
-			rotate(-angleDelta * elapsedMs / 1000.0);
-			return;	
-		}
-
-		if (_isRightPressed) {
-			onRightPressed(elapsedMs);
-			return;
-		}
-	}
-
-	void PlayerControlSystem::onDownPressed(uint64_t elapsedMs) {
 		// TODO improve
 		auto stateComponent = getState(_playerId);
 		if (!stateComponent) {
@@ -276,11 +254,67 @@ namespace spacewar {
 		stateComponent->timepoint = _updateTimepoint;
 	}
 
-	void PlayerControlSystem::onRightPressed(uint64_t elapsedMs) {
+	void PlayerControlSystem::onRightPressed(bool isPressed) {
+		_isRightPressed = isPressed;
 
+		onRightHold();
+	}
+
+	void PlayerControlSystem::onActionPressed(bool isPressed) {
+		_isActionPressed = isPressed;
+
+		if (!_isActionPressed) {
+			return;
+		} 
+
+		shoot();
+	}
+
+	void PlayerControlSystem::processHold() {
+		onUpHold();
+		onLeftHold();
+		onDownHold();
+		onRightHold();
+		onActionHold();
+	}
+
+	void PlayerControlSystem::onUpHold() {
+		if (_isUpPressed) {
+			setAcceleration(acceleration);
+			return;
+		} 
+
+		setAcceleration(0.0);
+	}
+
+	void PlayerControlSystem::onLeftHold() {
 		if (_isLeftPressed && _isRightPressed) {
 			return;
 		}
+
+		const uint64_t elapsedMs = SDL_GetTicks64() - _updateTimepoint;
+
+		if (_isLeftPressed) {
+			rotate(-angleDelta * elapsedMs / 1000.0);
+			return;	
+		}
+
+		if (_isRightPressed) {
+			onRightHold();
+			return;
+		}
+	}
+
+	void PlayerControlSystem::onDownHold() {
+
+	}
+
+	void PlayerControlSystem::onRightHold() {
+		if (_isLeftPressed && _isRightPressed) {
+			return;
+		}
+
+		const uint64_t elapsedMs = SDL_GetTicks64() - _updateTimepoint;
 
 		if (_isRightPressed) {
 			rotate(angleDelta * elapsedMs / 1000.0);
@@ -288,18 +322,13 @@ namespace spacewar {
 		}
 
 		if (_isLeftPressed) {
-			onLeftPressed(elapsedMs);
+			onLeftHold();
 			return;
 		}
 	}
 
-	// TODO pressed and hold
-	void PlayerControlSystem::onActionPressed(uint64_t elapsedMs) {
-		if (!_isActionPressed) {
-			return;
-		} 
-
-		shoot();
+	void PlayerControlSystem::onActionHold() {
+		
 	}
 
 	void PlayerControlSystem::setAcceleration(double acceleration) const {
