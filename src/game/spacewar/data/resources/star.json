@@ -8,10 +8,10 @@
 			"states": [
 				{
 					"name": "Idle",
-					"texture": "resources/player1.png",
-					"frameWidth": 66,
-					"frameHeight": 88,
-					"frameDuration": 1000,
+					"texture": "resources/star.png",
+					"frameWidth": 64,
+					"frameHeight": 64,
+					"frameDuration": 0,
 					"isLooped": true,
 					"frames" : [
 						{
@@ -28,11 +28,11 @@
 			"name": "Position",
 			"x": 760.0,
 			"y": 450.0,
-			"centerX": 33.0,
+			"centerX": 32.0,
 			"centerY": 32.0,
-			"width": 66.0,
-			"height": 88.0,
-			"scale": 0.5,
+			"width": 64.0,
+			"height": 64.0,
+			"scale": 0.625,
 			"angle": 0.0
 		},
 		{

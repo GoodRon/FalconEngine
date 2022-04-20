@@ -34,7 +34,8 @@ private:
     void unlockEntities() const override;
 
     void draw(Position* positionComponent, 
-        Visual* visualComponent) const;
+        Visual* visualComponent,
+        uint64_t timepoint) const;
 
 private:
     mutable std::mutex _entityMutex;

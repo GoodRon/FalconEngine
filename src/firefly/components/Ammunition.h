@@ -6,6 +6,8 @@
 #ifndef FIREFLY_COMPONENT_AMMUNITION_H
 #define FIREFLY_COMPONENT_AMMUNITION_H
 
+#include <unordered_map>
+
 #include "IComponent.h"
 
 namespace firefly {
@@ -24,8 +26,13 @@ public:
 		return new Ammunition(*this);
 	}
 
-	int max = 0;
-	int current = 0;
+	struct Weapon {
+		std::string projectile;
+		int maxShots = 0;
+		int currentShot = 0;
+	}
+
+	std::unordered_map<std::string, Weapon> _weapons;
 };
 
 }

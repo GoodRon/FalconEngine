@@ -11,7 +11,7 @@
 					"texture": "resources/player1.png",
 					"frameWidth": 66,
 					"frameHeight": 88,
-					"frameDuration": 1000,
+					"frameDuration": 0,
 					"isLooped": true,
 					"frames" : [
 						{

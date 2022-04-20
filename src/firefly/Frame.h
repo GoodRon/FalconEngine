@@ -20,7 +20,7 @@ class Frame {
 public:
 	Frame(const TexturePointer& texture, 
 		  const SDL_Rect& sourceRect,
-		  int durationMs = 0);
+		  uint64_t durationMs = 0);
 	~Frame();
 
 	Frame(const Frame&) = default;
@@ -31,12 +31,12 @@ public:
 
 	TexturePointer getTexture() const;
 	SDL_Rect getSourceRect() const;
-	int getDuration() const;
+	uint64_t getDuration() const;
 
 private:
 	TexturePointer _texture;
 	SDL_Rect _sourceRect;
-	int _durationMs;
+	uint64_t _durationMs;
 };
 
 }

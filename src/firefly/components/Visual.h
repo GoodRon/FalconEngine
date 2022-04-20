@@ -32,6 +32,7 @@ public:
 	using Direction = int;
 	using Frames = std::vector<std::shared_ptr<Frame>>;
 	
+	// TODO remove duration
 	struct State {
 		std::unordered_map<Direction, Frames> frames;
 		bool isLooped = true;
@@ -44,6 +45,7 @@ public:
 	bool isPaused = false;
 	bool isVisible = false;
 	int zIndex = 0;
+	uint64_t timepoint = 0;
 };
 
 }

@@ -1,5 +1,7 @@
 #include "RenderingSystem.h"
 
+#include <SDL_timer.h>
+
 #include "Entity.h"
 #include "Engine.h"
 #include "Frame.h"
@@ -26,6 +28,8 @@ void RenderingSystem::drawEntites() const {
 	// TODO improve
 	lockEntities();
 
+	const uint64_t timepoint = SDL_GetTicks64();
+
 	Position* positionComponent = nullptr;
 	Visual* visualComponent = nullptr;
 	
@@ -43,7 +47,7 @@ void RenderingSystem::drawEntites() const {
 		}
 
 		// TODO sort by zIndex
-		draw(positionComponent, visualComponent);
+		draw(positionComponent, visualComponent, timepoint);
 	}
 
 	unlockEntities();
@@ -65,7 +69,7 @@ void RenderingSystem::unlockEntities() const {
 }
 
 void RenderingSystem::draw(Position* positionComponent, 
-        Visual* visualComponent) const {
+        Visual* visualComponent, uint64_t timepoint) const {
 	if (!positionComponent || !visualComponent) {
 		return;
 	}
@@ -78,6 +82,27 @@ void RenderingSystem::draw(Position* positionComponent,
 
 	// TODO check index
 	auto frame = frames[visualComponent->frameIndex];
+
+	// TODO move to the advanceFrames() function
+	const auto duration = frame->getDuration();
+	if (duration > 0) {
+		auto elapsedMs = timepoint - visualComponent->timepoint;
+
+		if (elapsedMs > duration) {
+			// TODO minus delta
+			visualComponent->timepoint = timepoint;
+
+			if (visualComponent->frameIndex == frames.size() - 1) {
+				if (state.isLooped) {
+					visualComponent->frameIndex = 0;
+				}
+			} else {
+				visualComponent->frameIndex++;
+			}
+
+			frame = frames[visualComponent->frameIndex];
+		}
+	}
 
 	// TODO improve
 	SDL_Rect source = frame->getSourceRect();
