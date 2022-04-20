@@ -14,7 +14,7 @@
 #include <firefly/components/Position.h>
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Player.h>
-#include <firefly/components/Solidity.h>
+//#include <firefly/components/Solidity.h>
 #include <firefly/components/Gravity.h>
 #include <firefly/components/State.h>
 #include <firefly/components/Ammunition.h>
@@ -116,11 +116,13 @@ private:
 			return buildPlayerComponent(entity, document);
 		};
 
+		/*
 		_componentBuilders[firefly::Solidity::ComponentName] = [this](
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildSolidityComponent(entity, document);
 		};
+		*/
 
 		_componentBuilders[firefly::Gravity::ComponentName] = [this](
 			firefly::Entity* entity,
@@ -256,6 +258,7 @@ private:
 		return true;
 	}
 
+	/*
 	bool buildSolidityComponent(
 		firefly::Entity* entity,
 		rapidjson::Value& document) const {
@@ -267,7 +270,7 @@ private:
 
 		entity->addComponent(std::move(component));
 		return true;
-	}
+	}*/
 
 	bool buildGravityComponent(
 		firefly::Entity* entity,

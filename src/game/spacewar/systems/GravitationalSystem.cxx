@@ -138,7 +138,6 @@ void GravitationalSystem::processGravity(
 		}
 
 
-
 		// TODO move to velocity
 
 		velocity->speedAngle = (normalizeAngle(velocity->speedAngle));

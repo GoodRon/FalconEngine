@@ -8,10 +8,6 @@
 
 #include <firefly/systems/ISystem.h>
 
-namespace firefly {
-	class Entity;
-}
-
 namespace spacewar {
 
 class LifetimeSystem final: public firefly::ISystem {
