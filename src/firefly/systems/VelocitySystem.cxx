@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include <SDL_timer.h>
+//#include <SDL_Log.h>
 
 #include "Entity.h"
 
@@ -72,11 +73,11 @@ void VelocitySystem::processVelocity(
 	double speedRad = (velocity->speedAngle * M_PI) / 180.0;
 
 	const double deltaSpeed = velocity->acceleration * elapsedMs / 1000.0;
-	const double deltaX = deltaSpeed * cos(accelerationRad);
-	const double deltaY = deltaSpeed * sin(accelerationRad);
+	const double deltaX = deltaSpeed * sin(accelerationRad);
+	const double deltaY = -deltaSpeed * cos(accelerationRad);
 
-	velocity->speedX = velocity->speed * cos(speedRad) + deltaX;
-	velocity->speedY = velocity->speed * sin(speedRad) + deltaY;
+	velocity->speedX = velocity->speed * sin(speedRad) + deltaX;
+	velocity->speedY = -velocity->speed * cos(speedRad) + deltaY;
 
 	if (fabs(velocity->acceleration) < epsilon) {
 		return;
@@ -89,9 +90,9 @@ void VelocitySystem::processVelocity(
 	if (fabs(velocity->speed) < epsilon) {
 		speedRad = 0.0;
 	} else {
-		speedRad = acos(velocity->speedX / velocity->speed);
-		if (velocity->speedY < 0.0) {
-			speedRad = -speedRad;
+		speedRad = asin(velocity->speedX / velocity->speed);
+		if (velocity->speedY > 0.0) {
+			speedRad = M_PI - speedRad;
 		}
 	}
 
@@ -101,10 +102,20 @@ void VelocitySystem::processVelocity(
 	if (velocity->maxSpeed > epsilon) {
 		if (velocity->speed > velocity->maxSpeed) {
 			velocity->speed = velocity->maxSpeed;
-			velocity->speedX = velocity->speed * cos(speedRad);
-			velocity->speedY = velocity->speed * sin(speedRad);
+			velocity->speedX = velocity->speed * sin(speedRad);
+			velocity->speedY = -velocity->speed * cos(speedRad);
 		}
 	}
+
+/*
+	SDL_Log("---");
+	SDL_Log("speedAngle %f", velocity->speedAngle);
+	SDL_Log("speedX %f", velocity->speedX);
+	SDL_Log("speedY %f", velocity->speedY);
+	SDL_Log("velocity->accelerationAngle %f", velocity->accelerationAngle);
+	SDL_Log("deltaX %f", deltaX);
+	SDL_Log("deltaY %f", deltaY);
+*/
 }
 
 }
