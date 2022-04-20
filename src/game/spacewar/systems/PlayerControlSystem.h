@@ -13,6 +13,7 @@ namespace firefly {
 	class Velocity;
 	class Position;
 	class State;
+	class Ammunition;
 	class NativeEvent;
 }
 
@@ -28,7 +29,8 @@ public:
 	PlayerControlSystem(const PlayerControlSystem&) = delete;
 	PlayerControlSystem& operator=(const PlayerControlSystem&) = delete;
 
-	void setKeyCodes(int keyUp, int keyLeft, int keyDown, int keyRight);
+	void setKeyCodes(int keyUp, int keyLeft, int keyDown, 
+		int keyRight, int keyAction);
 
 	void update() override;
 
@@ -44,18 +46,18 @@ private:
 	firefly::Velocity* getVelocity(int playerId) const;
 	firefly::Position* getPosition(int playerId) const;
 	firefly::State* getState(int playerId) const;
+	firefly::Ammunition* getAmmunition(int playerId) const;
 
 	void processPressed(uint64_t elapsedMs);
 	void onUpPressed(uint64_t elapsedMs);
 	void onLeftPressed(uint64_t elapsedMs);
 	void onDownPressed(uint64_t elapsedMs);
 	void onRightPressed(uint64_t elapsedMs);
+	void onActionPressed(uint64_t elapsedMs);
 
-	void setSpeedX(double speedX);
-	void setSpeedY(double speedY);
-
-	void setAcceleration(double acceleration);
-	void rotate(double angle);
+	void setAcceleration(double acceleration) const;
+	void rotate(double angle) const;
+	void shoot() const;
 
 private:
 	const int _playerId;
@@ -63,10 +65,12 @@ private:
 	int _keyCodeLeft;
 	int _keyCodeDown;
 	int _keyCodeRight;
+	int _keyCodeAction;
 	bool _isUpPressed;
 	bool _isLeftPressed;
 	bool _isDownPressed;
 	bool _isRightPressed;
+	bool _isActionPressed;
 };
 
 }

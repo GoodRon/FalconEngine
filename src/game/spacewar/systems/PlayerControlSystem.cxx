@@ -3,12 +3,17 @@
 #include <SDL_events.h>
 #include <SDL_timer.h>
 
+#include <firefly/Engine.h>
 #include <firefly/Entity.h>
+#include <firefly/EntityPrototypes.h>
+#include <firefly/GameObject.h>
+#include <firefly/ObjectManager.h>
 #include <firefly/events/NativeEvent.h>
 #include <firefly/components/Player.h>
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Position.h>
 #include <firefly/components/State.h>
+#include <firefly/components/Ammunition.h>
 
 namespace spacewar {
 
@@ -25,30 +30,36 @@ namespace spacewar {
 		_keyCodeLeft(SDLK_a),
 		_keyCodeDown(SDLK_s),
 		_keyCodeRight(SDLK_d),
+		_keyCodeAction(SDLK_SPACE),
 		_isUpPressed(false),
 		_isLeftPressed(false),
 		_isDownPressed(false),
-		_isRightPressed(false) {
+		_isRightPressed(false),
+		_isActionPressed(false) {
 
 		_requiredComponents.push_front(firefly::Player::ComponentName);
 		_requiredComponents.push_front(firefly::Position::ComponentName);
 		_requiredComponents.push_front(firefly::Velocity::ComponentName);
 		_requiredComponents.push_front(firefly::State::ComponentName);
+		_requiredComponents.push_front(firefly::Ammunition::ComponentName);
 	}
 
 	PlayerControlSystem::~PlayerControlSystem() {
 	}
 
-	void PlayerControlSystem::setKeyCodes(int keyUp, int keyLeft, int keyDown, int keyRight) {
+	void PlayerControlSystem::setKeyCodes(int keyUp, int keyLeft, 
+		int keyDown, int keyRight, int keyAction) {
 		_keyCodeUp = keyUp;
 		_keyCodeLeft = keyLeft;
 		_keyCodeDown = keyDown;
 		_keyCodeRight = keyRight;
+		_keyCodeAction = keyAction;
 
 		_isUpPressed = false;
 		_isLeftPressed = false;
 		_isDownPressed = false;
 		_isRightPressed = false;
+		_isActionPressed = false;
 	}
 
 	void PlayerControlSystem::update() {
@@ -105,6 +116,11 @@ namespace spacewar {
 				_isRightPressed = true;
 				return true;
 			}
+
+			if (_keyCodeAction == keyCode) {
+				_isActionPressed = true;
+				return true;
+			}
 			break;
 
 		case SDL_KEYUP:
@@ -128,6 +144,11 @@ namespace spacewar {
 				_isRightPressed = false;
 				return true;
 			}
+
+			if (_keyCodeAction == keyCode) {
+				_isActionPressed = false;
+				return true;
+			}
 			break;
 
 		default:
@@ -149,6 +170,8 @@ namespace spacewar {
 		return nullptr;
 	}
 
+
+	// TODO pass the entity ptr
 	firefly::Velocity* PlayerControlSystem::getVelocity(int playerId) const {
 		firefly::Entity* playerEntity = findPlayer(playerId);
 		if (!playerEntity) {
@@ -185,11 +208,24 @@ namespace spacewar {
 		return component;
 	}
 
+	firefly::Ammunition* PlayerControlSystem::getAmmunition(int playerId) const {
+		firefly::Entity* playerEntity = findPlayer(playerId);
+		if (!playerEntity) {
+			return nullptr;
+		}
+
+		auto component = static_cast<firefly::Ammunition*>(
+			playerEntity->getComponent(
+				firefly::getComponentId(firefly::Ammunition::ComponentName)));
+		return component;
+	}
+
 	void PlayerControlSystem::processPressed(uint64_t elapsedMs) {
 		onUpPressed(elapsedMs);
 		onLeftPressed(elapsedMs);
 		onDownPressed(elapsedMs);
 		onRightPressed(elapsedMs);
+		onActionPressed(elapsedMs);
 	}
 
 	void PlayerControlSystem::onUpPressed(uint64_t elapsedMs) {
@@ -219,7 +255,6 @@ namespace spacewar {
 
 	void PlayerControlSystem::onDownPressed(uint64_t elapsedMs) {
 		// TODO improve
-		//shootRocket();
 		auto stateComponent = getState(_playerId);
 		if (!stateComponent) {
 			return;
@@ -257,25 +292,16 @@ namespace spacewar {
 		}
 	}
 
-	void PlayerControlSystem::setSpeedX(double speedX) {
-		auto velocityComponent = getVelocity(_playerId);
-		if (!velocityComponent) {
+	// TODO pressed and hold
+	void PlayerControlSystem::onActionPressed(uint64_t elapsedMs) {
+		if (!_isActionPressed) {
 			return;
-		}
+		} 
 
-		velocityComponent->speedX = speedX;
+		shoot();
 	}
 
-	void PlayerControlSystem::setSpeedY(double speedY) {
-		auto velocityComponent = getVelocity(_playerId);
-		if (!velocityComponent) {
-			return;
-		}
-
-		velocityComponent->speedY = speedY;
-	}
-
-	void PlayerControlSystem::setAcceleration(double acceleration) {
+	void PlayerControlSystem::setAcceleration(double acceleration) const {
 		auto velocityComponent = getVelocity(_playerId);
 		if (!velocityComponent) {
 			return;
@@ -284,17 +310,63 @@ namespace spacewar {
 		velocityComponent->acceleration = acceleration;
 	}
 
-	/*
-	void PlayerControlSystem::shootRocket() {
-		auto positionComponent = getPosition(_playerId);
-		if (!positionComponent) {
+	void PlayerControlSystem::shoot() const {
+		auto ammunitionComponent = getAmmunition(_playerId);
+		if (!ammunitionComponent) {
 			return;
 		}
 
-		
-	}*/
+		// TODO improve
+		const std::string weaponName("RocketLauncher");
 
-	void PlayerControlSystem::rotate(double angle) {
+		if (ammunitionComponent->weapons.find(weaponName) == 
+			ammunitionComponent->weapons.end()) {
+			return;
+		}
+
+		auto& weapon = ammunitionComponent->weapons[weaponName];
+
+		// TODO calc delta
+		if (_updateTimepoint - weapon.lastShotTimepoint < 
+			weapon.cooldownTimeMs) {
+			return;
+		}
+
+		weapon.lastShotTimepoint = _updateTimepoint;
+
+		auto entityPrototypes = _engine->getEntityPrototypes();
+		auto objectManager = _engine->getObjectManager();
+
+		auto projectile = entityPrototypes->makeEntity(weapon.projectile);
+		if (!projectile) {
+			return;
+		}
+
+		auto velocity = projectile->getComponent<firefly::Velocity>();
+		if (!velocity) {
+			return;
+		}
+
+		auto position = projectile->getComponent<firefly::Position>();
+		if (!position) {
+			return;
+		}
+
+		auto playerPosition = getPosition(_playerId);
+		if (!playerPosition) {
+			return;
+		}
+
+		velocity->speedAngle = playerPosition->angle;
+		position->angle = playerPosition->angle;
+		position->x = playerPosition->x;
+		position->y = playerPosition->y;
+
+		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(projectile));
+		objectManager->registerObject(object);
+	}
+
+	void PlayerControlSystem::rotate(double angle) const {
 		auto positionComponent = getPosition(_playerId);
 		if (!positionComponent) {
 			return;

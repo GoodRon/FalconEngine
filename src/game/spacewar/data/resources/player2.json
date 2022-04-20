@@ -78,6 +78,17 @@
 			"name": "State",
 			"current": "Idle",
 			"previous": ""
+		},
+		{
+			"name": "Ammunition",
+			"weapons": [
+				{	
+					"name": "RocketLauncher",
+					"projectile": "Rocket",
+					"rounds": 15,
+					"cooldownTimeMs": 5
+				}
+			]
 		}
 	]
 }

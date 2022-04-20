@@ -49,7 +49,7 @@
 			"width": 66.0,
 			"height": 88.0,
 			"scale": 0.5,
-			"angle": 90.0
+			"angle": 0.0
 		},
 		{
 			"name": "Velocity",
@@ -78,6 +78,17 @@
 			"name": "State",
 			"current": "Idle",
 			"previous": ""
+		},
+		{
+			"name": "Ammunition",
+			"weapons": [
+				{	
+					"name": "RocketLauncher",
+					"projectile": "Rocket",
+					"rounds": 15,
+					"cooldownTimeMs": 1000
+				}
+			]
 		}
 	]
 }

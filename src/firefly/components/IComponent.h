@@ -29,6 +29,10 @@ public:
 	const std::string getName() const;
 	ComponentID getId() const;
 
+	// TODO write it
+	//void setActive(bool isActive);
+	//bool isActive() const;
+
 private:
 	const std::string _name;
 	const ComponentID _id;

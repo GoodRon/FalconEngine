@@ -71,11 +71,11 @@ private:
 		std::shared_ptr<PlayerControlSystem> playerControl;
 
 		playerControl.reset(new PlayerControlSystem(_engine, 1, "1"));
-		playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d);
+		playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d, SDLK_SPACE);
 		systemManager->addSystem(std::move(playerControl));
 
 		playerControl.reset(new PlayerControlSystem(_engine, 2, "2"));
-		playerControl->setKeyCodes(SDLK_UP, SDLK_LEFT, SDLK_DOWN, SDLK_RIGHT);
+		playerControl->setKeyCodes(SDLK_UP, SDLK_LEFT, SDLK_DOWN, SDLK_RIGHT, SDLK_RCTRL);
 		systemManager->addSystem(std::move(playerControl));
 
 		std::shared_ptr<firefly::ISystem> systemPtr;
@@ -131,13 +131,8 @@ private:
 		object.reset(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
 
-		/*
 		entity = builder.buildEntity("resources/rocket.json");
-		object.reset(new firefly::GameObject(entity));
-		objectManager->registerObject(object);
-
 		entityPrototypes->registerPrototype(entity->getName(), entity);
-		*/
 
 		return true;
 	}

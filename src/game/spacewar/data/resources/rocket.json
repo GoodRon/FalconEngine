@@ -8,10 +8,10 @@
 			"states": [
 				{
 					"name": "Idle",
-					"texture": "resources/player1.png",
-					"frameWidth": 66,
-					"frameHeight": 88,
-					"frameDuration": 1000,
+					"texture": "resources/rocket.png",
+					"frameWidth": 32,
+					"frameHeight": 55,
+					"frameDuration": 0,
 					"isLooped": true,
 					"frames" : [
 						{
@@ -28,16 +28,16 @@
 			"name": "Position",
 			"x": 0.0,
 			"y": 0.0,
-			"centerX": 33.0,
-			"centerY": 32.0,
-			"width": 66.0,
-			"height": 88.0,
-			"scale": 0.5,
-			"angle": 90.0
+			"centerX": 16.0,
+			"centerY": 27.0,
+			"width": 32.0,
+			"height": 55.0,
+			"scale": 1.0,
+			"angle": 0.0
 		},
 		{
 			"name": "Velocity",
-			"speed": 0.0,
+			"speed": 150.0,
 			"speedAngle": 0.0,
 			"acceleration": 0.0,
 			"accelerationAngle": 0.0,
@@ -47,12 +47,6 @@
 			"name": "Solidity",
 			"isSolid": true,
 			"isDestructable": true
-		},
-		{
-			"name": "Gravity",
-			"hasGravity": false,
-			"emitGravity": false,
-			"mass": 0.0
 		}
 	]
 }

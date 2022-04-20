@@ -28,11 +28,12 @@ public:
 
 	struct Weapon {
 		std::string projectile;
-		int maxShots = 0;
-		int currentShot = 0;
-	}
+		int rounds = 0;
+		uint64_t cooldownTimeMs = 0;
+		uint64_t lastShotTimepoint = 0;
+	};
 
-	std::unordered_map<std::string, Weapon> _weapons;
+	std::unordered_map<std::string, Weapon> weapons;
 };
 
 }

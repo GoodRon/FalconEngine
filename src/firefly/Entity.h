@@ -34,6 +34,15 @@ public:
 
 	IComponent* getComponent(ComponentID id);
 
+	template<class T>
+	T* getComponent() {
+		const auto id = getComponentId(T::ComponentName);
+		if (_components.find(id) == _components.end()) {
+			return nullptr;
+		}
+		return static_cast<T*>(_components[id].get());
+	}
+
 private:
 	EntityID _id;
 	std::string _name;

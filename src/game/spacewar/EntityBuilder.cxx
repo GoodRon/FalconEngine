@@ -17,6 +17,7 @@
 #include <firefly/components/Solidity.h>
 #include <firefly/components/Gravity.h>
 #include <firefly/components/State.h>
+#include <firefly/components/Ammunition.h>
 
 #include "rapidjson/document.h"
 
@@ -130,6 +131,12 @@ private:
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildStateComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::Ammunition::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildAmmunitionComponent(entity, document);
 		};
 	}
 
@@ -278,6 +285,27 @@ private:
 		component->current = std::string(document["current"].GetString());
 		component->previous = std::string(document["previous"].GetString());
 
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildAmmunitionComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::Ammunition> component(new firefly::Ammunition);
+
+		for (auto& weaponData: document["weapons"].GetArray()) {
+			firefly::Ammunition::Weapon weapon;
+
+			const auto name = std::string(weaponData["name"].GetString());
+			weapon.projectile = std::string(weaponData["projectile"].GetString());
+			weapon.rounds = weaponData["rounds"].GetInt();
+			weapon.cooldownTimeMs = weaponData["cooldownTimeMs"].GetUint64();
+
+			component->weapons[name] = std::move(weapon);
+		}
+		
 		entity->addComponent(std::move(component));
 		return true;
 	}
