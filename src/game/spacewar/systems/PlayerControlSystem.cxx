@@ -357,8 +357,8 @@ namespace spacewar {
 
 		velocity->speedAngle = playerPosition->angle;
 		position->angle = playerPosition->angle;
-		position->x = playerPosition->x;
-		position->y = playerPosition->y;
+		position->x = playerPosition->x + 30.0;
+		position->y = playerPosition->y + 30.0;
 		lifetime->timepoint = _updateTimepoint;
 
 		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(projectile));

@@ -52,7 +52,7 @@
 		{
 			"name": "RoundCollidable",
 			"isDestructable": false,
-			"collidableRadius": 32.0
+			"collidableRadius": 15.0
 		}
 	]
 }
