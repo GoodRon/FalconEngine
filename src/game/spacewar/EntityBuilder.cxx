@@ -18,6 +18,7 @@
 #include <firefly/components/Gravity.h>
 #include <firefly/components/State.h>
 #include <firefly/components/Ammunition.h>
+#include <firefly/components/Lifetime.h>
 
 #include "rapidjson/document.h"
 
@@ -137,6 +138,12 @@ private:
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildAmmunitionComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::Lifetime::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildLifetimeComponent(entity, document);
 		};
 	}
 
@@ -306,6 +313,18 @@ private:
 			component->weapons[name] = std::move(weapon);
 		}
 		
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildLifetimeComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::Lifetime> component(new firefly::Lifetime);
+
+		component->lifetimeMs = document["lifetimeMs"].GetUint64();
+
 		entity->addComponent(std::move(component));
 		return true;
 	}

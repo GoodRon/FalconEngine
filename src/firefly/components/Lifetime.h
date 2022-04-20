@@ -10,21 +10,21 @@
 
 namespace firefly {
 
-class Temporal final: public IComponent {
+class Lifetime final: public IComponent {
 public:
-	inline static const std::string ComponentName = "Temporal";
+	inline static const std::string ComponentName = "Lifetime";
 	
-	Temporal(): IComponent(ComponentName) {}
-	~Temporal() override = default;
+	Lifetime(): IComponent(ComponentName) {}
+	~Lifetime() override = default;
 
-	Temporal(const Temporal&) = default;
-	Temporal& operator=(const Temporal&) = default;
+	Lifetime(const Lifetime&) = default;
+	Lifetime& operator=(const Lifetime&) = default;
 
 	IComponent* clone() const override {
-		return new Temporal(*this);
+		return new Lifetime(*this);
 	}
 
-	uint64_t timeToLiveMs = 0;
+	uint64_t lifetimeMs = 0;
 	uint64_t timepoint = 0;
 };
 

@@ -131,9 +131,9 @@ void GravitationalSystem::processGravity(
 			// TODO improve
 			acceleration = ((gConstant * emitterGravity->mass) / gDivider) / squaredDistance;
 
-			accelerationRad = acos(distanceX / distance);
-			if (dsistanceY < 0.0) {
-				accelerationRad = -accelerationRad;
+			accelerationRad = asin(distanceX / distance);
+			if (dsistanceY > 0.0) {
+				accelerationRad = M_PI -accelerationRad;
 			}
 		}
 
@@ -146,11 +146,11 @@ void GravitationalSystem::processGravity(
 		double speedRad = (velocity->speedAngle * M_PI) / 180.0;
 
 		const double deltaSpeed = acceleration * elapsedMs / 1000.0;
-		const double deltaX = deltaSpeed * cos(accelerationRad);
-		const double deltaY = deltaSpeed * sin(accelerationRad);
+		const double deltaX = deltaSpeed * sin(accelerationRad);
+		const double deltaY = -deltaSpeed * cos(accelerationRad);
 
-		velocity->speedX = velocity->speed * cos(speedRad) + deltaX;
-		velocity->speedY = velocity->speed * sin(speedRad) + deltaY;
+		velocity->speedX = velocity->speed * sin(speedRad) + deltaX;
+		velocity->speedY = -velocity->speed * cos(speedRad) + deltaY;
 
 		if (fabs(acceleration) < epsilon) {
 			return;
@@ -163,9 +163,9 @@ void GravitationalSystem::processGravity(
 		if (fabs(velocity->speed) < epsilon) {
 			speedRad = 0.0;
 		} else {
-			speedRad = acos(velocity->speedX / velocity->speed);
-			if (velocity->speedY < 0.0) {
-				speedRad = -speedRad;
+			speedRad = asin(velocity->speedX / velocity->speed);
+			if (velocity->speedY > 0.0) {
+				speedRad = M_PI -speedRad;
 			}
 		}
 
@@ -175,8 +175,8 @@ void GravitationalSystem::processGravity(
 		if (velocity->maxSpeed > epsilon) {
 			if (velocity->speed > velocity->maxSpeed) {
 				velocity->speed = velocity->maxSpeed;
-				velocity->speedX = velocity->speed * cos(speedRad);
-				velocity->speedY = velocity->speed * sin(speedRad);
+				velocity->speedX = velocity->speed * sin(speedRad);
+				velocity->speedY = -velocity->speed * cos(speedRad);
 			}
 		}
 	}

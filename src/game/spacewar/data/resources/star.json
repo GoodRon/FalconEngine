@@ -51,8 +51,8 @@
 		{
 			"name": "Gravity",
 			"hasGravity": false,
-			"emitGravity": false,
-			"mass": 300000000.0
+			"emitGravity": true,
+			"mass": 305000000.0
 		}
 	]
 }

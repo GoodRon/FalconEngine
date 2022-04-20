@@ -56,7 +56,7 @@
 			"speed": 0.0,
 			"speedAngle": 0.0,
 			"acceleration": 0.0,
-			"accelerationAngle": 180.0,
+			"accelerationAngle": 270.0,
 			"maxSpeed": 600.0
 		},
 		{

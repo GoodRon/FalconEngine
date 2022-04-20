@@ -14,6 +14,7 @@
 #include <firefly/components/Position.h>
 #include <firefly/components/State.h>
 #include <firefly/components/Ammunition.h>
+#include <firefly/components/Lifetime.h>
 
 namespace spacewar {
 
@@ -343,12 +344,9 @@ namespace spacewar {
 		}
 
 		auto velocity = projectile->getComponent<firefly::Velocity>();
-		if (!velocity) {
-			return;
-		}
-
 		auto position = projectile->getComponent<firefly::Position>();
-		if (!position) {
+		auto lifetime = projectile->getComponent<firefly::Lifetime>();
+		if (!velocity || !position || !lifetime) {
 			return;
 		}
 
@@ -361,6 +359,7 @@ namespace spacewar {
 		position->angle = playerPosition->angle;
 		position->x = playerPosition->x;
 		position->y = playerPosition->y;
+		lifetime->timepoint = _updateTimepoint;
 
 		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(projectile));
 		objectManager->registerObject(object);

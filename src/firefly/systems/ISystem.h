@@ -40,6 +40,7 @@ protected:
 	virtual bool checkComponents(Entity* entity) const;
 	virtual void lockEntities() const;
 	virtual void unlockEntities() const;
+	// TODO onEntityAdded
 	virtual void onRegisterEntity(Entity* entity);
 	virtual void onUnregisterEntity(Entity* entity);
 
