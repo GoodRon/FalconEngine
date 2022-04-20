@@ -3,13 +3,9 @@
  * All rights reserved
  */
 
-// NOTE particles and particle emmiters
+// NOTE add particles and particle emmiters
 
-#include <SDL.h>
-
-#include <iostream>
-
-#include "firefly/Engine.h"
+#include <firefly/Engine.h>
 
 #include "GameBuilder.h"
 

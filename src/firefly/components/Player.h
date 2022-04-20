@@ -21,7 +21,7 @@ public:
 	Player& operator=(const Player&) = default;
 
 	IComponent* clone() const override {
-		return new Player;
+		return new Player(*this);
 	}
 
 	int playerId = 0;

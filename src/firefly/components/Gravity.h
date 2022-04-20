@@ -21,12 +21,12 @@ public:
 	Gravity& operator=(const Gravity&) = default;
 
 	IComponent* clone() const override {
-		return new Gravity;
+		return new Gravity(*this);
 	}
 
 	bool hasGravity = false;
 	bool emitGravity = false;
-	double mass = 100000000.0;
+	double mass = 0.0;
 };
 
 }

@@ -21,7 +21,7 @@ public:
 	Velocity& operator=(const Velocity&) = default;
 
 	IComponent* clone() const override {
-		return new Velocity;
+		return new Velocity(*this);
 	}
 
 	// TODO improve

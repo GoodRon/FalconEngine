@@ -25,7 +25,7 @@ public:
 	Visual& operator=(const Visual&) = default;
 
 	IComponent* clone() const override {
-		return new Visual;
+		return new Visual(*this);
 	}
 
 	using StateName = std::string;

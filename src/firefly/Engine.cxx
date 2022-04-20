@@ -16,7 +16,7 @@
 #include "EngineException.h"
 #include "SystemManager.h"
 #include "EventManager.h"
-#include "EntityRegistry.h"
+#include "EntityPrototypes.h"
 
 #include "systems/RenderingSystem.h"
 #include "events/NativeEvent.h"
@@ -40,7 +40,7 @@ bool Engine::initialize(int width, int height) {
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
 	_objectManager.reset(new ObjectManager(_systemManager.get()));
-	_entityRegistry.reset(new EntityRegistry);
+	_entityPrototypes.reset(new EntityPrototypes);
 	_timerPool.reset(new TimerPool);
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
@@ -74,7 +74,7 @@ Engine::Engine():
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
-	_entityRegistry(),
+	_entityPrototypes (),
 	_systemManager(),
 	_eventManager(),
 	_renderingSystem(),
@@ -177,8 +177,8 @@ ObjectManager* Engine::getObjectManager() const {
 	return _objectManager.get();
 }
 
-EntityRegistry* Engine::getEntityRegistry() const {
-	return _entityRegistry.get();
+EntityPrototypes* Engine::getEntityPrototypes() const {
+	return _entityPrototypes.get();
 }
 
 SystemManager* Engine::getSystemManager() const {

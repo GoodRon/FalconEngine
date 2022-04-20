@@ -3,9 +3,11 @@
 #include <SDL.h>
 
 #include <firefly/Engine.h>
+#include <firefly/Entity.h>
 #include <firefly/SystemManager.h>
 #include <firefly/ResourceManager.h>
 #include <firefly/GameObject.h>
+#include <firefly/EntityPrototypes.h>
 #include <firefly/ObjectManager.h>
 #include <firefly/systems/VelocitySystem.h>
 
@@ -97,6 +99,11 @@ private:
 			return false;
 		}
 
+		auto entityPrototypes = _engine->getEntityPrototypes();
+		if (!entityPrototypes) {
+			return false;
+		}
+
 		// TODO while on a json list
 
 		std::shared_ptr<firefly::Entity> entity;
@@ -119,6 +126,12 @@ private:
 		entity = builder.buildEntity("resources/star.json");
 		object.reset(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
+
+		entity = builder.buildEntity("resources/rocket.json");
+		object.reset(new firefly::GameObject(entity));
+		objectManager->registerObject(object);
+
+		entityPrototypes->registerPrototype(entity->getName(), entity);
 
 		return true;
 	}

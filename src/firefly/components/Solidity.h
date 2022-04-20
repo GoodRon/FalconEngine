@@ -21,7 +21,7 @@ public:
 	Solidity& operator=(const Solidity&) = default;
 
 	IComponent* clone() const override {
-		return new Solidity;
+		return new Solidity(*this);
 	}
 
 	bool isSolid = false;

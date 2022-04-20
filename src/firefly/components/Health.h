@@ -21,7 +21,7 @@ public:
 	Health& operator=(const Health&) = default;
 
 	IComponent* clone() const override {
-		return new Health;
+		return new Health(*this);
 	}
 
 	int max = 0;

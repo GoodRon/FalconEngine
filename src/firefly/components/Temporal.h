@@ -21,7 +21,7 @@ public:
 	Temporal& operator=(const Temporal&) = default;
 
 	IComponent* clone() const override {
-		return new Temporal;
+		return new Temporal(*this);
 	}
 
 	uint64_t timeToLiveMs = 0;

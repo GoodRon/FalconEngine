@@ -11,7 +11,7 @@ add_library(firefly
 	Entity.cxx
 	SystemManager.cxx
 	EventManager.cxx
-	EntityRegistry.cxx
+	EntityPrototypes.cxx
 	GameObject.cxx
 	events/IEvent.cxx
 	events/NativeEvent.cxx

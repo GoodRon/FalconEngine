@@ -20,7 +20,7 @@ namespace firefly {
 class Renderer;
 class ResourceManager;
 class TimerPool;
-class EntityRegistry;
+class EntityPrototypes;
 class ObjectManager;
 class SystemManager;
 class EventManager;
@@ -52,7 +52,7 @@ public:
 	ResourceManager* getResourceManager() const;
 	ObjectManager* getObjectManager() const;
 
-	EntityRegistry* getEntityRegistry() const;
+	EntityPrototypes* getEntityPrototypes() const;
 	
 	SystemManager* getSystemManager() const;
 	EventManager* getEventManager() const;
@@ -79,7 +79,7 @@ private:
 	std::unique_ptr<Renderer> _renderer;
 	std::unique_ptr<ResourceManager> _resourceManager;
 	std::unique_ptr<ObjectManager> _objectManager;
-	std::unique_ptr<EntityRegistry> _entityRegistry;
+	std::unique_ptr<EntityPrototypes> _entityPrototypes;
 	std::unique_ptr<SystemManager> _systemManager;
 	std::unique_ptr<EventManager> _eventManager;
 	std::shared_ptr<firefly::RenderingSystem> _renderingSystem;

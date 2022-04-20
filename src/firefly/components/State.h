@@ -21,7 +21,7 @@ public:
 	State& operator=(const State&) = default;
 
 	IComponent* clone() const override {
-		return new State;
+		return new State(*this);
 	}
 
 	using StateID = int;

@@ -23,7 +23,7 @@ public:
 	Position& operator=(const Position&) = default;
 
 	IComponent* clone() const override {
-		return new Position;
+		return new Position(*this);
 	}
 
 	SDL_Rect toRect() {
