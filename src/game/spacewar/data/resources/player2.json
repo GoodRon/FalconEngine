@@ -64,9 +64,9 @@
 			"playerId": 2
 		},
 		{
-			"name": "Solidity",
-			"isSolid": true,
-			"isDestructable": true
+			"name": "RoundCollidable",
+			"isDestructable": true,
+			"collidableRadius": 16.0
 		},
 		{
 			"name": "Gravity",

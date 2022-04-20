@@ -44,15 +44,15 @@
 			"maxSpeed": 0.0
 		},
 		{
-			"name": "Solidity",
-			"isSolid": true,
-			"isDestructable": false
-		},
-		{
 			"name": "Gravity",
 			"hasGravity": false,
 			"emitGravity": true,
 			"mass": 305000000.0
+		},
+		{
+			"name": "RoundCollidable",
+			"isDestructable": false,
+			"collidableRadius": 32.0
 		}
 	]
 }

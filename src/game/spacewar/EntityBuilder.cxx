@@ -14,11 +14,11 @@
 #include <firefly/components/Position.h>
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Player.h>
-//#include <firefly/components/Solidity.h>
 #include <firefly/components/Gravity.h>
 #include <firefly/components/State.h>
 #include <firefly/components/Ammunition.h>
 #include <firefly/components/Lifetime.h>
+#include <firefly/components/RoundCollidable.h>
 
 #include "rapidjson/document.h"
 
@@ -115,15 +115,6 @@ private:
 			rapidjson::Value& document)->bool {
 			return buildPlayerComponent(entity, document);
 		};
-
-		/*
-		_componentBuilders[firefly::Solidity::ComponentName] = [this](
-			firefly::Entity* entity,
-			rapidjson::Value& document)->bool {
-			return buildSolidityComponent(entity, document);
-		};
-		*/
-
 		_componentBuilders[firefly::Gravity::ComponentName] = [this](
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
@@ -146,6 +137,12 @@ private:
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildLifetimeComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::RoundCollidable::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildRoundCollidableComponent(entity, document);
 		};
 	}
 
@@ -258,20 +255,6 @@ private:
 		return true;
 	}
 
-	/*
-	bool buildSolidityComponent(
-		firefly::Entity* entity,
-		rapidjson::Value& document) const {
-
-		std::unique_ptr<firefly::Solidity> component(new firefly::Solidity);
-
-		component->isSolid = document["isSolid"].GetBool();
-		component->isDestructable = document["isDestructable"].GetBool();
-
-		entity->addComponent(std::move(component));
-		return true;
-	}*/
-
 	bool buildGravityComponent(
 		firefly::Entity* entity,
 		rapidjson::Value& document) const {
@@ -327,6 +310,20 @@ private:
 		std::unique_ptr<firefly::Lifetime> component(new firefly::Lifetime);
 
 		component->lifetimeMs = document["lifetimeMs"].GetUint64();
+
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildRoundCollidableComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::RoundCollidable> component(
+			new firefly::RoundCollidable);
+
+		component->isDestructable = document["isDestructable"].GetBool();
+		component->collidableRadius = document["collidableRadius"].GetDouble();
 
 		entity->addComponent(std::move(component));
 		return true;

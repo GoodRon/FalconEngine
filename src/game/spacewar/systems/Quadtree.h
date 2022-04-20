@@ -19,7 +19,7 @@ namespace spacewar {
 
 class EntityQuadtree {
 public:
-	EntityQuadtree(SDL_Rect boundaries, size_t level = 0);
+	EntityQuadtree(const SDL_Rect& boundaries, size_t level = 0);
 	~EntityQuadtree();
 
 	EntityQuadtree(const EntityQuadtree&) = delete;

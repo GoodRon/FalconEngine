@@ -9,7 +9,7 @@ constexpr size_t maxLevel = 5;
 constexpr size_t maxObjects = 5;
 
 EntityQuadtree::EntityQuadtree(
-	SDL_Rect boundaries, 
+	const SDL_Rect& boundaries, 
 	size_t level):
 	_level(0),
 	_boundaries(boundaries),

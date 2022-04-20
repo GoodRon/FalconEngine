@@ -14,7 +14,7 @@ add_executable(spacewars WIN32
 	systems/PositioningSystem.cxx
 	systems/GravitationalSystem.cxx
 	systems/ShipStateSystem.cxx
-	#systems/CollisionSystem.cxx
+	systems/CollisionSystem.cxx
 	systems/LifetimeSystem.cxx)
 target_link_libraries(spacewars firefly SDL2::Main)
 

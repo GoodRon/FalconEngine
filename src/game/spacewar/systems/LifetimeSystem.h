@@ -8,6 +8,10 @@
 
 #include <firefly/systems/ISystem.h>
 
+namespace firefly {
+	class Entity;
+}
+
 namespace spacewar {
 
 class LifetimeSystem final: public firefly::ISystem {
@@ -22,6 +26,9 @@ public:
 
 	bool onEvent(
 		const std::shared_ptr<firefly::IEvent>& event) override;
+
+private:
+	bool isEntityExpired(firefly::Entity* entity) const;
 };
 
 }

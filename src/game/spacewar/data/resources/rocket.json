@@ -44,9 +44,9 @@
 			"maxSpeed": 600.0
 		},
 		{
-			"name": "Solidity",
-			"isSolid": true,
-			"isDestructable": true
+			"name": "RoundCollidable",
+			"isDestructable": true,
+			"collidableRadius": 8.0
 		},
 		{
 			"name": "Lifetime",

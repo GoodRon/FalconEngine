@@ -1,5 +1,7 @@
 #include "LifetimeSystem.h"
 
+#include <forward_list>
+
 #include <firefly/Engine.h>
 #include <firefly/ObjectManager.h>
 #include <firefly/Entity.h>
@@ -21,32 +23,17 @@ void LifetimeSystem::update() {
 	const uint64_t elapsedMs = timepoint - _updateTimepoint;
 	_updateTimepoint = timepoint;
 
-	firefly::Entity* entity = nullptr;
+	std::forward_list<firefly::EntityID> expiredIds;
+
+	for (auto& entity: _entities) {
+		if (isEntityExpired(entity.second)) {
+			expiredIds.push_front(entity.second->getId());
+		}
+	}
+
 	auto objectManager = _engine->getObjectManager();
-
-	auto& it = _entities.begin();
-	while (it != _entities.end()) {
-		entity = it->second;
-
-		if (!entity) {
-			++it;
-			continue;
-		}
-
-		auto lifetime = entity->getComponent<firefly::Lifetime>();
-		if (!lifetime) {
-			++it;
-			continue;
-		}
-
-		if (_updateTimepoint - lifetime->timepoint < lifetime->lifetimeMs) {
-			++it;
-			continue;
-		}
-
-		it = _entities.erase(it);
-
-		objectManager->unregisterObject(entity->getId());
+	for (auto& id: expiredIds) {
+		objectManager->unregisterObject(id);
 	}
 }
 
@@ -55,6 +42,18 @@ bool LifetimeSystem::onEvent(
 
 	// TODO write me!
 
+	return false;
+}
+
+bool LifetimeSystem::isEntityExpired(firefly::Entity* entity) const {
+	auto lifetime = entity->getComponent<firefly::Lifetime>();
+	if (!lifetime) {
+		return true;
+	}
+
+	if (_updateTimepoint - lifetime->timepoint > lifetime->lifetimeMs) {
+		return true;
+	}
 	return false;
 }
 
