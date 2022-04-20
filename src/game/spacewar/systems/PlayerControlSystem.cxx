@@ -8,7 +8,7 @@
 #include <firefly/components/Player.h>
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Position.h>
-#include <firefly/components/Visual.h>
+#include <firefly/components/State.h>
 
 namespace spacewar {
 
@@ -33,6 +33,7 @@ namespace spacewar {
 		_requiredComponents.push_front(firefly::Player::ComponentName);
 		_requiredComponents.push_front(firefly::Position::ComponentName);
 		_requiredComponents.push_front(firefly::Velocity::ComponentName);
+		_requiredComponents.push_front(firefly::State::ComponentName);
 	}
 
 	PlayerControlSystem::~PlayerControlSystem() {
@@ -172,15 +173,15 @@ namespace spacewar {
 		return component;
 	}
 
-	firefly::Visual* PlayerControlSystem::getVisual(int playerId) const {
+	firefly::State* PlayerControlSystem::getState(int playerId) const {
 		firefly::Entity* playerEntity = findPlayer(playerId);
 		if (!playerEntity) {
 			return nullptr;
 		}
 
-		auto component = static_cast<firefly::Visual*>(
+		auto component = static_cast<firefly::State*>(
 			playerEntity->getComponent(
-				firefly::getComponentId(firefly::Visual::ComponentName)));
+				firefly::getComponentId(firefly::State::ComponentName)));
 		return component;
 	}
 
@@ -192,23 +193,12 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::onUpPressed(uint64_t elapsedMs) {
-		// TODO move from here
-		auto visualComponent = getVisual(_playerId);
-
 		if (_isUpPressed) {
 			setAcceleration(acceleration);
-
-			if (visualComponent) {
-				visualComponent->currentState = "Moving";
-			}
 			return;
 		} 
 
 		setAcceleration(0.0);
-		
-		if (visualComponent) {
-			visualComponent->currentState = "Idle";
-		}
 	}
 
 	void PlayerControlSystem::onLeftPressed(uint64_t elapsedMs) {
@@ -228,7 +218,26 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::onDownPressed(uint64_t elapsedMs) {
+		// TODO improve
 		//shootRocket();
+		auto stateComponent = getState(_playerId);
+		if (!stateComponent) {
+			return;
+		}
+
+		if (!_isDownPressed) {
+			return;
+		}
+
+		const std::string nextState = "Hyperspace";
+
+		if (stateComponent->current == nextState) {
+			return;
+		}
+
+		stateComponent->previous = stateComponent->current;
+		stateComponent->current = nextState;
+		stateComponent->timepoint = _updateTimepoint;
 	}
 
 	void PlayerControlSystem::onRightPressed(uint64_t elapsedMs) {

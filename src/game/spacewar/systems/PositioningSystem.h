@@ -9,30 +9,30 @@
 #include <firefly/systems/ISystem.h>
 
 namespace firefly {
-    class Position;
-    class Velocity;
+	class Position;
+	class Velocity;
 }
 
 namespace spacewar {
 
 class PositioningSystem final: public firefly::ISystem {
 public:
-    PositioningSystem(firefly::Engine* engine);
-    ~PositioningSystem() override;
+	PositioningSystem(firefly::Engine* engine);
+	~PositioningSystem() override;
 
-    PositioningSystem(const PositioningSystem&) = delete;
-    PositioningSystem& operator=(const PositioningSystem&) = delete;
+	PositioningSystem(const PositioningSystem&) = delete;
+	PositioningSystem& operator=(const PositioningSystem&) = delete;
 
-    void update() override;
+	void update() override;
 
-    bool onEvent(
-        const std::shared_ptr<firefly::IEvent>& event) override;
+	bool onEvent(
+		const std::shared_ptr<firefly::IEvent>& event) override;
 
 private:
-    void processPosition(
-        firefly::Position* position, 
-        firefly::Velocity* velocity, 
-        uint64_t elapsedMs) const;
+	void processPosition(
+		firefly::Position* position, 
+		firefly::Velocity* velocity, 
+		uint64_t elapsedMs) const;
 };
 
 }

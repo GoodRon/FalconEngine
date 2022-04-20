@@ -10,7 +10,7 @@
 
 namespace firefly {
 
-class State: public IComponent {
+class State final: public IComponent {
 public:
 	inline static const std::string ComponentName = "State";
 
@@ -23,11 +23,10 @@ public:
 	IComponent* clone() const override {
 		return new State(*this);
 	}
-
-	using StateID = int;
 	
-	StateID id = 0;
-	StateID previousId = 0;
+	std::string current;
+	std::string previous;
+	uint64_t timepoint = 0;
 };
 
 }

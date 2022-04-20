@@ -11,7 +11,8 @@ add_executable(spacewars WIN32
 	EntityBuilder.cxx
 	systems/PlayerControlSystem.cxx
 	systems/PositioningSystem.cxx
-	systems/GravitationalSystem.cxx)
+	systems/GravitationalSystem.cxx
+	systems/ShipStateSystem.cxx)
 target_link_libraries(spacewars firefly SDL2::Main)
 
 install(TARGETS spacewars RUNTIME DESTINATION .)

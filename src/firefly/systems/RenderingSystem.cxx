@@ -38,6 +38,10 @@ void RenderingSystem::drawEntites() const {
 			entity.second->getComponent(
 				getComponentId(Visual::ComponentName)));
 
+		if (!visualComponent->isVisible) {
+			continue;
+		}
+
 		// TODO sort by zIndex
 		draw(positionComponent, visualComponent);
 	}

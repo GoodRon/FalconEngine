@@ -15,6 +15,7 @@
 #include "systems/PlayerControlSystem.h"
 #include "systems/PositioningSystem.h"
 #include "systems/GravitationalSystem.h"
+#include "systems/ShipStateSystem.h"
 
 namespace spacewar {
 
@@ -87,6 +88,9 @@ private:
 
 		systemPtr.reset(new PositioningSystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
+
+		systemPtr.reset(new ShipStateSystem(_engine));
+		systemManager->addSystem(std::move(systemPtr));
 		
 		// TODO write me!
 
@@ -127,11 +131,13 @@ private:
 		object.reset(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
 
+		/*
 		entity = builder.buildEntity("resources/rocket.json");
 		object.reset(new firefly::GameObject(entity));
 		objectManager->registerObject(object);
 
 		entityPrototypes->registerPrototype(entity->getName(), entity);
+		*/
 
 		return true;
 	}

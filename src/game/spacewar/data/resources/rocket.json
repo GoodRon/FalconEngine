@@ -4,6 +4,7 @@
 		{
 			"name": "Visual",
 			"zIndex": 1,
+			"isVisible": true,
 			"states": [
 				{
 					"name": "Idle",

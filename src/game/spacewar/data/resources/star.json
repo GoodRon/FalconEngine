@@ -4,6 +4,7 @@
 		{
 			"name": "Visual",
 			"zIndex": 0,
+			"isVisible": true,
 			"states": [
 				{
 					"name": "Idle",
@@ -51,7 +52,7 @@
 			"name": "Gravity",
 			"hasGravity": false,
 			"emitGravity": true,
-			"mass": 250000000.0
+			"mass": 300000000.0
 		}
 	]
 }

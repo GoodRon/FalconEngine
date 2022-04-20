@@ -16,6 +16,7 @@
 #include <firefly/components/Player.h>
 #include <firefly/components/Solidity.h>
 #include <firefly/components/Gravity.h>
+#include <firefly/components/State.h>
 
 #include "rapidjson/document.h"
 
@@ -124,6 +125,12 @@ private:
 			rapidjson::Value& document)->bool {
 			return buildGravityComponent(entity, document);
 		};
+
+		_componentBuilders[firefly::State::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildStateComponent(entity, document);
+		};
 	}
 
 	// TODO move to a separate functions
@@ -142,6 +149,7 @@ private:
 
 		std::unique_ptr<firefly::Visual> component(new firefly::Visual);
 		component->zIndex = document["zIndex"].GetInt();
+		component->isVisible = document["isVisible"].GetBool();
 
 		for (auto& state: document["states"].GetArray()) {
 			const auto stateName = std::string(state["name"].GetString());
@@ -256,6 +264,19 @@ private:
 		component->hasGravity = document["hasGravity"].GetBool();
 		component->emitGravity = document["emitGravity"].GetBool();
 		component->mass = document["mass"].GetDouble();
+
+		entity->addComponent(std::move(component));
+		return true;
+	}
+
+	bool buildStateComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::State> component(new firefly::State);
+
+		component->current = std::string(document["current"].GetString());
+		component->previous = std::string(document["previous"].GetString());
 
 		entity->addComponent(std::move(component));
 		return true;
