@@ -10,7 +10,7 @@
 
 #include "GameBuilder.h"
 
-int main(int argc, char** argv) {
+int main(int, char**) {
 	const int width = 1500;
 	const int height = 900;
 	const std::string header("Space War!");

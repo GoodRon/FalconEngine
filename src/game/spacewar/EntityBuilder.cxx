@@ -183,7 +183,7 @@ private:
 			SDL_Rect frameRect;
 			frameRect.w = state["frameWidth"].GetInt();
 			frameRect.h = state["frameHeight"].GetInt();
-			int duration = state["frameDuration"].GetInt();
+			const uint64_t duration = state["frameDuration"].GetUint64();
 
 			firefly::Visual::State visualState;
 			visualState.isLooped = state["isLooped"].GetBool();

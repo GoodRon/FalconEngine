@@ -68,7 +68,7 @@ bool ISystem::processEvent(const std::shared_ptr<IEvent>& event) {
 }
 
 bool ISystem::onEvent(
-		const std::shared_ptr<IEvent>& event) {
+		const std::shared_ptr<IEvent>&) {
 	return false;
 }
 
