@@ -63,6 +63,11 @@ void ISystem::update() {
 	_updateTimepoint = SDL_GetTicks64();
 }
 
+bool ISystem::onEvent(
+		const std::shared_ptr<IEvent>& event) {
+	return false;
+}
+
 bool ISystem::checkComponents(Entity* entity) const {
 	if (!entity) {
 		return false;

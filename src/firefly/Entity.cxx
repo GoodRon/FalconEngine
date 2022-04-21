@@ -59,12 +59,11 @@ bool Entity::addComponent(const std::string& name,
 	return true;
 }
 
-IComponent* Entity::getComponent(const std::string& name) {
+IComponent* Entity::getComponent(const std::string& name) const {
 	if (_components.find(name) == _components.end()) {
 		return nullptr;
 	}
-
-	return _components[name].get();
+	return _components.at(name).get();
 }
 
 }

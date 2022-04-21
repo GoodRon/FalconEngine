@@ -24,7 +24,7 @@ public:
 	ISystem(const std::string& name,
 		Engine* engine);
 
-	virtual ~ISystem();
+	virtual ~ISystem() = 0;
 
 	const std::string getName() const;
 
@@ -34,7 +34,7 @@ public:
 	virtual void update();
 
 	virtual bool onEvent(
-		const std::shared_ptr<IEvent>& event) = 0;
+		const std::shared_ptr<IEvent>& event);
 
 	// TODO turn on/off for game states (update _updateTimepoint)
 
@@ -42,7 +42,6 @@ protected:
 	virtual bool checkComponents(Entity* entity) const;
 	virtual void lockEntities() const;
 	virtual void unlockEntities() const;
-	// TODO onEntityAdded
 	virtual void onRegisterEntity(Entity* entity);
 	virtual void onUnregisterEntity(Entity* entity);
 

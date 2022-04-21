@@ -33,15 +33,11 @@ public:
 	bool addComponent(const std::string& name, 
 		std::unique_ptr<IComponent>&& component);
 
-	IComponent* getComponent(const std::string& name);
+	IComponent* getComponent(const std::string& name) const;
 
 	template<class T>
-	T* getComponent() {
-		const auto id = T::ComponentName;
-		if (_components.find(id) == _components.end()) {
-			return nullptr;
-		}
-		return static_cast<T*>(_components[id].get());
+	T* getComponent() const {
+		return static_cast<T*>(getComponent(T::ComponentName));
 	}
 
 private:
