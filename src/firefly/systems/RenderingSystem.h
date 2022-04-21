@@ -25,7 +25,7 @@ public:
 
 	RenderingSystem(const RenderingSystem&) = delete;
 	RenderingSystem& operator=(const RenderingSystem&) = delete;
-
+	
 private:
 	void onUpdate() override;
 
