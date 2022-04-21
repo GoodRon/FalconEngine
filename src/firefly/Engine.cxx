@@ -11,7 +11,7 @@
 #include "Entity.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
-#include "ObjectManager.h"
+#include "EntityManager.h"
 #include "EngineException.h"
 #include "SystemManager.h"
 #include "EventManager.h"
@@ -30,7 +30,7 @@ Engine::Engine(int width, int height):
 	_returnCode(0),
 	_renderer(),
 	_resourceManager(),
-	_objectManager(),
+	_entityManager(),
 	_entityPrototypes(),
 	_systemManager(),
 	_eventManager(),
@@ -47,7 +47,7 @@ Engine::Engine(int width, int height):
 
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
-	_objectManager.reset(new ObjectManager(_systemManager.get()));
+	_entityManager.reset(new EntityManager(_systemManager.get()));
 	_entityPrototypes.reset(new EntityPrototypes);
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
@@ -136,8 +136,8 @@ ResourceManager* Engine::getResourceManager() const {
 	return _resourceManager.get();
 }
 
-ObjectManager* Engine::getObjectManager() const {
-	return _objectManager.get();
+EntityManager* Engine::getEntityManager() const {
+	return _entityManager.get();
 }
 
 EntityPrototypes* Engine::getEntityPrototypes() const {

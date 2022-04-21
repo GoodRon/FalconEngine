@@ -6,9 +6,8 @@
 #include <firefly/Entity.h>
 #include <firefly/SystemManager.h>
 #include <firefly/ResourceManager.h>
-#include <firefly/GameObject.h>
 #include <firefly/EntityPrototypes.h>
-#include <firefly/ObjectManager.h>
+#include <firefly/EntityManager.h>
 
 #include "EntityBuilder.h"
 #include "systems/PlayerControlSystem.h"
@@ -105,8 +104,8 @@ private:
 	}
 
 	bool buildGameObjects() const {
-		auto objectManager = _engine->getObjectManager();
-		if (!objectManager) {
+		auto entityManager = _engine->getEntityManager();
+		if (!entityManager) {
 			return false;
 		}
 
@@ -118,28 +117,23 @@ private:
 		// TODO while on a json list
 
 		std::shared_ptr<firefly::Entity> entity;
-		std::shared_ptr<firefly::GameObject> object;
 		EntityBuilder builder(_engine);
 
-		// TODO improve
 		entity = builder.buildEntity("resources/background.json");
-		object.reset(new firefly::GameObject(entity));
-		objectManager->registerObject(object);
+		entityManager->addEntity(std::move(entity));
 
 		entity = builder.buildEntity("resources/player1.json");
-		object.reset(new firefly::GameObject(entity));
-		objectManager->registerObject(object);
+		entityManager->addEntity(std::move(entity));
 
 		entity = builder.buildEntity("resources/player2.json");
-		object.reset(new firefly::GameObject(entity));
-		objectManager->registerObject(object);
+		entityManager->addEntity(std::move(entity));
 
 		entity = builder.buildEntity("resources/star.json");
-		object.reset(new firefly::GameObject(entity));
-		objectManager->registerObject(object);
+		entityManager->addEntity(std::move(entity));
 
 		entity = builder.buildEntity("resources/rocket.json");
-		entityPrototypes->registerPrototype(entity->getName(), entity);
+		entityPrototypes->registerPrototype(entity->getName(), 
+			std::move(entity));
 
 		return true;
 	}

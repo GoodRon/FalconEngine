@@ -5,7 +5,7 @@
 #include <SDL_timer.h>
 
 #include <firefly/Engine.h>
-#include <firefly/ObjectManager.h>
+#include <firefly/EntityManager.h>
 #include <firefly/Entity.h>
 #include <firefly/components/Lifetime.h>
 
@@ -30,9 +30,9 @@ void LifetimeSystem::onUpdate() {
 		}
 	}
 
-	auto objectManager = getEngine()->getObjectManager();
+	auto entityManager = getEngine()->getEntityManager();
 	for (auto& id: expiredIds) {
-		objectManager->unregisterObject(id);
+		entityManager->removeEntity(id);
 	}
 }
 

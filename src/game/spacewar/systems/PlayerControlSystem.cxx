@@ -6,8 +6,7 @@
 #include <firefly/Engine.h>
 #include <firefly/Entity.h>
 #include <firefly/EntityPrototypes.h>
-#include <firefly/GameObject.h>
-#include <firefly/ObjectManager.h>
+#include <firefly/EntityManager.h>
 #include <firefly/events/NativeEvent.h>
 #include <firefly/components/Player.h>
 #include <firefly/components/Velocity.h>
@@ -360,7 +359,7 @@ namespace spacewar {
 		weapon.lastShotTimepoint = timepoint;
 
 		auto entityPrototypes = getEngine()->getEntityPrototypes();
-		auto objectManager = getEngine()->getObjectManager();
+		auto entityManager = getEngine()->getEntityManager();
 
 		auto projectile = entityPrototypes->makeEntity(weapon.projectile);
 		if (!projectile) {
@@ -385,8 +384,7 @@ namespace spacewar {
 		position->y = playerPosition->y + 30.0;
 		lifetime->timepoint = timepoint;
 
-		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(projectile));
-		objectManager->registerObject(object);
+		entityManager->addEntity(projectile);
 	}
 
 	void PlayerControlSystem::rotate(double angle) const {

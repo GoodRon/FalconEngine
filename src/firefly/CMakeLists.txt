@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.1)
 
 add_library(firefly 
 	STATIC
-	ObjectManager.cxx 
+	EntityManager.cxx 
 	Engine.cxx 
 	ResourceManager.cxx 
 	Renderer.cxx 
@@ -11,7 +11,6 @@ add_library(firefly
 	SystemManager.cxx
 	EventManager.cxx
 	EntityPrototypes.cxx
-	GameObject.cxx
 	events/IEvent.cxx
 	events/NativeEvent.cxx
 	systems/ISystem.cxx

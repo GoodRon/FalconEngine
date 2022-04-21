@@ -8,7 +8,6 @@
 #include <firefly/ResourceManager.h>
 #include <firefly/Entity.h>
 #include <firefly/Frame.h>
-#include <firefly/GameObject.h>
 
 #include <firefly/components/Visual.h>
 #include <firefly/components/Position.h>

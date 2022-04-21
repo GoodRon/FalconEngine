@@ -4,8 +4,8 @@
 
 #include <firefly/Engine.h>
 #include <firefly/Entity.h>
-#include <firefly/ObjectManager.h>
 #include <firefly/Renderer.h>
+#include <firefly/EntityManager.h>
 #include <firefly/components/RoundCollidable.h>
 #include <firefly/components/Position.h>
 
@@ -67,9 +67,9 @@ void CollisionSystem::onUpdate() {
 		}
 	}
 
-	auto objectManager = getEngine()->getObjectManager();
+	auto entityManager = getEngine()->getEntityManager();
 	for (auto& id: destroyedIds) {
-		objectManager->unregisterObject(id);
+		entityManager->removeEntity(id);
 	}
 }
 
