@@ -46,6 +46,11 @@
 		{
 			"name": "Lifetime",
 			"lifetimeMs": 4000
+		},
+		{
+			"name": "State",
+			"current": "Idle",
+			"previous": ""
 		}
 	]
 }

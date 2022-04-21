@@ -67,6 +67,7 @@ static Frame* advanceFrame(Visual* visualComponent, uint64_t timepoint) {
 			visualComponent->frameIndex = 0;
 		} else {
 			visualComponent->frameIndex--;
+			state.isStopped = true;
 		}
 	}
 

@@ -5,10 +5,11 @@
 #include <firefly/Engine.h>
 #include <firefly/Entity.h>
 #include <firefly/Renderer.h>
-#include <firefly/EntityManager.h>
 #include <firefly/components/RoundCollidable.h>
 #include <firefly/components/Position.h>
+#include <firefly/components/State.h>
 
+#include "StateNames.h"
 #include "misc/Quadtree.h"
 
 namespace spacewar {
@@ -19,6 +20,7 @@ CollisionSystem::CollisionSystem(firefly::Engine* engine):
 
 	addRequiredComponent(firefly::RoundCollidable::ComponentName);
 	addRequiredComponent(firefly::Position::ComponentName);
+	addRequiredComponent(firefly::State::ComponentName);
 
 	auto renderer = engine->getRenderer();
 	_qauadtree.reset(new EntityQuadtree(renderer->getViewport()));
@@ -40,8 +42,6 @@ void CollisionSystem::onUpdate() {
 		_qauadtree->insert(entity.second);
 	}
 
-	std::unordered_set<firefly::EntityID> destroyedIds;
-
 	for (auto& entityIt: entities) {
 		auto entity = entityIt.second;
 
@@ -56,21 +56,19 @@ void CollisionSystem::onUpdate() {
 
 			auto positionRight = nearestEntity->getComponent<firefly::Position>();
 			auto collidableRight = nearestEntity->getComponent<firefly::RoundCollidable>();
+			auto stateRight = nearestEntity->getComponent<firefly::State>();
 
 			if (isCollided(collidableLeft, positionLeft,
 				collidableRight, positionRight)) {
 
 				if (collidableRight->isDestructable) {
-					destroyedIds.insert(nearestEntity->getId());
+					stateRight->previous = stateRight->current;
+					stateRight->current = stateNameDestroyed();
 				}
 			}
 		}
 	}
 
-	auto entityManager = getEngine()->getEntityManager();
-	for (auto& id: destroyedIds) {
-		entityManager->removeEntity(id);
-	}
 }
 
 bool CollisionSystem::isCollided(

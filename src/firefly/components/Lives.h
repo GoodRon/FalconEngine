@@ -24,7 +24,8 @@ public:
 		return new Lives(*this);
 	}
 
-	int playerId = 0;
+	int maxLives = 0;
+	int currentLives = 0;
 };
 
 }

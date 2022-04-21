@@ -8,6 +8,8 @@
 
 #include <memory>
 #include <queue>
+#include <mutex>
+#include <atomic>
 
 namespace firefly {
 
@@ -22,10 +24,15 @@ public:
 	EventManager(const EventManager&) = delete;
 	EventManager& operator=(const EventManager&) = delete;
 
-	void sendEvent(const std::shared_ptr<IEvent>& event) const;
+	bool registerEvent(const std::shared_ptr<IEvent>& event);
+
+	void processEvents();
 
 private:
 	SystemManager* const _systemManager;
+	std::atomic<bool> _hasNewEvents;
+	std::mutex _queueMutex;
+	std::queue<std::shared_ptr<IEvent>> _events;
 };
 
 }

@@ -10,7 +10,9 @@ namespace firefly {
 
 enum class EventType: int {
 	Unknown = 0,
-	NativeEvent,
+    Update,
+	Native,
+    Entity,
 };
 
 }

@@ -13,7 +13,7 @@
 #include "systems/PlayerControlSystem.h"
 #include "systems/PositioningSystem.h"
 #include "systems/GravitationalSystem.h"
-#include "systems/ShipStateSystem.h"
+#include "systems/StateSystem.h"
 #include "systems/LifetimeSystem.h"
 #include "systems/CollisionSystem.h"
 #include "systems/VelocitySystem.h"
@@ -29,7 +29,6 @@ public:
 	Impl(firefly::Engine* engine):
 		_engine(engine),
 		_isBuilt(false) {
-
 	}
 
 	~Impl() {

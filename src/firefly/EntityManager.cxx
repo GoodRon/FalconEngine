@@ -6,13 +6,14 @@
 #include "EntityManager.h"
 
 #include "Entity.h"
-#include "SystemManager.h"
+#include "EventManager.h"
+
+#include "events\EntityEvent.h"
 
 namespace firefly {
 
-EntityManager::EntityManager(SystemManager* systemManager):
-	_systemManager(systemManager),
-	_entites() {
+EntityManager::EntityManager(EventManager* eventManager):
+	_eventManager(eventManager) {
 }
 
 EntityManager::~EntityManager() {
@@ -32,7 +33,8 @@ bool EntityManager::addEntity(
 
 	_entites[id] = entity;
 
-	_systemManager->registerEntity(entity.get());
+	std::shared_ptr<IEvent> event(new EntityEvent(entity));
+	_eventManager->registerEvent(std::move(event));
 	return true;
 }
 
@@ -42,7 +44,9 @@ void EntityManager::removeEntity(EntityID id) {
 		return;
 	}
 
-	_systemManager->unregisterEntity((*it).second->getId());
+	std::shared_ptr<IEvent> event(new EntityEvent(_entites[id], true));
+	_eventManager->registerEvent(std::move(event));
+
 	_entites.erase(id);
 }
 

@@ -32,6 +32,7 @@ public:
 	struct State {
 		std::vector<std::shared_ptr<Frame>> frames;
 		bool isLooped = true;
+		bool isStopped = false;
 	};
 
 	std::string currentState = "Idle";

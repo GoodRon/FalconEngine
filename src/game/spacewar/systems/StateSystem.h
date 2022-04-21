@@ -9,6 +9,7 @@
 #include <firefly/systems/ISystem.h>
 
 namespace firefly {
+	class Entity;
 	class State;
 	class Position;
 	class Visual;
@@ -25,9 +26,9 @@ public:
 	ShipStateSystem(const ShipStateSystem&) = delete;
 	ShipStateSystem& operator=(const ShipStateSystem&) = delete;
 
+private:
 	void onUpdate() override;
 
-private:
 	void updateState(
 		firefly::Entity* entity) const;
 
@@ -50,6 +51,7 @@ private:
 		firefly::Velocity* velocity) const;
 
 	void updateDestroyed(
+		firefly::Entity* entity,
 		firefly::State* state,
 		firefly::Visual* visual,
 		firefly::Position* position,

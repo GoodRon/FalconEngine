@@ -19,6 +19,7 @@
 
 #include "systems/RenderingSystem.h"
 #include "events/NativeEvent.h"
+#include "events/UpdateEvent.h"
 #include "components/IComponent.h"
 
 namespace firefly {
@@ -36,7 +37,7 @@ Engine::Engine(int width, int height):
 	_eventManager(),
 	_renderingSystem(),
 	_eventMutex(),
-	_eventQueue(),
+	_sdlEventQueue(),
 	_isEventAwaiting(false) {
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -44,13 +45,12 @@ Engine::Engine(int width, int height):
 	}
 
 	_systemManager.reset(new SystemManager());
+	_eventManager.reset(new EventManager(_systemManager.get()));
 
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
-	_entityManager.reset(new EntityManager(_systemManager.get()));
+	_entityManager.reset(new EntityManager(_eventManager.get()));
 	_entityPrototypes.reset(new EntityPrototypes);
-
-	_eventManager.reset(new EventManager(_systemManager.get()));
 
 	_renderingSystem.reset(
 		new firefly::RenderingSystem(this));
@@ -77,22 +77,24 @@ int Engine::run() {
 		uint64_t elapsedMs = 0;
 		uint64_t timepoint = 0;
 
-		std::queue<SDL_Event> events;
+		std::queue<SDL_Event> sdlEvents;
+		std::shared_ptr<IEvent> updateEvent(new UpdateEvent);
 
 		while (_isRunning) {
 			timepoint = SDL_GetTicks64();
 
-			_systemManager->updateSystems();
+			_eventManager->registerEvent(updateEvent);
+			_eventManager->processEvents();
 
 			if (_isEventAwaiting) {
 				std::lock_guard<std::mutex> locker(_eventMutex);
-				events.swap(_eventQueue);
+				sdlEvents.swap(_sdlEventQueue);
 				_isEventAwaiting = false;
 			}
 
-			while (!events.empty()) {
-				onSDLEvent(events.front());
-				events.pop();
+			while (!sdlEvents.empty()) {
+				onSDLEvent(std::move(sdlEvents.front()));
+				sdlEvents.pop();
 			}
 
 			elapsedMs = SDL_GetTicks64() - timepoint;
@@ -114,14 +116,14 @@ int Engine::run() {
 		
 		std::lock_guard<std::mutex> locker(_eventMutex);
 		while (SDL_PollEvent(&event) != 0) {
-			if (_eventQueue.size() >= maxQueuedEvents) {
-				_eventQueue.pop();
+			if (_sdlEventQueue.size() >= maxQueuedEvents) {
+				_sdlEventQueue.pop();
 			}
 
-			_eventQueue.push(std::move(event));
+			_sdlEventQueue.push(std::move(event));
 		}
 
-		if (!_isEventAwaiting && !_eventQueue.empty()) {
+		if (!_isEventAwaiting && !_sdlEventQueue.empty()) {
 			_isEventAwaiting = true;
 		}
 	}
@@ -167,7 +169,7 @@ void Engine::onSDLEvent(const SDL_Event& event) {
 	}
 
 	std::shared_ptr<IEvent> nativeEvent(new NativeEvent(event));
-	_eventManager->sendEvent(nativeEvent);
+	_eventManager->registerEvent(nativeEvent);
 }
 
 }

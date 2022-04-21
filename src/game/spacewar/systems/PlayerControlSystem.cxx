@@ -15,11 +15,12 @@
 #include <firefly/components/Ammunition.h>
 #include <firefly/components/Lifetime.h>
 
+#include "StateNames.h"
 #include "misc/VelocityHelpers.h"
 
 namespace spacewar {
 
-	// TODO remove from here
+	// TODO move from here
 	const double acceleration = 15.0;
 	const double angleDelta = 45.0;
 
@@ -79,7 +80,7 @@ namespace spacewar {
 			return false;
 		}
 
-		if (event->getType() != firefly::EventType::NativeEvent) {
+		if (event->getType() != firefly::EventType::Native) {
 			return false;
 		}
 
@@ -88,7 +89,6 @@ namespace spacewar {
 		if (onPlayerInput(nativeEvent)) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -211,7 +211,7 @@ namespace spacewar {
 		const auto stateComponent = 
 			_player->getComponent<firefly::State>();
 
-		const std::string nextState = "Hyperspace";
+		const std::string nextState = stateNameHyperspace();
 
 		if (stateComponent->current == nextState) {
 			return;

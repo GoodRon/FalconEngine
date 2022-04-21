@@ -30,12 +30,7 @@ public:
 	bool hasSystem(const std::string& name) const;
 	std::shared_ptr<ISystem> getSystem(const std::string& name);
 
-	void registerEntity(Entity* entity);
-	void unregisterEntity(EntityID id);
-
-	void updateSystems();
-
-	bool onEvent(
+	bool processEvent(
 		const std::shared_ptr<IEvent>& event);
 
 	void clear();

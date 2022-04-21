@@ -63,7 +63,7 @@ private:
 	std::unique_ptr<EventManager> _eventManager;
 	std::shared_ptr<firefly::RenderingSystem> _renderingSystem;
 	std::mutex _eventMutex;
-	std::queue<SDL_Event> _eventQueue;
+	std::queue<SDL_Event> _sdlEventQueue;
 	std::atomic<bool> _isEventAwaiting;
 };
 

@@ -27,9 +27,9 @@ public:
 	CollisionSystem(const CollisionSystem&) = delete;
 	CollisionSystem& operator=(const CollisionSystem&) = delete;
 
+private:
 	void onUpdate() override;
 
-private:
 	bool isCollided(
 		firefly::RoundCollidable* collidableLeft,
 		firefly::Position* positionLeft,

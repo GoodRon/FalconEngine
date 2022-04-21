@@ -48,6 +48,11 @@
 			"name": "RoundCollidable",
 			"isDestructable": false,
 			"collidableRadius": 15.0
+		},
+		{
+			"name": "State",
+			"current": "Idle",
+			"previous": ""
 		}
 	]
 }

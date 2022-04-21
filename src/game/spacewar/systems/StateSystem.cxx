@@ -1,4 +1,4 @@
-#include "ShipStateSystem.h"
+#include "StateSystem.h"
 
 #include <SDL_timer.h>
 
@@ -7,13 +7,68 @@
 #include <firefly/Engine.h>
 #include <firefly/Renderer.h>
 #include <firefly/Entity.h>
+#include <firefly/EntityManager.h>
 
 #include <firefly/components/State.h>
 #include <firefly/components/Position.h>
 #include <firefly/components/Visual.h>
 #include <firefly/components/Velocity.h>
+#include <firefly/components/Lives.h>
+
+#include "StateNames.h"
 
 namespace spacewar {
+
+static int randomInt(int min, int max) {
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_int_distribution<int> dist(min, max);
+
+	return dist(mt);
+}
+
+static void randomScreenPosition(
+	int width, int height, double& x, double& y) {
+
+	x = static_cast<double>(randomInt(0, width));
+	y = static_cast<double>(randomInt(0, height));
+}
+
+static void changeState(
+	firefly::State* state, 
+	const std::string& nextState) {
+
+	if (!state) {
+		return;
+	}
+
+	if (state->current == nextState) {
+		return;
+	}
+
+	state->previous = state->current;
+	state->current = nextState;
+	state->timepoint = SDL_GetTicks64();
+}
+
+static void changeVisualState(
+	firefly::Visual* visual, 
+	const std::string& nextState) {
+
+	if (!visual) {
+		return;
+	}
+
+	if (visual->currentState == nextState) {
+		return;
+	}
+
+	const auto timepoint = SDL_GetTicks64();
+
+	visual->currentState = nextState;
+	visual->states[nextState].isStopped = false;
+	visual->timepoint = SDL_GetTicks64();
+}
 
 ShipStateSystem::ShipStateSystem(firefly::Engine* engine):
 	firefly::ISystem("ShipStateSystem", engine) {
@@ -46,26 +101,28 @@ void ShipStateSystem::updateState(
 	auto componentVisual = entity->getComponent<firefly::Visual>();
 	auto componentVelocity = entity->getComponent<firefly::Velocity>();
 	
-	if (componentState->current == "Idle") {
+	changeVisualState(componentVisual, componentState->current);
+
+	if (componentState->current == stateNameIdle()) {
 		updateIdle(componentState, componentVisual,
 			componentPosition, componentVelocity);
 		return;
 	}
 
-	if (componentState->current == "Moving") {
+	if (componentState->current == stateNameMoving()) {
 		updateMoving(componentState, componentVisual,
 			componentPosition, componentVelocity);
 		return;
 	}
 
-	if (componentState->current == "Hyperspace") {
+	if (componentState->current == stateNameHyperspace()) {
 		updateHyperspace(componentState, componentVisual,
 			componentPosition, componentVelocity);
 		return;
 	}
 
-	if (componentState->current == "Destroyed") {
-		updateDestroyed(componentState, componentVisual,
+	if (componentState->current == stateNameDestroyed()) {
+		updateDestroyed(entity, componentState, componentVisual,
 			componentPosition, componentVelocity);
 		return;
 	}
@@ -89,13 +146,9 @@ void ShipStateSystem::updateIdle(
 	}
 
 	// TODO move strings to some constant place
-	const std::string nextState = "Moving";
-
-	state->previous = state->current;
-	state->current = nextState;
-	state->timepoint = SDL_GetTicks64();
-
-	visual->currentState = nextState;
+	const std::string nextState = stateNameMoving();
+	changeState(state, nextState);
+	changeVisualState(visual, nextState);
 }
 
 void ShipStateSystem::updateMoving(
@@ -113,27 +166,9 @@ void ShipStateSystem::updateMoving(
 		return;
 	}
 
-	// TODO move strings to some constant place
-	const std::string nextState = "Idle";
-
-	state->previous = state->current;
-	state->current = nextState;
-	state->timepoint = SDL_GetTicks64();
-
-	visual->currentState = nextState;
-}
-
-int randomInt(int min, int max) {
-	std::random_device rd;
-	std::mt19937 mt(rd());
-	std::uniform_int_distribution<int> dist(min, max);
-
-	return dist(mt);
-}
-
-void randomScreenPosition(int width, int height, double& x, double& y) {
-	x = static_cast<double>(randomInt(0, width));
-	y = static_cast<double>(randomInt(0, height));
+	const std::string nextState = stateNameIdle();
+	changeState(state, nextState);
+	changeVisualState(visual, nextState);
 }
 
 // TODO turn off velocity & gravity
@@ -157,16 +192,14 @@ void ShipStateSystem::updateHyperspace(
 		return;
 	}
 
-	std::string nextState = "Idle";
+	std::string nextState = stateNameIdle();
 	if (velocity->acceleration > 0.0) {
-		nextState = "Moving";
+		nextState = stateNameMoving();
 	}
 
-	state->previous = state->current;
-	state->current = nextState;
-	state->timepoint = timepoint;
+	changeState(state, nextState);
+	changeVisualState(visual, nextState);
 
-	visual->currentState = nextState;
 	visual->isVisible = true;
 
 	// TODO move to a separate func
@@ -177,16 +210,27 @@ void ShipStateSystem::updateHyperspace(
 }
 
 void ShipStateSystem::updateDestroyed(
+	firefly::Entity* entity,
 	firefly::State* state,
 	firefly::Visual* visual,
 	firefly::Position* position,
 	firefly::Velocity* velocity) const {
 
-	if (!state || !visual || !position || !velocity) {
+	if (!entity || !state || !visual || !position || !velocity) {
 		return;
 	}
 
-	// TODO write me
+	const auto lives = entity->getComponent<firefly::Lives>();
+	if (lives) {
+		lives->currentLives--;
+		if (lives->currentLives > 0) {
+			// TODO respawn
+			return;
+		}
+	}
+
+	const auto entityManager = getEngine()->getEntityManager();
+	entityManager->removeEntity(entity->getId());
 }
 
 }

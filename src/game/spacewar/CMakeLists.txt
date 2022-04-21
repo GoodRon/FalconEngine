@@ -8,13 +8,14 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(spacewar WIN32 
 	main.cxx
 	GameBuilder.cxx
+	StateNames.cxx
 	EntityBuilder.cxx
 	misc/Quadtree.cxx
 	misc/VelocityHelpers.cxx
 	systems/PlayerControlSystem.cxx
 	systems/PositioningSystem.cxx
 	systems/GravitationalSystem.cxx
-	systems/ShipStateSystem.cxx
+	systems/StateSystem.cxx
 	systems/CollisionSystem.cxx
 	systems/LifetimeSystem.cxx
 	systems/VelocitySystem.cxx)

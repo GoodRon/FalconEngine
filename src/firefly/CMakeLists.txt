@@ -13,6 +13,8 @@ add_library(firefly
 	EntityPrototypes.cxx
 	events/IEvent.cxx
 	events/NativeEvent.cxx
+	events/EntityEvent.cxx
+	events/UpdateEvent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx)
 

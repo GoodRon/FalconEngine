@@ -23,9 +23,9 @@ public:
 	PositioningSystem(const PositioningSystem&) = delete;
 	PositioningSystem& operator=(const PositioningSystem&) = delete;
 
-	void onUpdate() override;
-
 private:
+	void onUpdate() override;
+	
 	void processPosition(
 		firefly::Position* position, 
 		firefly::Velocity* velocity) const;

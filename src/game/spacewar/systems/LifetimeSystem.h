@@ -21,10 +21,9 @@ public:
 
 	LifetimeSystem(const LifetimeSystem&) = delete;
 	LifetimeSystem& operator=(const LifetimeSystem&) = delete;
-
-	void onUpdate() override;
 	
 private:
+	void onUpdate() override;
 	bool isEntityExpired(firefly::Entity* entity) const;
 };
 

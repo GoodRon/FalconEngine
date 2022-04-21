@@ -3,6 +3,7 @@
 #include <SDL_timer.h>
 
 #include "Entity.h"
+#include "events/EntityEvent.h"
 #include "components/IComponent.h"
 
 namespace firefly {
@@ -24,43 +25,46 @@ const std::string ISystem::getName() const {
 	return _name;
 }
 
-bool ISystem::registerEntity(Entity* entity) {
-	if (!entity) {
+bool ISystem::processEvent(const std::shared_ptr<IEvent>& event) {
+	if (!event) {
 		return false;
 	}
 
-	if (!checkComponents(entity)) {
-		return false;
+	switch (event->getType()) {
+		case EventType::Entity: {
+			// TODO optimize
+			auto entityEvent = std::dynamic_pointer_cast<EntityEvent>(event);
+			if (!entityEvent) {
+				return false;
+			}
+
+			auto entity = entityEvent->getEntity();
+			if (!entity) {
+				return false;
+			}
+
+			if (entityEvent->isRemoved()) {
+				unregisterEntity(entity->getId());
+				return false;
+			}
+
+			registerEntity(entity.get());
+			return false;
+		} break;
+
+		case EventType::Update: {
+			if (_isActive) {
+				onUpdate();
+				_updateTimepoint = SDL_GetTicks64();
+			}
+			return false;
+		} break;
+
+		default:
+			break;
 	}
 
-	const auto id = entity->getId();
-	bool result = true;
-
-	lockEntities();
-	if (_entities.find(id) == _entities.end()) {
-		if (onRegisterEntity(entity)) {
-			_entities[id] = entity;
-		} else {
-			result = false;
-		}
-	}
-	unlockEntities();
-	return result;
-}
-
-void ISystem::unregisterEntity(EntityID id) {
-	lockEntities();
-	auto it = _entities.find(id);
-	if (it != _entities.end()) {
-		onUnregisterEntity((*it).second);
-		_entities.erase(id);
-	}
-	unlockEntities();
-}
-
-void ISystem::update() {
-	onUpdate();
-	_updateTimepoint = SDL_GetTicks64();
+	return onEvent(event);
 }
 
 bool ISystem::onEvent(
@@ -69,13 +73,8 @@ bool ISystem::onEvent(
 }
 
 void ISystem::setActive(bool isActive) {
-	if (_isActive == isActive) {
-		return;
-	}
-
 	_isActive = isActive;
 	if (_isActive) {
-		// TODO check it
 		_updateTimepoint = SDL_GetTicks64();
 	}
 }
@@ -135,6 +134,40 @@ bool ISystem::onRegisterEntity(Entity*) {
 }
 
 void ISystem::onUnregisterEntity(Entity*) {
+}
+
+bool ISystem::registerEntity(Entity* entity) {
+	if (!entity) {
+		return false;
+	}
+
+	if (!checkComponents(entity)) {
+		return false;
+	}
+
+	const auto id = entity->getId();
+	bool result = true;
+
+	lockEntities();
+	if (_entities.find(id) == _entities.end()) {
+		if (onRegisterEntity(entity)) {
+			_entities[id] = entity;
+		} else {
+			result = false;
+		}
+	}
+	unlockEntities();
+	return result;
+}
+
+void ISystem::unregisterEntity(EntityID id) {
+	lockEntities();
+	auto it = _entities.find(id);
+	if (it != _entities.end()) {
+		onUnregisterEntity((*it).second);
+		_entities.erase(id);
+	}
+	unlockEntities();
 }
 
 }

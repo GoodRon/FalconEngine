@@ -15,11 +15,11 @@
 namespace firefly {
 
 class Entity;
-class SystemManager;
+class EventManager;
 
 class EntityManager {
 public:
-	EntityManager(SystemManager* systemManager);
+	EntityManager(EventManager* eventManager);
 	~EntityManager();
 
 	EntityManager(const EntityManager&) = delete;
@@ -31,7 +31,7 @@ public:
 	void clear();
 
 private:
-	SystemManager* const _systemManager;
+	EventManager* const _eventManager;
 	std::unordered_map<EntityID, std::shared_ptr<Entity>> _entites;
 };
 

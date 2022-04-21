@@ -54,6 +54,10 @@
 			"playerId": 2
 		},
 		{
+			"name": "Lives",
+			"maxLives": 5
+		},
+		{
 			"name": "RoundCollidable",
 			"isDestructable": true,
 			"collidableRadius": 16.0

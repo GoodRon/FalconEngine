@@ -17,6 +17,7 @@
 #include <firefly/components/State.h>
 #include <firefly/components/Ammunition.h>
 #include <firefly/components/Lifetime.h>
+#include <firefly/components/Lives.h>
 #include <firefly/components/RoundCollidable.h>
 
 #include "rapidjson/document.h"
@@ -142,6 +143,12 @@ private:
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildRoundCollidableComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::Lives::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildLivesComponent(entity, document);
 		};
 	}
 
@@ -322,6 +329,20 @@ private:
 		component->collidableRadius = document["collidableRadius"].GetDouble();
 
 		entity->addComponent(firefly::RoundCollidable::ComponentName, 
+			std::move(component));
+		return true;
+	}
+
+	bool buildLivesComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::Lives> component(
+			new firefly::Lives);
+
+		component->maxLives = document["maxLives"].GetInt();
+
+		entity->addComponent(firefly::Lives::ComponentName, 
 			std::move(component));
 		return true;
 	}

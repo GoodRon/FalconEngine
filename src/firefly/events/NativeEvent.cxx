@@ -3,7 +3,7 @@
 namespace firefly {
 
 NativeEvent::NativeEvent(const SDL_Event& event):
-	IEvent(EventType::NativeEvent),
+	IEvent(EventType::Native),
 	_event(event) {
 }
 

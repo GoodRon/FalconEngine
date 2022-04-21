@@ -35,30 +35,10 @@ SystemManager::getSystem(const std::string& name) {
 	return _systems[name];
 }
 
-void SystemManager::registerEntity(Entity* entity) {
-	for (auto& sys: _systems) {
-		sys.second->registerEntity(entity);
-	}
-}
-
-void SystemManager::unregisterEntity(EntityID id) {
-	for (auto& sys: _systems) {
-		sys.second->unregisterEntity(id);
-	}
-}
-
-void SystemManager::updateSystems() {
-	for (auto& sys: _systems) {
-		if (sys.second->isActive()) {
-			sys.second->update();
-		}
-	}
-}
-
-bool SystemManager::onEvent(
+bool SystemManager::processEvent(
 		const std::shared_ptr<IEvent>& event) {
 	for (auto& sys: _systems) {
-		if (sys.second->onEvent(event)) {
+		if (sys.second->processEvent(event)) {
 			return true;
 		}
 	}

@@ -32,13 +32,7 @@ public:
 
 	const std::string getName() const;
 
-	bool registerEntity(Entity* entity);
-	void unregisterEntity(EntityID id);
-
-	void update();
-
-	virtual bool onEvent(
-		const std::shared_ptr<IEvent>& event);
+	bool processEvent(const std::shared_ptr<IEvent>& event);
 
 	void setActive(bool isActive);
 	bool isActive() const;
@@ -55,9 +49,15 @@ protected:
 
 	virtual void lockEntities() const;
 	virtual void unlockEntities() const;
+	virtual bool onEvent(
+		const std::shared_ptr<IEvent>& event);
 	virtual void onUpdate();
 	virtual bool onRegisterEntity(Entity* entity);
 	virtual void onUnregisterEntity(Entity* entity);
+
+private:
+	bool registerEntity(Entity* entity);
+	void unregisterEntity(EntityID id);
 
 private:
 	const std::string _name;
