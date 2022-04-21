@@ -22,7 +22,10 @@ void VelocitySystem::onUpdate() {
 	auto& entities = getEntities();
 	for (auto& entity: entities) {
 		velocity = entity.second->getComponent<firefly::Velocity>();
-		processVelocity(velocity);
+
+		if (velocity->isActive) {
+			processVelocity(velocity);
+		}
 	}
 }
 

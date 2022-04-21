@@ -37,7 +37,10 @@ void CollisionSystem::onUpdate() {
 	_qauadtree->clear();
 
 	for (auto& entity: entities) {
-		_qauadtree->insert(entity.second);
+		const auto collidable = entity.second->getComponent<firefly::RoundCollidable>();
+		if (collidable->isActive) {
+			_qauadtree->insert(entity.second);
+		}
 	}
 
 	for (auto& entityIt: entities) {

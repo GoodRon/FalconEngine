@@ -63,6 +63,10 @@ void GravitationalSystem::processGravity(
 	auto emitterPosition = gravityEmitter->getComponent<firefly::Position>();
 	auto emitterGravity = gravityEmitter->getComponent<firefly::Gravity>();
 
+	if (!emitterGravity->isActive) {
+		return;
+	}
+
 	// TODO improve, just testing
 	constexpr double gConstant = 6.67430;
 	//constexpr double gDivider = 100000000000.0;
@@ -70,6 +74,7 @@ void GravitationalSystem::processGravity(
 
 	firefly::Position* position = nullptr;
 	firefly::Velocity* velocity = nullptr;
+	firefly::Gravity* gravity = nullptr;
 
 	auto& entities = getEntities();
 	for (auto& entity: entities) {
@@ -79,6 +84,11 @@ void GravitationalSystem::processGravity(
 
 		position = entity.second->getComponent<firefly::Position>();
 		velocity = entity.second->getComponent<firefly::Velocity>();
+		gravity = entity.second->getComponent<firefly::Gravity>();
+
+		if (!velocity->isActive || !gravity->isActive) {
+			continue;
+		}
 		
 		// TODO use centers!
 		const double distanceX = emitterPosition->x - position->x;

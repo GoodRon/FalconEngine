@@ -32,7 +32,9 @@ void PositioningSystem::onUpdate() {
 		position = entity.second->getComponent<firefly::Position>();
 		velocity = entity.second->getComponent<firefly::Velocity>();
 
-		processPosition(position, velocity);
+		if (velocity->isActive) {
+			processPosition(position, velocity);
+		}
 	}
 }
 

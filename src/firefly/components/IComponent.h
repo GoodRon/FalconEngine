@@ -19,6 +19,8 @@ public:
 	IComponent& operator=(const IComponent&) = default;
 
 	virtual IComponent* clone() const = 0;
+
+	bool isActive = true;
 };
 
 }

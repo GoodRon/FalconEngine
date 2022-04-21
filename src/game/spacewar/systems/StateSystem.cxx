@@ -97,34 +97,28 @@ void ShipStateSystem::updateState(
 		return;
 	}
 
-	auto componentState = entity->getComponent<firefly::State>();
-	auto componentPosition = entity->getComponent<firefly::Position>();
-	auto componentVisual = entity->getComponent<firefly::Visual>();
-	auto componentVelocity = entity->getComponent<firefly::Velocity>();
+	const auto state = entity->getComponent<firefly::State>();
+	const auto visual = entity->getComponent<firefly::Visual>();
 	
-	changeVisualState(componentVisual, componentState->current);
+	changeVisualState(visual, state->current);
 
-	if (componentState->current == stateNameIdle()) {
-		updateIdle(componentState, componentVisual,
-			componentPosition, componentVelocity);
+	if (state->current == stateNameIdle()) {
+		updateIdle(entity);
 		return;
 	}
 
-	if (componentState->current == stateNameMoving()) {
-		updateMoving(componentState, componentVisual,
-			componentPosition, componentVelocity);
+	if (state->current == stateNameMoving()) {
+		updateMoving(entity);
 		return;
 	}
 
-	if (componentState->current == stateNameHyperspace()) {
-		updateHyperspace(componentState, componentVisual,
-			componentPosition, componentVelocity);
+	if (state->current == stateNameHyperspace()) {
+		updateHyperspace(entity);
 		return;
 	}
 
-	if (componentState->current == stateNameDestroyed()) {
-		updateDestroyed(entity, componentState, componentVisual,
-			componentPosition, componentVelocity);
+	if (state->current == stateNameDestroyed()) {
+		updateDestroyed(entity);
 		return;
 	}
 }
@@ -132,12 +126,17 @@ void ShipStateSystem::updateState(
 // TODO improve
 
 void ShipStateSystem::updateIdle(
-	firefly::State* state,
-	firefly::Visual* visual,
-	firefly::Position* position,
-	firefly::Velocity* velocity) const {
+	firefly::Entity* entity) const {
 
-	if (!state || !visual || !position || !velocity) {
+	if (!entity) {
+		return;
+	}
+
+	const auto state = entity->getComponent<firefly::State>();
+	const auto velocity = entity->getComponent<firefly::Velocity>();
+	const auto visual = entity->getComponent<firefly::Visual>();
+
+	if (!state || !visual || !velocity) {
 		return;
 	}
 
@@ -152,12 +151,17 @@ void ShipStateSystem::updateIdle(
 }
 
 void ShipStateSystem::updateMoving(
-	firefly::State* state,
-	firefly::Visual* visual,
-	firefly::Position* position,
-	firefly::Velocity* velocity) const {
+	firefly::Entity* entity) const {
 
-	if (!state || !visual || !position || !velocity) {
+	if (!entity) {
+		return;
+	}
+
+	const auto state = entity->getComponent<firefly::State>();
+	const auto velocity = entity->getComponent<firefly::Velocity>();
+	const auto visual = entity->getComponent<firefly::Visual>();
+
+	if (!state || !visual || !velocity) {
 		return;
 	}
 
@@ -173,10 +177,16 @@ void ShipStateSystem::updateMoving(
 
 // TODO turn off velocity & gravity
 void ShipStateSystem::updateHyperspace(
-	firefly::State* state,
-	firefly::Visual* visual,
-	firefly::Position* position,
-	firefly::Velocity* velocity) const {
+	firefly::Entity* entity) const {
+
+	if (!entity) {
+		return;
+	}
+
+	const auto state = entity->getComponent<firefly::State>();
+	const auto velocity = entity->getComponent<firefly::Velocity>();
+	const auto visual = entity->getComponent<firefly::Visual>();
+	const auto position = entity->getComponent<firefly::Position>();
 
 	if (!state || !visual || !position || !velocity) {
 		return;
@@ -210,13 +220,18 @@ void ShipStateSystem::updateHyperspace(
 }
 
 void ShipStateSystem::updateDestroyed(
-	firefly::Entity* entity,
-	firefly::State* state,
-	firefly::Visual* visual,
-	firefly::Position* position,
-	firefly::Velocity* velocity) const {
+	firefly::Entity* entity) const {
 
-	if (!entity || !state || !visual || !position || !velocity) {
+	if (!entity) {
+		return;
+	}
+
+	const auto state = entity->getComponent<firefly::State>();
+	const auto velocity = entity->getComponent<firefly::Velocity>();
+	const auto visual = entity->getComponent<firefly::Visual>();
+	const auto position = entity->getComponent<firefly::Position>();
+
+	if (!state || !visual || !position || !velocity) {
 		return;
 	}
 

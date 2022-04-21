@@ -10,10 +10,6 @@
 
 namespace firefly {
 	class Entity;
-	class State;
-	class Position;
-	class Visual;
-	class Velocity;
 }
 
 namespace spacewar {
@@ -32,30 +28,10 @@ private:
 	void updateState(
 		firefly::Entity* entity) const;
 
-	void updateIdle(
-		firefly::State* state,
-		firefly::Visual* visual,
-		firefly::Position* position,
-		firefly::Velocity* velocity) const;
-
-	void updateMoving(
-		firefly::State* state,
-		firefly::Visual* visual,
-		firefly::Position* position,
-		firefly::Velocity* velocity) const;
-
-	void updateHyperspace(
-		firefly::State* state,
-		firefly::Visual* visual,
-		firefly::Position* position,
-		firefly::Velocity* velocity) const;
-
-	void updateDestroyed(
-		firefly::Entity* entity,
-		firefly::State* state,
-		firefly::Visual* visual,
-		firefly::Position* position,
-		firefly::Velocity* velocity) const;
+	void updateIdle(firefly::Entity* entity) const;
+	void updateMoving(firefly::Entity* entity) const;
+	void updateHyperspace(firefly::Entity* entity) const;
+	void updateDestroyed(firefly::Entity* entity) const;
 };
 
 }
