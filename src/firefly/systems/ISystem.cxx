@@ -11,6 +11,7 @@ ISystem::ISystem(const std::string& name,
 	Engine* engine): 
 	_name(name), 
 	_engine(engine),
+	_isActive(true),
 	_requiredComponents(),
 	_entities(),
 	_updateTimepoint(SDL_GetTicks64()) {
@@ -23,7 +24,6 @@ const std::string ISystem::getName() const {
 	return _name;
 }
 
-// TODO improve
 bool ISystem::registerEntity(Entity* entity) {
 	if (!entity) {
 		return false;
@@ -33,39 +33,51 @@ bool ISystem::registerEntity(Entity* entity) {
 		return false;
 	}
 
-	auto id = entity->getId();
+	const auto id = entity->getId();
+	bool result = true;
 
 	lockEntities();
 	if (_entities.find(id) == _entities.end()) {
-		_entities[id] = entity;
-		onRegisterEntity(entity);
+		if (onRegisterEntity(entity)) {
+			_entities[id] = entity;
+		} else {
+			result = false;
+		}
 	}
 	unlockEntities();
-	return true;
+	return result;
 }
 
-// TODO improve
 void ISystem::unregisterEntity(EntityID id) {
 	lockEntities();
 	auto it = _entities.find(id);
-	if (it == _entities.end()) {
-		unlockEntities();
-		return;
+	if (it != _entities.end()) {
+		onUnregisterEntity((*it).second);
+		_entities.erase(id);
 	}
-
-	onUnregisterEntity((*it).second);
-	_entities.erase(id);
-
 	unlockEntities();
 }
 
 void ISystem::update() {
+	onUpdate();
 	_updateTimepoint = SDL_GetTicks64();
 }
 
 bool ISystem::onEvent(
 		const std::shared_ptr<IEvent>& event) {
 	return false;
+}
+
+void ISystem::setActive(bool isActive) {
+	_isActive = isActive;
+}
+
+bool ISystem::isActive() const {
+	return _isActive;
+}
+
+void ISystem::addRequiredComponent(const std::string& name) {
+	_requiredComponents.insert(name);
 }
 
 bool ISystem::checkComponents(Entity* entity) const {
@@ -84,16 +96,37 @@ bool ISystem::checkComponents(Entity* entity) const {
 	return true;
 }
 
+Engine* ISystem::getEngine() const {
+	return _engine;
+}
+
+const std::unordered_map<EntityID, Entity*>& 
+ISystem::getEntities() const {
+	return _entities;
+}
+
+uint64_t ISystem::getElapsedMs() const {
+	return SDL_GetTicks64() - _updateTimepoint;
+}
+
+uint64_t ISystem::getLastUpdateTimepoint() const {
+	return _updateTimepoint;
+}
+
 void ISystem::lockEntities() const {
 }
 
 void ISystem::unlockEntities() const {
 }
 
-void ISystem::onRegisterEntity(Entity * entity) {
+void ISystem::onUpdate() {
 }
 
-void ISystem::onUnregisterEntity(Entity* entity) {
+bool ISystem::onRegisterEntity(Entity*) {
+	return true;
+}
+
+void ISystem::onUnregisterEntity(Entity*) {
 }
 
 }

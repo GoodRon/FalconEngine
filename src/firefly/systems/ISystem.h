@@ -6,10 +6,11 @@
 #ifndef FIREFLY_ISYSTEM_H
 #define FIREFLY_ISYSTEM_H
 
+#include <atomic>
 #include <string>
 #include <memory>
 #include <unordered_map>
-#include <forward_list>
+#include <unordered_set>
 
 #include "Types.h"
 
@@ -26,31 +27,45 @@ public:
 
 	virtual ~ISystem() = 0;
 
+	ISystem(const ISystem&) = delete;
+	ISystem& operator=(const ISystem&) = delete;
+
 	const std::string getName() const;
 
 	bool registerEntity(Entity* entity);
 	void unregisterEntity(EntityID id);
 
-	virtual void update();
+	void update();
 
 	virtual bool onEvent(
 		const std::shared_ptr<IEvent>& event);
 
-	// TODO turn on/off for game states (update _updateTimepoint)
+	void setActive(bool isActive);
+	bool isActive() const;
 
 protected:
-	virtual bool checkComponents(Entity* entity) const;
+	void addRequiredComponent(const std::string& name);
+	bool checkComponents(Entity* entity) const;
+
+	Engine* getEngine() const;
+	const std::unordered_map<EntityID, Entity*>& getEntities() const;
+
+	uint64_t getElapsedMs() const;
+	uint64_t getLastUpdateTimepoint() const;
+
 	virtual void lockEntities() const;
 	virtual void unlockEntities() const;
-	virtual void onRegisterEntity(Entity* entity);
+	virtual void onUpdate();
+	virtual bool onRegisterEntity(Entity* entity);
 	virtual void onUnregisterEntity(Entity* entity);
 
-protected:
+private:
 	const std::string _name;
 	Engine* const _engine;
-	std::forward_list<std::string> _requiredComponents;
+	bool _isActive;
+	std::unordered_set<std::string> _requiredComponents;
 	std::unordered_map<EntityID, Entity*> _entities;
-	uint64_t _updateTimepoint;
+	std::atomic<uint64_t> _updateTimepoint;
 };
 
 }

@@ -2,6 +2,8 @@
 
 #include <forward_list>
 
+#include <SDL_timer.h>
+
 #include <firefly/Engine.h>
 #include <firefly/ObjectManager.h>
 #include <firefly/Entity.h>
@@ -12,37 +14,26 @@ namespace spacewar {
 LifetimeSystem::LifetimeSystem(firefly::Engine* engine):
 	firefly::ISystem("LifetimeSystem", engine) {
 
-	_requiredComponents.push_front(firefly::Lifetime::ComponentName);
+	addRequiredComponent(firefly::Lifetime::ComponentName);
 }
 
 LifetimeSystem::~LifetimeSystem() {
 }
 
-void LifetimeSystem::update() {
-	const uint64_t timepoint = SDL_GetTicks64();
-	const uint64_t elapsedMs = timepoint - _updateTimepoint;
-	_updateTimepoint = timepoint;
-
+void LifetimeSystem::onUpdate() {
 	std::forward_list<firefly::EntityID> expiredIds;
 
-	for (auto& entity: _entities) {
+	auto& entities = getEntities();
+	for (auto& entity: entities) {
 		if (isEntityExpired(entity.second)) {
 			expiredIds.push_front(entity.second->getId());
 		}
 	}
 
-	auto objectManager = _engine->getObjectManager();
+	auto objectManager = getEngine()->getObjectManager();
 	for (auto& id: expiredIds) {
 		objectManager->unregisterObject(id);
 	}
-}
-
-bool LifetimeSystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) {
-
-	// TODO write me!
-
-	return false;
 }
 
 bool LifetimeSystem::isEntityExpired(firefly::Entity* entity) const {
@@ -51,7 +42,7 @@ bool LifetimeSystem::isEntityExpired(firefly::Entity* entity) const {
 		return true;
 	}
 
-	if (_updateTimepoint - lifetime->timepoint > lifetime->lifetimeMs) {
+	if (SDL_GetTicks64() - lifetime->timepoint > lifetime->lifetimeMs) {
 		return true;
 	}
 	return false;

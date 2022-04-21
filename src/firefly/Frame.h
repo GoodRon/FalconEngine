@@ -34,9 +34,9 @@ public:
 	uint64_t getDuration() const;
 
 private:
-	TexturePointer _texture;
-	SDL_Rect _sourceRect;
-	uint64_t _durationMs;
+	const TexturePointer _texture;
+	const SDL_Rect _sourceRect;
+	const uint64_t _durationMs;
 };
 
 }

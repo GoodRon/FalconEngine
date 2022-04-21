@@ -25,15 +25,11 @@ public:
 	ShipStateSystem(const ShipStateSystem&) = delete;
 	ShipStateSystem& operator=(const ShipStateSystem&) = delete;
 
-	void update() override;
-
-	bool onEvent(
-		const std::shared_ptr<firefly::IEvent>& event) override;
+	void onUpdate() override;
 
 private:
 	void updateState(
-		firefly::Entity* entity,
-		uint64_t elapsedMs) const;
+		firefly::Entity* entity) const;
 
 	void updateIdle(
 		firefly::State* state,

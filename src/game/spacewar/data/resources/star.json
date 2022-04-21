@@ -12,10 +12,10 @@
 					"isLooped": true,
 					"frameWidth": 64,
 					"frameHeight": 64,
-					"frameDuration": 0,
+					"frameDuration": 100,
 					"frameRow": 0,
 					"frameCol": 0,
-					"frameAmount": 1
+					"frameAmount": 4
 				}
 			]
 		},

@@ -1,9 +1,5 @@
 #include "GravitationalSystem.h"
 
-#include <cmath>
-
-#include <SDL_timer.h>
-
 #include <firefly/Engine.h>
 #include <firefly/Renderer.h>
 #include <firefly/Entity.h>
@@ -14,57 +10,12 @@
 
 namespace spacewar {
 
-GravitationalSystem::GravitationalSystem(firefly::Engine* engine):
-	firefly::ISystem("GravitationalSystem", engine) {
+// TODO move to helpers
+constexpr double pi = 3.14159265358979323846;
+const double degreesToRad = pi / 180.0;
+const double radToDegrees = 180.0 / pi;
 
-	_requiredComponents.push_front(firefly::Position::ComponentName);
-	_requiredComponents.push_front(firefly::Velocity::ComponentName);
-	_requiredComponents.push_front(firefly::Gravity::ComponentName);
-}
-
-GravitationalSystem::~GravitationalSystem() {
-}
-
-void GravitationalSystem::update() {
-	const uint64_t timepoint = SDL_GetTicks64();
-	const uint64_t elapsedMs = timepoint - _updateTimepoint;
-	_updateTimepoint = timepoint;
-
-	for (auto& entity: _gravityEmitters) {
-		processGravity(entity.second, elapsedMs);
-	}
-}
-
-bool GravitationalSystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) {
-
-	// TODO write me!
-
-	return false;
-}
-
-void GravitationalSystem::onRegisterEntity(firefly::Entity* entity) {
-	if (!entity) {
-		return;
-	}
-
-	auto gravity = entity->getComponent<firefly::Gravity>();
-
-	if (gravity->emitGravity) {
-		_gravityEmitters[entity->getId()] = entity;
-	}
-}
-
-void GravitationalSystem::onUnregisterEntity(firefly::Entity* entity) {
-	if (!entity) {
-		return;
-	}
-
-	_gravityEmitters.erase(entity->getId());
-}
-
-// TODO move from here
-double normalizeAngle(double angle) {
+static double normalizeAngle(double angle) {
 	if (fabs(angle) > 360.0) {
 		angle = fmod(angle, 360.0);
 	}
@@ -75,11 +26,115 @@ double normalizeAngle(double angle) {
 	return angle;
 }
 
+static void updateSpeed(firefly::Velocity* velocity) {
+	if (!velocity) {
+		return;
+	}
+
+	velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
+
+	const double speedRad = velocity->speedAngle * degreesToRad;
+	velocity->speedX = velocity->speed * sin(speedRad);
+	velocity->speedY = -velocity->speed * cos(speedRad);
+}
+
+static void accelerate(firefly::Velocity* velocity, double acceleration,
+	double accelerationAngle, uint64_t elapsedMs) {
+
+	if (!velocity) {
+		return;
+	}
+
+	if (!velocity->isAccelerated) {
+		return;
+	}
+
+	updateSpeed(velocity);
+
+	constexpr double epsilon = 0.0001;
+	if (fabs(acceleration) < epsilon || elapsedMs == 0) {
+		return;
+	}
+
+	accelerationAngle = (normalizeAngle(accelerationAngle));
+
+	const double accelerationRad = accelerationAngle * degreesToRad;
+	const double deltaSpeed = acceleration * elapsedMs / 1000.0;
+	const double deltaX = deltaSpeed * sin(accelerationRad);
+	const double deltaY = -deltaSpeed * cos(accelerationRad);
+
+	velocity->speedX += deltaX;
+	velocity->speedY += deltaY;
+
+	// TODO optimize?
+	velocity->speed = sqrt(velocity->speedX * velocity->speedX + 
+		velocity->speedY * velocity->speedY);
+
+	double speedRad = 0.0;
+	if (fabs(velocity->speed) < epsilon) {
+		speedRad = 0.0;
+	} else {
+		speedRad = asin(velocity->speedX / velocity->speed);
+		if (velocity->speedY > 0.0) {
+			speedRad = pi - speedRad;
+		}
+	}
+
+	velocity->speedAngle = speedRad * radToDegrees;
+	velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
+
+	if (velocity->maxSpeed < epsilon) {
+		return;
+	}
+
+	if (velocity->speed > velocity->maxSpeed) {
+		velocity->speed = velocity->maxSpeed;
+		updateSpeed(velocity);
+	}
+}
+
+GravitationalSystem::GravitationalSystem(firefly::Engine* engine):
+	firefly::ISystem("GravitationalSystem", engine) {
+
+	addRequiredComponent(firefly::Position::ComponentName);
+	addRequiredComponent(firefly::Velocity::ComponentName);
+	addRequiredComponent(firefly::Gravity::ComponentName);
+}
+
+GravitationalSystem::~GravitationalSystem() {
+}
+
+void GravitationalSystem::onUpdate() {
+	for (auto& entity: _gravityEmitters) {
+		processGravity(entity.second);
+	}
+}
+
+bool GravitationalSystem::onRegisterEntity(firefly::Entity* entity) {
+	if (!entity) {
+		return false;
+	}
+
+	auto gravity = entity->getComponent<firefly::Gravity>();
+
+	if (gravity->emitGravity) {
+		_gravityEmitters[entity->getId()] = entity;
+	}
+	return true;
+}
+
+void GravitationalSystem::onUnregisterEntity(firefly::Entity* entity) {
+	if (!entity) {
+		return;
+	}
+
+	_gravityEmitters.erase(entity->getId());
+}
+
 // TODO check components here
 
 void GravitationalSystem::processGravity(
-        firefly::Entity* gravityEmitter,
-        uint64_t elapsedMs) const {
+		firefly::Entity* gravityEmitter) const {
 	
 	if (!gravityEmitter) {
 		return;
@@ -96,7 +151,8 @@ void GravitationalSystem::processGravity(
 	firefly::Position* position = nullptr;
 	firefly::Velocity* velocity = nullptr;
 
-	for (auto& entity: _entities) {
+	auto& entities = getEntities();
+	for (auto& entity: entities) {
 		if (entity.second == gravityEmitter) {
 			continue;
 		}
@@ -108,64 +164,24 @@ void GravitationalSystem::processGravity(
 		const double distanceX = emitterPosition->x - position->x;
 		const double dsistanceY = emitterPosition->y - position->y;
 		const double squaredDistance = distanceX * distanceX + dsistanceY * dsistanceY;
+		
+		constexpr double epsilon = 0.0001;
+		if (squaredDistance < epsilon) {
+			continue;
+		}
+
 		const double distance = sqrt(squaredDistance);
 
-		double acceleration = 0.0;
-		constexpr double epsilon = 0.0001;
+		// TODO improve
+		const double acceleration = ((gConstant * emitterGravity->mass) / gDivider) / squaredDistance;
 
-		double accelerationRad = 0.0;
-
-		if (distance > epsilon) {
-			// TODO improve
-			acceleration = ((gConstant * emitterGravity->mass) / gDivider) / squaredDistance;
-
-			accelerationRad = asin(distanceX / distance);
-			if (dsistanceY > 0.0) {
-				accelerationRad = M_PI -accelerationRad;
-			}
+		double accelerationRad = asin(distanceX / distance);
+		if (dsistanceY > 0.0) {
+			accelerationRad = M_PI -accelerationRad;
 		}
 
-
-		// TODO move to velocity
-
-		velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
-
-		double speedRad = (velocity->speedAngle * M_PI) / 180.0;
-
-		const double deltaSpeed = acceleration * elapsedMs / 1000.0;
-		const double deltaX = deltaSpeed * sin(accelerationRad);
-		const double deltaY = -deltaSpeed * cos(accelerationRad);
-
-		velocity->speedX = velocity->speed * sin(speedRad) + deltaX;
-		velocity->speedY = -velocity->speed * cos(speedRad) + deltaY;
-
-		if (fabs(acceleration) < epsilon) {
-			return;
-		}
-
-		// TODO optimize?
-		velocity->speed = sqrt(velocity->speedX * velocity->speedX + 
-			velocity->speedY * velocity->speedY);
-
-		if (fabs(velocity->speed) < epsilon) {
-			speedRad = 0.0;
-		} else {
-			speedRad = asin(velocity->speedX / velocity->speed);
-			if (velocity->speedY > 0.0) {
-				speedRad = M_PI -speedRad;
-			}
-		}
-
-		velocity->speedAngle = speedRad * 180.0 / M_PI;
-		velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
-
-		if (velocity->maxSpeed > epsilon) {
-			if (velocity->speed > velocity->maxSpeed) {
-				velocity->speed = velocity->maxSpeed;
-				velocity->speedX = velocity->speed * sin(speedRad);
-				velocity->speedY = -velocity->speed * cos(speedRad);
-			}
-		}
+		accelerate(velocity, acceleration, 
+			accelerationRad * radToDegrees, getElapsedMs());
 	}
 }
 

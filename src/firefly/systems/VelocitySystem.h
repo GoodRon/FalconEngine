@@ -14,19 +14,15 @@ class Velocity;
 
 class VelocitySystem final: public ISystem {
 public:
-    VelocitySystem(Engine* engine);
-    ~VelocitySystem() override;
+	VelocitySystem(Engine* engine);
+	~VelocitySystem() override;
 
-    VelocitySystem(const VelocitySystem&) = delete;
-    VelocitySystem& operator=(const VelocitySystem&) = delete;
-
-    void update() override;
-
-    bool onEvent(
-        const std::shared_ptr<IEvent>& event) override;
+	VelocitySystem(const VelocitySystem&) = delete;
+	VelocitySystem& operator=(const VelocitySystem&) = delete;
 
 private:
-    void processVelocity(Velocity* velocity, uint64_t elapsedMs) const;
+	void onUpdate() override;
+	void processVelocity(Velocity* velocity) const;
 };
 
 }

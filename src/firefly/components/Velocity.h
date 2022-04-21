@@ -24,6 +24,7 @@ public:
 		return new Velocity(*this);
 	}
 
+	bool isAccelerated = true;
 	double speed = 0.0;
 	double speedAngle = 0.0;
 	double maxSpeed = 0.0;

@@ -23,16 +23,12 @@ public:
 	PositioningSystem(const PositioningSystem&) = delete;
 	PositioningSystem& operator=(const PositioningSystem&) = delete;
 
-	void update() override;
-
-	bool onEvent(
-		const std::shared_ptr<firefly::IEvent>& event) override;
+	void onUpdate() override;
 
 private:
 	void processPosition(
 		firefly::Position* position, 
-		firefly::Velocity* velocity, 
-		uint64_t elapsedMs) const;
+		firefly::Velocity* velocity) const;
 };
 
 }

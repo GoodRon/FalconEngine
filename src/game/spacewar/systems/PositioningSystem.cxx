@@ -11,52 +11,72 @@
 
 namespace spacewar {
 
+ // TODO move to helpers
+constexpr double pi = 3.14159265358979323846;
+const double degreesToRad = pi / 180.0;
+const double radToDegrees = 180.0 / pi;
+
+static double normalizeAngle(double angle) {
+	if (fabs(angle) > 360.0) {
+		angle = fmod(angle, 360.0);
+	}
+
+	if (angle < 0.0) {
+		angle += 360.0;
+	}
+	return angle;
+}
+
+static void updateSpeed(firefly::Velocity* velocity) {
+	if (!velocity) {
+		return;
+	}
+
+	velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
+
+	const double speedRad = velocity->speedAngle * degreesToRad;
+	velocity->speedX = velocity->speed * sin(speedRad);
+	velocity->speedY = -velocity->speed * cos(speedRad);
+}
+
 PositioningSystem::PositioningSystem(firefly::Engine* engine):
 	firefly::ISystem("PositioningSystem", engine) {
 
-	_requiredComponents.push_front(firefly::Position::ComponentName);
-	_requiredComponents.push_front(firefly::Velocity::ComponentName);
+	addRequiredComponent(firefly::Position::ComponentName);
+	addRequiredComponent(firefly::Velocity::ComponentName);
 }
 
 PositioningSystem::~PositioningSystem() {
 }
 
-void PositioningSystem::update() {
-	const uint64_t timepoint = SDL_GetTicks64();
-	const uint64_t elapsedMs = timepoint - _updateTimepoint;
-	_updateTimepoint = timepoint;
-
+void PositioningSystem::onUpdate() {
 	firefly::Position* position = nullptr;
 	firefly::Velocity* velocity = nullptr;
 
-	for (auto& entity: _entities) {
+	auto& entities = getEntities();
+	for (auto& entity: entities) {
 		position = entity.second->getComponent<firefly::Position>();
 		velocity = entity.second->getComponent<firefly::Velocity>();
 
-		processPosition(position, velocity, elapsedMs);
+		processPosition(position, velocity);
 	}
 }
 
-bool PositioningSystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) {
-
-	// TODO write me!
-
-	return false;
-}
-
 void PositioningSystem::processPosition(
-        firefly::Position* position, firefly::Velocity* velocity, 
-        uint64_t elapsedMs) const {
+		firefly::Position* position, firefly::Velocity* velocity) const {
 	
 	if (!position || !velocity) {
 		return;
 	}
 
+	updateSpeed(velocity);
+
+	const auto elapsedMs = getElapsedMs();
+
 	position->x += velocity->speedX * elapsedMs / 1000.0;
 	position->y += velocity->speedY * elapsedMs / 1000.0;
 
-	auto renderer = _engine->getRenderer();
+	auto renderer = getEngine()->getRenderer();
 	SDL_Rect windowRect = renderer->getViewport();
 
 	if ((position->x + position->centerX) > (windowRect.w + position->width)) {

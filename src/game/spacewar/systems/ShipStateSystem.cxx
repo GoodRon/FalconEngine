@@ -1,5 +1,7 @@
 #include "ShipStateSystem.h"
 
+#include <SDL_timer.h>
+
 #include <random>
 
 #include <firefly/Engine.h>
@@ -16,36 +18,24 @@ namespace spacewar {
 ShipStateSystem::ShipStateSystem(firefly::Engine* engine):
 	firefly::ISystem("ShipStateSystem", engine) {
 
-	_requiredComponents.push_front(firefly::State::ComponentName);
-	_requiredComponents.push_front(firefly::Position::ComponentName);
-	_requiredComponents.push_front(firefly::Visual::ComponentName);
-	_requiredComponents.push_front(firefly::Velocity::ComponentName);
+	addRequiredComponent(firefly::State::ComponentName);
+	addRequiredComponent(firefly::Position::ComponentName);
+	addRequiredComponent(firefly::Visual::ComponentName);
+	addRequiredComponent(firefly::Velocity::ComponentName);
 }
 
 ShipStateSystem::~ShipStateSystem() {
 }
 
-void ShipStateSystem::update() {
-	const uint64_t timepoint = SDL_GetTicks64();
-	const uint64_t elapsedMs = timepoint - _updateTimepoint;
-	_updateTimepoint = timepoint;
-
-	for (auto& entity: _entities) {
-		updateState(entity.second, elapsedMs);
+void ShipStateSystem::onUpdate() {
+	auto& entities = getEntities();
+	for (auto& entity: entities) {
+		updateState(entity.second);
 	}
 }
 
-bool ShipStateSystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) {
-
-	// TODO write me!
-
-	return false;
-}
-
 void ShipStateSystem::updateState(
-	firefly::Entity* entity,
-	uint64_t elapsedMs) const {
+	firefly::Entity* entity) const {
 
 	if (!entity) {
 		return;
@@ -103,7 +93,7 @@ void ShipStateSystem::updateIdle(
 
 	state->previous = state->current;
 	state->current = nextState;
-	state->timepoint = _updateTimepoint;
+	state->timepoint = SDL_GetTicks64();
 
 	visual->currentState = nextState;
 }
@@ -128,7 +118,7 @@ void ShipStateSystem::updateMoving(
 
 	state->previous = state->current;
 	state->current = nextState;
-	state->timepoint = _updateTimepoint;
+	state->timepoint = SDL_GetTicks64();
 
 	visual->currentState = nextState;
 }
@@ -159,7 +149,8 @@ void ShipStateSystem::updateHyperspace(
 
 	// TODO read from a config
 	const uint64_t hyperspaceTimeMs = 2000;
-	if ((_updateTimepoint - state->timepoint) < hyperspaceTimeMs) {
+	const uint64_t timepoint = SDL_GetTicks64();
+	if ((timepoint - state->timepoint) < hyperspaceTimeMs) {
 		if (visual->isVisible) {
 			visual->isVisible = false;
 		}
@@ -173,13 +164,13 @@ void ShipStateSystem::updateHyperspace(
 
 	state->previous = state->current;
 	state->current = nextState;
-	state->timepoint = _updateTimepoint;
+	state->timepoint = timepoint;
 
 	visual->currentState = nextState;
 	visual->isVisible = true;
 
 	// TODO move to a separate func
-	const auto renderer = _engine->getRenderer();
+	const auto renderer = getEngine()->getRenderer();
 	auto rect = renderer->getViewport();
 
 	randomScreenPosition(rect.w, rect.h, position->x, position->y);

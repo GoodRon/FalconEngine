@@ -32,7 +32,7 @@ public:
 	void setKeyCodes(int keyUp, int keyLeft, int keyDown, 
 		int keyRight, int keyAction);
 
-	void update() override;
+	void onUpdate() override;
 
 	bool onEvent(
 		const std::shared_ptr<firefly::IEvent>& event) override;

@@ -17,8 +17,8 @@ CollisionSystem::CollisionSystem(firefly::Engine* engine):
 	firefly::ISystem("CollisionSystem", engine),
 	_qauadtree() {
 
-	_requiredComponents.push_front(firefly::RoundCollidable::ComponentName);
-	_requiredComponents.push_front(firefly::Position::ComponentName);
+	addRequiredComponent(firefly::RoundCollidable::ComponentName);
+	addRequiredComponent(firefly::Position::ComponentName);
 
 	auto renderer = engine->getRenderer();
 	_qauadtree.reset(new EntityQuadtree(renderer->getViewport()));
@@ -27,21 +27,22 @@ CollisionSystem::CollisionSystem(firefly::Engine* engine):
 CollisionSystem::~CollisionSystem() {
 }
 
-void CollisionSystem::update() {
+void CollisionSystem::onUpdate() {
 
-	if (_entities.empty()) {
+	auto& entities = getEntities();
+	if (entities.empty()) {
 		return;
 	}
 
 	_qauadtree->clear();
 
-	for (auto& entity: _entities) {
+	for (auto& entity: entities) {
 		_qauadtree->insert(entity.second);
 	}
 
 	std::unordered_set<firefly::EntityID> destroyedIds;
 
-	for (auto& entityIt: _entities) {
+	for (auto& entityIt: entities) {
 		auto entity = entityIt.second;
 
 		auto positionLeft = entity->getComponent<firefly::Position>();
@@ -66,18 +67,10 @@ void CollisionSystem::update() {
 		}
 	}
 
-	auto objectManager = _engine->getObjectManager();
+	auto objectManager = getEngine()->getObjectManager();
 	for (auto& id: destroyedIds) {
 		objectManager->unregisterObject(id);
 	}
-}
-
-bool CollisionSystem::onEvent(
-	const std::shared_ptr<firefly::IEvent>& event) {
-
-	// TODO write me!
-
-	return false;
 }
 
 bool CollisionSystem::isCollided(

@@ -27,10 +27,7 @@ public:
 	CollisionSystem(const CollisionSystem&) = delete;
 	CollisionSystem& operator=(const CollisionSystem&) = delete;
 
-	void update() override;
-
-	bool onEvent(
-		const std::shared_ptr<firefly::IEvent>& event) override;
+	void onUpdate() override;
 
 private:
 	bool isCollided(

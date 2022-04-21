@@ -22,11 +22,8 @@ public:
 	LifetimeSystem(const LifetimeSystem&) = delete;
 	LifetimeSystem& operator=(const LifetimeSystem&) = delete;
 
-	void update() override;
-
-	bool onEvent(
-		const std::shared_ptr<firefly::IEvent>& event) override;
-
+	void onUpdate() override;
+	
 private:
 	bool isEntityExpired(firefly::Entity* entity) const;
 };

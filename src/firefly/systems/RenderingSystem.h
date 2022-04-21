@@ -31,12 +31,11 @@ public:
 private:
 	void lockEntities() const override;
 	void unlockEntities() const override;
-	void onRegisterEntity(Entity* entity) override;
+	bool onRegisterEntity(Entity* entity) override;
 	void onUnregisterEntity(Entity* entity) override;
 
 	void draw(Position* positionComponent, 
-		Visual* visualComponent,
-		uint64_t timepoint) const;
+		Visual* visualComponent) const;
 
 private:
 	mutable std::mutex _mutex;

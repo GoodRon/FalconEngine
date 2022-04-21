@@ -1,7 +1,7 @@
 #include "PlayerControlSystem.h"
 
-#include <SDL_events.h>
 #include <SDL_timer.h>
+#include <SDL_events.h>
 
 #include <firefly/Engine.h>
 #include <firefly/Entity.h>
@@ -40,11 +40,11 @@ namespace spacewar {
 		_isRightPressed(false),
 		_isActionPressed(false) {
 
-		_requiredComponents.push_front(firefly::Player::ComponentName);
-		_requiredComponents.push_front(firefly::Position::ComponentName);
-		_requiredComponents.push_front(firefly::Velocity::ComponentName);
-		_requiredComponents.push_front(firefly::State::ComponentName);
-		_requiredComponents.push_front(firefly::Ammunition::ComponentName);
+		addRequiredComponent(firefly::Player::ComponentName);
+		addRequiredComponent(firefly::Position::ComponentName);
+		addRequiredComponent(firefly::Velocity::ComponentName);
+		addRequiredComponent(firefly::State::ComponentName);
+		addRequiredComponent(firefly::Ammunition::ComponentName);
 	}
 
 	PlayerControlSystem::~PlayerControlSystem() {
@@ -65,9 +65,8 @@ namespace spacewar {
 		_isActionPressed = false;
 	}
 
-	void PlayerControlSystem::update() {
+	void PlayerControlSystem::onUpdate() {
 		processHold();
-		_updateTimepoint = SDL_GetTicks64();
 	}
 
 	bool PlayerControlSystem::onEvent(
@@ -123,7 +122,7 @@ namespace spacewar {
 			}
 
 			if (keyCode == SDLK_ESCAPE) {
-				_engine->stop();
+				getEngine()->stop();
 				return true;
 			}
 			break;
@@ -163,7 +162,8 @@ namespace spacewar {
 	}
 
 	firefly::Entity* PlayerControlSystem::findPlayer(int playerId) const {
-		for (auto& entity : _entities) {
+		auto& entities = getEntities();
+		for (auto& entity : entities) {
 			auto playerComponent = entity.second->getComponent<firefly::Player>();
 
 			if (playerComponent->playerId == playerId) {
@@ -248,7 +248,7 @@ namespace spacewar {
 
 		stateComponent->previous = stateComponent->current;
 		stateComponent->current = nextState;
-		stateComponent->timepoint = _updateTimepoint;
+		stateComponent->timepoint = SDL_GetTicks64();
 	}
 
 	void PlayerControlSystem::onRightPressed(bool isPressed) {
@@ -289,10 +289,8 @@ namespace spacewar {
 			return;
 		}
 
-		const uint64_t elapsedMs = SDL_GetTicks64() - _updateTimepoint;
-
 		if (_isLeftPressed) {
-			rotate(-angleDelta * elapsedMs / 1000.0);
+			rotate(-angleDelta * getElapsedMs() / 1000.0);
 			return;	
 		}
 
@@ -311,10 +309,8 @@ namespace spacewar {
 			return;
 		}
 
-		const uint64_t elapsedMs = SDL_GetTicks64() - _updateTimepoint;
-
 		if (_isRightPressed) {
-			rotate(angleDelta * elapsedMs / 1000.0);
+			rotate(angleDelta * getElapsedMs() / 1000.0);
 			return;	
 		}
 
@@ -353,16 +349,18 @@ namespace spacewar {
 
 		auto& weapon = ammunitionComponent->weapons[weaponName];
 
+		const auto timepoint = SDL_GetTicks64();
+
 		// TODO calc delta
-		if (_updateTimepoint - weapon.lastShotTimepoint < 
+		if (timepoint - weapon.lastShotTimepoint < 
 			weapon.cooldownTimeMs) {
 			return;
 		}
 
-		weapon.lastShotTimepoint = _updateTimepoint;
+		weapon.lastShotTimepoint = timepoint;
 
-		auto entityPrototypes = _engine->getEntityPrototypes();
-		auto objectManager = _engine->getObjectManager();
+		auto entityPrototypes = getEngine()->getEntityPrototypes();
+		auto objectManager = getEngine()->getObjectManager();
 
 		auto projectile = entityPrototypes->makeEntity(weapon.projectile);
 		if (!projectile) {
@@ -385,7 +383,7 @@ namespace spacewar {
 		position->angle = playerPosition->angle;
 		position->x = playerPosition->x + 30.0;
 		position->y = playerPosition->y + 30.0;
-		lifetime->timepoint = _updateTimepoint;
+		lifetime->timepoint = timepoint;
 
 		std::shared_ptr<firefly::GameObject> object(new firefly::GameObject(projectile));
 		objectManager->registerObject(object);

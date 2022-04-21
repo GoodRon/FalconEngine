@@ -47,7 +47,7 @@ static Frame* advanceFrame(Visual* visualComponent, uint64_t timepoint) {
 		visualComponent->frameIndex = 0;
 	}
 
-	auto frame = state.frames[visualComponent->frameIndex];
+	auto& frame = state.frames[visualComponent->frameIndex];
 	const auto duration = frame->getDuration();
 
 	if (duration == 0 || timepoint < visualComponent->timepoint) {
@@ -81,8 +81,8 @@ RenderingSystem::RenderingSystem(Engine* engine):
 	_isRenderListChanged(false),
 	_renderList() {
 
-	_requiredComponents.push_front(Visual::ComponentName);
-	_requiredComponents.push_front(Position::ComponentName);
+	addRequiredComponent(Visual::ComponentName);
+	addRequiredComponent(Position::ComponentName);
 }
 
 RenderingSystem::~RenderingSystem() {
@@ -93,9 +93,10 @@ void RenderingSystem::drawEntites() {
 		_renderList.clear();
 
 		lockEntities();
-		_renderList.reserve(_entities.size());
+		auto& entities = getEntities();
+		_renderList.reserve(entities.size());
 
-		for (auto& entity: _entities) {
+		for (auto& entity: entities) {
 			_renderList.push_back(entity.second);
 		}
 
@@ -105,7 +106,6 @@ void RenderingSystem::drawEntites() {
 		std::sort(_renderList.begin(), _renderList.end(), sortEntities);
 	}
 
-	const uint64_t timepoint = SDL_GetTicks64();
 	Position* positionComponent = nullptr;
 	Visual* visualComponent = nullptr;
 
@@ -117,7 +117,7 @@ void RenderingSystem::drawEntites() {
 			continue;
 		}
 
-		draw(positionComponent, visualComponent, timepoint);
+		draw(positionComponent, visualComponent);
 	}
 }
 
@@ -129,8 +129,9 @@ void RenderingSystem::unlockEntities() const {
 	_mutex.unlock();
 }
 
-void RenderingSystem::onRegisterEntity(Entity* entity) {
+bool RenderingSystem::onRegisterEntity(Entity* entity) {
 	_isRenderListChanged = true;
+	return true;
 }
 
 void RenderingSystem::onUnregisterEntity(Entity* entity) {
@@ -138,12 +139,12 @@ void RenderingSystem::onUnregisterEntity(Entity* entity) {
 }
 
 void RenderingSystem::draw(Position* positionComponent, 
-		Visual* visualComponent, uint64_t timepoint) const {
+		Visual* visualComponent) const {
 	if (!positionComponent || !visualComponent) {
 		return;
 	}
 
-	const auto frame = advanceFrame(visualComponent, timepoint);
+	const auto frame = advanceFrame(visualComponent, getLastUpdateTimepoint());
 	if (!frame) {
 		return;
 	}

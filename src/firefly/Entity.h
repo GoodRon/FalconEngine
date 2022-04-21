@@ -38,7 +38,7 @@ public:
 	template<class T>
 	T* getComponent() const {
 		return static_cast<T*>(getComponent(T::ComponentName));
-	}
+	};
 
 private:
 	EntityID _id;
