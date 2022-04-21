@@ -15,12 +15,11 @@
 #include <firefly/components/Ammunition.h>
 #include <firefly/components/Lifetime.h>
 
-// TODO add only player with id
+#include "misc/VelocityHelpers.h"
 
 namespace spacewar {
 
 	// TODO remove from here
-	const double speed = 90.0;
 	const double acceleration = 15.0;
 	const double angleDelta = 45.0;
 
@@ -316,14 +315,12 @@ namespace spacewar {
 		auto& weapon = ammunitionComponent->weapons[weaponName];
 
 		const auto timepoint = SDL_GetTicks64();
-
-		// TODO calc delta
-		if (timepoint - weapon.lastShotTimepoint < 
-			weapon.cooldownTimeMs) {
+		const auto elapsedMs = timepoint - weapon.lastShotTimepoint;
+		if (elapsedMs < weapon.cooldownTimeMs) {
 			return;
 		}
 
-		weapon.lastShotTimepoint = timepoint;
+		weapon.lastShotTimepoint = timepoint + weapon.cooldownTimeMs - elapsedMs;
 
 		auto entityPrototypes = getEngine()->getEntityPrototypes();
 		auto entityManager = getEngine()->getEntityManager();
@@ -356,24 +353,17 @@ namespace spacewar {
 			return;
 		}
 
-		const auto positionComponent = _player->getComponent<firefly::Position>();
-		const auto velocityComponent = _player->getComponent<firefly::Velocity>();
+		const auto positionComponent = 
+			_player->getComponent<firefly::Position>();
+		const auto velocityComponent = 
+			_player->getComponent<firefly::Velocity>();
 
 		velocityComponent->acceleration = acceleration;
 
-		velocityComponent->accelerationAngle += angle;
-		/*
-		if (velocityComponent->accelerationAngle > 360.0) {
-			velocityComponent->accelerationAngle = 
-				fmod(velocityComponent->accelerationAngle, 360.0);
-		}*/
+		velocityComponent->accelerationAngle = 
+			normalizeAngle(velocityComponent->accelerationAngle + angle);
 
-		positionComponent->angle += angle;
-		/*
-		if (positionComponent->angle > 360.0) {
-			positionComponent->angle = 
-				fmod(positionComponent->angle, 360.0);
-		}
-		*/
+		positionComponent->angle = 
+			normalizeAngle(positionComponent->angle + angle);
 	}
 }
