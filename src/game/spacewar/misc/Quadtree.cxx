@@ -81,12 +81,13 @@ void EntityQuadtree::insert(firefly::Entity* entity) {
 	}
 }
 
-std::list<firefly::Entity*> EntityQuadtree::retrieve(const SDL_Rect& rect) const {
+std::list<firefly::Entity*> EntityQuadtree::retrieve(
+	const SDL_Rect& rect) const {
+
 	const int index = getIndex(rect);
 	if (index > -1 && _nodes[0] != nullptr) {
 		return _nodes[index]->retrieve(rect);
 	}
-	
 	return _entities;
 }
 

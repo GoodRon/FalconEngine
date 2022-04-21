@@ -19,11 +19,10 @@ namespace firefly {
 
 namespace spacewar {
 
-class PlayerControlSystem: public firefly::ISystem {
+class PlayerControlSystem final: public firefly::ISystem {
 public:
-	// TODO remove suffix, make unique name
 	PlayerControlSystem(firefly::Engine* engine, int playerId, 
-		const std::string suffix);
+		const std::string playerName);
 	~PlayerControlSystem() override;
 
 	PlayerControlSystem(const PlayerControlSystem&) = delete;
@@ -38,23 +37,17 @@ public:
 		const std::shared_ptr<firefly::IEvent>& event) override;
 
 private:
+	bool onRegisterEntity(firefly::Entity* entity) override;
+	void onUnregisterEntity(firefly::Entity* entity) override;
+
 	bool onPlayerInput(
 		const std::shared_ptr<firefly::NativeEvent>& event);
-
-	firefly::Entity* findPlayer(int playerId) const;
-
-	firefly::Velocity* getVelocity(int playerId) const;
-	firefly::Position* getPosition(int playerId) const;
-	firefly::State* getState(int playerId) const;
-	firefly::Ammunition* getAmmunition(int playerId) const;
 
 	void onUpPressed(bool isPressed);
 	void onLeftPressed(bool isPressed);
 	void onDownPressed(bool isPressed);
 	void onRightPressed(bool isPressed);
 	void onActionPressed(bool isPressed);
-
-	void processHold();
 
 	void onUpHold();
 	void onLeftHold();
@@ -78,6 +71,7 @@ private:
 	bool _isDownPressed;
 	bool _isRightPressed;
 	bool _isActionPressed;
+	firefly::Entity* _player;
 };
 
 }

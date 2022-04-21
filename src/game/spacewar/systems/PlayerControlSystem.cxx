@@ -25,8 +25,9 @@ namespace spacewar {
 	const double angleDelta = 45.0;
 
 	PlayerControlSystem::PlayerControlSystem(
-		firefly::Engine* engine, int playerId, const std::string suffix) :
-		firefly::ISystem("PlayerControlSystem" + suffix, engine),
+		firefly::Engine* engine, int playerId, 
+		const std::string playerName) :
+		firefly::ISystem("PlayerControlSystem_" + playerName, engine),
 		_playerId(playerId),
 		_keyCodeUp(SDLK_w),
 		_keyCodeLeft(SDLK_a),
@@ -37,7 +38,8 @@ namespace spacewar {
 		_isLeftPressed(false),
 		_isDownPressed(false),
 		_isRightPressed(false),
-		_isActionPressed(false) {
+		_isActionPressed(false),
+		_player(nullptr) {
 
 		addRequiredComponent(firefly::Player::ComponentName);
 		addRequiredComponent(firefly::Position::ComponentName);
@@ -65,7 +67,11 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::onUpdate() {
-		processHold();
+		onUpHold();
+		onLeftHold();
+		onDownHold();
+		onRightHold();
+		onActionHold();
 	}
 
 	bool PlayerControlSystem::onEvent(
@@ -85,6 +91,26 @@ namespace spacewar {
 		}
 
 		return false;
+	}
+
+	bool PlayerControlSystem::onRegisterEntity(firefly::Entity* entity) {
+		if (!entity) {
+			return false;
+		}
+
+		auto playerComponent = entity->getComponent<firefly::Player>();
+		if (playerComponent->playerId != _playerId) {
+			return false;
+		}
+		_player = entity;
+		return true;
+	}
+
+	void PlayerControlSystem::onUnregisterEntity(firefly::Entity* entity) {
+		if (_player != entity) {
+			return;
+		}
+		_player = nullptr;
 	}
 
 	bool PlayerControlSystem::onPlayerInput(
@@ -160,60 +186,6 @@ namespace spacewar {
 		return false;
 	}
 
-	firefly::Entity* PlayerControlSystem::findPlayer(int playerId) const {
-		auto& entities = getEntities();
-		for (auto& entity : entities) {
-			auto playerComponent = entity.second->getComponent<firefly::Player>();
-
-			if (playerComponent->playerId == playerId) {
-				return entity.second;
-			}
-		}
-		return nullptr;
-	}
-
-
-	// TODO pass the entity ptr
-	firefly::Velocity* PlayerControlSystem::getVelocity(int playerId) const {
-		firefly::Entity* playerEntity = findPlayer(playerId);
-		if (!playerEntity) {
-			return nullptr;
-		}
-
-		auto component = playerEntity->getComponent<firefly::Velocity>();
-		return component;
-	}
-
-	firefly::Position* PlayerControlSystem::getPosition(int playerId) const {
-		firefly::Entity* playerEntity = findPlayer(playerId);
-		if (!playerEntity) {
-			return nullptr;
-		}
-
-		auto component = playerEntity->getComponent<firefly::Position>();
-		return component;
-	}
-
-	firefly::State* PlayerControlSystem::getState(int playerId) const {
-		firefly::Entity* playerEntity = findPlayer(playerId);
-		if (!playerEntity) {
-			return nullptr;
-		}
-
-		auto component = playerEntity->getComponent<firefly::State>();
-		return component;
-	}
-
-	firefly::Ammunition* PlayerControlSystem::getAmmunition(int playerId) const {
-		firefly::Entity* playerEntity = findPlayer(playerId);
-		if (!playerEntity) {
-			return nullptr;
-		}
-
-		auto component = playerEntity->getComponent<firefly::Ammunition>();
-		return component;
-	}
-
 	void PlayerControlSystem::onUpPressed(bool isPressed) {
 		_isUpPressed = isPressed;
 
@@ -229,15 +201,16 @@ namespace spacewar {
 	void PlayerControlSystem::onDownPressed(bool isPressed) {
 		_isDownPressed = isPressed;
 
-		// TODO improve
-		auto stateComponent = getState(_playerId);
-		if (!stateComponent) {
-			return;
-		}
-
 		if (!_isDownPressed) {
 			return;
 		}
+
+		if (!_player) {
+			return;
+		}
+
+		const auto stateComponent = 
+			_player->getComponent<firefly::State>();
 
 		const std::string nextState = "Hyperspace";
 
@@ -264,14 +237,6 @@ namespace spacewar {
 		} 
 
 		shoot();
-	}
-
-	void PlayerControlSystem::processHold() {
-		onUpHold();
-		onLeftHold();
-		onDownHold();
-		onRightHold();
-		onActionHold();
 	}
 
 	void PlayerControlSystem::onUpHold() {
@@ -324,19 +289,21 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::setAcceleration(double acceleration) const {
-		auto velocityComponent = getVelocity(_playerId);
-		if (!velocityComponent) {
+		if (!_player) {
 			return;
 		}
 
+		const auto velocityComponent = _player->getComponent<firefly::Velocity>();
 		velocityComponent->acceleration = acceleration;
 	}
 
 	void PlayerControlSystem::shoot() const {
-		auto ammunitionComponent = getAmmunition(_playerId);
-		if (!ammunitionComponent) {
+		if (!_player) {
 			return;
 		}
+
+		const auto ammunitionComponent = 
+			_player->getComponent<firefly::Ammunition>();
 
 		// TODO improve
 		const std::string weaponName("RocketLauncher");
@@ -373,10 +340,7 @@ namespace spacewar {
 			return;
 		}
 
-		auto playerPosition = getPosition(_playerId);
-		if (!playerPosition) {
-			return;
-		}
+		const auto playerPosition = _player->getComponent<firefly::Position>();
 
 		velocity->speedAngle = playerPosition->angle;
 		position->angle = playerPosition->angle;
@@ -388,15 +352,14 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::rotate(double angle) const {
-		auto positionComponent = getPosition(_playerId);
-		if (!positionComponent) {
+		if (!_player) {
 			return;
 		}
 
-		auto velocityComponent = getVelocity(_playerId);
-		if (!velocityComponent) {
-			return;
-		}
+		const auto positionComponent = _player->getComponent<firefly::Position>();
+		const auto velocityComponent = _player->getComponent<firefly::Velocity>();
+
+		velocityComponent->acceleration = acceleration;
 
 		velocityComponent->accelerationAngle += angle;
 		/*

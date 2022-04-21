@@ -14,13 +14,14 @@ int main(int argc, char** argv) {
 	const int width = 1500;
 	const int height = 900;
 	const std::string header("Space War!");
+	const std::string icon("resources/icon.png");
 
 	int ret = 0;
 	try {
 
 		firefly::Engine engine(width, height);
 		engine.setWindowHeader(header);
-		engine.setWindowIcon("resources/icon.png");
+		engine.setWindowIcon(icon);
 
 		spacewar::GameBuilder gameBuilder(&engine);
 		gameBuilder.buildGame();
