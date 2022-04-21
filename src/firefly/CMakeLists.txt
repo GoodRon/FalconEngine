@@ -15,7 +15,6 @@ add_library(firefly
 	events/IEvent.cxx
 	events/NativeEvent.cxx
 	systems/ISystem.cxx
-	systems/RenderingSystem.cxx
-	systems/VelocitySystem.cxx)
+	systems/RenderingSystem.cxx)
 
 target_link_libraries(firefly SDL2::Core SDL2::Image)

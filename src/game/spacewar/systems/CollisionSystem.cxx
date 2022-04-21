@@ -9,7 +9,7 @@
 #include <firefly/components/RoundCollidable.h>
 #include <firefly/components/Position.h>
 
-#include "Quadtree.h"
+#include "misc/Quadtree.h"
 
 namespace spacewar {
 

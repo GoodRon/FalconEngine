@@ -9,35 +9,9 @@
 #include <firefly/components/Position.h>
 #include <firefly/components/Velocity.h>
 
+#include "misc/VelocityHelpers.h"
+
 namespace spacewar {
-
- // TODO move to helpers
-constexpr double pi = 3.14159265358979323846;
-const double degreesToRad = pi / 180.0;
-const double radToDegrees = 180.0 / pi;
-
-static double normalizeAngle(double angle) {
-	if (fabs(angle) > 360.0) {
-		angle = fmod(angle, 360.0);
-	}
-
-	if (angle < 0.0) {
-		angle += 360.0;
-	}
-	return angle;
-}
-
-static void updateSpeed(firefly::Velocity* velocity) {
-	if (!velocity) {
-		return;
-	}
-
-	velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
-
-	const double speedRad = velocity->speedAngle * degreesToRad;
-	velocity->speedX = velocity->speed * sin(speedRad);
-	velocity->speedY = -velocity->speed * cos(speedRad);
-}
 
 PositioningSystem::PositioningSystem(firefly::Engine* engine):
 	firefly::ISystem("PositioningSystem", engine) {

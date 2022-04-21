@@ -1,28 +1,28 @@
-#include "VelocitySystem.h"
+#include "VelocityHelpers.h"
 
-#include "Entity.h"
+#include <cmath>
 
-#include "components/Velocity.h"
+#include <firefly/components/Velocity.h>
 
-namespace firefly {
- 
-// TODO move to helpers
+namespace spacewar {
+
 constexpr double pi = 3.14159265358979323846;
-const double degreesToRad = pi / 180.0;
-const double radToDegrees = 180.0 / pi;
+constexpr double degreesToRad = pi / 180.0;
+constexpr double radToDegrees = 180.0 / pi;
+constexpr double epsilon = 0.0001;
 
-static double normalizeAngle(double angle) {
-	if (fabs(angle) > 360.0) {
-		angle = fmod(angle, 360.0);
+double normalizeAngle(double degrees) {
+	if (fabs(degrees) > 360.0) {
+		degrees = fmod(degrees, 360.0);
 	}
 
-	if (angle < 0.0) {
-		angle += 360.0;
+	if (degrees < 0.0) {
+		degrees += 360.0;
 	}
-	return angle;
+	return degrees;
 }
 
-static void updateSpeed(Velocity* velocity) {
+void updateSpeed(firefly::Velocity* velocity) {
 	if (!velocity) {
 		return;
 	}
@@ -34,7 +34,7 @@ static void updateSpeed(Velocity* velocity) {
 	velocity->speedY = -velocity->speed * cos(speedRad);
 }
 
-static void accelerate(Velocity* velocity, double acceleration,
+void accelerate(firefly::Velocity* velocity, double acceleration,
 	double accelerationAngle, uint64_t elapsedMs) {
 
 	if (!velocity) {
@@ -47,7 +47,6 @@ static void accelerate(Velocity* velocity, double acceleration,
 
 	updateSpeed(velocity);
 
-	constexpr double epsilon = 0.0001;
 	if (fabs(acceleration) < epsilon || elapsedMs == 0) {
 		return;
 	}
@@ -66,14 +65,14 @@ static void accelerate(Velocity* velocity, double acceleration,
 	velocity->speed = sqrt(velocity->speedX * velocity->speedX + 
 		velocity->speedY * velocity->speedY);
 
-	double speedRad = 0.0;
 	if (fabs(velocity->speed) < epsilon) {
-		speedRad = 0.0;
-	} else {
-		speedRad = asin(velocity->speedX / velocity->speed);
-		if (velocity->speedY > 0.0) {
-			speedRad = pi - speedRad;
-		}
+		velocity->speedAngle = 0.0;
+		return;
+	}
+
+	double speedRad = asin(velocity->speedX / velocity->speed);
+	if (velocity->speedY > 0.0) {
+		speedRad = pi - speedRad;
 	}
 
 	velocity->speedAngle = speedRad * radToDegrees;
@@ -87,35 +86,6 @@ static void accelerate(Velocity* velocity, double acceleration,
 		velocity->speed = velocity->maxSpeed;
 		updateSpeed(velocity);
 	}
-}
-
-VelocitySystem::VelocitySystem(Engine* engine):
-	ISystem("VelocitySystem", engine) {
-
-	addRequiredComponent(Velocity::ComponentName);
-}
-
-VelocitySystem::~VelocitySystem() {
-}
-
-void VelocitySystem::onUpdate() {
-	Velocity* velocity = nullptr;
-
-	auto& entities = getEntities();
-	for (auto& entity: entities) {
-		velocity = entity.second->getComponent<Velocity>();
-		processVelocity(velocity);
-	}
-}
-
-void VelocitySystem::processVelocity(
-	Velocity* velocity) const {
-	if (!velocity) {
-		return;
-	}
-
-	accelerate(velocity, velocity->acceleration,
-		velocity->accelerationAngle, getElapsedMs());
 }
 
 }

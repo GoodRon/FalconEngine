@@ -3,18 +3,20 @@
  * All rights reserved
  */
 
-#ifndef FIREFLY_SYSTEMS_VELOCITY_H
-#define FIREFLY_SYSTEMS_VELOCITY_H
+#ifndef SW_SYSTEMS_VELOCITY_H
+#define SW_SYSTEMS_VELOCITY_H
 
-#include "ISystem.h"
+#include <firefly/systems/ISystem.h>
 
 namespace firefly {
+	class Velocity;
+}
 
-class Velocity;
+namespace spacewar {
 
-class VelocitySystem final: public ISystem {
+class VelocitySystem final: public firefly::ISystem {
 public:
-	VelocitySystem(Engine* engine);
+	VelocitySystem(firefly::Engine* engine);
 	~VelocitySystem() override;
 
 	VelocitySystem(const VelocitySystem&) = delete;
@@ -22,9 +24,9 @@ public:
 
 private:
 	void onUpdate() override;
-	void processVelocity(Velocity* velocity) const;
+	void processVelocity(firefly::Velocity* velocity) const;
 };
 
 }
 
-#endif // FIREFLY_SYSTEMS_VELOCITY_H
+#endif // SW_SYSTEMS_VELOCITY_H

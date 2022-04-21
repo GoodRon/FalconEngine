@@ -3,8 +3,8 @@
  * All rights reserved
  */
 
-#ifndef SW_SYSTEMS_QUADTREE_H
-#define SW_SYSTEMS_QUADTREE_H
+#ifndef SW_MISC_QUADTREE_H
+#define SW_MISC_QUADTREE_H
 
 #include <SDL_rect.h>
 
@@ -43,4 +43,4 @@ private:
 
 }
 
-#endif // SW_SYSTEMS_QUADTREE_H
+#endif // SW_MISC_QUADTREE_H

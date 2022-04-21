@@ -9,7 +9,6 @@
 #include <firefly/GameObject.h>
 #include <firefly/EntityPrototypes.h>
 #include <firefly/ObjectManager.h>
-#include <firefly/systems/VelocitySystem.h>
 
 #include "EntityBuilder.h"
 #include "systems/PlayerControlSystem.h"
@@ -18,6 +17,7 @@
 #include "systems/ShipStateSystem.h"
 #include "systems/LifetimeSystem.h"
 #include "systems/CollisionSystem.h"
+#include "systems/VelocitySystem.h"
 
 namespace spacewar {
 
@@ -83,7 +83,7 @@ private:
 
 		std::shared_ptr<firefly::ISystem> systemPtr;
 
-		systemPtr.reset(new firefly::VelocitySystem(_engine));
+		systemPtr.reset(new VelocitySystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 
 		systemPtr.reset(new GravitationalSystem(_engine));
