@@ -3,6 +3,8 @@
  * All rights reserved
  */
 
+#include <SDL_timer.h>
+
 #include <thread>
 
 #include "Engine.h"
@@ -29,7 +31,7 @@ Engine::Engine(int width, int height):
 	_renderer(),
 	_resourceManager(),
 	_objectManager(),
-	_entityPrototypes (),
+	_entityPrototypes(),
 	_systemManager(),
 	_eventManager(),
 	_renderingSystem(),
@@ -60,14 +62,16 @@ Engine::~Engine() {
 }
 
 int Engine::run() {
-	
-	std::thread logicThread([this](){
-		// TODO use accurate timers here
 
-		const Uint32 delayMs = 33;
+	std::thread logicThread([this](){
+		constexpr uint64_t logicPeriodMs = 16;
+		uint64_t elapsedMs = 0;
+		uint64_t timepoint = 0;
+
 		std::queue<SDL_Event> events;
 
 		while (_isRunning) {
+			timepoint = SDL_GetTicks64();
 
 			_systemManager->update();
 
@@ -82,9 +86,12 @@ int Engine::run() {
 				events.pop();
 			}
 
-			// TODO calculate delay instead of using the constant value
-			//SDL_Delay(delayMs);
-			SDL_Delay(1);
+			elapsedMs = SDL_GetTicks64() - timepoint;
+			if (elapsedMs > logicPeriodMs) {
+				continue;
+			}
+
+			SDL_Delay(logicPeriodMs - elapsedMs);
 		}
 	});
 	
@@ -143,20 +150,9 @@ SystemManager* Engine::getSystemManager() const {
 }
 
 void Engine::onSDLEvent(const SDL_Event& event) {
-
-	// TODO divide and move to the default handler
 	switch (event.type) {
 		case SDL_QUIT:
 			_isRunning = false;
-			break;
-		case SDL_KEYDOWN:
-			switch (event.key.keysym.sym) {
-				case SDLK_ESCAPE:
-					_isRunning = false;
-					break;
-				default:
-					break;
-			}
 			break;
 		default:
 			break;

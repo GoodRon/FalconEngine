@@ -121,6 +121,11 @@ namespace spacewar {
 				onActionPressed(true);
 				return true;
 			}
+
+			if (keyCode == SDLK_ESCAPE) {
+				_engine->stop();
+				return true;
+			}
 			break;
 
 		case SDL_KEYUP:
