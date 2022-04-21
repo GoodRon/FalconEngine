@@ -29,11 +29,16 @@ public:
 private:
 	void onUpdate() override;
 
+	bool onRegisterEntity(Entity* entity) override;
+	void onUnregisterEntity(Entity* entity) override;
+
 	void draw(Position* positionComponent, 
 		Visual* visualComponent) const;
 
 private:
 	Renderer* const _renderer;
+	bool _isRenderListChanged;
+	std::vector<Entity*> _renderList;
 };
 
 }

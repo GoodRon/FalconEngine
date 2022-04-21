@@ -66,7 +66,6 @@ void CollisionSystem::onUpdate() {
 			}
 		}
 	}
-
 }
 
 bool CollisionSystem::isCollided(

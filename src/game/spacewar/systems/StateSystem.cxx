@@ -63,8 +63,6 @@ static void changeVisualState(
 		return;
 	}
 
-	const auto timepoint = SDL_GetTicks64();
-
 	visual->currentState = nextState;
 	visual->timepoint = SDL_GetTicks64();
 

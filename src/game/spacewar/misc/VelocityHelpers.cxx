@@ -54,7 +54,7 @@ void accelerate(firefly::Velocity* velocity, double acceleration,
 	accelerationAngle = (normalizeAngle(accelerationAngle));
 
 	const double accelerationRad = accelerationAngle * degreesToRad;
-	const double deltaSpeed = acceleration * elapsedMs / 1000.0;
+	const double deltaSpeed = acceleration * static_cast<double>(elapsedMs) / 1000.0;
 	const double deltaX = deltaSpeed * sin(accelerationRad);
 	const double deltaY = -deltaSpeed * cos(accelerationRad);
 
