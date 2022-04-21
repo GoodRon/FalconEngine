@@ -5,11 +5,8 @@
 
 #include <thread>
 
-#include <SDL.h>
-
 #include "Engine.h"
 #include "Entity.h"
-#include "TimerPool.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "ObjectManager.h"
@@ -26,10 +23,19 @@ namespace firefly {
 
 constexpr size_t maxQueuedEvents = 1024;
 
-bool Engine::initialize(int width, int height) {
-	if (_isInitialized) {
-		return _isInitialized;
-	}
+Engine::Engine(int width, int height):
+	_isRunning(true),
+	_returnCode(0),
+	_renderer(),
+	_resourceManager(),
+	_objectManager(),
+	_entityPrototypes (),
+	_systemManager(),
+	_eventManager(),
+	_renderingSystem(),
+	_eventMutex(),
+	_eventQueue(),
+	_isEventAwaiting(false) {
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
@@ -41,67 +47,19 @@ bool Engine::initialize(int width, int height) {
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
 	_objectManager.reset(new ObjectManager(_systemManager.get()));
 	_entityPrototypes.reset(new EntityPrototypes);
-	_timerPool.reset(new TimerPool);
 
 	_eventManager.reset(new EventManager(_systemManager.get()));
-
-	// TODO fix this
-	/*
-	_timerPool->addTimer(10, [this](TimerPool::id_t) {
-		if (!_objectManager) {
-			return;
-		}
-		//_objectManager->updateAll();
-	});
-	*/
 
 	_renderingSystem.reset(
 		new firefly::RenderingSystem(this));
 	_systemManager->addSystem(_renderingSystem);
-
-	_isInitialized = true;
-	return _isInitialized;
-}
-
-bool Engine::isInitialized() const {
-	return _isInitialized;
-}
-
-Engine::Engine():
-	_isInitialized(false),
-	_isRunning(true),
-	_returnCode(0),
-	_renderer(),
-	_resourceManager(),
-	_objectManager(),
-	_entityPrototypes (),
-	_systemManager(),
-	_eventManager(),
-	_renderingSystem(),
-	_timerPool(),
-	//_eventHandlers(),
-	//_handlersMutex(),
-	_eventMutex(),
-	_eventQueue(),
-	_isEventAwaiting(false) {
 }
 
 Engine::~Engine() {
 	SDL_Quit();
-	_isInitialized = false;
 }
-
-/*
-bool Engine::loadConfig(const std::string& file) {
-	// TODO write me!
-	return true;
-}
-*/
 
 int Engine::run() {
-	if (!_isInitialized) {
-		return _returnCode;
-	}
 	
 	std::thread logicThread([this](){
 		// TODO use accurate timers here
@@ -111,7 +69,6 @@ int Engine::run() {
 
 		while (_isRunning) {
 
-			_timerPool->check();
 			_systemManager->update();
 
 			if (_isEventAwaiting) {
@@ -185,26 +142,6 @@ SystemManager* Engine::getSystemManager() const {
 	return _systemManager.get();
 }
 
-TimerPool* Engine::getTimersPool() const {
-	return _timerPool.get();
-}
-
-/*
-void Engine::pushEventHandler(const EventHandler& handler) {
-	if (!_isInitialized) {
-		return;
-	}
-
-	std::lock_guard<std::mutex> locker(_handlersMutex);
-	_eventHandlers.push_back(handler);
-}
-
-void Engine::clearEventHandlers() {
-	std::lock_guard<std::mutex> locker(_handlersMutex);
-	_eventHandlers.clear();
-}
-*/
-
 void Engine::onSDLEvent(const SDL_Event& event) {
 
 	// TODO divide and move to the default handler
@@ -225,15 +162,6 @@ void Engine::onSDLEvent(const SDL_Event& event) {
 			break;
 	}
 
-	// TODO remove the locking here
-	/*
-	std::lock_guard<std::mutex> locker(_handlersMutex);
-	for (auto &handler: _eventHandlers) {
-		if (handler(event)) {
-			break;
-		}
-	}
-	*/
 	std::shared_ptr<IEvent> nativeEvent(new NativeEvent(event));
 	_eventManager->sendEvent(nativeEvent);
 }

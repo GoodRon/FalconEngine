@@ -4,7 +4,6 @@ add_library(firefly
 	STATIC
 	ObjectManager.cxx 
 	Engine.cxx 
-	TimerPool.cxx
 	ResourceManager.cxx 
 	Renderer.cxx 
 	Frame.cxx
