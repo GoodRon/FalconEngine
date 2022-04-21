@@ -7,6 +7,7 @@
 #define FIREFLY_COMPONENT_VISUAL_H
 
 #include <unordered_map>
+#include <vector>
 
 #include "IComponent.h"
 
@@ -27,21 +28,15 @@ public:
 	IComponent* clone() const override {
 		return new Visual(*this);
 	}
-
-	using StateName = std::string;
-	using Direction = int;
-	using Frames = std::vector<std::shared_ptr<Frame>>;
 	
-	// TODO remove duration
 	struct State {
-		std::unordered_map<Direction, Frames> frames;
+		std::vector<std::shared_ptr<Frame>> frames;
 		bool isLooped = true;
 	};
 
-	StateName currentState = "Idle";
-	Direction currentDirection = 0;
+	std::string currentState = "Idle";
 	size_t frameIndex = 0; 
-	std::unordered_map<StateName, State> states;
+	std::unordered_map<std::string, State> states;
 	bool isPaused = false;
 	bool isVisible = false;
 	int zIndex = 0;

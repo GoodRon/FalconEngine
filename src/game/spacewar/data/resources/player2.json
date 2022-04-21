@@ -9,34 +9,24 @@
 				{
 					"name": "Idle",
 					"texture": "resources/player2.png",
+					"isLooped": true,
 					"frameWidth": 66,
 					"frameHeight": 88,
 					"frameDuration": 0,
-					"isLooped": true,
-					"frames" : [
-						{
-							"direction": 0,
-							"row": 0,
-							"col": 0,
-							"amount": 1
-						}
-					]
+					"frameRow": 0,
+					"frameCol": 0,
+					"frameAmount": 1
 				},
 				{
 					"name": "Moving",
 					"texture": "resources/player2.png",
+					"isLooped": true,
 					"frameWidth": 66,
 					"frameHeight": 88,
 					"frameDuration": 1000,
-					"isLooped": true,
-					"frames" : [
-						{
-							"direction": 0,
-							"row": 0,
-							"col": 1,
-							"amount": 1
-						}
-					]
+					"frameRow": 0,
+					"frameCol": 1,
+					"frameAmount": 1
 				}
 			]
 		},

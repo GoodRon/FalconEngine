@@ -7,7 +7,6 @@
 #define FIREFLY_ICOMPONENT_H
 
 #include <string>
-#include <memory>
 
 namespace firefly {
 

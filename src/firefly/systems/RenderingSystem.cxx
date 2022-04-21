@@ -69,14 +69,13 @@ void RenderingSystem::draw(Position* positionComponent,
 		return;
 	}
 
-	Visual::State& state = visualComponent->states[visualComponent->currentState];
-	auto& frames = state.frames[visualComponent->currentDirection];
-	if (frames.empty()) {
+	auto& state = visualComponent->states[visualComponent->currentState];
+	if (state.frames.empty()) {
 		return;
 	}
 
 	// TODO check index
-	auto frame = frames[visualComponent->frameIndex];
+	auto frame = state.frames[visualComponent->frameIndex];
 
 	// TODO move to the advanceFrames() function
 	const auto duration = frame->getDuration();
@@ -87,7 +86,7 @@ void RenderingSystem::draw(Position* positionComponent,
 			// TODO minus delta
 			visualComponent->timepoint = timepoint;
 
-			if (visualComponent->frameIndex == frames.size() - 1) {
+			if (visualComponent->frameIndex == state.frames.size() - 1) {
 				if (state.isLooped) {
 					visualComponent->frameIndex = 0;
 				}
@@ -95,7 +94,7 @@ void RenderingSystem::draw(Position* positionComponent,
 				visualComponent->frameIndex++;
 			}
 
-			frame = frames[visualComponent->frameIndex];
+			frame = state.frames[visualComponent->frameIndex];
 		}
 	}
 

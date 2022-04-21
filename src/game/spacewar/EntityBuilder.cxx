@@ -182,24 +182,21 @@ private:
 			firefly::Visual::State visualState;
 			visualState.isLooped = state["isLooped"].GetBool();
 
-			for (auto& frameLine: state["frames"].GetArray()) {
-				const int direction = frameLine["direction"].GetInt();
-				const int row = frameLine["row"].GetInt();
-				const int col = frameLine["col"].GetInt();
-				const int amount = frameLine["amount"].GetInt();
+			const int row = state["frameRow"].GetInt();
+			const int col = state["frameCol"].GetInt();
+			const int amount = state["frameAmount"].GetInt();
 
-				firefly::Visual::Frames frames;
+			std::vector<std::shared_ptr<firefly::Frame>> frames;
 
-				frameRect.y = row * frameRect.h;
-				for (int frameCount = 0; frameCount < amount; ++frameCount) {
-					frameRect.x = (col + frameCount) * frameRect.w;
+			frameRect.y = row * frameRect.h;
+			for (int frameCount = 0; frameCount < amount; ++frameCount) {
+				frameRect.x = (col + frameCount) * frameRect.w;
 					
-					frames.emplace_back(
-						new firefly::Frame(texture, frameRect, duration));
-				}
-
-				visualState.frames[direction] = std::move(frames);
+				frames.emplace_back(
+					new firefly::Frame(texture, frameRect, duration));
 			}
+
+			visualState.frames = std::move(frames);
 
 			component->states[stateName] = std::move(visualState);
 		}

@@ -9,18 +9,13 @@
 				{
 					"name": "Idle",
 					"texture": "resources/background.png",
+					"isLooped": false,
 					"frameWidth": 1664,
 					"frameHeight": 1149,
 					"frameDuration": 0,
-					"isLooped": true,
-					"frames" : [
-						{
-							"direction": 0,
-							"row": 0,
-							"col": 0,
-							"amount": 1
-						}
-					]
+					"frameRow": 0,
+					"frameCol": 0,
+					"frameAmount": 1
 				}
 			]
 		},

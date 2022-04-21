@@ -9,18 +9,13 @@
 				{
 					"name": "Idle",
 					"texture": "resources/star.png",
+					"isLooped": true,
 					"frameWidth": 64,
 					"frameHeight": 64,
 					"frameDuration": 0,
-					"isLooped": true,
-					"frames" : [
-						{
-							"direction": 0,
-							"row": 0,
-							"col": 0,
-							"amount": 1
-						}
-					]
+					"frameRow": 0,
+					"frameCol": 0,
+					"frameAmount": 1
 				}
 			]
 		},
