@@ -30,14 +30,14 @@
 				},
 				{
 					"name": "Destroyed",
-					"texture": "resources/explosion.png",
+					"texture": "resources/player1.png",
 					"isLooped": true,
-					"frameWidth": 100,
-					"frameHeight": 100,
-					"frameDuration": 33,
+					"frameWidth": 66,
+					"frameHeight": 88,
+					"frameDuration": 0,
 					"frameRow": 0,
 					"frameCol": 0,
-					"frameAmount": 44
+					"frameAmount": 1
 				}
 			]
 		},

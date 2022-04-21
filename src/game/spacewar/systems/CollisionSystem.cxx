@@ -1,7 +1,5 @@
 #include "CollisionSystem.h"
 
-#include <unordered_set>
-
 #include <firefly/Engine.h>
 #include <firefly/Entity.h>
 #include <firefly/Renderer.h>

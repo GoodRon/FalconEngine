@@ -27,6 +27,17 @@
 					"frameRow": 0,
 					"frameCol": 1,
 					"frameAmount": 1
+				},
+				{
+					"name": "Destroyed",
+					"texture": "resources/explosion.png",
+					"isLooped": false,
+					"frameWidth": 100,
+					"frameHeight": 100,
+					"frameDuration": 33,
+					"frameRow": 0,
+					"frameCol": 0,
+					"frameAmount": 44
 				}
 			]
 		},

@@ -66,8 +66,11 @@ static void changeVisualState(
 	const auto timepoint = SDL_GetTicks64();
 
 	visual->currentState = nextState;
-	visual->states[nextState].isStopped = false;
 	visual->timepoint = SDL_GetTicks64();
+
+	if (visual->states[nextState].isLooped) {
+		visual->states[nextState].isStopped = false;
+	}
 }
 
 ShipStateSystem::ShipStateSystem(firefly::Engine* engine):
@@ -145,7 +148,6 @@ void ShipStateSystem::updateIdle(
 		return;
 	}
 
-	// TODO move strings to some constant place
 	const std::string nextState = stateNameMoving();
 	changeState(state, nextState);
 	changeVisualState(visual, nextState);
@@ -182,6 +184,7 @@ void ShipStateSystem::updateHyperspace(
 		return;
 	}
 
+	// TODO improve this
 	// TODO read from a config
 	const uint64_t hyperspaceTimeMs = 2000;
 	const uint64_t timepoint = SDL_GetTicks64();
@@ -202,7 +205,6 @@ void ShipStateSystem::updateHyperspace(
 
 	visual->isVisible = true;
 
-	// TODO move to a separate func
 	const auto renderer = getEngine()->getRenderer();
 	auto rect = renderer->getViewport();
 
@@ -220,11 +222,27 @@ void ShipStateSystem::updateDestroyed(
 		return;
 	}
 
+	// NOTE awaiting the animation to stop
+	if (!visual->states[visual->currentState].isStopped) {
+		return;
+	}
+
 	const auto lives = entity->getComponent<firefly::Lives>();
 	if (lives) {
 		lives->currentLives--;
 		if (lives->currentLives > 0) {
-			// TODO respawn
+			// NOTE respawn
+
+			const auto renderer = getEngine()->getRenderer();
+			auto rect = renderer->getViewport();
+			randomScreenPosition(rect.w, rect.h, position->x, position->y);
+			
+			velocity->speed = 0.0;
+			velocity->acceleration = 0.0;
+
+			const std::string nextState = stateNameIdle();
+			changeState(state, nextState);
+			changeVisualState(visual, nextState);
 			return;
 		}
 	}
