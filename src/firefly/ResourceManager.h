@@ -28,9 +28,10 @@ public:
 	ResourceManager& operator=(ResourceManager&) = delete;
 
 	TexturePointer loadTexture(const std::string& name);
-	// loadSurface
 
 	void freeUnused();
+
+	void clear();
 
 private:
 	Renderer* _renderer;

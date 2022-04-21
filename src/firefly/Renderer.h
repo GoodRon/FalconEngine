@@ -22,7 +22,6 @@ using TexturePointer = std::shared_ptr<SDL_Texture>;
 class Renderer {
 public:
 	Renderer(int width, int heigh);
-
 	~Renderer();
 
 	Renderer(const Renderer& other) = delete;

@@ -82,7 +82,7 @@ int Engine::run() {
 		while (_isRunning) {
 			timepoint = SDL_GetTicks64();
 
-			_systemManager->update();
+			_systemManager->updateSystems();
 
 			if (_isEventAwaiting) {
 				std::lock_guard<std::mutex> locker(_eventMutex);

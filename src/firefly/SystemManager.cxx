@@ -27,6 +27,14 @@ bool SystemManager::hasSystem(const std::string& name) const {
 	return false;
 }
 
+std::shared_ptr<ISystem> 
+SystemManager::getSystem(const std::string& name) {
+	if (hasSystem(name)) {
+		return nullptr;
+	}
+	return _systems[name];
+}
+
 void SystemManager::registerEntity(Entity* entity) {
 	for (auto& sys: _systems) {
 		sys.second->registerEntity(entity);
@@ -39,9 +47,11 @@ void SystemManager::unregisterEntity(EntityID id) {
 	}
 }
 
-void SystemManager::update() {
+void SystemManager::updateSystems() {
 	for (auto& sys: _systems) {
-		sys.second->update();
+		if (sys.second->isActive()) {
+			sys.second->update();
+		}
 	}
 }
 

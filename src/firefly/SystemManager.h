@@ -27,13 +27,13 @@ public:
 	SystemManager& operator=(const SystemManager&) = delete;
 
 	void addSystem(const std::shared_ptr<ISystem>& system);
-
 	bool hasSystem(const std::string& name) const;
+	std::shared_ptr<ISystem> getSystem(const std::string& name);
 
 	void registerEntity(Entity* entity);
 	void unregisterEntity(EntityID id);
 
-	void update();
+	void updateSystems();
 
 	bool onEvent(
 		const std::shared_ptr<IEvent>& event);

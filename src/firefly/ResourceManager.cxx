@@ -34,16 +34,12 @@ TexturePointer ResourceManager::loadTexture(const std::string& name) {
 
 	SDL_Surface* surface = IMG_Load(name.c_str());
 	if (surface == nullptr) {
-		//cerr << "Unable to load image " << name << ". Error: " << IMG_GetError()
-		//	 << endl;
 		return nullptr;
 	}
 
 	auto texture = SDL_CreateTextureFromSurface(_renderer->getContext(),
 												surface);
 	if (texture == nullptr) {
-		//cerr << "Unable to create texture from image " << name << ". Error: "
-		//	 << SDL_GetError() << endl;
 		SDL_FreeSurface(surface);
 		return nullptr;
 	}
@@ -56,11 +52,16 @@ TexturePointer ResourceManager::loadTexture(const std::string& name) {
 }
 
 void ResourceManager::freeUnused() {
-	for (auto texture = _textureCache.begin(); texture != _textureCache.end(); ++texture) {
+	for (auto texture = _textureCache.begin(); 
+		texture != _textureCache.end(); ++texture) {
 		if ((*texture).second.use_count() <= 1) {
 			_textureCache.erase(texture);
 		}
 	}
+}
+
+void ResourceManager::clear() {
+	_textureCache.clear();
 }
 
 }

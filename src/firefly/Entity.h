@@ -24,8 +24,8 @@ public:
 	Entity(const Entity& other);
 	Entity& operator=(const Entity& other);
 
-	Entity(Entity&&) = default;
-	Entity& operator=(Entity&&) = default;
+	Entity(Entity&&) = delete;
+	Entity& operator=(Entity&&) = delete;
 
 	EntityID getId() const;
 	const std::string getName() const;

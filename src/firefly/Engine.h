@@ -9,8 +9,6 @@
 #include <SDL.h>
 
 #include <string>
-#include <vector>
-#include <functional>
 #include <memory>
 #include <atomic>
 #include <queue>

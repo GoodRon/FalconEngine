@@ -42,13 +42,14 @@ bool EntityPrototypes::hasPrototype(const std::string& name) const {
 	return true;
 }
 
-std::shared_ptr<Entity> EntityPrototypes::makeEntity(const std::string& name) {
+std::shared_ptr<Entity> EntityPrototypes::makeEntity(
+	const std::string& name) const {
 	if (!hasPrototype(name)) {
 		return nullptr;
 	}
 
 	std::shared_ptr<Entity> entity(new Entity(name));
-	(*entity.get()) = (*_prototypes[name].get());
+	(*entity.get()) = (*_prototypes.at(name).get());
 
 	return entity;
 }

@@ -5,7 +5,7 @@ add_subdirectory(data)
 include_directories(${CMAKE_SOURCE_DIR}/src)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
-add_executable(spacewars WIN32 
+add_executable(spacewar WIN32 
 	main.cxx
 	GameBuilder.cxx
 	EntityBuilder.cxx
@@ -18,6 +18,6 @@ add_executable(spacewars WIN32
 	systems/CollisionSystem.cxx
 	systems/LifetimeSystem.cxx
 	systems/VelocitySystem.cxx)
-target_link_libraries(spacewars firefly SDL2::Main)
+target_link_libraries(spacewar firefly SDL2::Main)
 
-install(TARGETS spacewars RUNTIME DESTINATION .)
+install(TARGETS spacewar RUNTIME DESTINATION .)

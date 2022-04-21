@@ -69,7 +69,15 @@ bool ISystem::onEvent(
 }
 
 void ISystem::setActive(bool isActive) {
+	if (_isActive == isActive) {
+		return;
+	}
+
 	_isActive = isActive;
+	if (_isActive) {
+		// TODO check it
+		_updateTimepoint = SDL_GetTicks64();
+	}
 }
 
 bool ISystem::isActive() const {

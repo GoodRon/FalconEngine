@@ -15,7 +15,6 @@ Entity::Entity(const std::string& name):
 	_components() {
 }
 
-// TODO check
 Entity::Entity(const Entity& other) {
 	operator=(other);
 }

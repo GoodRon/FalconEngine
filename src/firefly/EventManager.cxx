@@ -5,7 +5,8 @@
 
 namespace firefly {
 
-// TODO multithread protection
+// TODO extend it
+// TODO add multithread protection
 
 EventManager::EventManager(SystemManager* systemManager):
 	_systemManager(systemManager) {

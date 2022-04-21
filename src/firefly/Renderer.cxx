@@ -13,6 +13,18 @@ namespace firefly {
 
 const std::string engineName = "Firefly Engine";
 
+static bool hasIntersection(
+	const SDL_Rect& lhs, const SDL_Rect& rhs) {
+
+	if (lhs.x < rhs.x + rhs.w &&
+		lhs.x + lhs.w > rhs.x &&
+		lhs.y < rhs.y + rhs.h &&
+		lhs.y + lhs.h > rhs.y) {
+		return true;
+	}
+	return false;
+}
+
 Renderer::Renderer(int width, int height) :
 	_window(nullptr),
 	_renderer(nullptr),
@@ -68,7 +80,6 @@ bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
 	SDL_Rect* destination) {
 
 	// TODO check if texture is inside the viewport
-
 	if (SDL_RenderCopy(_renderer.get(), texture.get(), source, destination) != 0) {
 		return false;
 	}
