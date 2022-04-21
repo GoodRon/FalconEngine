@@ -7,6 +7,7 @@
 #define FIREFLY_RENDERER_H
 
 #include <memory>
+#include <string>
 
 #include <SDL_rect.h>
 
@@ -26,6 +27,9 @@ public:
 
 	Renderer(const Renderer& other) = delete;
 	Renderer& operator=(Renderer& other) = delete;
+
+	void setWindowHeader(const std::string& header);
+	void setWindowIcon(const std::string& iconPath);
 
 	bool clearViewport();
 

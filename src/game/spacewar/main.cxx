@@ -3,8 +3,6 @@
  * All rights reserved
  */
 
-// NOTE add particles and particle emmiters
-
 #include <SDL_log.h>
 
 #include <firefly/Engine.h>
@@ -13,18 +11,25 @@
 #include "GameBuilder.h"
 
 int main(int argc, char** argv) {
+	const int width = 1500;
+	const int height = 900;
+	const std::string header("Space War!");
+
+	int ret = 0;
 	try {
 
-		firefly::Engine engine(1500, 900);
+		firefly::Engine engine(width, height);
+		engine.setWindowHeader(header);
+		engine.setWindowIcon("resources/icon.png");
 
 		spacewar::GameBuilder gameBuilder(&engine);
 		gameBuilder.buildGame();
 
-		engine.run();
+		ret = engine.run();
 
 	} catch (firefly::EngineException& exception) {
 		SDL_Log("Exception caught: %s", exception.what());
+		ret = -1;
 	}
-
-	return 0;
+	return ret;
 }

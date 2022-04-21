@@ -7,16 +7,18 @@
 #include "EngineException.h"
 
 #include <SDL.h>
+#include <SDL_image.h>
 
 namespace firefly {
+
+const std::string engineName = "Firefly Engine";
 
 Renderer::Renderer(int width, int height) :
 	_window(nullptr),
 	_renderer(nullptr),
 	_viewport({0, 0, width, height}) {
 
-	// TODO pass the header string here
-	auto window = SDL_CreateWindow("Falcon Engine",
+	auto window = SDL_CreateWindow(engineName.c_str(),
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		_viewport.w, _viewport.h, SDL_WINDOW_SHOWN);
 
@@ -39,6 +41,20 @@ Renderer::Renderer(int width, int height) :
 Renderer::~Renderer() {
 	_renderer.reset();
 	_window.reset();
+}
+
+void Renderer::setWindowHeader(const std::string& header) {
+	SDL_SetWindowTitle(_window.get(), header.c_str());
+}
+
+void Renderer::setWindowIcon(const std::string& iconPath) {
+	SDL_Surface* surface = IMG_Load(iconPath.c_str());
+	if (!surface) {
+		return;
+	}
+
+	SDL_SetWindowIcon(_window.get(), surface);
+	SDL_FreeSurface(surface);
 }
 
 bool Renderer::clearViewport() {

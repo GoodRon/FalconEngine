@@ -61,9 +61,18 @@ Engine::~Engine() {
 	SDL_Quit();
 }
 
+void Engine::setWindowHeader(const std::string& header) {
+	_renderer->setWindowHeader(header);
+}
+
+void Engine::setWindowIcon(const std::string& iconPath) {
+	_renderer->setWindowIcon(iconPath);
+}
+
 int Engine::run() {
 
 	std::thread logicThread([this](){
+		// TODO set the logic period
 		constexpr uint64_t logicPeriodMs = 16;
 		uint64_t elapsedMs = 0;
 		uint64_t timepoint = 0;

@@ -8,6 +8,7 @@
 
 #include <SDL.h>
 
+#include <string>
 #include <vector>
 #include <functional>
 #include <memory>
@@ -32,6 +33,9 @@ public:
 	
 	Engine(const Engine&) = delete;
 	Engine& operator=(const Engine& other) = delete;
+
+	void setWindowHeader(const std::string& header);
+	void setWindowIcon(const std::string& iconPath);
 
 	int run();
 	void stop();
