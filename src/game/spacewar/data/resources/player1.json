@@ -23,21 +23,21 @@
 					"isLooped": true,
 					"frameWidth": 66,
 					"frameHeight": 88,
-					"frameDuration": 1000,
+					"frameDuration": 0,
 					"frameRow": 0,
 					"frameCol": 1,
 					"frameAmount": 1
 				},
 				{
 					"name": "Destroyed",
-					"texture": "resources/player1.png",
-					"isLooped": true,
-					"frameWidth": 66,
-					"frameHeight": 88,
-					"frameDuration": 0,
+					"texture": "resources/explosion.png",
+					"isLooped": false,
+					"frameWidth": 100,
+					"frameHeight": 100,
+					"frameDuration": 33,
 					"frameRow": 0,
 					"frameCol": 0,
-					"frameAmount": 1
+					"frameAmount": 44
 				}
 			]
 		},

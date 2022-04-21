@@ -3,7 +3,6 @@
 #include <algorithm>
 
 #include <SDL_timer.h>
-#include <SDL_log.h>
 
 #include "Entity.h"
 #include "Engine.h"
@@ -51,8 +50,8 @@ static Frame* advanceFrame(Visual* visualComponent, uint64_t timepoint) {
 	auto& frame = state.frames[visualComponent->frameIndex];
 	const auto duration = frame->getDuration();
 
-	if (duration == 0 || timepoint < visualComponent->timepoint) {
-		return frame.get();
+	if (timepoint < visualComponent->timepoint) {
+		visualComponent->timepoint = timepoint;
 	}
 
 	const uint64_t elapsedMs = timepoint - visualComponent->timepoint;
@@ -62,15 +61,14 @@ static Frame* advanceFrame(Visual* visualComponent, uint64_t timepoint) {
 
 	visualComponent->timepoint = timepoint + duration - elapsedMs;
 
-	visualComponent->frameIndex++;
-	if (visualComponent->frameIndex >= state.frames.size()) {
+	if (visualComponent->frameIndex + 1 >= state.frames.size()) {
 		if (state.isLooped) {
 			visualComponent->frameIndex = 0;
 		} else {
-			visualComponent->frameIndex--;
 			state.isStopped = true;
-			SDL_Log("STOPED!");
 		}
+	} else {
+		visualComponent->frameIndex++;
 	}
 
 	frame = state.frames[visualComponent->frameIndex];

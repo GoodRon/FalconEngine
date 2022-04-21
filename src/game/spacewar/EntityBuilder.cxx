@@ -341,6 +341,7 @@ private:
 			new firefly::Lives);
 
 		component->maxLives = document["maxLives"].GetInt();
+		component->currentLives = component->maxLives;
 
 		entity->addComponent(firefly::Lives::ComponentName, 
 			std::move(component));

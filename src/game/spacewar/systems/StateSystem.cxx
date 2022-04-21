@@ -65,12 +65,12 @@ static void changeVisualState(
 		return;
 	}
 
+	visual->states[visual->currentState].isStopped = false;
+
 	visual->currentState = nextState;
 	visual->timepoint = SDL_GetTicks64();
-
-	if (visual->states[nextState].isLooped) {
-		visual->states[nextState].isStopped = false;
-	}
+	visual->frameIndex = 0;
+	visual->states[nextState].isStopped = false;
 }
 
 static void setEntityReactivenes(
@@ -196,7 +196,6 @@ void StateSystem::updateMoving(
 	changeVisualState(visual, nextState);
 }
 
-// TODO turn off velocity & gravity
 void StateSystem::updateHyperspace(
 	firefly::Entity* entity) const {
 
@@ -265,34 +264,40 @@ void StateSystem::updateDestroyed(
 	}
 
 	// NOTE awaiting the animation to stop
-	if (!visual->states[visual->currentState].isStopped) {
+	if (visual->states[visual->currentState].isStopped == false) {
 		return;
 	}
 
+	const auto entityManager = getEngine()->getEntityManager();
+
 	const auto lives = entity->getComponent<firefly::Lives>();
-	if (lives) {
+	if (!lives) {
+		entityManager->removeEntity(entity->getId());
+		return;
+	}
+
+	if (lives->maxLives > 0 && lives->currentLives > 0) {
 		lives->currentLives--;
-		if (lives->currentLives > 0) {
-			// NOTE respawn
-
-			setEntityReactivenes(entity, true);
-
-			const auto renderer = getEngine()->getRenderer();
-			auto rect = renderer->getViewport();
-			randomScreenPosition(rect.w, rect.h, position->x, position->y);
-			
-			velocity->speed = 0.0;
-			velocity->acceleration = 0.0;
-
-			const std::string nextState = stateNameIdle();
-			changeState(state, nextState);
-			changeVisualState(visual, nextState);
+		if (lives->currentLives <= 0) {
+			entityManager->removeEntity(entity->getId());
 			return;
 		}
 	}
 
-	const auto entityManager = getEngine()->getEntityManager();
-	entityManager->removeEntity(entity->getId());
+	// NOTE respawn, move to a function
+	const auto renderer = getEngine()->getRenderer();
+	auto rect = renderer->getViewport();
+	randomScreenPosition(rect.w, rect.h, position->x, position->y);
+			
+	setEntityReactivenes(entity, true);
+
+	velocity->speed = 0.0;
+	velocity->acceleration = 0.0;
+
+	const std::string nextState = stateNameIdle();
+	changeState(state, nextState);
+	changeVisualState(visual, nextState);
+
 }
 
 }

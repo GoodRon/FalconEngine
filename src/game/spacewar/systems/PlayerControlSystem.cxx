@@ -239,6 +239,12 @@ namespace spacewar {
 			return;
 		} 
 
+		const auto stateComponent =
+			_player->getComponent<firefly::State>();
+		if (stateComponent->current == stateNameDestroyed()) {
+			return;
+		}
+
 		shoot();
 	}
 
