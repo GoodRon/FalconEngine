@@ -211,6 +211,10 @@ namespace spacewar {
 		const auto stateComponent = 
 			_player->getComponent<firefly::State>();
 
+		if (stateComponent->current == stateNameDestroyed()) {
+			return;
+		}
+
 		const std::string nextState = stateNameHyperspace();
 
 		if (stateComponent->current == nextState) {

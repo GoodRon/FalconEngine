@@ -90,7 +90,7 @@ private:
 		systemPtr.reset(new PositioningSystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 
-		systemPtr.reset(new ShipStateSystem(_engine));
+		systemPtr.reset(new StateSystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 		
 		systemPtr.reset(new LifetimeSystem(_engine));

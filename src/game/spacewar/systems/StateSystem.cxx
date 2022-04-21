@@ -13,7 +13,9 @@
 #include <firefly/components/Position.h>
 #include <firefly/components/Visual.h>
 #include <firefly/components/Velocity.h>
+#include <firefly/components/Gravity.h>
 #include <firefly/components/Lives.h>
+#include <firefly/components/RoundCollidable.h>
 
 #include "StateNames.h"
 
@@ -71,8 +73,27 @@ static void changeVisualState(
 	}
 }
 
-ShipStateSystem::ShipStateSystem(firefly::Engine* engine):
-	firefly::ISystem("ShipStateSystem", engine) {
+static void setEntityReactivenes(
+	firefly::Entity* entity, bool isReactive) {
+
+	const auto velocity = entity->getComponent<firefly::Velocity>();
+	if (velocity) {
+		velocity->isActive = isReactive;
+	}
+
+	const auto gravity = entity->getComponent<firefly::Gravity>();
+	if (gravity) {
+		gravity->isActive = isReactive;
+	}
+
+	const auto collidable = entity->getComponent<firefly::RoundCollidable>();
+	if (collidable) {
+		collidable->isActive = isReactive;
+	}
+}
+
+StateSystem::StateSystem(firefly::Engine* engine):
+	firefly::ISystem("StateSystem", engine) {
 
 	addRequiredComponent(firefly::State::ComponentName);
 	addRequiredComponent(firefly::Position::ComponentName);
@@ -80,17 +101,17 @@ ShipStateSystem::ShipStateSystem(firefly::Engine* engine):
 	addRequiredComponent(firefly::Velocity::ComponentName);
 }
 
-ShipStateSystem::~ShipStateSystem() {
+StateSystem::~StateSystem() {
 }
 
-void ShipStateSystem::onUpdate() {
+void StateSystem::onUpdate() {
 	auto& entities = getEntities();
 	for (auto& entity: entities) {
 		updateState(entity.second);
 	}
 }
 
-void ShipStateSystem::updateState(
+void StateSystem::updateState(
 	firefly::Entity* entity) const {
 
 	if (!entity) {
@@ -125,7 +146,7 @@ void ShipStateSystem::updateState(
 
 // TODO improve
 
-void ShipStateSystem::updateIdle(
+void StateSystem::updateIdle(
 	firefly::Entity* entity) const {
 
 	if (!entity) {
@@ -150,7 +171,7 @@ void ShipStateSystem::updateIdle(
 	changeVisualState(visual, nextState);
 }
 
-void ShipStateSystem::updateMoving(
+void StateSystem::updateMoving(
 	firefly::Entity* entity) const {
 
 	if (!entity) {
@@ -176,7 +197,7 @@ void ShipStateSystem::updateMoving(
 }
 
 // TODO turn off velocity & gravity
-void ShipStateSystem::updateHyperspace(
+void StateSystem::updateHyperspace(
 	firefly::Entity* entity) const {
 
 	if (!entity) {
@@ -196,12 +217,18 @@ void ShipStateSystem::updateHyperspace(
 	// TODO read from a config
 	const uint64_t hyperspaceTimeMs = 2000;
 	const uint64_t timepoint = SDL_GetTicks64();
+
+	// NOTE in hyberspace
 	if ((timepoint - state->timepoint) < hyperspaceTimeMs) {
+		setEntityReactivenes(entity, false);
+
 		if (visual->isVisible) {
 			visual->isVisible = false;
 		}
 		return;
 	}
+
+	setEntityReactivenes(entity, true);
 
 	std::string nextState = stateNameIdle();
 	if (velocity->acceleration > 0.0) {
@@ -219,12 +246,14 @@ void ShipStateSystem::updateHyperspace(
 	randomScreenPosition(rect.w, rect.h, position->x, position->y);
 }
 
-void ShipStateSystem::updateDestroyed(
+void StateSystem::updateDestroyed(
 	firefly::Entity* entity) const {
 
 	if (!entity) {
 		return;
 	}
+
+	setEntityReactivenes(entity, false);
 
 	const auto state = entity->getComponent<firefly::State>();
 	const auto velocity = entity->getComponent<firefly::Velocity>();
@@ -245,6 +274,8 @@ void ShipStateSystem::updateDestroyed(
 		lives->currentLives--;
 		if (lives->currentLives > 0) {
 			// NOTE respawn
+
+			setEntityReactivenes(entity, true);
 
 			const auto renderer = getEngine()->getRenderer();
 			auto rect = renderer->getViewport();

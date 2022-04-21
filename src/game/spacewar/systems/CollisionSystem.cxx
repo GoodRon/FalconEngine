@@ -49,6 +49,10 @@ void CollisionSystem::onUpdate() {
 		auto positionLeft = entity->getComponent<firefly::Position>();
 		auto collidableLeft = entity->getComponent<firefly::RoundCollidable>();
 
+		if (!collidableLeft->isActive) {
+			continue;
+		}
+
 		auto nearestEntities = _qauadtree->retrieve(positionLeft->toRect());
 		for (auto& nearestEntity: nearestEntities) {
 			if (entity == nearestEntity) {

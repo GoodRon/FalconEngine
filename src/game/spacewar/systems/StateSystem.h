@@ -14,13 +14,13 @@ namespace firefly {
 
 namespace spacewar {
 
-class ShipStateSystem final: public firefly::ISystem {
+class StateSystem final: public firefly::ISystem {
 public:
-	ShipStateSystem(firefly::Engine* engine);
-	~ShipStateSystem() override;
+	StateSystem(firefly::Engine* engine);
+	~StateSystem() override;
 
-	ShipStateSystem(const ShipStateSystem&) = delete;
-	ShipStateSystem& operator=(const ShipStateSystem&) = delete;
+	StateSystem(const StateSystem&) = delete;
+	StateSystem& operator=(const StateSystem&) = delete;
 
 private:
 	void onUpdate() override;

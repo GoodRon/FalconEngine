@@ -3,6 +3,7 @@
 #include <algorithm>
 
 #include <SDL_timer.h>
+#include <SDL_log.h>
 
 #include "Entity.h"
 #include "Engine.h"
@@ -68,6 +69,7 @@ static Frame* advanceFrame(Visual* visualComponent, uint64_t timepoint) {
 		} else {
 			visualComponent->frameIndex--;
 			state.isStopped = true;
+			SDL_Log("STOPED!");
 		}
 	}
 
