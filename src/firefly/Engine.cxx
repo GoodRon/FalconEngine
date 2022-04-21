@@ -5,8 +5,6 @@
 
 #include <SDL_timer.h>
 
-#include <thread>
-
 #include "Engine.h"
 #include "Entity.h"
 #include "ResourceManager.h"
@@ -35,10 +33,7 @@ Engine::Engine(int width, int height):
 	_entityPrototypes(),
 	_systemManager(),
 	_eventManager(),
-	_renderingSystem(),
-	_eventMutex(),
-	_sdlEventQueue(),
-	_isEventAwaiting(false) {
+	_renderingSystem() {
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
@@ -71,63 +66,19 @@ void Engine::setWindowIcon(const std::string& iconPath) {
 
 int Engine::run() {
 
-	std::thread logicThread([this](){
-		// TODO set the logic period
-		constexpr uint64_t logicPeriodMs = 16;
-		uint64_t elapsedMs = 0;
-		uint64_t timepoint = 0;
-
-		std::queue<SDL_Event> sdlEvents;
-		std::shared_ptr<IEvent> updateEvent(new UpdateEvent);
-
-		while (_isRunning) {
-			timepoint = SDL_GetTicks64();
-
-			_eventManager->registerEvent(updateEvent);
-			_eventManager->processEvents();
-
-			if (_isEventAwaiting) {
-				std::lock_guard<std::mutex> locker(_eventMutex);
-				sdlEvents.swap(_sdlEventQueue);
-				_isEventAwaiting = false;
-			}
-
-			while (!sdlEvents.empty()) {
-				onSDLEvent(std::move(sdlEvents.front()));
-				sdlEvents.pop();
-			}
-
-			elapsedMs = SDL_GetTicks64() - timepoint;
-			if (elapsedMs > logicPeriodMs) {
-				continue;
-			}
-
-			SDL_Delay(logicPeriodMs - elapsedMs);
-		}
-	});
-	
+	std::shared_ptr<IEvent> updateEvent(new UpdateEvent);
 	SDL_Event event;
 
 	// TODO make an option for restricting fps
+	// TODO divide to two threads for logic and rendering
 	while (_isRunning) {
-		_renderer->clearViewport();
-		_renderingSystem->drawEntites();
-		SDL_RenderPresent(_renderer->getContext());
-		
-		std::lock_guard<std::mutex> locker(_eventMutex);
 		while (SDL_PollEvent(&event) != 0) {
-			if (_sdlEventQueue.size() >= maxQueuedEvents) {
-				_sdlEventQueue.pop();
-			}
-
-			_sdlEventQueue.push(std::move(event));
+			onSDLEvent(event);
 		}
 
-		if (!_isEventAwaiting && !_sdlEventQueue.empty()) {
-			_isEventAwaiting = true;
-		}
+		_eventManager->registerEvent(updateEvent);
+		_eventManager->processEvents();
 	}
-	logicThread.join();
 	return _returnCode;
 }
 
@@ -169,7 +120,7 @@ void Engine::onSDLEvent(const SDL_Event& event) {
 	}
 
 	std::shared_ptr<IEvent> nativeEvent(new NativeEvent(event));
-	_eventManager->registerEvent(nativeEvent);
+	_eventManager->registerEvent(std::move(nativeEvent));
 }
 
 }

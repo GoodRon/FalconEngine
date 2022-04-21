@@ -77,10 +77,7 @@ static Frame* advanceFrame(Visual* visualComponent, uint64_t timepoint) {
 
 RenderingSystem::RenderingSystem(Engine* engine):
 	ISystem("RenderingSystem", engine),
-	_mutex(),
-	_renderer(engine->getRenderer()),
-	_isRenderListChanged(false),
-	_renderList() {
+	_renderer(engine->getRenderer()) {
 
 	addRequiredComponent(Visual::ComponentName);
 	addRequiredComponent(Position::ComponentName);
@@ -89,30 +86,16 @@ RenderingSystem::RenderingSystem(Engine* engine):
 RenderingSystem::~RenderingSystem() {
 }
 
-void RenderingSystem::drawEntites() {
-	if (_isRenderListChanged) {
-		_renderList.clear();
-
-		lockEntities();
-		auto& entities = getEntities();
-		_renderList.reserve(entities.size());
-
-		for (auto& entity: entities) {
-			_renderList.push_back(entity.second);
-		}
-
-		_isRenderListChanged = false;
-		unlockEntities();
-
-		std::sort(_renderList.begin(), _renderList.end(), sortEntities);
-	}
+void RenderingSystem::onUpdate() {
 
 	Position* positionComponent = nullptr;
 	Visual* visualComponent = nullptr;
 
-	for (auto& entity: _renderList) {
-		positionComponent = entity->getComponent<Position>();
-		visualComponent = entity->getComponent<Visual>();
+	_renderer->clearViewport();
+
+	for (auto& entity: getEntities()) {
+		positionComponent = entity.second->getComponent<Position>();
+		visualComponent = entity.second->getComponent<Visual>();
 
 		if (!visualComponent->isVisible) {
 			continue;
@@ -120,23 +103,8 @@ void RenderingSystem::drawEntites() {
 
 		draw(positionComponent, visualComponent);
 	}
-}
-
-void RenderingSystem::lockEntities() const {
-	_mutex.lock();
-}
-
-void RenderingSystem::unlockEntities() const {
-	_mutex.unlock();
-}
-
-bool RenderingSystem::onRegisterEntity(Entity* entity) {
-	_isRenderListChanged = true;
-	return true;
-}
-
-void RenderingSystem::onUnregisterEntity(Entity* entity) {
-	_isRenderListChanged = true;
+	
+	SDL_RenderPresent(_renderer->getContext());
 }
 
 void RenderingSystem::draw(Position* positionComponent, 

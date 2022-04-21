@@ -120,12 +120,6 @@ uint64_t ISystem::getLastUpdateTimepoint() const {
 	return _updateTimepoint;
 }
 
-void ISystem::lockEntities() const {
-}
-
-void ISystem::unlockEntities() const {
-}
-
 void ISystem::onUpdate() {
 }
 
@@ -148,7 +142,6 @@ bool ISystem::registerEntity(Entity* entity) {
 	const auto id = entity->getId();
 	bool result = true;
 
-	lockEntities();
 	if (_entities.find(id) == _entities.end()) {
 		if (onRegisterEntity(entity)) {
 			_entities[id] = entity;
@@ -156,18 +149,15 @@ bool ISystem::registerEntity(Entity* entity) {
 			result = false;
 		}
 	}
-	unlockEntities();
 	return result;
 }
 
 void ISystem::unregisterEntity(EntityID id) {
-	lockEntities();
 	auto it = _entities.find(id);
 	if (it != _entities.end()) {
 		onUnregisterEntity((*it).second);
 		_entities.erase(id);
 	}
-	unlockEntities();
 }
 
 }

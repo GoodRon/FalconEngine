@@ -47,8 +47,6 @@ protected:
 	uint64_t getElapsedMs() const;
 	uint64_t getLastUpdateTimepoint() const;
 
-	virtual void lockEntities() const;
-	virtual void unlockEntities() const;
 	virtual bool onEvent(
 		const std::shared_ptr<IEvent>& event);
 	virtual void onUpdate();
