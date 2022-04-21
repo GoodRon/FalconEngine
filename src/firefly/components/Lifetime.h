@@ -14,7 +14,7 @@ class Lifetime final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Lifetime";
 	
-	Lifetime(): IComponent(ComponentName) {}
+	Lifetime() = default;
 	~Lifetime() override = default;
 
 	Lifetime(const Lifetime&) = default;

@@ -34,13 +34,8 @@ void RenderingSystem::drawEntites() const {
 	Visual* visualComponent = nullptr;
 	
 	for (auto& entity: _entities) {
-		auto positionComponent = static_cast<Position*>(
-			entity.second->getComponent(
-				getComponentId(Position::ComponentName)));
-
-		auto visualComponent = static_cast<Visual*>(
-			entity.second->getComponent(
-				getComponentId(Visual::ComponentName)));
+		positionComponent = entity.second->getComponent<Position>();
+		visualComponent = entity.second->getComponent<Visual>();
 
 		if (!visualComponent->isVisible) {
 			continue;

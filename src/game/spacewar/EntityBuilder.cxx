@@ -204,7 +204,7 @@ private:
 			component->states[stateName] = std::move(visualState);
 		}
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::Visual::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -223,7 +223,7 @@ private:
 		component->scale = document["scale"].GetDouble();
 		component->angle = document["angle"].GetDouble();
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::Position::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -239,7 +239,7 @@ private:
 		component->acceleration = document["acceleration"].GetDouble();
 		component->accelerationAngle = document["accelerationAngle"].GetDouble();
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::Velocity::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -251,7 +251,7 @@ private:
 
 		component->playerId = document["playerId"].GetInt();
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::Player::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -265,7 +265,7 @@ private:
 		component->emitGravity = document["emitGravity"].GetBool();
 		component->mass = document["mass"].GetDouble();
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::Gravity::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -278,7 +278,7 @@ private:
 		component->current = std::string(document["current"].GetString());
 		component->previous = std::string(document["previous"].GetString());
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::State::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -299,7 +299,7 @@ private:
 			component->weapons[name] = std::move(weapon);
 		}
 		
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::Ammunition::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -311,7 +311,7 @@ private:
 
 		component->lifetimeMs = document["lifetimeMs"].GetUint64();
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::Lifetime::ComponentName, std::move(component));
 		return true;
 	}
 
@@ -325,7 +325,8 @@ private:
 		component->isDestructable = document["isDestructable"].GetBool();
 		component->collidableRadius = document["collidableRadius"].GetDouble();
 
-		entity->addComponent(std::move(component));
+		entity->addComponent(firefly::RoundCollidable::ComponentName, 
+			std::move(component));
 		return true;
 	}
 };

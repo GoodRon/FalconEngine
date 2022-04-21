@@ -14,7 +14,7 @@ class Player final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Player";
 	
-	Player(): IComponent(ComponentName) {}
+	Player() = default;
 	~Player() override = default;
 
 	Player(const Player&) = default;

@@ -30,13 +30,8 @@ void PositioningSystem::update() {
 	firefly::Velocity* velocity = nullptr;
 
 	for (auto& entity: _entities) {
-		position = static_cast<firefly::Position*>(
-			entity.second->getComponent(
-				firefly::getComponentId(firefly::Position::ComponentName)));
-
-		velocity = static_cast<firefly::Velocity*>(
-			entity.second->getComponent(
-				firefly::getComponentId(firefly::Velocity::ComponentName)));
+		position = entity.second->getComponent<firefly::Position>();
+		velocity = entity.second->getComponent<firefly::Velocity>();
 
 		processPosition(position, velocity, elapsedMs);
 	}

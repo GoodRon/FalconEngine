@@ -14,7 +14,7 @@ class Velocity final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Velocity";
 	
-	Velocity(): IComponent(ComponentName) {}
+	Velocity() = default;
 	~Velocity() override = default;
 
 	Velocity(const Velocity&) = default;

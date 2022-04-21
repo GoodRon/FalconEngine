@@ -14,7 +14,7 @@ class RoundCollidable final: public IComponent {
 public:
 	inline static const std::string ComponentName = "RoundCollidable";
 	
-	RoundCollidable(): IComponent(ComponentName) {}
+	RoundCollidable() = default;
 	~RoundCollidable() override = default;
 
 	RoundCollidable(const RoundCollidable&) = default;

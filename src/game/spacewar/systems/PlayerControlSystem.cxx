@@ -16,6 +16,8 @@
 #include <firefly/components/Ammunition.h>
 #include <firefly/components/Lifetime.h>
 
+// TODO add only player with id
+
 namespace spacewar {
 
 	// TODO remove from here
@@ -157,9 +159,7 @@ namespace spacewar {
 
 	firefly::Entity* PlayerControlSystem::findPlayer(int playerId) const {
 		for (auto& entity : _entities) {
-			auto playerComponent = static_cast<firefly::Player*>(
-				entity.second->getComponent(
-					firefly::getComponentId(firefly::Player::ComponentName)));
+			auto playerComponent = entity.second->getComponent<firefly::Player>();
 
 			if (playerComponent->playerId == playerId) {
 				return entity.second;
@@ -176,9 +176,7 @@ namespace spacewar {
 			return nullptr;
 		}
 
-		auto component = static_cast<firefly::Velocity*>(
-			playerEntity->getComponent(
-				firefly::getComponentId(firefly::Velocity::ComponentName)));
+		auto component = playerEntity->getComponent<firefly::Velocity>();
 		return component;
 	}
 
@@ -188,9 +186,7 @@ namespace spacewar {
 			return nullptr;
 		}
 
-		auto component = static_cast<firefly::Position*>(
-			playerEntity->getComponent(
-				firefly::getComponentId(firefly::Position::ComponentName)));
+		auto component = playerEntity->getComponent<firefly::Position>();
 		return component;
 	}
 
@@ -200,9 +196,7 @@ namespace spacewar {
 			return nullptr;
 		}
 
-		auto component = static_cast<firefly::State*>(
-			playerEntity->getComponent(
-				firefly::getComponentId(firefly::State::ComponentName)));
+		auto component = playerEntity->getComponent<firefly::State>();
 		return component;
 	}
 
@@ -212,9 +206,7 @@ namespace spacewar {
 			return nullptr;
 		}
 
-		auto component = static_cast<firefly::Ammunition*>(
-			playerEntity->getComponent(
-				firefly::getComponentId(firefly::Ammunition::ComponentName)));
+		auto component = playerEntity->getComponent<firefly::Ammunition>();
 		return component;
 	}
 

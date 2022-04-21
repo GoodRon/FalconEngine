@@ -16,7 +16,7 @@ class Position final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Position";
 	
-	Position(): IComponent(ComponentName) {}
+	Position() = default;
 	~Position() override = default;
 
 	Position(const Position&) = default;

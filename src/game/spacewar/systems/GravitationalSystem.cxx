@@ -48,11 +48,9 @@ void GravitationalSystem::onRegisterEntity(firefly::Entity* entity) {
 		return;
 	}
 
-	auto solidity = static_cast<firefly::Gravity*>(
-		entity->getComponent(
-			firefly::getComponentId(firefly::Gravity::ComponentName)));
+	auto gravity = entity->getComponent<firefly::Gravity>();
 
-	if (solidity->emitGravity) {
+	if (gravity->emitGravity) {
 		_gravityEmitters[entity->getId()] = entity;
 	}
 }
@@ -87,13 +85,8 @@ void GravitationalSystem::processGravity(
 		return;
 	}
 
-	auto emitterPosition = static_cast<firefly::Position*>(
-		gravityEmitter->getComponent(
-			firefly::getComponentId(firefly::Position::ComponentName)));
-
-	auto emitterGravity = static_cast<firefly::Gravity*>(
-		gravityEmitter->getComponent(
-			firefly::getComponentId(firefly::Gravity::ComponentName)));
+	auto emitterPosition = gravityEmitter->getComponent<firefly::Position>();
+	auto emitterGravity = gravityEmitter->getComponent<firefly::Gravity>();
 
 	// TODO improve, just testing
 	constexpr double gConstant = 6.67430;
@@ -108,14 +101,9 @@ void GravitationalSystem::processGravity(
 			continue;
 		}
 
-		position = static_cast<firefly::Position*>(
-			entity.second->getComponent(
-				firefly::getComponentId(firefly::Position::ComponentName)));
-
-		velocity = static_cast<firefly::Velocity*>(
-			entity.second->getComponent(
-				firefly::getComponentId(firefly::Velocity::ComponentName)));
-
+		position = entity.second->getComponent<firefly::Position>();
+		velocity = entity.second->getComponent<firefly::Velocity>();
+		
 		// TODO use centers!
 		const double distanceX = emitterPosition->x - position->x;
 		const double dsistanceY = emitterPosition->y - position->y;

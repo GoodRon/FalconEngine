@@ -28,9 +28,7 @@ void VelocitySystem::update() {
 	Velocity* velocity = nullptr;
 
 	for (auto& entity: _entities) {
-		velocity = static_cast<Velocity*>(
-			entity.second->getComponent(
-				getComponentId(Velocity::ComponentName)));
+		velocity = entity.second->getComponent<Velocity>();
 
 		processVelocity(velocity, elapsedMs);
 	}

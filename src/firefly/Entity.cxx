@@ -45,27 +45,26 @@ const std::string Entity::getName() const {
 	return _name;
 }
 
-bool Entity::addComponent(std::unique_ptr<IComponent>&& component) {
+bool Entity::addComponent(const std::string& name,
+	std::unique_ptr<IComponent>&& component) {
 	if (!component) {
 		return false;
 	}
 
-	auto id = component->getId();
-
-	if (_components.find(id) != _components.end()) {
+	if (_components.find(name) != _components.end()) {
 		return false;
 	}
 
-	_components[id] = std::move(component);
+	_components[name] = std::move(component);
 	return true;
 }
 
-IComponent* Entity::getComponent(ComponentID id) {
-	if (_components.find(id) == _components.end()) {
+IComponent* Entity::getComponent(const std::string& name) {
+	if (_components.find(name) == _components.end()) {
 		return nullptr;
 	}
 
-	return _components[id].get();
+	return _components[name].get();
 }
 
 }

@@ -16,7 +16,7 @@ class Ammunition final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Ammunition";
 	
-	Ammunition(): IComponent(ComponentName) {}
+	Ammunition() = default;
 	~Ammunition() override = default;
 
 	Ammunition(const Ammunition&) = default;

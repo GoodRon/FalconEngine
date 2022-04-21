@@ -18,7 +18,7 @@ class Visual final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Visual";
 
-	Visual(): IComponent(ComponentName) {}
+	Visual() = default;
 	~Visual() override = default;
 
 	Visual(const Visual&) = default;

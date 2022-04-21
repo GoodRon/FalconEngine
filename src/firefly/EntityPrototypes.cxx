@@ -47,7 +47,7 @@ std::shared_ptr<Entity> EntityPrototypes::makeEntity(const std::string& name) {
 		return nullptr;
 	}
 
-	std::shared_ptr<Entity> entity(new Entity);
+	std::shared_ptr<Entity> entity(new Entity(name));
 	(*entity.get()) = (*_prototypes[name].get());
 
 	return entity;

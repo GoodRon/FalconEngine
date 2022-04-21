@@ -18,7 +18,7 @@ class IComponent;
 
 class Entity {
 public:
-	Entity(const std::string& name = "");
+	Entity(const std::string& name);
 	~Entity() = default;
 
 	Entity(const Entity& other);
@@ -30,13 +30,14 @@ public:
 	EntityID getId() const;
 	const std::string getName() const;
 
-	bool addComponent(std::unique_ptr<IComponent>&& component);
+	bool addComponent(const std::string& name, 
+		std::unique_ptr<IComponent>&& component);
 
-	IComponent* getComponent(ComponentID id);
+	IComponent* getComponent(const std::string& name);
 
 	template<class T>
 	T* getComponent() {
-		const auto id = getComponentId(T::ComponentName);
+		const auto id = T::ComponentName;
 		if (_components.find(id) == _components.end()) {
 			return nullptr;
 		}
@@ -46,7 +47,8 @@ public:
 private:
 	EntityID _id;
 	std::string _name;
-	std::unordered_map<ComponentID, std::unique_ptr<IComponent>> _components;
+	std::unordered_map<std::string, 
+		std::unique_ptr<IComponent>> _components;
 };
 
 }

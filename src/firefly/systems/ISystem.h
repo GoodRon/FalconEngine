@@ -36,6 +36,8 @@ public:
 	virtual bool onEvent(
 		const std::shared_ptr<IEvent>& event) = 0;
 
+	// TODO turn on/off for game states (update _updateTimepoint)
+
 protected:
 	virtual bool checkComponents(Entity* entity) const;
 	virtual void lockEntities() const;

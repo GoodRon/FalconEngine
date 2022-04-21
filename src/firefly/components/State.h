@@ -14,7 +14,7 @@ class State final: public IComponent {
 public:
 	inline static const std::string ComponentName = "State";
 
-	State(): IComponent(ComponentName) {}
+	State() = default;
 	~State() override = default;
 
 	State(const State&) = default;

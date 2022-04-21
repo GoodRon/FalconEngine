@@ -14,7 +14,7 @@ class Gravity final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Gravity";
 	
-	Gravity(): IComponent(ComponentName) {}
+	Gravity() = default;
 	~Gravity() override = default;
 
 	Gravity(const Gravity&) = default;

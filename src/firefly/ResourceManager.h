@@ -28,6 +28,7 @@ public:
 	ResourceManager& operator=(ResourceManager&) = delete;
 
 	TexturePointer loadTexture(const std::string& name);
+	// loadSurface
 
 	void freeUnused();
 

@@ -14,7 +14,7 @@ class Health final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Health";
 	
-	Health(): IComponent(ComponentName) {}
+	Health() = default;
 	~Health() override = default;
 
 	Health(const Health&) = default;

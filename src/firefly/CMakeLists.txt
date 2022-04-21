@@ -15,7 +15,6 @@ add_library(firefly
 	GameObject.cxx
 	events/IEvent.cxx
 	events/NativeEvent.cxx
-	components/IComponent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx
 	systems/VelocitySystem.cxx)

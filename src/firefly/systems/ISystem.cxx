@@ -71,8 +71,7 @@ bool ISystem::checkComponents(Entity* entity) const {
 	IComponent* component = nullptr;
 
 	for (auto& componentName: _requiredComponents) {
-		component = entity->getComponent(
-			getComponentId(componentName));
+		component = entity->getComponent(componentName);
 		if (!component) {
 			return false;
 		}

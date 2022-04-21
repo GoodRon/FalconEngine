@@ -51,21 +51,10 @@ void ShipStateSystem::updateState(
 		return;
 	}
 
-	auto componentState = static_cast<firefly::State*>(
-		entity->getComponent(
-			firefly::getComponentId(firefly::State::ComponentName)));
-
-	auto componentPosition = static_cast<firefly::Position*>(
-		entity->getComponent(
-			firefly::getComponentId(firefly::Position::ComponentName)));
-
-	auto componentVisual = static_cast<firefly::Visual*>(
-		entity->getComponent(
-			firefly::getComponentId(firefly::Visual::ComponentName)));
-
-	auto componentVelocity = static_cast<firefly::Velocity*>(
-		entity->getComponent(
-			firefly::getComponentId(firefly::Velocity::ComponentName)));
+	auto componentState = entity->getComponent<firefly::State>();
+	auto componentPosition = entity->getComponent<firefly::Position>();
+	auto componentVisual = entity->getComponent<firefly::Visual>();
+	auto componentVelocity = entity->getComponent<firefly::Velocity>();
 	
 	if (componentState->current == "Idle") {
 		updateIdle(componentState, componentVisual,

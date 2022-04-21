@@ -14,7 +14,7 @@ class Fuel final: public IComponent {
 public:
 	inline static const std::string ComponentName = "Fuel";
 	
-	Fuel(): IComponent(ComponentName) {}
+	Fuel() = default;
 	~Fuel() override = default;
 
 	Fuel(const Fuel&) = default;
