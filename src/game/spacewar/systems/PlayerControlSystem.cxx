@@ -86,6 +86,13 @@ namespace spacewar {
 
 		auto nativeEvent = std::dynamic_pointer_cast<firefly::NativeEvent>(event);
 
+		auto sdlEvent = nativeEvent->getSDLEvent();
+		if (sdlEvent.type && sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
+			// NOTE exit game
+			getEngine()->stop();
+			return true;
+		}
+
 		if (onPlayerInput(nativeEvent)) {
 			return true;
 		}
@@ -115,6 +122,10 @@ namespace spacewar {
 	bool PlayerControlSystem::onPlayerInput(
 		const std::shared_ptr<firefly::NativeEvent>& event) {
 
+		if (!_player) {
+			return false;
+		}
+
 		auto sdlEvent = event->getSDLEvent();
 		int keyCode = 0;
 		switch (sdlEvent.type) {
@@ -142,11 +153,6 @@ namespace spacewar {
 
 			if (_keyCodeAction == keyCode) {
 				onActionPressed(true);
-				return true;
-			}
-
-			if (keyCode == SDLK_ESCAPE) {
-				getEngine()->stop();
 				return true;
 			}
 			break;
