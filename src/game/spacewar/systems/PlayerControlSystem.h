@@ -53,7 +53,7 @@ private:
 	void onRightHold();
 
 	void setAcceleration(double acceleration) const;
-	void rotate(double angle) const;
+	void rotate(double angle);
 	void shoot() const;
 	void hyperspace() const;
 
@@ -67,6 +67,7 @@ private:
 	bool _isLeftPressed;
 	bool _isDownPressed;
 	bool _isRightPressed;
+	double _accelerationDirection;
 	firefly::Entity* _player;
 };
 

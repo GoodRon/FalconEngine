@@ -45,12 +45,12 @@ public:
 
 	double x = 0.0;
 	double y = 0.0;
+	double direction = 0.0;
 	double width = 0.0;
 	double height = 0.0;
 	double centerX = 0.0;
 	double centerY = 0.0;
 	double scale = 0.0;
-	double direction = 0.0;
 };
 
 }

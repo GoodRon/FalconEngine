@@ -129,6 +129,14 @@ bool ISystem::onRegisterEntity(Entity*) {
 void ISystem::onUnregisterEntity(Entity*) {
 }
 
+Entity* ISystem::getEntity(EntityID id) const {
+	auto it = _entities.find(id);
+	if (it == _entities.end()) {
+		return nullptr;
+	}
+	return it->second;
+}
+
 bool ISystem::registerEntity(Entity* entity) {
 	if (!entity) {
 		return false;

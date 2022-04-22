@@ -9,7 +9,9 @@
 #include <firefly/Entity.h>
 #include <firefly/EntityPrototypes.h>
 #include <firefly/EntityManager.h>
+#include <firefly/EventManager.h>
 #include <firefly/events/NativeEvent.h>
+#include <firefly/events/StateEvent.h>
 #include <firefly/components/Player.h>
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Position.h>
@@ -46,6 +48,7 @@ namespace spacewar {
 		_isLeftPressed(false),
 		_isDownPressed(false),
 		_isRightPressed(false),
+		_accelerationDirection(0.0),
 		_player(nullptr) {
 
 		addRequiredComponent(firefly::Player::ComponentName);
@@ -92,7 +95,7 @@ namespace spacewar {
 
 		auto sdlEvent = nativeEvent->getSDLEvent();
 		if (sdlEvent.type && sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
-			// NOTE exit game
+			// NOTE exit the game
 			getEngine()->stop();
 			return true;
 		}
@@ -108,11 +111,22 @@ namespace spacewar {
 			return false;
 		}
 
-		auto playerComponent = entity->getComponent<firefly::Player>();
+		const auto playerComponent = entity->getComponent<firefly::Player>();
+		if (!playerComponent) {
+			return false;
+		}
+
 		if (playerComponent->playerId != _playerId) {
 			return false;
 		}
 		_player = entity;
+
+		const auto positionComponent = entity->getComponent<firefly::Position>();
+		if (!positionComponent) {
+			return false;
+		}
+
+		_accelerationDirection = positionComponent->direction;
 		return true;
 	}
 
@@ -185,6 +199,7 @@ namespace spacewar {
 		return false;
 	}
 
+	// TODO replace hold
 	void PlayerControlSystem::onUpPressed(bool isPressed) {
 		_isUpPressed = isPressed;
 
@@ -209,6 +224,7 @@ namespace spacewar {
 		onRightHold();
 	}
 
+	// TODO send acceleration event
 	void PlayerControlSystem::onUpHold() {
 		if (_isUpPressed) {
 			setAcceleration(acceleration);
@@ -218,6 +234,7 @@ namespace spacewar {
 		setAcceleration(0.0);
 	}
 
+	// TODO send rotation event
 	void PlayerControlSystem::onLeftHold() {
 		if (_isLeftPressed && _isRightPressed) {
 			hyperspace();
@@ -273,8 +290,10 @@ namespace spacewar {
 
 		const auto velocityComponent = _player->getComponent<firefly::Velocity>();
 		velocityComponent->acceleration = acceleration;
+		velocityComponent->accelerationDirection = _accelerationDirection;
 	}
 
+	// TODO make a weapon system
 	void PlayerControlSystem::shoot() const {
 		if (!_player) {
 			return;
@@ -341,6 +360,8 @@ namespace spacewar {
 			return;
 		}
 
+		const auto eventManager = getEngine()->getEventManager();
+
 		const auto stateComponent = 
 			_player->getComponent<firefly::State>();
 
@@ -349,24 +370,20 @@ namespace spacewar {
 			return;
 		}
 
+		ObjectState nextState = ObjectState::Hyperspace;
+
 		constexpr int chanceOfMulfunction = 5;
 		if (randomInt(0, 100) <= chanceOfMulfunction) {
-			stateComponent->current = ObjectState::Destroyed;
-			return;
+			nextState = ObjectState::Destroyed;
 		}
 
-		const auto nextState = ObjectState::Hyperspace;
-
-		if (stateComponent->current == nextState) {
-			return;
-		}
-
-		stateComponent->previous = stateComponent->current;
-		stateComponent->current = nextState;
-		stateComponent->timepoint = SDL_GetTicks64();
+		std::shared_ptr<firefly::IEvent> event(new firefly::StateEvent(
+			_player->getId(), nextState));
+					
+		eventManager->registerEvent(std::move(event));
 	}
 
-	void PlayerControlSystem::rotate(double angle) const {
+	void PlayerControlSystem::rotate(double angle) {
 		if (!_player) {
 			return;
 		}
@@ -376,8 +393,8 @@ namespace spacewar {
 		const auto velocityComponent = 
 			_player->getComponent<firefly::Velocity>();
 
-		velocityComponent->accelerationDirection =
-			normalizeAngle(velocityComponent->accelerationDirection + angle);
+		_accelerationDirection =
+			normalizeAngle(_accelerationDirection + angle);
 
 		positionComponent->direction =
 			normalizeAngle(positionComponent->direction + angle);

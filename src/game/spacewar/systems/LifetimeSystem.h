@@ -7,9 +7,11 @@
 #define SW_SYSTEMS_LIFETIME_H
 
 #include <firefly/systems/ISystem.h>
+#include <firefly/Types.h>
 
 namespace firefly {
 	class Entity;
+	class EntityManager;
 }
 
 namespace spacewar {
@@ -25,6 +27,9 @@ public:
 private:
 	void onUpdate() override;
 	bool isEntityExpired(firefly::Entity* entity) const;
+
+private:
+	firefly::EntityManager* _entityManager;
 };
 
 }

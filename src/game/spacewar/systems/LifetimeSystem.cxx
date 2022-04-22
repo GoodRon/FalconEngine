@@ -12,7 +12,8 @@
 namespace spacewar {
 
 LifetimeSystem::LifetimeSystem(firefly::Engine* engine):
-	firefly::ISystem("LifetimeSystem", engine) {
+	firefly::ISystem("LifetimeSystem", engine),
+	_entityManager(engine->getEntityManager()) {
 
 	addRequiredComponent(firefly::Lifetime::ComponentName);
 }
@@ -30,9 +31,8 @@ void LifetimeSystem::onUpdate() {
 		}
 	}
 
-	auto entityManager = getEngine()->getEntityManager();
 	for (auto& id: expiredIds) {
-		entityManager->removeEntity(id);
+		_entityManager->removeEntity(id);
 	}
 }
 

@@ -23,8 +23,15 @@ public:
 	VelocitySystem& operator=(const VelocitySystem&) = delete;
 
 private:
+	bool onEvent(
+		const std::shared_ptr<firefly::IEvent>& event) override;
 	void onUpdate() override;
 	void processVelocity(firefly::Velocity* velocity) const;
+
+	void updateSpeed(firefly::EntityID id, 
+		double speed, double direction) const;
+	void accelerateEntity(firefly::EntityID id, 
+		double acceleration, double direction) const;
 };
 
 }

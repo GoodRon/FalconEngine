@@ -20,7 +20,7 @@ public:
 	SDL_Event getSDLEvent() const;
 
 private:
-	SDL_Event _event;
+	const SDL_Event _event;
 };
 
 }

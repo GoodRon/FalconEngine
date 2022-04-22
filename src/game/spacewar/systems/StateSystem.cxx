@@ -1,13 +1,17 @@
 #include "StateSystem.h"
 
 #include <SDL_timer.h>
-
 #include <random>
 
 #include <firefly/Engine.h>
 #include <firefly/Renderer.h>
 #include <firefly/Entity.h>
-#include <firefly/EntityManager.h>
+#include <firefly/EventManager.h>
+
+#include <firefly/events/StateEvent.h>
+#include <firefly/events/KillEvent.h>
+#include <firefly/events/PositionEvent.h>
+#include <firefly/events/CollisionEvent.h>
 
 #include <firefly/components/State.h>
 #include <firefly/components/Position.h>
@@ -21,6 +25,7 @@
 
 namespace spacewar {
 
+// TODO move to helpers
 static int randomInt(int min, int max) {
 	std::random_device rd;
 	std::mt19937 mt(rd());
@@ -36,44 +41,7 @@ static void randomScreenPosition(
 	y = static_cast<double>(randomInt(0, height));
 }
 
-static void changeState(
-	firefly::State* state, 
-	int nextState) {
-
-	if (!state) {
-		return;
-	}
-
-	if (state->current == nextState) {
-		return;
-	}
-
-	state->previous = state->current;
-	state->current = nextState;
-	state->timepoint = SDL_GetTicks64();
-}
-
-static void changeVisualState(
-	firefly::Visual* visual, 
-	int nextState) {
-
-	if (!visual) {
-		return;
-	}
-
-	if (visual->currentState == nextState) {
-		return;
-	}
-
-	visual->states[visual->currentState].isFinished = false;
-
-	visual->currentState = nextState;
-	visual->timepoint = SDL_GetTicks64();
-	visual->frameIndex = 0;
-	visual->states[nextState].isFinished = false;
-}
-
-static void setEntityReactivenes(
+static void setEntityReactiveness(
 	firefly::Entity* entity, bool isReactive) {
 
 	const auto velocity = entity->getComponent<firefly::Velocity>();
@@ -104,6 +72,54 @@ StateSystem::StateSystem(firefly::Engine* engine):
 StateSystem::~StateSystem() {
 }
 
+bool StateSystem::onEvent(
+		const std::shared_ptr<firefly::IEvent>& event) {
+
+	switch (event->getType()) {
+	case firefly::EventType::Collision: {
+		const auto collisionEvent = 
+			static_cast<firefly::CollisionEvent*>(event.get());
+
+		if (!collisionEvent) {
+			return false;
+		}
+
+		const auto entity = getEntity(collisionEvent->getId());
+		if (!entity) {
+			return false;
+		}
+
+		switchState(entity, ObjectState::Destroyed);
+		return true;
+	} break;
+
+	case firefly::EventType::State: {
+		const auto stateEvent = 
+		static_cast<firefly::StateEvent*>(event.get());
+
+		if (!stateEvent) {
+			return false;
+		}
+
+		const auto entityId = stateEvent->getId();
+		const auto state = stateEvent->getState();
+
+		const auto entity = getEntity(entityId);
+		if (!entity) {
+			return false;
+		}
+
+		switchState(entity, state);
+		return true;
+	} break;
+
+	default:
+		break;
+	}
+
+	return false;
+}
+
 void StateSystem::onUpdate() {
 	auto& entities = getEntities();
 	for (auto& entity: entities) {
@@ -118,13 +134,9 @@ void StateSystem::updateState(
 		return;
 	}
 
-	const auto state = entity->getComponent<firefly::State>();
-	const auto visual = entity->getComponent<firefly::Visual>();
-	
-	changeVisualState(visual, state->current);
+	const auto stateComponent = entity->getComponent<firefly::State>();
 
-	// TODO switch
-	switch (state->current) {
+	switch (stateComponent->current) {
 	case ObjectState::Idle:
 		updateIdle(entity);
 		break;
@@ -146,7 +158,48 @@ void StateSystem::updateState(
 	}
 }
 
-// TODO improve
+void StateSystem::switchState(
+		firefly::Entity* entity, int state) const {
+
+	const auto stateComponent = entity->getComponent<firefly::State>();
+	const auto visualComponent = entity->getComponent<firefly::Visual>();
+	if (!stateComponent || !visualComponent) {
+		return;
+	}
+
+	if (stateComponent->current == state) {
+		return;
+	}
+
+	const uint64_t timepoint = SDL_GetTicks64();
+
+	visualComponent->states[stateComponent->current].isFinished = false;
+	visualComponent->currentState = state;
+	visualComponent->timepoint = timepoint;
+	visualComponent->frameIndex = 0;
+	visualComponent->states[visualComponent->currentState].isFinished = false;
+
+	stateComponent->previous = stateComponent->current;
+	stateComponent->current = state;
+	stateComponent->timepoint = timepoint;
+
+	switch (state) {
+	case ObjectState::Hyperspace:
+		setEntityReactiveness(entity, false);
+		visualComponent->isVisible = false;
+		break;
+
+	case ObjectState::Destroyed:
+		setEntityReactiveness(entity, false);
+		visualComponent->isVisible = true;
+		break;
+		
+	default:
+		setEntityReactiveness(entity, true);
+		visualComponent->isVisible = true;
+		break;
+	}
+}
 
 void StateSystem::updateIdle(
 	firefly::Entity* entity) const {
@@ -155,22 +208,17 @@ void StateSystem::updateIdle(
 		return;
 	}
 
-	const auto state = entity->getComponent<firefly::State>();
 	const auto velocity = entity->getComponent<firefly::Velocity>();
-	const auto visual = entity->getComponent<firefly::Visual>();
-
-	if (!state || !visual || !velocity) {
+	if (!velocity) {
 		return;
 	}
 
-	const double epsilon = 0.0001;
+	constexpr double epsilon = 0.0001;
 	if (velocity->acceleration < epsilon) {
 		return;
 	}
 
-	const auto nextState = ObjectState::Moving;
-	changeState(state, nextState);
-	changeVisualState(visual, nextState);
+	switchState(entity, ObjectState::Moving);
 }
 
 void StateSystem::updateMoving(
@@ -180,11 +228,8 @@ void StateSystem::updateMoving(
 		return;
 	}
 
-	const auto state = entity->getComponent<firefly::State>();
 	const auto velocity = entity->getComponent<firefly::Velocity>();
-	const auto visual = entity->getComponent<firefly::Visual>();
-
-	if (!state || !visual || !velocity) {
+	if (!velocity) {
 		return;
 	}
 
@@ -193,9 +238,7 @@ void StateSystem::updateMoving(
 		return;
 	}
 
-	const auto nextState = ObjectState::Idle;
-	changeState(state, nextState);
-	changeVisualState(visual, nextState);
+	switchState(entity, ObjectState::Idle);
 }
 
 void StateSystem::updateHyperspace(
@@ -206,45 +249,31 @@ void StateSystem::updateHyperspace(
 	}
 
 	const auto state = entity->getComponent<firefly::State>();
-	const auto velocity = entity->getComponent<firefly::Velocity>();
-	const auto visual = entity->getComponent<firefly::Visual>();
 	const auto position = entity->getComponent<firefly::Position>();
-
-	if (!state || !visual || !position || !velocity) {
+	if (!state || !position) {
 		return;
 	}
 
-	// TODO improve this
 	// TODO read from a config
-	const uint64_t hyperspaceTimeMs = 2000;
-	const uint64_t timepoint = SDL_GetTicks64();
-
-	// NOTE in hyberspace
-	if ((timepoint - state->timepoint) < hyperspaceTimeMs) {
-		setEntityReactivenes(entity, false);
-
-		if (visual->isVisible) {
-			visual->isVisible = false;
-		}
+	constexpr uint64_t hyperspaceTimeMs = 2000;
+	if ((SDL_GetTicks64() - state->timepoint) < hyperspaceTimeMs) {
 		return;
 	}
-
-	setEntityReactivenes(entity, true);
-
-	auto nextState = ObjectState::Idle;
-	if (velocity->acceleration > 0.0) {
-		nextState = ObjectState::Moving;
-	}
-
-	changeState(state, nextState);
-	changeVisualState(visual, nextState);
-
-	visual->isVisible = true;
 
 	const auto renderer = getEngine()->getRenderer();
-	auto rect = renderer->getViewport();
+	const auto rect = renderer->getViewport();
 
-	randomScreenPosition(rect.w, rect.h, position->x, position->y);
+	double x = 0;
+	double y = 0;
+	randomScreenPosition(rect.w, rect.h, x, y);
+
+	std::shared_ptr<firefly::IEvent> event(new firefly::PositionEvent(
+		entity->getId(), x, y, position->direction));
+
+	const auto eventManager = getEngine()->getEventManager();
+	eventManager->registerEvent(std::move(event));
+
+	switchState(entity, ObjectState::Idle);
 }
 
 void StateSystem::updateDestroyed(
@@ -254,51 +283,20 @@ void StateSystem::updateDestroyed(
 		return;
 	}
 
-	setEntityReactivenes(entity, false);
-
-	const auto state = entity->getComponent<firefly::State>();
-	const auto velocity = entity->getComponent<firefly::Velocity>();
 	const auto visual = entity->getComponent<firefly::Visual>();
-	const auto position = entity->getComponent<firefly::Position>();
-
-	if (!state || !visual || !position || !velocity) {
-		return;
-	}
-
-	// NOTE awaiting the animation to stop
-	if (visual->states[visual->currentState].isFinished == false) {
-		return;
-	}
-
-	const auto entityManager = getEngine()->getEntityManager();
-
-	const auto lives = entity->getComponent<firefly::Lives>();
-	if (!lives) {
-		entityManager->removeEntity(entity->getId());
-		return;
-	}
-
-	if (lives->maxLives > 0 && lives->currentLives > 0) {
-		lives->currentLives--;
-		if (lives->currentLives <= 0) {
-			entityManager->removeEntity(entity->getId());
+	if (visual) {
+		// NOTE awaiting the animation to stop
+		// TODO better wait for the state timeout
+		if (visual->states[ObjectState::Destroyed].isFinished == false) {
 			return;
 		}
 	}
 
-	// NOTE respawn, move to a function
-	const auto renderer = getEngine()->getRenderer();
-	auto rect = renderer->getViewport();
-	randomScreenPosition(rect.w, rect.h, position->x, position->y);
-			
-	setEntityReactivenes(entity, true);
+	std::shared_ptr<firefly::IEvent> event(new firefly::KillEvent(
+		entity->getId()));
 
-	velocity->speed = 0.0;
-	velocity->acceleration = 0.0;
-
-	const auto nextState = ObjectState::Idle;
-	changeState(state, nextState);
-	changeVisualState(visual, nextState);
+	const auto eventManager = getEngine()->getEventManager();
+	eventManager->registerEvent(std::move(event));
 
 }
 

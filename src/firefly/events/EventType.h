@@ -13,7 +13,11 @@ enum class EventType: int {
 	Update,
 	Native,
 	Entity,
-	State
+	State,
+	Kill,
+	Collision,
+	Position,
+	Speed
 }; 
 
 }

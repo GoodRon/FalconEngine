@@ -3,27 +3,25 @@
  * All rights reserved
  */
 
-#ifndef FIREFLY_STATE_EVENT_H
-#define FIREFLY_STATE_EVENT_H
+#ifndef FIREFLY_COLLISION_EVENT_H
+#define FIREFLY_COLLISION_EVENT_H
 
 #include "IEvent.h"
 #include "Types.h"
 
 namespace firefly {
 
-class StateEvent final: public IEvent {
+class CollisionEvent final: public IEvent {
 public:
-	StateEvent(EntityID id, int state);
-	~StateEvent() override;
+	CollisionEvent(EntityID id);
+	~CollisionEvent() override;
 
 	EntityID getId() const;
-	int getState() const;
 
 private:
 	const EntityID _id;
-	const int _state;
 };
 
 }
 
-#endif // FIREFLY_STATE_EVENT_H
+#endif // FIREFLY_COLLISION_EVENT_H

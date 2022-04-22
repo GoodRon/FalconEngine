@@ -2,12 +2,12 @@
 
 #include <firefly/Engine.h>
 #include <firefly/Entity.h>
+#include <firefly/EventManager.h>
 #include <firefly/Renderer.h>
+#include <firefly/events/CollisionEvent.h>
 #include <firefly/components/RoundCollidable.h>
 #include <firefly/components/Position.h>
-#include <firefly/components/State.h>
 
-#include "States.h"
 #include "misc/Quadtree.h"
 
 namespace spacewar {
@@ -18,7 +18,6 @@ CollisionSystem::CollisionSystem(firefly::Engine* engine):
 
 	addRequiredComponent(firefly::RoundCollidable::ComponentName);
 	addRequiredComponent(firefly::Position::ComponentName);
-	addRequiredComponent(firefly::State::ComponentName);
 
 	auto renderer = engine->getRenderer();
 	_qauadtree.reset(new EntityQuadtree(renderer->getViewport()));
@@ -43,6 +42,8 @@ void CollisionSystem::onUpdate() {
 		}
 	}
 
+	const auto eventManager = getEngine()->getEventManager();
+
 	for (auto& entityIt: entities) {
 		auto entity = entityIt.second;
 
@@ -61,14 +62,15 @@ void CollisionSystem::onUpdate() {
 
 			auto positionRight = nearestEntity->getComponent<firefly::Position>();
 			auto collidableRight = nearestEntity->getComponent<firefly::RoundCollidable>();
-			auto stateRight = nearestEntity->getComponent<firefly::State>();
 
 			if (isCollided(collidableLeft, positionLeft,
 				collidableRight, positionRight)) {
 
 				if (collidableRight->isDestructable) {
-					stateRight->previous = stateRight->current;
-					stateRight->current = ObjectState::Destroyed;
+					std::shared_ptr<firefly::IEvent> event(new firefly::CollisionEvent(
+						nearestEntity->getId()));
+					
+					eventManager->registerEvent(std::move(event));
 				}
 			}
 		}

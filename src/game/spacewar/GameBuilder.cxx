@@ -17,6 +17,7 @@
 #include "systems/LifetimeSystem.h"
 #include "systems/CollisionSystem.h"
 #include "systems/VelocitySystem.h"
+#include "systems/RespawnSystem.h"
 
 namespace spacewar {
 
@@ -97,6 +98,9 @@ private:
 		systemManager->addSystem(std::move(systemPtr));
 
 		systemPtr.reset(new CollisionSystem(_engine));
+		systemManager->addSystem(std::move(systemPtr));
+
+		systemPtr.reset(new RespawnSystem(_engine));
 		systemManager->addSystem(std::move(systemPtr));
 
 		return true;

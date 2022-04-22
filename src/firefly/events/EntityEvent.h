@@ -25,7 +25,7 @@ public:
 	bool isRemoved() const;
 
 private:
-	std::shared_ptr<Entity> _entity;
+	const std::shared_ptr<Entity> _entity;
 	const bool _isRemoved;
 };
 

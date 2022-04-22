@@ -24,11 +24,19 @@ public:
 	PositioningSystem& operator=(const PositioningSystem&) = delete;
 
 private:
+	bool onEvent(
+		const std::shared_ptr<firefly::IEvent>& event) override;
 	void onUpdate() override;
 	
+	void updatePosition(firefly::EntityID id, 
+		double x, double y, double direction) const;
+
 	void processPosition(
 		firefly::Position* position, 
 		firefly::Velocity* velocity) const;
+
+	void wrapCoordinates(
+		firefly::Position* position) const;
 };
 
 }

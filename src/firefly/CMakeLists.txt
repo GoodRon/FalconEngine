@@ -15,6 +15,11 @@ add_library(firefly
 	events/NativeEvent.cxx
 	events/EntityEvent.cxx
 	events/UpdateEvent.cxx
+	events/StateEvent.cxx
+	events/KillEvent.cxx
+	events/CollisionEvent.cxx
+	events/PositionEvent.cxx
+	events/SpeedEvent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx)
 

@@ -10,6 +10,7 @@
 
 namespace firefly {
 	class Entity;
+	class IEvent;
 }
 
 namespace spacewar {
@@ -23,10 +24,14 @@ public:
 	StateSystem& operator=(const StateSystem&) = delete;
 
 private:
+	bool onEvent(
+		const std::shared_ptr<firefly::IEvent>& event) override;
 	void onUpdate() override;
 
 	void updateState(
 		firefly::Entity* entity) const;
+	void switchState(
+		firefly::Entity* entity, int state) const;
 
 	void updateIdle(firefly::Entity* entity) const;
 	void updateMoving(firefly::Entity* entity) const;

@@ -110,6 +110,10 @@ SystemManager* Engine::getSystemManager() const {
 	return _systemManager.get();
 }
 
+EventManager* Engine::getEventManager() const {
+	return _eventManager.get();
+}
+
 void Engine::onSDLEvent(const SDL_Event& event) {
 	switch (event.type) {
 		case SDL_QUIT:

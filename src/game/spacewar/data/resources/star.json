@@ -42,7 +42,7 @@
 			"name": "Gravity",
 			"hasGravity": false,
 			"emitGravity": true,
-			"mass": 305000000.0
+			"mass": 350000000.0
 		},
 		{
 			"name": "RoundCollidable",

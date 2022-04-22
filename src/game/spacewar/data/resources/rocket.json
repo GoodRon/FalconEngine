@@ -51,6 +51,10 @@
 			"name": "State",
 			"current": 0,
 			"previous": 0
+		},
+		{
+			"name": "Lives",
+			"maxLives": 1
 		}
 	]
 }

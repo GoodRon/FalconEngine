@@ -53,6 +53,8 @@ protected:
 	virtual bool onRegisterEntity(Entity* entity);
 	virtual void onUnregisterEntity(Entity* entity);
 
+	Entity* getEntity(EntityID id) const;
+
 private:
 	bool registerEntity(Entity* entity);
 	void unregisterEntity(EntityID id);
