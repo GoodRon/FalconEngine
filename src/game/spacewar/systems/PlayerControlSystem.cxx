@@ -377,7 +377,7 @@ namespace spacewar {
 
 		constexpr int chanceOfMulfunction = 5;
 		if (randomInt(0, 100) <= chanceOfMulfunction) {
-			nextState = ObjectState::Destroyed;
+			nextState = ObjectState::Exploading;
 		}
 
 		std::shared_ptr<firefly::IEvent> event(new firefly::StateEvent(
