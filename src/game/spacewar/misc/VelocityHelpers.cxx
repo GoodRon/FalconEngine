@@ -28,9 +28,9 @@ void updateSpeed(firefly::Velocity* velocity) {
 		return;
 	}
 
-	velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
+	velocity->speedDirection = (normalizeAngle(velocity->speedDirection));
 
-	const double speedRad = velocity->speedAngle * degreesToRad;
+	const double speedRad = velocity->speedDirection * degreesToRad;
 	velocity->speedX = velocity->speed * sin(speedRad);
 	velocity->speedY = -velocity->speed * cos(speedRad);
 }
@@ -67,7 +67,7 @@ void accelerate(firefly::Velocity* velocity, double acceleration,
 		velocity->speedY * velocity->speedY);
 
 	if (fabs(velocity->speed) < epsilon) {
-		velocity->speedAngle = 0.0;
+		velocity->speedDirection = 0.0;
 		return;
 	}
 
@@ -76,8 +76,8 @@ void accelerate(firefly::Velocity* velocity, double acceleration,
 		speedRad = pi - speedRad;
 	}
 
-	velocity->speedAngle = speedRad * radToDegrees;
-	velocity->speedAngle = (normalizeAngle(velocity->speedAngle));
+	velocity->speedDirection = speedRad * radToDegrees;
+	velocity->speedDirection = (normalizeAngle(velocity->speedDirection));
 
 	if (velocity->maxSpeed < epsilon) {
 		return;

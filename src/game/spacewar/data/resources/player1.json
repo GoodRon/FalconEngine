@@ -50,14 +50,14 @@
 			"width": 66.0,
 			"height": 88.0,
 			"scale": 0.5,
-			"angle": 90.0
+			"direction": 90.0
 		},
 		{
 			"name": "Velocity",
 			"speed": 0.0,
-			"speedAngle": 0.0,
+			"speedDirection": 0.0,
 			"acceleration": 0.0,
-			"accelerationAngle": 90.0,
+			"accelerationDirection": 90.0,
 			"maxSpeed": 600.0
 		},
 		{

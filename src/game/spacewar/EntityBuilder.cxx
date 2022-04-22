@@ -224,7 +224,7 @@ private:
 		component->width = document["width"].GetDouble();
 		component->height = document["height"].GetDouble();
 		component->scale = document["scale"].GetDouble();
-		component->angle = document["angle"].GetDouble();
+		component->direction = document["direction"].GetDouble();
 
 		entity->addComponent(firefly::Position::ComponentName, std::move(component));
 		return true;
@@ -237,10 +237,10 @@ private:
 		std::unique_ptr<firefly::Velocity> component(new firefly::Velocity);
 
 		component->speed = document["speed"].GetDouble();
-		component->speedAngle = document["speedAngle"].GetDouble();
+		component->speedDirection = document["speedDirection"].GetDouble();
 		component->maxSpeed = document["maxSpeed"].GetDouble();
 		component->acceleration = document["acceleration"].GetDouble();
-		component->accelerationAngle = document["accelerationAngle"].GetDouble();
+		component->accelerationDirection = document["accelerationDirection"].GetDouble();
 
 		entity->addComponent(firefly::Velocity::ComponentName, std::move(component));
 		return true;

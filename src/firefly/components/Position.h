@@ -50,7 +50,7 @@ public:
 	double centerX = 0.0;
 	double centerY = 0.0;
 	double scale = 0.0;
-	double angle = 0.0;
+	double direction = 0.0;
 };
 
 }

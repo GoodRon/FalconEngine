@@ -149,7 +149,7 @@ void RenderingSystem::draw(Position* positionComponent,
 	SDL_Point center = positionComponent->center();
 
 	_renderer->drawTexture(frame->getTexture(), &source, &dest, 
-		positionComponent->angle, &center);
+		positionComponent->direction, &center);
 }
 
 }

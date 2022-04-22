@@ -36,7 +36,7 @@ void VelocitySystem::processVelocity(
 	}
 
 	accelerate(velocity, velocity->acceleration,
-		velocity->accelerationAngle, getElapsedMs());
+		velocity->accelerationDirection, getElapsedMs());
 }
 
 }

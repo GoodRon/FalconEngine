@@ -325,13 +325,13 @@ namespace spacewar {
 
 		const auto playerPosition = _player->getComponent<firefly::Position>();
 
-		velocity->speedAngle = playerPosition->angle;
-		position->angle = playerPosition->angle;
+		velocity->speedDirection = playerPosition->direction;
+		position->direction = playerPosition->direction;
 		position->x = playerPosition->x;
 		position->y = playerPosition->y;
 		lifetime->timepoint = timepoint;
 
-		move(position, 36, playerPosition->angle);
+		move(position, 36, playerPosition->direction);
 
 		entityManager->addEntity(projectile);
 	}
@@ -376,10 +376,10 @@ namespace spacewar {
 		const auto velocityComponent = 
 			_player->getComponent<firefly::Velocity>();
 
-		velocityComponent->accelerationAngle = 
-			normalizeAngle(velocityComponent->accelerationAngle + angle);
+		velocityComponent->accelerationDirection =
+			normalizeAngle(velocityComponent->accelerationDirection + angle);
 
-		positionComponent->angle = 
-			normalizeAngle(positionComponent->angle + angle);
+		positionComponent->direction =
+			normalizeAngle(positionComponent->direction + angle);
 	}
 }
