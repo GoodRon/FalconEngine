@@ -1,5 +1,7 @@
 #include "PlayerControlSystem.h"
 
+#include <random>
+
 #include <SDL_timer.h>
 #include <SDL_events.h>
 
@@ -20,8 +22,15 @@
 
 namespace spacewar {
 
-	// TODO move from here
-	const double acceleration = 15.0;
+	static int randomInt(int min, int max) {
+		std::random_device rd;
+		std::mt19937 mt(rd());
+		std::uniform_int_distribution<int> dist(min, max);
+		return dist(mt);
+	}
+
+	// TODO move to config here
+	const double acceleration = 20.0;
 	const double angleDelta = 45.0;
 
 	PlayerControlSystem::PlayerControlSystem(
@@ -221,6 +230,12 @@ namespace spacewar {
 			return;
 		}
 
+		constexpr int chanceOfMulfunction = 5;
+		if (randomInt(0, 100) <= chanceOfMulfunction) {
+			stateComponent->current = stateNameDestroyed();
+			return;
+		}
+
 		const std::string nextState = stateNameHyperspace();
 
 		if (stateComponent->current == nextState) {
@@ -303,6 +318,7 @@ namespace spacewar {
 		if (!_isActionPressed) {
 			return;
 		}
+
 		shoot();
 	}
 
