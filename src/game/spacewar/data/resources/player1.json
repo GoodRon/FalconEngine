@@ -5,6 +5,7 @@
 			"name": "Visual",
 			"zIndex": 2,
 			"isVisible": true,
+			"currentState": 0,
 			"states": [
 				{
 					"state": 0,
@@ -29,7 +30,7 @@
 					"frameAmount": 1
 				},
 				{
-					"state": 2,
+					"state": 3,
 					"texture": "resources/explosion.png",
 					"isLooped": false,
 					"frameWidth": 100,
@@ -81,7 +82,7 @@
 		},
 		{
 			"name": "State",
-			"current": 0,
+			"current": 1,
 			"previous": 0
 		},
 		{

@@ -259,9 +259,12 @@ namespace spacewar {
 
 		const auto stateComponent =
 			_player->getComponent<firefly::State>();
-		if (stateComponent->current == ObjectState::Destroyed) {
+
+		if (stateComponent->current != ObjectState::Idle &&
+			stateComponent->current != ObjectState::Moving) {
 			return;
 		}
+
 
 		shoot();
 	}
@@ -301,8 +304,8 @@ namespace spacewar {
 
 		const auto stateComponent = 
 			_player->getComponent<firefly::State>();
-		if (stateComponent->current == ObjectState::Destroyed ||
-			stateComponent->current == ObjectState::Hyperspace) {
+		if (stateComponent->current != ObjectState::Idle &&
+			stateComponent->current != ObjectState::Moving) {
 			return;
 		}
 
@@ -365,8 +368,8 @@ namespace spacewar {
 		const auto stateComponent = 
 			_player->getComponent<firefly::State>();
 
-		if (stateComponent->current == ObjectState::Destroyed ||
-			stateComponent->current == ObjectState::Hyperspace) {
+		if (stateComponent->current != ObjectState::Idle &&
+			stateComponent->current != ObjectState::Moving) {
 			return;
 		}
 

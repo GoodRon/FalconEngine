@@ -116,18 +116,20 @@ void RespawnSystem::respawnEntity(firefly::EntityID id) const {
 
 	const auto eventManager = getEngine()->getEventManager();
 
-	std::shared_ptr<firefly::IEvent> event(new firefly::PositionEvent(
+	std::shared_ptr<firefly::IEvent> event;
+
+	event.reset(new firefly::SpeedEvent(
+		entity->getId(), 0.0, 0.0));
+
+	eventManager->registerEvent(std::move(event));
+
+	event.reset(new firefly::PositionEvent(
 		entity->getId(), x, y, position->direction));
 
 	eventManager->registerEvent(std::move(event));
 	
 	event.reset(new firefly::StateEvent(
 		entity->getId(), ObjectState::Idle));
-
-	eventManager->registerEvent(std::move(event));
-
-	event.reset(new firefly::SpeedEvent(
-		entity->getId(), 0.0, 0.0));
 
 	eventManager->registerEvent(std::move(event));
 

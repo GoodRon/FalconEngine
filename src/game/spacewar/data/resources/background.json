@@ -5,9 +5,10 @@
 			"name": "Visual",
 			"zIndex": -1,
 			"isVisible": true,
+			"currentState": 0,
 			"states": [
 				{
-					"name": "Idle",
+					"state": 0,
 					"texture": "resources/background.png",
 					"isLooped": false,
 					"frameWidth": 1664,
@@ -28,7 +29,7 @@
 			"width": 1664.0,
 			"height": 1149.0,
 			"scale": 1,
-			"angle": 0.0
+			"direction": 0.0
 		}
 	]
 }

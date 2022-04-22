@@ -10,9 +10,10 @@ namespace spacewar {
 
 enum ObjectState {
 	Idle = 0,
-	Moving,
-	Destroyed,
-	Hyperspace
+	Moving = 1,
+	Hyperspace = 2,
+	Exploading = 3,
+	Destroyed = 4
 };
 
 }

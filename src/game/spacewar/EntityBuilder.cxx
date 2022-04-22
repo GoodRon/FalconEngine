@@ -169,6 +169,7 @@ private:
 		std::unique_ptr<firefly::Visual> component(new firefly::Visual);
 		component->zIndex = document["zIndex"].GetInt();
 		component->isVisible = document["isVisible"].GetBool();
+		component->currentState = document["currentState"].GetInt();
 
 		for (auto& state: document["states"].GetArray()) {
 			const auto stateValue = state["state"].GetInt();

@@ -37,6 +37,7 @@ private:
 	void updateMoving(firefly::Entity* entity) const;
 	void updateHyperspace(firefly::Entity* entity) const;
 	void updateDestroyed(firefly::Entity* entity) const;
+	void updateExploading(firefly::Entity* entity) const;
 };
 
 }

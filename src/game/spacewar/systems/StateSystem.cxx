@@ -25,6 +25,8 @@
 
 namespace spacewar {
 
+// TODO rename to ship state & make a new state for rockets?
+
 // TODO move to helpers
 static int randomInt(int min, int max) {
 	std::random_device rd;
@@ -89,7 +91,7 @@ bool StateSystem::onEvent(
 			return false;
 		}
 
-		switchState(entity, ObjectState::Destroyed);
+		switchState(entity, ObjectState::Exploading);
 		return true;
 	} break;
 
@@ -145,12 +147,16 @@ void StateSystem::updateState(
 		updateMoving(entity);
 		break;
 
-	case ObjectState::Destroyed:
-		updateDestroyed(entity);
-		break;
-
 	case ObjectState::Hyperspace:
 		updateHyperspace(entity);
+		break;
+
+	case ObjectState::Exploading:
+		updateExploading(entity);
+		break;
+
+	case ObjectState::Destroyed:
+		updateDestroyed(entity);
 		break;
 
 	default:
@@ -184,12 +190,13 @@ void StateSystem::switchState(
 	stateComponent->timepoint = timepoint;
 
 	switch (state) {
+	case ObjectState::Destroyed:
 	case ObjectState::Hyperspace:
 		setEntityReactiveness(entity, false);
 		visualComponent->isVisible = false;
 		break;
 
-	case ObjectState::Destroyed:
+	case ObjectState::Exploading:
 		setEntityReactiveness(entity, false);
 		visualComponent->isVisible = true;
 		break;
@@ -276,7 +283,7 @@ void StateSystem::updateHyperspace(
 	switchState(entity, ObjectState::Idle);
 }
 
-void StateSystem::updateDestroyed(
+void StateSystem::updateExploading(
 	firefly::Entity* entity) const {
 
 	if (!entity) {
@@ -287,7 +294,7 @@ void StateSystem::updateDestroyed(
 	if (visual) {
 		// NOTE awaiting the animation to stop
 		// TODO better wait for the state timeout
-		if (visual->states[ObjectState::Destroyed].isFinished == false) {
+		if (visual->states[ObjectState::Exploading].isFinished == false) {
 			return;
 		}
 	}
@@ -298,6 +305,13 @@ void StateSystem::updateDestroyed(
 	const auto eventManager = getEngine()->getEventManager();
 	eventManager->registerEvent(std::move(event));
 
+	switchState(entity, ObjectState::Destroyed);
+}
+
+void StateSystem::updateDestroyed(
+	firefly::Entity* entity) const {
+
+	// TODO write it
 }
 
 }

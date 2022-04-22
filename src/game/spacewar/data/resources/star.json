@@ -5,6 +5,7 @@
 			"name": "Visual",
 			"zIndex": 0,
 			"isVisible": true,
+			"currentState": 0,
 			"states": [
 				{
 					"state": 0,
@@ -51,7 +52,7 @@
 		},
 		{
 			"name": "State",
-			"current": 0,
+			"current": 1,
 			"previous": 0
 		}
 	]
