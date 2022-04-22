@@ -86,9 +86,13 @@ bool CollisionSystem::isCollided(
 		return false;
 	}
 
-	// TODO fix the center!
-	const double distanceX = positionLeft->x - positionRigth->x;
-	const double dsistanceY = positionLeft->y - positionRigth->y;
+	const auto centerLeft = positionLeft->center();
+	const auto centerRight = positionRigth->center();
+
+	const double distanceX = (positionLeft->x + centerLeft.x) -
+		(positionRigth->x + centerRight.x);
+	const double dsistanceY = (positionLeft->y + centerLeft.y) -
+		(positionRigth->y + centerRight.y);
 	const double squaredDistance = distanceX * distanceX 
 		+ dsistanceY * dsistanceY;
 	const double minCollisionDistance = collidableLeft->collidableRadius 

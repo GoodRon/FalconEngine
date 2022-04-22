@@ -27,9 +27,11 @@ public:
 	}
 
 	SDL_Rect toRect() {
+		auto point = center();
+
 		return SDL_Rect{ 
-			static_cast<int>(x), 
-			static_cast<int>(y),
+			static_cast<int>(x - point.x), 
+			static_cast<int>(y - point.y),
 			static_cast<int>(width * scale), 
 			static_cast<int>(height * scale)};
 	}

@@ -32,7 +32,7 @@
 		},
 		{
 			"name": "Velocity",
-			"speed": 150.0,
+			"speed": 200.0,
 			"speedAngle": 0.0,
 			"acceleration": 0.0,
 			"accelerationAngle": 0.0,

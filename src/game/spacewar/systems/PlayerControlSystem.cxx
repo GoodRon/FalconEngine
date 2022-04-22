@@ -294,7 +294,10 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::onActionHold() {
-		
+		if (!_isActionPressed) {
+			return;
+		}
+		shoot();
 	}
 
 	void PlayerControlSystem::setAcceleration(double acceleration) const {
@@ -308,6 +311,13 @@ namespace spacewar {
 
 	void PlayerControlSystem::shoot() const {
 		if (!_player) {
+			return;
+		}
+
+		const auto stateComponent = 
+			_player->getComponent<firefly::State>();
+		if (stateComponent->current == stateNameDestroyed() ||
+			stateComponent->current == stateNameHyperspace()) {
 			return;
 		}
 
@@ -330,7 +340,7 @@ namespace spacewar {
 			return;
 		}
 
-		weapon.lastShotTimepoint = timepoint + weapon.cooldownTimeMs - elapsedMs;
+		weapon.lastShotTimepoint = timepoint;
 
 		auto entityPrototypes = getEngine()->getEntityPrototypes();
 		auto entityManager = getEngine()->getEntityManager();
@@ -351,9 +361,11 @@ namespace spacewar {
 
 		velocity->speedAngle = playerPosition->angle;
 		position->angle = playerPosition->angle;
-		position->x = playerPosition->x + 30.0;
-		position->y = playerPosition->y + 30.0;
+		position->x = playerPosition->x;
+		position->y = playerPosition->y;
 		lifetime->timepoint = timepoint;
+
+		move(position, 36, playerPosition->angle);
 
 		entityManager->addEntity(projectile);
 	}

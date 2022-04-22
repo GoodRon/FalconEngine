@@ -3,6 +3,7 @@
 #include <cmath>
 
 #include <firefly/components/Velocity.h>
+#include <firefly/components/Position.h>
 
 namespace spacewar {
 
@@ -86,6 +87,17 @@ void accelerate(firefly::Velocity* velocity, double acceleration,
 		velocity->speed = velocity->maxSpeed;
 		updateSpeed(velocity);
 	}
+}
+
+void move(firefly::Position* position, 
+	double distance, double angle) {
+
+	const double rad = angle * degreesToRad;
+	const double deltaX = distance * sin(rad);
+	const double deltaY = -distance * cos(rad);
+
+	position->x += deltaX;
+	position->y += deltaY;
 }
 
 }

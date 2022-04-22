@@ -10,6 +10,7 @@
 
 namespace firefly {
 	class Velocity;
+	class Position;
 }
 
 namespace spacewar {
@@ -21,6 +22,9 @@ void updateSpeed(firefly::Velocity* velocity);
 void accelerate(firefly::Velocity* velocity, 
 	double acceleration, double accelerationAngle, 
 	uint64_t elapsedMs);
+
+void move(firefly::Position* position, 
+	double distance, double angle);
 
 }
 
