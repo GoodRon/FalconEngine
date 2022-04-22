@@ -12,6 +12,7 @@
 #include <firefly/events/KillEvent.h>
 #include <firefly/events/PositionEvent.h>
 #include <firefly/events/CollisionEvent.h>
+#include <firefly/events/SpeedEvent.h>
 
 #include <firefly/components/State.h>
 #include <firefly/components/Position.h>
@@ -274,10 +275,17 @@ void StateSystem::updateHyperspace(
 	double y = 0;
 	randomScreenPosition(rect.w, rect.h, x, y);
 
-	std::shared_ptr<firefly::IEvent> event(new firefly::PositionEvent(
+	const auto eventManager = getEngine()->getEventManager();
+	std::shared_ptr<firefly::IEvent> event;
+
+	event.reset(new firefly::SpeedEvent(
+		entity->getId(), 0.0, 0.0));
+
+	eventManager->registerEvent(std::move(event));
+
+	event.reset(new firefly::PositionEvent(
 		entity->getId(), x, y, position->direction));
 
-	const auto eventManager = getEngine()->getEventManager();
 	eventManager->registerEvent(std::move(event));
 
 	switchState(entity, ObjectState::Idle);

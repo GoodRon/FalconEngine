@@ -33,7 +33,7 @@
 		},
 		{
 			"name": "Velocity",
-			"speed": 250.0,
+			"speed": 100.0,
 			"speedDirection": 0.0,
 			"acceleration": 0.0,
 			"accelerationDirection": 0.0,
@@ -46,7 +46,7 @@
 		},
 		{
 			"name": "Lifetime",
-			"lifetimeMs": 2000
+			"lifetimeMs": 10000
 		},
 		{
 			"name": "State",

@@ -32,8 +32,8 @@ namespace spacewar {
 	}
 
 	// TODO move to config here
-	const double acceleration = 20.0;
-	const double angleDelta = 45.0;
+	const double acceleration = 3.0;
+	const double angleDelta = 30.0;
 
 	PlayerControlSystem::PlayerControlSystem(
 		firefly::Engine* engine, int playerId, 
