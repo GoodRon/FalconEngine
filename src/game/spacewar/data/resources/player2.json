@@ -7,7 +7,7 @@
 			"isVisible": true,
 			"states": [
 				{
-					"name": "Idle",
+					"state": 0,
 					"texture": "resources/player2.png",
 					"isLooped": true,
 					"frameWidth": 66,
@@ -18,7 +18,7 @@
 					"frameAmount": 1
 				},
 				{
-					"name": "Moving",
+					"state": 1,
 					"texture": "resources/player2.png",
 					"isLooped": true,
 					"frameWidth": 66,
@@ -29,7 +29,7 @@
 					"frameAmount": 1
 				},
 				{
-					"name": "Destroyed",
+					"state": 2,
 					"texture": "resources/explosion.png",
 					"isLooped": false,
 					"frameWidth": 100,
@@ -81,8 +81,8 @@
 		},
 		{
 			"name": "State",
-			"current": "Idle",
-			"previous": ""
+			"current": 0,
+			"previous": 0
 		},
 		{
 			"name": "Ammunition",

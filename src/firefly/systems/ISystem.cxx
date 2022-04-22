@@ -32,8 +32,7 @@ bool ISystem::processEvent(const std::shared_ptr<IEvent>& event) {
 
 	switch (event->getType()) {
 		case EventType::Entity: {
-			// TODO optimize
-			auto entityEvent = std::dynamic_pointer_cast<EntityEvent>(event);
+			auto entityEvent = static_cast<EntityEvent*>(event.get());
 			if (!entityEvent) {
 				return false;
 			}

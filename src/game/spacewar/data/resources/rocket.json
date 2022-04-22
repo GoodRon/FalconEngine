@@ -7,7 +7,7 @@
 			"isVisible": true,
 			"states": [
 				{
-					"name": "Idle",
+					"state": 0,
 					"texture": "resources/rocket.png",
 					"isLooped": true,
 					"frameWidth": 32,
@@ -49,8 +49,8 @@
 		},
 		{
 			"name": "State",
-			"current": "Idle",
-			"previous": ""
+			"current": 0,
+			"previous": 0
 		}
 	]
 }

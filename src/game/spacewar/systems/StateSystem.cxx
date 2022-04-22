@@ -17,7 +17,7 @@
 #include <firefly/components/Lives.h>
 #include <firefly/components/RoundCollidable.h>
 
-#include "StateNames.h"
+#include "States.h"
 
 namespace spacewar {
 
@@ -38,7 +38,7 @@ static void randomScreenPosition(
 
 static void changeState(
 	firefly::State* state, 
-	const std::string& nextState) {
+	int nextState) {
 
 	if (!state) {
 		return;
@@ -55,7 +55,7 @@ static void changeState(
 
 static void changeVisualState(
 	firefly::Visual* visual, 
-	const std::string& nextState) {
+	int nextState) {
 
 	if (!visual) {
 		return;
@@ -65,12 +65,12 @@ static void changeVisualState(
 		return;
 	}
 
-	visual->states[visual->currentState].isStopped = false;
+	visual->states[visual->currentState].isFinished = false;
 
 	visual->currentState = nextState;
 	visual->timepoint = SDL_GetTicks64();
 	visual->frameIndex = 0;
-	visual->states[nextState].isStopped = false;
+	visual->states[nextState].isFinished = false;
 }
 
 static void setEntityReactivenes(
@@ -123,24 +123,26 @@ void StateSystem::updateState(
 	
 	changeVisualState(visual, state->current);
 
-	if (state->current == stateNameIdle()) {
+	// TODO switch
+	switch (state->current) {
+	case ObjectState::Idle:
 		updateIdle(entity);
-		return;
-	}
+		break;
 
-	if (state->current == stateNameMoving()) {
+	case ObjectState::Moving:
 		updateMoving(entity);
-		return;
-	}
+		break;
 
-	if (state->current == stateNameHyperspace()) {
-		updateHyperspace(entity);
-		return;
-	}
-
-	if (state->current == stateNameDestroyed()) {
+	case ObjectState::Destroyed:
 		updateDestroyed(entity);
-		return;
+		break;
+
+	case ObjectState::Hyperspace:
+		updateHyperspace(entity);
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -166,7 +168,7 @@ void StateSystem::updateIdle(
 		return;
 	}
 
-	const std::string nextState = stateNameMoving();
+	const auto nextState = ObjectState::Moving;
 	changeState(state, nextState);
 	changeVisualState(visual, nextState);
 }
@@ -191,7 +193,7 @@ void StateSystem::updateMoving(
 		return;
 	}
 
-	const std::string nextState = stateNameIdle();
+	const auto nextState = ObjectState::Idle;
 	changeState(state, nextState);
 	changeVisualState(visual, nextState);
 }
@@ -229,9 +231,9 @@ void StateSystem::updateHyperspace(
 
 	setEntityReactivenes(entity, true);
 
-	std::string nextState = stateNameIdle();
+	auto nextState = ObjectState::Idle;
 	if (velocity->acceleration > 0.0) {
-		nextState = stateNameMoving();
+		nextState = ObjectState::Moving;
 	}
 
 	changeState(state, nextState);
@@ -264,7 +266,7 @@ void StateSystem::updateDestroyed(
 	}
 
 	// NOTE awaiting the animation to stop
-	if (visual->states[visual->currentState].isStopped == false) {
+	if (visual->states[visual->currentState].isFinished == false) {
 		return;
 	}
 
@@ -294,7 +296,7 @@ void StateSystem::updateDestroyed(
 	velocity->speed = 0.0;
 	velocity->acceleration = 0.0;
 
-	const std::string nextState = stateNameIdle();
+	const auto nextState = ObjectState::Idle;
 	changeState(state, nextState);
 	changeVisualState(visual, nextState);
 

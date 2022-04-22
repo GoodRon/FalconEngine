@@ -32,12 +32,12 @@ public:
 	struct State {
 		std::vector<std::shared_ptr<Frame>> frames;
 		bool isLooped = true;
-		bool isStopped = false;
+		bool isFinished = false;
 	};
 
-	std::string currentState = "Idle";
+	int currentState = 0;
 	size_t frameIndex = 0; 
-	std::unordered_map<std::string, State> states;
+	std::unordered_map<int, State> states;
 	bool isPaused = false;
 	bool isVisible = false;
 	int zIndex = 0;

@@ -171,7 +171,7 @@ private:
 		component->isVisible = document["isVisible"].GetBool();
 
 		for (auto& state: document["states"].GetArray()) {
-			const auto stateName = std::string(state["name"].GetString());
+			const auto stateValue = state["state"].GetInt();
 			const auto texturePath = std::string(state["texture"].GetString());
 
 			const auto texture = resourceManager->loadTexture(texturePath);
@@ -204,7 +204,7 @@ private:
 
 			visualState.frames = std::move(frames);
 
-			component->states[stateName] = std::move(visualState);
+			component->states[stateValue] = std::move(visualState);
 		}
 
 		entity->addComponent(firefly::Visual::ComponentName, std::move(component));
@@ -278,8 +278,8 @@ private:
 
 		std::unique_ptr<firefly::State> component(new firefly::State);
 
-		component->current = std::string(document["current"].GetString());
-		component->previous = std::string(document["previous"].GetString());
+		component->current = document["current"].GetInt();
+		component->previous = document["previous"].GetInt();
 
 		entity->addComponent(firefly::State::ComponentName, std::move(component));
 		return true;

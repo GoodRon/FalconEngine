@@ -65,7 +65,7 @@ static Frame* advanceFrame(Visual* visualComponent, uint64_t timepoint) {
 		if (state.isLooped) {
 			visualComponent->frameIndex = 0;
 		} else {
-			state.isStopped = true;
+			state.isFinished = true;
 		}
 	} else {
 		visualComponent->frameIndex++;

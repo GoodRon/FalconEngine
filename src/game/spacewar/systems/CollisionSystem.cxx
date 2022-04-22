@@ -7,7 +7,7 @@
 #include <firefly/components/Position.h>
 #include <firefly/components/State.h>
 
-#include "StateNames.h"
+#include "States.h"
 #include "misc/Quadtree.h"
 
 namespace spacewar {
@@ -68,7 +68,7 @@ void CollisionSystem::onUpdate() {
 
 				if (collidableRight->isDestructable) {
 					stateRight->previous = stateRight->current;
-					stateRight->current = stateNameDestroyed();
+					stateRight->current = ObjectState::Destroyed;
 				}
 			}
 		}

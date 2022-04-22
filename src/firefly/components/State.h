@@ -24,8 +24,8 @@ public:
 		return new State(*this);
 	}
 	
-	std::string current;
-	std::string previous;
+	int current;
+	int previous;
 	uint64_t timepoint = 0;
 };
 

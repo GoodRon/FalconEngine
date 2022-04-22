@@ -17,7 +17,7 @@
 #include <firefly/components/Ammunition.h>
 #include <firefly/components/Lifetime.h>
 
-#include "StateNames.h"
+#include "States.h"
 #include "misc/VelocityHelpers.h"
 
 namespace spacewar {
@@ -242,7 +242,7 @@ namespace spacewar {
 
 		const auto stateComponent =
 			_player->getComponent<firefly::State>();
-		if (stateComponent->current == stateNameDestroyed()) {
+		if (stateComponent->current == ObjectState::Destroyed) {
 			return;
 		}
 
@@ -282,8 +282,8 @@ namespace spacewar {
 
 		const auto stateComponent = 
 			_player->getComponent<firefly::State>();
-		if (stateComponent->current == stateNameDestroyed() ||
-			stateComponent->current == stateNameHyperspace()) {
+		if (stateComponent->current == ObjectState::Destroyed ||
+			stateComponent->current == ObjectState::Hyperspace) {
 			return;
 		}
 
@@ -344,18 +344,18 @@ namespace spacewar {
 		const auto stateComponent = 
 			_player->getComponent<firefly::State>();
 
-		if (stateComponent->current == stateNameDestroyed() ||
-			stateComponent->current == stateNameHyperspace()) {
+		if (stateComponent->current == ObjectState::Destroyed ||
+			stateComponent->current == ObjectState::Hyperspace) {
 			return;
 		}
 
 		constexpr int chanceOfMulfunction = 5;
 		if (randomInt(0, 100) <= chanceOfMulfunction) {
-			stateComponent->current = stateNameDestroyed();
+			stateComponent->current = ObjectState::Destroyed;
 			return;
 		}
 
-		const std::string nextState = stateNameHyperspace();
+		const auto nextState = ObjectState::Hyperspace;
 
 		if (stateComponent->current == nextState) {
 			return;
