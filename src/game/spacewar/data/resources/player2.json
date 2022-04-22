@@ -23,7 +23,7 @@
 					"isLooped": true,
 					"frameWidth": 66,
 					"frameHeight": 88,
-					"frameDuration": 1000,
+					"frameDuration": 0,
 					"frameRow": 0,
 					"frameCol": 1,
 					"frameAmount": 1
@@ -66,7 +66,7 @@
 		},
 		{
 			"name": "Lives",
-			"maxLives": 5
+			"maxLives": 0
 		},
 		{
 			"name": "RoundCollidable",
@@ -91,7 +91,7 @@
 					"name": "RocketLauncher",
 					"projectile": "Rocket",
 					"rounds": 15,
-					"cooldownTimeMs": 200
+					"cooldownTimeMs": 300
 				}
 			]
 		}
