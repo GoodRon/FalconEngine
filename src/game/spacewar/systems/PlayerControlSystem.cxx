@@ -368,8 +368,6 @@ namespace spacewar {
 		const auto velocityComponent = 
 			_player->getComponent<firefly::Velocity>();
 
-		velocityComponent->acceleration = acceleration;
-
 		velocityComponent->accelerationAngle = 
 			normalizeAngle(velocityComponent->accelerationAngle + angle);
 
