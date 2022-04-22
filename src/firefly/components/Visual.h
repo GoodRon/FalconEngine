@@ -29,6 +29,13 @@ public:
 		return new Visual(*this);
 	}
 	
+	bool hasState(int state) {
+		if (states.find(state) == states.end()) {
+			return false;
+		}
+		return true;
+	}
+
 	struct State {
 		std::vector<std::shared_ptr<Frame>> frames;
 		bool isLooped = true;

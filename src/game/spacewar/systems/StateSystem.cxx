@@ -166,7 +166,7 @@ void StateSystem::updateState(
 }
 
 void StateSystem::switchState(
-		firefly::Entity* entity, int state) const {
+	firefly::Entity* entity, int state) const {
 
 	const auto stateComponent = entity->getComponent<firefly::State>();
 	const auto visualComponent = entity->getComponent<firefly::Visual>();
@@ -180,11 +180,17 @@ void StateSystem::switchState(
 
 	const uint64_t timepoint = SDL_GetTicks64();
 
-	visualComponent->states[stateComponent->current].isFinished = false;
+	if (visualComponent->hasState(stateComponent->current)) {
+		visualComponent->states[stateComponent->current].isFinished = false;
+	}
+	
 	visualComponent->currentState = state;
 	visualComponent->timepoint = timepoint;
 	visualComponent->frameIndex = 0;
-	visualComponent->states[visualComponent->currentState].isFinished = false;
+
+	if (visualComponent->hasState(state)) {
+		visualComponent->states[state].isFinished = false;
+	}
 
 	stateComponent->previous = stateComponent->current;
 	stateComponent->current = state;
