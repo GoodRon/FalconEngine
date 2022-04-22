@@ -42,12 +42,10 @@ namespace spacewar {
 		_keyCodeLeft(SDLK_a),
 		_keyCodeDown(SDLK_s),
 		_keyCodeRight(SDLK_d),
-		_keyCodeAction(SDLK_SPACE),
 		_isUpPressed(false),
 		_isLeftPressed(false),
 		_isDownPressed(false),
 		_isRightPressed(false),
-		_isActionPressed(false),
 		_player(nullptr) {
 
 		addRequiredComponent(firefly::Player::ComponentName);
@@ -61,18 +59,16 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::setKeyCodes(int keyUp, int keyLeft, 
-		int keyDown, int keyRight, int keyAction) {
+		int keyDown, int keyRight) {
 		_keyCodeUp = keyUp;
 		_keyCodeLeft = keyLeft;
 		_keyCodeDown = keyDown;
 		_keyCodeRight = keyRight;
-		_keyCodeAction = keyAction;
 
 		_isUpPressed = false;
 		_isLeftPressed = false;
 		_isDownPressed = false;
 		_isRightPressed = false;
-		_isActionPressed = false;
 	}
 
 	void PlayerControlSystem::onUpdate() {
@@ -80,7 +76,6 @@ namespace spacewar {
 		onLeftHold();
 		onDownHold();
 		onRightHold();
-		onActionHold();
 	}
 
 	bool PlayerControlSystem::onEvent(
@@ -159,11 +154,6 @@ namespace spacewar {
 				onRightPressed(true);
 				return true;
 			}
-
-			if (_keyCodeAction == keyCode) {
-				onActionPressed(true);
-				return true;
-			}
 			break;
 
 		case SDL_KEYUP:
@@ -185,11 +175,6 @@ namespace spacewar {
 
 			if (_keyCodeRight == keyCode) {
 				onRightPressed(false);
-				return true;
-			}
-
-			if (_keyCodeAction == keyCode) {
-				onActionPressed(false);
 				return true;
 			}
 			break;
@@ -215,58 +200,13 @@ namespace spacewar {
 	void PlayerControlSystem::onDownPressed(bool isPressed) {
 		_isDownPressed = isPressed;
 
-		if (!_isDownPressed) {
-			return;
-		}
-
-		if (!_player) {
-			return;
-		}
-
-		const auto stateComponent = 
-			_player->getComponent<firefly::State>();
-
-		if (stateComponent->current == stateNameDestroyed()) {
-			return;
-		}
-
-		constexpr int chanceOfMulfunction = 5;
-		if (randomInt(0, 100) <= chanceOfMulfunction) {
-			stateComponent->current = stateNameDestroyed();
-			return;
-		}
-
-		const std::string nextState = stateNameHyperspace();
-
-		if (stateComponent->current == nextState) {
-			return;
-		}
-
-		stateComponent->previous = stateComponent->current;
-		stateComponent->current = nextState;
-		stateComponent->timepoint = SDL_GetTicks64();
+		onDownHold();
 	}
 
 	void PlayerControlSystem::onRightPressed(bool isPressed) {
 		_isRightPressed = isPressed;
 
 		onRightHold();
-	}
-
-	void PlayerControlSystem::onActionPressed(bool isPressed) {
-		_isActionPressed = isPressed;
-
-		if (!_isActionPressed) {
-			return;
-		} 
-
-		const auto stateComponent =
-			_player->getComponent<firefly::State>();
-		if (stateComponent->current == stateNameDestroyed()) {
-			return;
-		}
-
-		shoot();
 	}
 
 	void PlayerControlSystem::onUpHold() {
@@ -280,6 +220,7 @@ namespace spacewar {
 
 	void PlayerControlSystem::onLeftHold() {
 		if (_isLeftPressed && _isRightPressed) {
+			hyperspace();
 			return;
 		}
 
@@ -295,11 +236,22 @@ namespace spacewar {
 	}
 
 	void PlayerControlSystem::onDownHold() {
+		if (!_isDownPressed) {
+			return;
+		}
 
+		const auto stateComponent =
+			_player->getComponent<firefly::State>();
+		if (stateComponent->current == stateNameDestroyed()) {
+			return;
+		}
+
+		shoot();
 	}
 
 	void PlayerControlSystem::onRightHold() {
 		if (_isLeftPressed && _isRightPressed) {
+			hyperspace();
 			return;
 		}
 
@@ -312,14 +264,6 @@ namespace spacewar {
 			onLeftHold();
 			return;
 		}
-	}
-
-	void PlayerControlSystem::onActionHold() {
-		if (!_isActionPressed) {
-			return;
-		}
-
-		shoot();
 	}
 
 	void PlayerControlSystem::setAcceleration(double acceleration) const {
@@ -390,6 +334,36 @@ namespace spacewar {
 		move(position, 36, playerPosition->angle);
 
 		entityManager->addEntity(projectile);
+	}
+
+	void PlayerControlSystem::hyperspace() const {
+		if (!_player) {
+			return;
+		}
+
+		const auto stateComponent = 
+			_player->getComponent<firefly::State>();
+
+		if (stateComponent->current == stateNameDestroyed() ||
+			stateComponent->current == stateNameHyperspace()) {
+			return;
+		}
+
+		constexpr int chanceOfMulfunction = 5;
+		if (randomInt(0, 100) <= chanceOfMulfunction) {
+			stateComponent->current = stateNameDestroyed();
+			return;
+		}
+
+		const std::string nextState = stateNameHyperspace();
+
+		if (stateComponent->current == nextState) {
+			return;
+		}
+
+		stateComponent->previous = stateComponent->current;
+		stateComponent->current = nextState;
+		stateComponent->timepoint = SDL_GetTicks64();
 	}
 
 	void PlayerControlSystem::rotate(double angle) const {
