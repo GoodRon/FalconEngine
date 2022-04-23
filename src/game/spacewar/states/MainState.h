@@ -34,13 +34,8 @@ public:
 		const std::shared_ptr<firefly::IEvent>& event) override;
 
 private:
-	void buildObjects();
-	void destroyObjects();
-	void setObjectsActive(bool isActive);
-
-	void buildSystems();
-	void destroySystems();
-	void setSystemsActive(bool isActive);
+	void buildObjects() override;
+	void buildSystems() override;
 
 private:
 	std::forward_list<firefly::EntityID> _objectIds; 

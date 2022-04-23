@@ -49,14 +49,9 @@ MainState::MainState(firefly::Engine* engine):
 	firefly::IGameState(engine, GameState::Main),
 	_systemNames(),
 	_objectIds() {
-
-	buildObjects();
-	buildSystems();
 }
 
 MainState::~MainState() {
-	destroySystems();
-	destroyObjects();
 }
 
 void MainState::onEnter() {
@@ -92,6 +87,8 @@ bool MainState::onEvent(
 		return true;
 	}
 
+	// TODO write it
+
 	return false;
 }
 
@@ -100,9 +97,11 @@ void MainState::buildObjects() {
 	const auto entityManager = engine->getEntityManager();
 	const auto prototypes = engine->getEntityPrototypes();
 
-	std::forward_list<std::string> entityNames{
+	// TODO read form a config
+	const std::forward_list<std::string> entityNames{
 		"Player_1", "Player_2", "Star", "Background"
 	};
+	std::forward_list<firefly::EntityID> ids;
 
 	std::shared_ptr<firefly::Entity> entity;
 	for (auto& name: entityNames) {
@@ -112,7 +111,7 @@ void MainState::buildObjects() {
 		}
 
 		entity->setActive(false);
-		_objectIds.push_front(entity->getId());
+		ids.push_front(entity->getId());
 
 		if (name == "Player_1") {
 			setControls(entity.get(), SDLK_w, SDLK_s,
@@ -126,34 +125,15 @@ void MainState::buildObjects() {
 
 		entityManager->addEntity(std::move(entity));
 	}
-}
 
-void MainState::destroyObjects() {
-	const auto engine = getEngine();
-	const auto entityManager = engine->getEntityManager();
-
-	for (auto& id: _objectIds) {
-		entityManager->removeEntity(id);
-	}
-	_objectIds.clear();
-}
-
-void MainState::setObjectsActive(bool isActive) {
-	const auto engine = getEngine();
-	const auto entityManager = engine->getEntityManager();
-
-	std::shared_ptr<firefly::Entity> entity;
-	for (auto& id: _objectIds) {
-		entity = std::move(entityManager->getEntity(id));
-		entity->setActive(isActive);
-	}
+	setObjectIds(std::move(ids));
 }
 
 void MainState::buildSystems() {
-	// TODO make a loop?
 	const auto engine = getEngine();
 	const auto systemManager = engine->getSystemManager();
 
+	// TODO read form a config
 	std::forward_list<std::string> systemNames{
 		CollisionSystem::Name,
 		GravitationalSystem::Name,
@@ -171,29 +151,8 @@ void MainState::buildSystems() {
 		_systemNames.push_front(name);
 		systemManager->addSystem(std::move(system));
 	}
-}
 
-void MainState::destroySystems() {
-	const auto engine = getEngine();
-	const auto systemManager = engine->getSystemManager();
-
-	for (auto& systemName: _systemNames) {
-		systemManager->removeSystem(systemName);
-	}
-	_systemNames.clear();
-}
-
-void MainState::setSystemsActive(bool isActive) {
-	const auto engine = getEngine();
-	const auto systemManager = engine->getSystemManager();
-
-	std::shared_ptr<firefly::ISystem> sys;
-	for (auto& systemName: _systemNames) {
-		sys = std::move(systemManager->getSystem(systemName));
-		if (sys) {
-			sys->setActive(isActive);
-		}
-	}
+	setSystemNames(std::move(systemNames));
 }
 
 }

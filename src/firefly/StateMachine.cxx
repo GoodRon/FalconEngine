@@ -40,6 +40,7 @@ bool StateMachine::switchState(int stateId) {
 	}
 
 	_currentStateId = stateId;
+	_states[_currentStateId]->init();
 	_states[_currentStateId]->onEnter();
 	return true;
 }
