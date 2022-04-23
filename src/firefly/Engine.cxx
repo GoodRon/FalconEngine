@@ -36,15 +36,15 @@ Engine::Engine(int width, int height):
 		throw EngineException(SDL_GetError());
 	}
 
-	_systemManager.reset(new SystemManager);
 	_stateMachine.reset(new StateMachine);
 
-	_eventManager.reset(new EventManager(_stateMachine.get(), 
-		_systemManager.get()));
+	_eventManager.reset(new EventManager(_stateMachine.get()));
 
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
 	_entityManager.reset(new EntityManager(_eventManager.get()));
+	_systemManager.reset(new SystemManager(_eventManager.get()));
+	
 	_entityPrototypes.reset(new EntityPrototypes);
 
 	_renderingSystem.reset(

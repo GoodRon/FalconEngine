@@ -1,10 +1,16 @@
 #include "SystemManager.h"
 
 #include "systems/ISystem.h"
+#include "EventManager.h"
+#include "StateMachine.h"
+
+#include "events/SystemEvent.h"
 
 namespace firefly {
 
-SystemManager::SystemManager():
+SystemManager::SystemManager(
+	EventManager* eventManager):
+	_eventManager(eventManager),
 	_systems() {
 }
 
@@ -21,6 +27,10 @@ bool SystemManager::addSystem(const std::shared_ptr<ISystem>& system) {
 		return false;
 	}
 	_systems[name] = system;
+
+	std::shared_ptr<IEvent> event(new SystemEvent(
+		name));
+	_eventManager->registerEvent(std::move(event));
 	return true;
 }
 
@@ -28,6 +38,11 @@ void SystemManager::removeSystem(const std::string& name) {
 	if (hasSystem(name)) {
 		return;
 	}
+
+	std::shared_ptr<IEvent> event(new SystemEvent(
+		name, true));
+	_eventManager->registerEvent(std::move(event));
+
 	_systems.erase(name);
 }
 
@@ -47,7 +62,8 @@ SystemManager::getSystem(const std::string& name) {
 }
 
 bool SystemManager::processEvent(
-		const std::shared_ptr<IEvent>& event) {
+	const std::shared_ptr<IEvent>& event) {
+
 	for (auto& sys: _systems) {
 		if (!sys.second->isActive()) {
 			continue;

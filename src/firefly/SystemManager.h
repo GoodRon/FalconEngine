@@ -17,10 +17,12 @@ namespace firefly {
 class ISystem;
 class IEvent;
 class Entity;
+class EventManager;
 
 class SystemManager {
 public:
-	SystemManager();
+	SystemManager(
+		EventManager* eventManager);
 	~SystemManager();
 
 	SystemManager(const SystemManager&) = delete;
@@ -38,6 +40,7 @@ public:
 	void clear();
 
 private:
+	EventManager* const _eventManager;
 	std::unordered_map<std::string, std::shared_ptr<ISystem>> _systems;
 };
 

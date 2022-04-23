@@ -8,10 +8,8 @@
 namespace firefly {
 
 EventManager::EventManager(
-	StateMachine* stateMachine,
-	SystemManager* systemManager):
+	StateMachine* stateMachine):
 	_stateMachine(stateMachine),
-	_systemManager(systemManager),
 	_hasNewEvents(false),
 	_queueMutex(),
 	_events() {
@@ -47,13 +45,8 @@ void EventManager::processEvents() {
 	_hasNewEvents = false;
 	_queueMutex.unlock();
 
-	bool isHandled = false;
 	while (!events.empty()) {
-		isHandled = _stateMachine->processEvent(events.front());
-
-		if (!isHandled) {
-			isHandled = _systemManager->processEvent(events.front());
-		}
+		_stateMachine->processEvent(events.front());
 		events.pop();
 	}
 }

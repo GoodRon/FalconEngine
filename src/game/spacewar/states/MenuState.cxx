@@ -71,10 +71,10 @@ void MenuState::buildObjects() {
 	const auto prototypes = engine->getEntityPrototypes();
 
 	// TODO read form a config
-	const std::forward_list<std::string> entityNames{
+	const std::unordered_set<std::string> entityNames{
 		"Logo"
 	};
-	std::forward_list<firefly::EntityID> ids;
+	std::unordered_set<firefly::EntityID> ids;
 
 	std::shared_ptr<firefly::Entity> entity;
 	for (auto& name: entityNames) {
@@ -84,7 +84,7 @@ void MenuState::buildObjects() {
 		}
 
 		entity->setActive(false);
-		ids.push_front(entity->getId());
+		ids.insert(entity->getId());
 
 		entityManager->addEntity(std::move(entity));
 	}

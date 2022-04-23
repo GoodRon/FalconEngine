@@ -4,7 +4,10 @@
 #include "Entity.h"
 #include "EntityManager.h"
 #include "SystemManager.h"
+
 #include "systems/ISystem.h"
+#include "events/EntityEvent.h"
+#include "events/SystemEvent.h"
 
 namespace firefly {
 
@@ -47,6 +50,64 @@ void IGameState::onEnter() {
 void IGameState::onExit() {
 }
 
+bool IGameState::processEvent(
+	const std::shared_ptr<IEvent>& event) {
+
+	if (!event) {
+		return false;
+	}
+
+	switch (event->getType()) {
+	case EventType::Entity: {
+		auto entityEvent = static_cast<EntityEvent*>(event.get());
+		if (!entityEvent) {
+			break;
+		}
+
+		auto entity = entityEvent->getEntity();
+		if (!entity) {
+			break;
+		}
+
+		if (entityEvent->isRemoved()) {
+			_objectIds.erase(entity->getId());
+		} else {
+			_objectIds.insert(entity->getId());
+		}
+		
+	} break;
+
+	case EventType::System: {
+		auto systemEvent = static_cast<SystemEvent*>(event.get());
+		if (!systemEvent) {
+			break;
+		}
+
+		if (systemEvent->isRemoved()) {
+			_systemNames.erase(systemEvent->getSystemName());
+			break;
+		}
+		
+		if (systemEvent->isRemoved()) {
+			_systemNames.erase(systemEvent->getSystemName());
+		} else {
+			_systemNames.insert(systemEvent->getSystemName());
+		}
+		
+	} break;
+
+	default:
+		break;
+	}
+	
+	if (onEvent(event)) {
+		return true;
+	}
+
+	const auto systemManager = getEngine()->getSystemManager();
+	return systemManager->processEvent(event);
+}
+
 bool IGameState::onEvent(
 	const std::shared_ptr<IEvent>& event) {
 	return false;
@@ -60,12 +121,8 @@ void IGameState::buildObjects() {
 }
 
 void IGameState::setObjectIds(
-	std::forward_list<EntityID>&& objectIds) {
-	if (!_objectIds.empty()) {
-		destroyObjects();
-	}
-
-	_objectIds = std::move(objectIds);
+	std::unordered_set<EntityID>&& ids) {
+	_objectIds = std::move(ids);
 }
 
 void IGameState::destroyObjects() {
@@ -82,23 +139,19 @@ void IGameState::setObjectsActive(bool isActive) const {
 	const auto engine = getEngine();
 	const auto entityManager = engine->getEntityManager();
 
-	std::shared_ptr<firefly::Entity> entity;
+	std::shared_ptr<Entity> entity;
 	for (auto& id: _objectIds) {
 		entity = std::move(entityManager->getEntity(id));
 		entity->setActive(isActive);
 	}
 }
 
-void IGameState::buildSystems() {
+void IGameState::setSystemNames(
+	std::unordered_set<std::string>&& systemNames) {
+	_systemNames = std::move(systemNames);
 }
 
-void IGameState::setSystemNames(
-	std::forward_list<std::string>&& systemNames) {
-	if (!_systemNames.empty()) {
-		destroyObjects();
-	}
-
-	_systemNames = std::move(systemNames);
+void IGameState::buildSystems() {
 }
 
 void IGameState::destroySystems() {
@@ -115,7 +168,7 @@ void IGameState::setSystemsActive(bool isActive) const {
 	const auto engine = getEngine();
 	const auto systemManager = engine->getSystemManager();
 
-	std::shared_ptr<firefly::ISystem> sys;
+	std::shared_ptr<ISystem> sys;
 	for (auto& systemName: _systemNames) {
 		sys = std::move(systemManager->getSystem(systemName));
 		if (sys) {

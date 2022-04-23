@@ -26,10 +26,9 @@ public:
 	void onEnter() override;
 	void onExit() override;
 
+private:
 	bool onEvent(
 		const std::shared_ptr<firefly::IEvent>& event) override;
-
-private:
 	void buildObjects() override;
 	void buildSystems() override;
 };

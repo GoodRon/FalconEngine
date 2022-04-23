@@ -15,6 +15,7 @@ add_library(firefly
 	IGameState.cxx
 	events/IEvent.cxx
 	events/GameStateEvent.cxx
+	events/SystemEvent.cxx
 	events/NativeEvent.cxx
 	events/EntityEvent.cxx
 	events/UpdateEvent.cxx

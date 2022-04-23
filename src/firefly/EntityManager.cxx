@@ -8,11 +8,12 @@
 #include "Entity.h"
 #include "EventManager.h"
 
-#include "events\EntityEvent.h"
+#include "events/EntityEvent.h"
 
 namespace firefly {
 
-EntityManager::EntityManager(EventManager* eventManager):
+EntityManager::EntityManager(
+	EventManager* eventManager):
 	_eventManager(eventManager) {
 }
 
@@ -31,9 +32,10 @@ bool EntityManager::addEntity(
 		return true;
 	}
 
-	_entites[id] = entity;
+	_entities[id] = entity;
 
-	std::shared_ptr<IEvent> event(new EntityEvent(entity));
+	std::shared_ptr<IEvent> event(new EntityEvent(
+		entity));
 	_eventManager->registerEvent(std::move(event));
 	return true;
 }
@@ -43,14 +45,15 @@ void EntityManager::removeEntity(EntityID id) {
 		return;
 	}
 
-	std::shared_ptr<IEvent> event(new EntityEvent(_entites[id], true));
+	std::shared_ptr<IEvent> event(new EntityEvent(
+		_entities[id], true));
 	_eventManager->registerEvent(std::move(event));
 
-	_entites.erase(id);
+	_entities.erase(id);
 }
 
 bool EntityManager::hasEntity(EntityID id) const {
-	if (_entites.find(id) != _entites.end()) {
+	if (_entities.find(id) != _entities.end()) {
 		return true;
 	}
 	return false;
@@ -61,11 +64,20 @@ EntityManager::getEntity(EntityID id) {
 	if (!hasEntity(id)) {
 		return nullptr;
 	}
-	return _entites[id];
+	return _entities[id];
+}
+
+std::forward_list<EntityID> 
+EntityManager::getIds() const {
+	std::forward_list<EntityID> ids;
+	for (auto& entity: _entities) {
+		ids.push_front(entity.first);
+	}
+	return ids;
 }
 
 void EntityManager::clear() {
-	_entites.clear();
+	_entities.clear();
 }
 
 }

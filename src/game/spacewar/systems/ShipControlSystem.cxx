@@ -20,8 +20,6 @@
 #include <firefly/components/Lifetime.h>
 #include <firefly/components/ShipControls.h>
 
-#include <firefly/events/GameStateEvent.h>
-
 #include "ObjectStates.h"
 #include "misc/VelocityHelpers.h"
 
@@ -358,10 +356,6 @@ namespace spacewar {
 		std::shared_ptr<firefly::IEvent> event(new firefly::StateEvent(
 			entity->getId(), nextState));
 					
-		eventManager->registerEvent(std::move(event));
-
-		event.reset(new firefly::GameStateEvent(
-			0));
 		eventManager->registerEvent(std::move(event));
 	}
 }

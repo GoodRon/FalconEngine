@@ -20,8 +20,7 @@ class StateMachine;
 class EventManager {
 public:
 	EventManager(
-		StateMachine* stateMachine,
-		SystemManager* systemManager);
+		StateMachine* stateMachine);
 	~EventManager();
 
 	EventManager(const EventManager&) = delete;
@@ -33,7 +32,6 @@ public:
 
 private:
 	StateMachine* const _stateMachine;
-	SystemManager* const _systemManager;
 	std::atomic<bool> _hasNewEvents;
 	std::mutex _queueMutex;
 	std::queue<std::shared_ptr<IEvent>> _events;

@@ -8,6 +8,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <forward_list>
 #include <memory>
 
 #include "Types.h"
@@ -19,7 +20,8 @@ class EventManager;
 
 class EntityManager {
 public:
-	EntityManager(EventManager* eventManager);
+	EntityManager(
+		EventManager* eventManager);
 	~EntityManager();
 
 	EntityManager(const EntityManager&) = delete;
@@ -31,11 +33,13 @@ public:
 	bool hasEntity(EntityID id) const;
 	std::shared_ptr<Entity> getEntity(EntityID id);
 
+	std::forward_list<EntityID> getIds() const;
+
 	void clear();
 
 private:
 	EventManager* const _eventManager;
-	std::unordered_map<EntityID, std::shared_ptr<Entity>> _entites;
+	std::unordered_map<EntityID, std::shared_ptr<Entity>> _entities;
 };
 
 }

@@ -8,7 +8,7 @@
 
 #include <memory>
 #include <string>
-#include <forward_list>
+#include <unordered_set>
 
 #include "Types.h"
 
@@ -33,7 +33,7 @@ public:
 	virtual void onEnter();
 	virtual void onExit();
 
-	virtual bool onEvent(
+	bool processEvent(
 		const std::shared_ptr<IEvent>& event);
 
 protected:
@@ -41,22 +41,26 @@ protected:
 
 	virtual void buildObjects();
 	void setObjectIds(
-		std::forward_list<EntityID>&& objectIds);
+		std::unordered_set<EntityID>&& ids);
 	void destroyObjects();
 	void setObjectsActive(bool isActive) const;
 
 	virtual void buildSystems();
 	void setSystemNames(
-		std::forward_list<std::string>&& systemNames);
+		std::unordered_set<std::string>&& systemNames);
 	void destroySystems();
 	void setSystemsActive(bool isActive) const;
+
+private:
+	virtual bool onEvent(
+		const std::shared_ptr<IEvent>& event);
 
 private:
 	Engine* const _engine;
 	const int _id;
 	bool _isInit;
-	std::forward_list<firefly::EntityID> _objectIds; 
-	std::forward_list<std::string> _systemNames;
+	std::unordered_set<EntityID> _objectIds; 
+	std::unordered_set<std::string> _systemNames;
 };
 
 }

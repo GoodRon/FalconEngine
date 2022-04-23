@@ -26,6 +26,8 @@ public:
 
 	bool switchState(int stateId);
 
+	int currentState() const;
+
 	void clearStates();
 
 	bool processEvent(

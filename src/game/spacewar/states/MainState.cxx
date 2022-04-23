@@ -95,10 +95,10 @@ void MainState::buildObjects() {
 	const auto prototypes = engine->getEntityPrototypes();
 
 	// TODO read form a config
-	const std::forward_list<std::string> entityNames{
+	const std::unordered_set<std::string> entityNames{
 		"Player_1", "Player_2", "Star", "Background"
 	};
-	std::forward_list<firefly::EntityID> ids;
+	std::unordered_set<firefly::EntityID> ids;
 
 	std::shared_ptr<firefly::Entity> entity;
 	for (auto& name: entityNames) {
@@ -108,7 +108,7 @@ void MainState::buildObjects() {
 		}
 
 		entity->setActive(false);
-		ids.push_front(entity->getId());
+		ids.insert(entity->getId());
 
 		if (name == "Player_1") {
 			setControls(entity.get(), SDLK_w, SDLK_s,
@@ -131,7 +131,7 @@ void MainState::buildSystems() {
 	const auto systemManager = engine->getSystemManager();
 
 	// TODO read form a config
-	std::forward_list<std::string> systemNames{
+	std::unordered_set<std::string> systemNames{
 		CollisionSystem::Name,
 		GravitationalSystem::Name,
 		LifetimeSystem::Name,

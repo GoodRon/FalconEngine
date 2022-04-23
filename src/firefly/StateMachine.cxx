@@ -47,6 +47,10 @@ bool StateMachine::switchState(int stateId) {
 	return true;
 }
 
+int StateMachine::currentState() const {
+	return _currentStateId;
+}
+
 void StateMachine::clearStates() {
 	_currentStateId = -1;
 	_states.clear();
@@ -77,11 +81,11 @@ bool StateMachine::processEvent(
 	default:
 		break;
 	}
-
+	
 	if (_currentStateId < 0) {
 		return false;
 	}
-	return _states[_currentStateId]->onEvent(event);
+	return _states[_currentStateId]->processEvent(event);
 }
 
 }
