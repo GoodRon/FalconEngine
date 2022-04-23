@@ -3,6 +3,7 @@
 #include "GameStates.h"
 
 #include <firefly/Engine.h>
+#include <firefly/Renderer.h>
 #include <firefly/EntityPrototypes.h>
 #include <firefly/EntityManager.h>
 #include <firefly/SystemManager.h>
@@ -11,6 +12,7 @@
 #include <firefly/systems/ISystem.h>
 #include <firefly/events/NativeEvent.h>
 #include <firefly/components/ShipControls.h>
+#include <firefly/components/Position.h>
 
 #include "SystemBuilder.h"
 
@@ -43,6 +45,23 @@ static void setControls(firefly::Entity* entity,
 	controls->keyCodeDown = keyCodeDown;
 	controls->keyCodeLeft = keyCodeLeft;
 	controls->keyCodeRight = keyCodeRight;
+}
+
+static void setPosition(firefly::Entity* entity,
+	double x, double y) {
+
+	if (!entity) {
+		return;
+	}
+
+	const auto position = 
+		entity->getComponent<firefly::Position>();
+	if (!position) {
+		return;
+	}
+
+	position->x = x;
+	position->y = y;
 }
 
 MainState::MainState(firefly::Engine* engine):
@@ -91,6 +110,8 @@ bool MainState::onEvent(
 
 void MainState::buildObjects() {
 	const auto engine = getEngine();
+	const auto renderer = engine->getRenderer();
+	const auto viewport = renderer->getViewport();
 	const auto entityManager = engine->getEntityManager();
 	const auto prototypes = engine->getEntityPrototypes();
 
@@ -99,6 +120,9 @@ void MainState::buildObjects() {
 		"Player_1", "Player_2", "Star", "Background"
 	};
 	std::unordered_set<firefly::EntityID> ids;
+
+	const double spawnX = 140.0;
+	const double spawnY = 140.0;
 
 	std::shared_ptr<firefly::Entity> entity;
 	for (auto& name: entityNames) {
@@ -113,11 +137,22 @@ void MainState::buildObjects() {
 		if (name == "Player_1") {
 			setControls(entity.get(), SDLK_w, SDLK_s,
 				SDLK_a, SDLK_d);
+
+			setPosition(entity.get(), 
+				spawnX, spawnY);
 		}
 
 		if (name == "Player_2") {
 			setControls(entity.get(), SDLK_KP_8, SDLK_KP_5,
 				SDLK_KP_4, SDLK_KP_6);
+
+			setPosition(entity.get(), 
+				viewport.w - spawnX, viewport.h - spawnY);
+		}
+
+		if (name == "Star") {
+			setPosition(entity.get(), 
+				viewport.w / 2.0, viewport.h / 2.0);
 		}
 
 		entityManager->addEntity(std::move(entity));

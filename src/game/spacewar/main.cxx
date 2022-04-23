@@ -12,8 +12,8 @@
 
 int main(int, char**) {
 	// TODO read from a config
-	const int width = 1500;
-	const int height = 900;
+	const int width = 1700;
+	const int height = 1000;
 	const std::string header("Space War!");
 	const std::string icon("resources/icon.png");
 
