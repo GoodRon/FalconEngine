@@ -2,8 +2,11 @@
 
 namespace firefly {
 
-IGameState::IGameState(Engine* engine):
-	_engine(engine) {
+IGameState::IGameState(
+	Engine* engine, 
+	int id):
+	_engine(engine),
+	_id(id) {
 }
 
 IGameState::~IGameState() {
@@ -13,6 +16,10 @@ void IGameState::onEnter() {
 }
 
 void IGameState::onExit() {
+}
+
+int IGameState::getId() const {
+	return _id;
 }
 
 bool IGameState::onEvent(

@@ -15,11 +15,13 @@ class Engine;
 
 class IGameState {
 public:
-	IGameState(Engine* engine);
+	IGameState(Engine* engine, int id);
 	virtual ~IGameState() = 0;
 
 	virtual void onEnter();
 	virtual void onExit();
+
+	int getId() const;
 
 	virtual bool onEvent(
 		const std::shared_ptr<IEvent>& event);
@@ -29,6 +31,7 @@ protected:
 
 private:
 	Engine* const _engine;
+	const int _id;
 };
 
 }

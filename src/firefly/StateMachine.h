@@ -22,8 +22,7 @@ public:
 	StateMachine(const StateMachine&) = delete;
 	StateMachine& operator=(const StateMachine&) = delete;
 
-	bool pushState(
-		int stateId, std::unique_ptr<IGameState>&& state);
+	bool pushState(std::unique_ptr<IGameState>&& state);
 
 	bool switchState(int stateId);
 

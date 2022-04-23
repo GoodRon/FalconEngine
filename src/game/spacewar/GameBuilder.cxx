@@ -8,8 +8,10 @@
 #include <firefly/ResourceManager.h>
 #include <firefly/EntityPrototypes.h>
 #include <firefly/EntityManager.h>
+#include <firefly/StateMachine.h>
 
 #include "EntityBuilder.h"
+
 #include "systems/PlayerControlSystem.h"
 #include "systems/PositioningSystem.h"
 #include "systems/GravitationalSystem.h"
@@ -18,6 +20,9 @@
 #include "systems/CollisionSystem.h"
 #include "systems/VelocitySystem.h"
 #include "systems/RespawnSystem.h"
+
+#include "states/GameStates.h"
+#include "states/MainState.h"
 
 namespace spacewar {
 
@@ -54,6 +59,10 @@ public:
 		}
 
 		if (!buildGameObjects()) {
+			return _isBuilt;
+		}
+
+		if (!buildGameStates()) {
 			return _isBuilt;
 		}
 
@@ -107,36 +116,45 @@ private:
 	}
 
 	bool buildGameObjects() const {
-		auto entityManager = _engine->getEntityManager();
-		if (!entityManager) {
-			return false;
-		}
-
-		auto entityPrototypes = _engine->getEntityPrototypes();
-		if (!entityPrototypes) {
-			return false;
-		}
+		const auto entityPrototypes = _engine->getEntityPrototypes();
 
 		// TODO while on a json list
 
-		std::shared_ptr<firefly::Entity> entity;
 		EntityBuilder builder(_engine);
+		std::shared_ptr<firefly::Entity> entity;
 
 		entity = builder.buildEntity("resources/background.json");
-		entityManager->addEntity(std::move(entity));
+		entityPrototypes->registerPrototype(entity->getName(), 
+			std::move(entity));
 
 		entity = builder.buildEntity("resources/player1.json");
-		entityManager->addEntity(std::move(entity));
+		entityPrototypes->registerPrototype(entity->getName(), 
+			std::move(entity));
 
 		entity = builder.buildEntity("resources/player2.json");
-		entityManager->addEntity(std::move(entity));
+		entityPrototypes->registerPrototype(entity->getName(), 
+			std::move(entity));
 
 		entity = builder.buildEntity("resources/star.json");
-		entityManager->addEntity(std::move(entity));
+		entityPrototypes->registerPrototype(entity->getName(), 
+			std::move(entity));
 
 		entity = builder.buildEntity("resources/rocket.json");
 		entityPrototypes->registerPrototype(entity->getName(), 
 			std::move(entity));
+
+		return true;
+	}
+
+	bool buildGameStates() const {
+
+		const auto stateMachine = _engine->getStateMachine();
+		std::unique_ptr<firefly::IGameState> state;
+
+		state.reset(new MainState(_engine));
+		stateMachine->pushState(std::move(state));
+
+		stateMachine->switchState(GameState::Main);
 
 		return true;
 	}

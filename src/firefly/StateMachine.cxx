@@ -15,13 +15,18 @@ StateMachine::~StateMachine() {
 	}
 }
 
-bool StateMachine::pushState(int stateId, 
+bool StateMachine::pushState(
 	std::unique_ptr<IGameState>&& state) {
 
-	if (!state || hasState(stateId)) {
+	if (!state) {
 		return false;
 	}
-	_states[stateId] = std::move(state);
+
+	const int id = state->getId();
+	if (hasState(id)) {
+		return false;
+	}
+	_states[id] = std::move(state);
 }
 
 bool StateMachine::switchState(int stateId) {

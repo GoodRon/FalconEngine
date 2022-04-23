@@ -11,6 +11,7 @@ add_executable(spacewar WIN32
 	EntityBuilder.cxx
 	misc/Quadtree.cxx
 	misc/VelocityHelpers.cxx
+	states/MainState.cxx
 	systems/PlayerControlSystem.cxx
 	systems/RespawnSystem.cxx
 	systems/PositioningSystem.cxx
