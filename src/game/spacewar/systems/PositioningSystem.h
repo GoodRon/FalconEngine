@@ -17,6 +17,8 @@ namespace spacewar {
 
 class PositioningSystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "PositioningSystem";
+	
 	PositioningSystem(firefly::Engine* engine);
 	~PositioningSystem() override;
 

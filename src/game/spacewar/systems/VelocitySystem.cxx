@@ -10,7 +10,7 @@
 namespace spacewar {
  
 VelocitySystem::VelocitySystem(firefly::Engine* engine):
-	ISystem("VelocitySystem", engine) {
+	ISystem(VelocitySystem::Name, engine) {
 
 	addRequiredComponent(firefly::Velocity::ComponentName);
 }

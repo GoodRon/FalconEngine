@@ -18,6 +18,8 @@ namespace spacewar {
 
 class RespawnSystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "RespawnSystem";
+	
 	RespawnSystem(firefly::Engine* engine);
 	~RespawnSystem() override;
 

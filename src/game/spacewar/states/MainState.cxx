@@ -7,7 +7,12 @@
 #include <firefly/EntityManager.h>
 #include <firefly/SystemManager.h>
 #include <firefly/Entity.h>
+
+#include <firefly/systems/ISystem.h>
 #include <firefly/events/NativeEvent.h>
+#include <firefly/components/ShipControls.h>
+
+#include "SystemBuilder.h"
 
 #include "systems/ShipControlSystem.h"
 #include "systems/PositioningSystem.h"
@@ -17,9 +22,6 @@
 #include "systems/CollisionSystem.h"
 #include "systems/VelocitySystem.h"
 #include "systems/RespawnSystem.h"
-
-#include <firefly/components/ShipControls.h>
-#include <firefly/events/NativeEvent.h>
 
 namespace spacewar {
 
@@ -152,50 +154,23 @@ void MainState::buildSystems() {
 	const auto engine = getEngine();
 	const auto systemManager = engine->getSystemManager();
 
-	std::shared_ptr<ShipControlSystem> playerControl;
+	std::forward_list<std::string> systemNames{
+		CollisionSystem::Name,
+		GravitationalSystem::Name,
+		LifetimeSystem::Name,
+		PositioningSystem::Name,
+		RespawnSystem::Name,
+		ShipControlSystem::Name,
+		StateSystem::Name,
+		VelocitySystem::Name
+	};
 
-	playerControl.reset(new ShipControlSystem(engine));
-	_systemNames.push_front(playerControl->getName());
-
-	//playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d);
-	systemManager->addSystem(std::move(playerControl));
-
-	playerControl.reset(new ShipControlSystem(engine));
-	_systemNames.push_front(playerControl->getName());
-
-	//playerControl->setKeyCodes(SDLK_KP_8, SDLK_KP_4, 
-	//	SDLK_KP_5, SDLK_KP_6);
-	systemManager->addSystem(std::move(playerControl));
-
-	std::shared_ptr<firefly::ISystem> systemPtr;
-
-	systemPtr.reset(new VelocitySystem(engine));
-	_systemNames.push_front(systemPtr->getName());
-	systemManager->addSystem(std::move(systemPtr));
-
-	systemPtr.reset(new GravitationalSystem(engine));
-	_systemNames.push_front(systemPtr->getName());
-	systemManager->addSystem(std::move(systemPtr));
-
-	systemPtr.reset(new PositioningSystem(engine));
-	_systemNames.push_front(systemPtr->getName());
-	systemManager->addSystem(std::move(systemPtr));
-
-	systemPtr.reset(new StateSystem(engine));
-	_systemNames.push_front(systemPtr->getName());
-	systemManager->addSystem(std::move(systemPtr));
-		
-	systemPtr.reset(new LifetimeSystem(engine));
-	_systemNames.push_front(systemPtr->getName());
-	systemManager->addSystem(std::move(systemPtr));
-
-	systemPtr.reset(new CollisionSystem(engine));
-	_systemNames.push_front(systemPtr->getName());
-	systemManager->addSystem(std::move(systemPtr));
-
-	systemPtr.reset(new RespawnSystem(engine));
-	_systemNames.push_front(systemPtr->getName());
-	systemManager->addSystem(std::move(systemPtr));
+	std::shared_ptr<firefly::ISystem> system;
+	for (auto& name: systemNames) {
+		system = std::move(buidSystem(name, engine));
+		_systemNames.push_front(name);
+		systemManager->addSystem(std::move(system));
+	}
 }
 
 void MainState::destroySystems() {

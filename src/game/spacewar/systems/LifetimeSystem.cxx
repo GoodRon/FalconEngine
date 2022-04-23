@@ -12,7 +12,7 @@
 namespace spacewar {
 
 LifetimeSystem::LifetimeSystem(firefly::Engine* engine):
-	firefly::ISystem("LifetimeSystem", engine),
+	firefly::ISystem(LifetimeSystem::Name, engine),
 	_entityManager(engine->getEntityManager()) {
 
 	addRequiredComponent(firefly::Lifetime::ComponentName);

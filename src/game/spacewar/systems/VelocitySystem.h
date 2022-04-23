@@ -16,6 +16,8 @@ namespace spacewar {
 
 class VelocitySystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "VelocitySystem";
+	
 	VelocitySystem(firefly::Engine* engine);
 	~VelocitySystem() override;
 

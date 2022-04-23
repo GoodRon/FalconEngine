@@ -64,7 +64,7 @@ static void setEntityReactiveness(
 }
 
 StateSystem::StateSystem(firefly::Engine* engine):
-	firefly::ISystem("StateSystem", engine) {
+	firefly::ISystem(StateSystem::Name, engine) {
 
 	addRequiredComponent(firefly::State::ComponentName);
 	addRequiredComponent(firefly::Position::ComponentName);

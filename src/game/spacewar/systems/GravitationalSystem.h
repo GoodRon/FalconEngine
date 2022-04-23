@@ -19,6 +19,8 @@ namespace spacewar {
 
 class GravitationalSystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "GravitationalSystem";
+
 	GravitationalSystem(firefly::Engine* engine);
 	~GravitationalSystem() override;
 

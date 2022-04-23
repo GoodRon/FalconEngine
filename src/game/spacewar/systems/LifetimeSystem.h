@@ -18,6 +18,8 @@ namespace spacewar {
 
 class LifetimeSystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "LifetimeSystem";
+
 	LifetimeSystem(firefly::Engine* engine);
 	~LifetimeSystem() override;
 

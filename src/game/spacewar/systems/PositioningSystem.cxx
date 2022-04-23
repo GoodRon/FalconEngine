@@ -14,7 +14,7 @@
 namespace spacewar {
 
 PositioningSystem::PositioningSystem(firefly::Engine* engine):
-	firefly::ISystem("PositioningSystem", engine) {
+	firefly::ISystem(PositioningSystem::Name, engine) {
 
 	// TODO remove velocity
 	addRequiredComponent(firefly::Position::ComponentName);

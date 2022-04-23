@@ -17,6 +17,8 @@ namespace spacewar {
 
 class StateSystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "StateSystem";
+	
 	StateSystem(firefly::Engine* engine);
 	~StateSystem() override;
 

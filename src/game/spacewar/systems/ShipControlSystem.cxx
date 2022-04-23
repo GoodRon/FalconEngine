@@ -38,7 +38,7 @@ namespace spacewar {
 
 	ShipControlSystem::ShipControlSystem(
 		firefly::Engine* engine):
-		firefly::ISystem("ShipControlSystem", engine) {
+		firefly::ISystem(ShipControlSystem::Name, engine) {
 
 		addRequiredComponent(firefly::Player::ComponentName);
 		addRequiredComponent(firefly::ShipControls::ComponentName);

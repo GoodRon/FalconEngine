@@ -16,7 +16,7 @@ constexpr double pi = 3.14159265358979323846;
 constexpr double radToDegrees = 180.0 / pi;
 
 GravitationalSystem::GravitationalSystem(firefly::Engine* engine):
-	firefly::ISystem("GravitationalSystem", engine) {
+	firefly::ISystem(GravitationalSystem::Name, engine) {
 
 	addRequiredComponent(firefly::Position::ComponentName);
 	addRequiredComponent(firefly::Velocity::ComponentName);

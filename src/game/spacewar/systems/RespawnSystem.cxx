@@ -40,7 +40,7 @@ static void randomScreenPosition(
 }
 
 RespawnSystem::RespawnSystem(firefly::Engine* engine):
-	firefly::ISystem("RespawnSystem", engine),
+	firefly::ISystem(RespawnSystem::Name, engine),
 	_entityManager(engine->getEntityManager()) {
 
 	addRequiredComponent(firefly::Lives::ComponentName);

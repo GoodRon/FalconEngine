@@ -9,6 +9,7 @@ add_executable(spacewar WIN32
 	main.cxx
 	GameBuilder.cxx
 	EntityBuilder.cxx
+	SystemBuilder.cxx
 	misc/Quadtree.cxx
 	misc/VelocityHelpers.cxx
 	states/MainState.cxx

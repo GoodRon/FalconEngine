@@ -18,6 +18,8 @@ namespace spacewar {
 
 class ShipControlSystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "ShipControlSystem";
+	
 	ShipControlSystem(firefly::Engine* engine);
 	~ShipControlSystem() override;
 

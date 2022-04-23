@@ -21,6 +21,8 @@ class EntityQuadtree;
 
 class CollisionSystem final: public firefly::ISystem {
 public:
+	inline static const std::string Name = "CollisionSystem";
+
 	CollisionSystem(firefly::Engine* engine);
 	~CollisionSystem() override;
 

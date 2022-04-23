@@ -13,7 +13,7 @@
 namespace spacewar {
 
 CollisionSystem::CollisionSystem(firefly::Engine* engine):
-	firefly::ISystem("CollisionSystem", engine),
+	firefly::ISystem(CollisionSystem::Name, engine),
 	_qauadtree() {
 
 	addRequiredComponent(firefly::RoundCollidable::ComponentName);
