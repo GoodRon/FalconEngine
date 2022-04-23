@@ -19,6 +19,7 @@
 #include <firefly/components/Lifetime.h>
 #include <firefly/components/Lives.h>
 #include <firefly/components/RoundCollidable.h>
+#include <firefly/components/ShipControls.h>
 
 #include "rapidjson/document.h"
 
@@ -149,6 +150,12 @@ private:
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildLivesComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::ShipControls::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildShipControlsComponent(entity, document);
 		};
 	}
 
@@ -345,6 +352,18 @@ private:
 		component->currentLives = component->maxLives;
 
 		entity->addComponent(firefly::Lives::ComponentName, 
+			std::move(component));
+		return true;
+	}
+
+	bool buildShipControlsComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::ShipControls> component(
+			new firefly::ShipControls);
+
+		entity->addComponent(firefly::ShipControls::ComponentName, 
 			std::move(component));
 		return true;
 	}

@@ -3,8 +3,8 @@
  * All rights reserved
  */
 
-#ifndef FIREFLY_COMPONENT_CONTROL_H
-#define FIREFLY_COMPONENT_CONTROL_H
+#ifndef FIREFLY_COMPONENT_PLAYER_H
+#define FIREFLY_COMPONENT_PLAYER_H
 
 #include "IComponent.h"
 
@@ -29,4 +29,4 @@ public:
 
 }
 
-#endif // FIREFLY_COMPONENT_CONTROL_H
+#endif // FIREFLY_COMPONENT_PLAYER_H

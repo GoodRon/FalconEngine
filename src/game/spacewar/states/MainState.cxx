@@ -9,7 +9,7 @@
 #include <firefly/Entity.h>
 #include <firefly/events/NativeEvent.h>
 
-#include "systems/PlayerControlSystem.h"
+#include "systems/ShipControlSystem.h"
 #include "systems/PositioningSystem.h"
 #include "systems/GravitationalSystem.h"
 #include "systems/StateSystem.h"
@@ -18,9 +18,30 @@
 #include "systems/VelocitySystem.h"
 #include "systems/RespawnSystem.h"
 
+#include <firefly/components/ShipControls.h>
 #include <firefly/events/NativeEvent.h>
 
 namespace spacewar {
+
+static void setControls(firefly::Entity* entity,
+	int keyCodeUp, int keyCodeDown, 
+	int keyCodeLeft, int keyCodeRight) {
+
+	if (!entity) {
+		return;
+	}
+
+	const auto controls = 
+		entity->getComponent<firefly::ShipControls>();
+	if (!controls) {
+		return;
+	}
+
+	controls->keyCodeUp = keyCodeUp;
+	controls->keyCodeDown = keyCodeDown;
+	controls->keyCodeLeft = keyCodeLeft;
+	controls->keyCodeRight = keyCodeRight;
+}
 
 MainState::MainState(firefly::Engine* engine):
 	firefly::IGameState(engine, GameState::Main),
@@ -87,6 +108,16 @@ void MainState::buildObjects() {
 		entity->setActive(false);
 		_objectIds.push_front(entity->getId());
 
+		if (name == "Player_1") {
+			setControls(entity.get(), SDLK_w, SDLK_s,
+				SDLK_a, SDLK_d);
+		}
+
+		if (name == "Player_2") {
+			setControls(entity.get(), SDLK_KP_8, SDLK_KP_5,
+				SDLK_KP_4, SDLK_KP_6);
+		}
+
 		entityManager->addEntity(std::move(entity));
 	}
 }
@@ -117,19 +148,19 @@ void MainState::buildSystems() {
 	const auto engine = getEngine();
 	const auto systemManager = engine->getSystemManager();
 
-	std::shared_ptr<PlayerControlSystem> playerControl;
+	std::shared_ptr<ShipControlSystem> playerControl;
 
-	playerControl.reset(new PlayerControlSystem(engine, 1, "Player 1"));
+	playerControl.reset(new ShipControlSystem(engine));
 	_systemNames.push_front(playerControl->getName());
 
-	playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d);
+	//playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d);
 	systemManager->addSystem(std::move(playerControl));
 
-	playerControl.reset(new PlayerControlSystem(engine, 2, "Player 2"));
+	playerControl.reset(new ShipControlSystem(engine));
 	_systemNames.push_front(playerControl->getName());
 
-	playerControl->setKeyCodes(SDLK_KP_8, SDLK_KP_4, 
-		SDLK_KP_5, SDLK_KP_6);
+	//playerControl->setKeyCodes(SDLK_KP_8, SDLK_KP_4, 
+	//	SDLK_KP_5, SDLK_KP_6);
 	systemManager->addSystem(std::move(playerControl));
 
 	std::shared_ptr<firefly::ISystem> systemPtr;

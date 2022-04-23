@@ -95,6 +95,9 @@
 					"cooldownTimeMs": 300
 				}
 			]
+		},
+		{
+			"name": "ShipControls"
 		}
 	]
 }
