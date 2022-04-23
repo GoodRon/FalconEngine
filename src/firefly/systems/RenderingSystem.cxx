@@ -96,10 +96,6 @@ void RenderingSystem::onUpdate() {
 		_renderList.reserve(entities.size());
 
 		for (auto& entity: entities) {
-			if (!entity.second->isActive()) {
-				continue;
-			}
-
 			_renderList.push_back(entity.second);
 		}
 
@@ -114,6 +110,10 @@ void RenderingSystem::onUpdate() {
 	_renderer->clearViewport();
 
 	for (auto& entity: _renderList) {
+		if (!entity->isActive()) {
+			continue;
+		}
+
 		positionComponent = entity->getComponent<Position>();
 		visualComponent = entity->getComponent<Visual>();
 

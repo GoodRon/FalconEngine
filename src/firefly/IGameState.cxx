@@ -34,6 +34,7 @@ void IGameState::init() {
 
 	buildObjects();
 	buildSystems();
+	_isInit = true;
 }
 
 bool IGameState::isInit() const {

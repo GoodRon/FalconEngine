@@ -86,8 +86,6 @@ bool MainState::onEvent(
 		return true;
 	}
 
-	// TODO write it
-
 	return false;
 }
 
