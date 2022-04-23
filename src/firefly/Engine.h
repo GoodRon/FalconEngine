@@ -21,6 +21,7 @@ class EntityManager;
 class SystemManager;
 class EventManager;
 class RenderingSystem;
+class StateMachine;
 
 class Engine {
 public:
@@ -32,6 +33,9 @@ public:
 
 	void setWindowHeader(const std::string& header);
 	void setWindowIcon(const std::string& iconPath);
+
+	void pushStateMachine(
+		std::unique_ptr<StateMachine>&& stateMachine);
 
 	int run();
 	void stop();
@@ -47,6 +51,8 @@ public:
 	SystemManager* getSystemManager() const;
 	EventManager* getEventManager() const;
 
+	StateMachine* getStateMachine() const;
+
 private:
 	void onSDLEvent(const SDL_Event& event);
 
@@ -59,7 +65,8 @@ private:
 	std::unique_ptr<EntityPrototypes> _entityPrototypes;
 	std::unique_ptr<SystemManager> _systemManager;
 	std::unique_ptr<EventManager> _eventManager;
-	std::shared_ptr<firefly::RenderingSystem> _renderingSystem;
+	std::shared_ptr<RenderingSystem> _renderingSystem;
+	std::shared_ptr<StateMachine> _stateMachine;
 };
 
 }

@@ -14,6 +14,7 @@
 #include "SystemManager.h"
 #include "EventManager.h"
 #include "EntityPrototypes.h"
+#include "StateMachine.h"
 
 #include "systems/RenderingSystem.h"
 #include "events/NativeEvent.h"
@@ -33,7 +34,8 @@ Engine::Engine(int width, int height):
 	_entityPrototypes(),
 	_systemManager(),
 	_eventManager(),
-	_renderingSystem() {
+	_renderingSystem(),
+	_stateMachine() {
 
 	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		throw EngineException(SDL_GetError());
@@ -62,6 +64,11 @@ void Engine::setWindowHeader(const std::string& header) {
 
 void Engine::setWindowIcon(const std::string& iconPath) {
 	_renderer->setWindowIcon(iconPath);
+}
+
+void Engine::pushStateMachine(
+	std::unique_ptr<StateMachine>&& stateMachine) {
+	_stateMachine = std::move(stateMachine);
 }
 
 int Engine::run() {
@@ -112,6 +119,10 @@ SystemManager* Engine::getSystemManager() const {
 
 EventManager* Engine::getEventManager() const {
 	return _eventManager.get();
+}
+
+StateMachine* Engine::getStateMachine() const {
+	return _stateMachine.get();
 }
 
 void Engine::onSDLEvent(const SDL_Event& event) {
