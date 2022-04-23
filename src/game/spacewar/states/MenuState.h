@@ -6,11 +6,7 @@
 #ifndef SW_MENU_STATE_H
 #define SW_MENU_STATE_H
 
-#include <forward_list>
-#include <string>
-
 #include <firefly/IGameState.h>
-#include <firefly/Types.h>
 
 namespace firefly {
 	class IEvent;
@@ -19,7 +15,7 @@ namespace firefly {
 
 namespace spacewar {
 
-class MenuState final: public firefly::IGameState {
+class MenuState final : public firefly::IGameState {
 public:
 	MenuState(firefly::Engine* engine);
 	~MenuState() override;
@@ -34,18 +30,9 @@ public:
 		const std::shared_ptr<firefly::IEvent>& event) override;
 
 private:
-	void buildObjects();
-	void destroyObjects();
-	void setObjectsActive(bool isActive);
-
-	void buildSystems();
-	void destroySystems();
-	void setSystemsActive(bool isActive);
-
-private:
-	std::forward_list<firefly::EntityID> _objectIds; 
-	std::forward_list<std::string> _systemNames;
+	void buildObjects() override;
 };
 
+}
 
 #endif // SW_MENU_STATE_H

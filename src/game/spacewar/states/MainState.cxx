@@ -46,9 +46,7 @@ static void setControls(firefly::Entity* entity,
 }
 
 MainState::MainState(firefly::Engine* engine):
-	firefly::IGameState(engine, GameState::Main),
-	_systemNames(),
-	_objectIds() {
+	firefly::IGameState(engine, GameState::Main) {
 }
 
 MainState::~MainState() {
@@ -81,7 +79,8 @@ bool MainState::onEvent(
 			static_cast<firefly::NativeEvent*>(event.get());
 
 	const auto sdlEvent = nativeEvent->getSDLEvent();
-	if (sdlEvent.type && sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
+	if (sdlEvent.type == SDL_KEYDOWN && 
+		sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
 		// NOTE exit the game
 		getEngine()->stop();
 		return true;
@@ -148,7 +147,6 @@ void MainState::buildSystems() {
 	std::shared_ptr<firefly::ISystem> system;
 	for (auto& name: systemNames) {
 		system = std::move(buidSystem(name, engine));
-		_systemNames.push_front(name);
 		systemManager->addSystem(std::move(system));
 	}
 

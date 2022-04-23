@@ -15,6 +15,7 @@
 #include "EntityBuilder.h"
 
 #include "states/GameStates.h"
+#include "states/MenuState.h"
 #include "states/MainState.h"
 
 namespace spacewar {
@@ -66,6 +67,7 @@ private:
 
 		// TODO read from a file
 		std::forward_list<std::string> entityConfigs{
+			"resources/logo.json",
 			"resources/background.json", 
 			"resources/player1.json", 
 			"resources/player2.json", 
@@ -79,6 +81,11 @@ private:
 		for (auto& config: entityConfigs) {
 			entity = std::move(
 				builder.buildEntity(config));
+
+			if (!entity) {
+				continue;
+			}
+
 			prototypes->registerPrototype(entity->getName(), 
 				std::move(entity));
 		}
@@ -93,7 +100,10 @@ private:
 		state.reset(new MainState(_engine));
 		stateMachine->pushState(std::move(state));
 
-		stateMachine->switchState(GameState::Main);
+		state.reset(new MenuState(_engine));
+		stateMachine->pushState(std::move(state));
+
+		stateMachine->switchState(GameState::Menu);
 
 		return true;
 	}

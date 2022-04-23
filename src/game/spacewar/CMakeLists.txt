@@ -13,6 +13,7 @@ add_executable(spacewar WIN32
 	misc/Quadtree.cxx
 	misc/VelocityHelpers.cxx
 	states/MainState.cxx
+	states/MenuState.cxx
 	systems/ShipControlSystem.cxx
 	systems/RespawnSystem.cxx
 	systems/PositioningSystem.cxx

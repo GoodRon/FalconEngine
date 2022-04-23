@@ -6,11 +6,7 @@
 #ifndef SW_MAIN_STATE_H
 #define SW_MAIN_STATE_H
 
-#include <forward_list>
-#include <string>
-
 #include <firefly/IGameState.h>
-#include <firefly/Types.h>
 
 namespace firefly {
 	class IEvent;
@@ -36,10 +32,6 @@ public:
 private:
 	void buildObjects() override;
 	void buildSystems() override;
-
-private:
-	std::forward_list<firefly::EntityID> _objectIds; 
-	std::forward_list<std::string> _systemNames;
 };
 
 }
