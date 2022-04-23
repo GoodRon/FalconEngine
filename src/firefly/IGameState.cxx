@@ -142,6 +142,9 @@ void IGameState::setObjectsActive(bool isActive) const {
 	std::shared_ptr<Entity> entity;
 	for (auto& id: _objectIds) {
 		entity = std::move(entityManager->getEntity(id));
+		if (!entity) {
+			continue;
+		}
 		entity->setActive(isActive);
 	}
 }

@@ -33,7 +33,7 @@ namespace spacewar {
 	}
 
 	// TODO move to config here
-	constexpr double acceleration = 3.0;
+	constexpr double acceleration = 10.0;
 	constexpr double angleDelta = 30.0;
 
 	ShipControlSystem::ShipControlSystem(
@@ -327,7 +327,7 @@ namespace spacewar {
 
 		velocity->speedDirection = playerPosition->direction;
 		addSpeed(velocity, playerVelocity->speed, playerVelocity->speedDirection);
-		
+
 		position->direction = velocity->speedDirection;
 		position->x = playerPosition->x;
 		position->y = playerPosition->y;
