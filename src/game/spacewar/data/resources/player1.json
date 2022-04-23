@@ -72,7 +72,7 @@
 		{
 			"name": "RoundCollidable",
 			"isDestructable": true,
-			"collidableRadius": 16.0
+			"collidableRadius": 8.0
 		},
 		{
 			"name": "Gravity",

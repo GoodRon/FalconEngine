@@ -33,8 +33,11 @@ void updateSpeed(firefly::Velocity* velocity) {
 	const double speedRad = velocity->speedDirection * degreesToRad;
 	velocity->speedX = velocity->speed * sin(speedRad);
 	velocity->speedY = -velocity->speed * cos(speedRad);
+
+
 }
 
+// TODO improve this
 void addSpeed(firefly::Velocity* velocity, 
 	double speed, double direction) {
 
@@ -44,15 +47,32 @@ void addSpeed(firefly::Velocity* velocity,
 
 	updateSpeed(velocity);
 
-	const double speedRad = direction * degreesToRad;
-	const double deltaSpeedX = speed * sin(speedRad);
-	const double deltaSpeedY = -speed * cos(speedRad);
+	const double deltaSpeedRad = direction * degreesToRad;
+	const double deltaSpeedX = speed * sin(deltaSpeedRad);
+	const double deltaSpeedY = -speed * cos(deltaSpeedRad);
 
 	velocity->speedX += deltaSpeedX;
 	velocity->speedY += deltaSpeedY;
 
 	velocity->speed = sqrt(velocity->speedX * velocity->speedX +
 		velocity->speedY * velocity->speedY);
+
+	double speedRad = asin(velocity->speedX / velocity->speed);
+	if (velocity->speedY > 0.0) {
+		speedRad = pi - speedRad;
+	}
+
+	velocity->speedDirection = speedRad * radToDegrees;
+	velocity->speedDirection = (normalizeAngle(velocity->speedDirection));
+
+	if (velocity->maxSpeed < epsilon) {
+		return;
+	}
+
+	if (velocity->speed > velocity->maxSpeed) {
+		velocity->speed = velocity->maxSpeed;
+		updateSpeed(velocity);
+	}
 }
 
 void accelerate(firefly::Velocity* velocity, double acceleration,

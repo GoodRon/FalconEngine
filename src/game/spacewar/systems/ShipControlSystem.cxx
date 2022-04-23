@@ -328,14 +328,15 @@ namespace spacewar {
 
 		velocity->speedDirection = playerPosition->direction;
 		addSpeed(velocity, playerVelocity->speed, playerVelocity->speedDirection);
+		velocity->accelerationDirection = playerPosition->direction;
 
-		position->direction = velocity->speedDirection;
+		position->direction = playerPosition->direction;
 		position->x = playerPosition->x;
 		position->y = playerPosition->y;
 		lifetime->timepoint = timepoint;
 
 		// TODO improve
-		constexpr double spawnDistance = 36.0;
+		constexpr double spawnDistance = 27.0;
 		move(position, spawnDistance, playerPosition->direction);
 
 		entityManager->addEntity(projectile);

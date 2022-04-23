@@ -9,10 +9,10 @@
 			"states": [
 				{
 					"state": 0,
-					"texture": "resources/rocket.png",
+					"texture": "resources/rocket2.png",
 					"isLooped": true,
 					"frameWidth": 32,
-					"frameHeight": 55,
+					"frameHeight": 32,
 					"frameDuration": 0,
 					"frameRow": 0,
 					"frameCol": 0,
@@ -25,28 +25,28 @@
 			"x": 0.0,
 			"y": 0.0,
 			"centerX": 16.0,
-			"centerY": 27.0,
+			"centerY": 16.0,
 			"width": 32.0,
-			"height": 55.0,
-			"scale": 0.5,
+			"height": 32.0,
+			"scale": 0.6,
 			"direction": 0.0
 		},
 		{
 			"name": "Velocity",
-			"speed": 100.0,
+			"speed": 40.0,
 			"speedDirection": 0.0,
-			"acceleration": 0.0,
+			"acceleration": 20.0,
 			"accelerationDirection": 0.0,
 			"maxSpeed": 600.0
 		},
 		{
 			"name": "RoundCollidable",
 			"isDestructable": true,
-			"collidableRadius": 8.0
+			"collidableRadius": 4.0
 		},
 		{
 			"name": "Lifetime",
-			"lifetimeMs": 10000
+			"lifetimeMs": 6000
 		},
 		{
 			"name": "State",
