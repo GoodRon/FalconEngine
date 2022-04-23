@@ -3,8 +3,8 @@
  * All rights reserved
  */
 
-#ifndef SW_UNIT_BUILDER_H
-#define SW_UNIT_BUILDER_H
+#ifndef SW_ENTITY_BUILDER_H
+#define SW_ENTITY_BUILDER_H
 
 #include <memory>
 #include <string>
@@ -34,4 +34,4 @@ private:
 
 }
 
-#endif // SW_UNIT_BUILDER_H
+#endif // SW_ENTITY_BUILDER_H

@@ -37,13 +37,13 @@ MainState::~MainState() {
 }
 
 void MainState::onEnter() {
-	const bool isActive = true;
+	constexpr bool isActive = true;
 	setObjectsActive(isActive);
 	setSystemsActive(isActive);
 }
 
 void MainState::onExit() {
-	const bool isActive = false;
+	constexpr bool isActive = false;
 	setObjectsActive(isActive);
 	setSystemsActive(isActive);
 }
@@ -73,32 +73,22 @@ bool MainState::onEvent(
 }
 
 void MainState::buildObjects() {
-	// TODO make a loop?
 	const auto engine = getEngine();
 	const auto entityManager = engine->getEntityManager();
 	const auto prototypes = engine->getEntityPrototypes();
 
+	std::forward_list<std::string> entityNames{
+		"Player_1", "Player_2", "Star", "Background"
+	};
+
 	std::shared_ptr<firefly::Entity> entity;
+	for (auto& name: entityNames) {
+		entity = std::move(prototypes->makeEntity(name));
+		entity->setActive(false);
+		_objectIds.push_front(entity->getId());
 
-	entity = std::move(prototypes->makeEntity("Player_1"));
-	entity->setActive(false);
-	_objectIds.push_front(entity->getId());
-	entityManager->addEntity(std::move(entity));
-
-	entity = std::move(prototypes->makeEntity("Player_2"));
-	entity->setActive(false);
-	_objectIds.push_front(entity->getId());
-	entityManager->addEntity(std::move(entity));
-
-	entity = std::move(prototypes->makeEntity("Star"));
-	entity->setActive(false);
-	_objectIds.push_front(entity->getId());
-	entityManager->addEntity(std::move(entity));
-
-	entity = std::move(prototypes->makeEntity("Background"));
-	entity->setActive(false);
-	_objectIds.push_front(entity->getId());
-	entityManager->addEntity(std::move(entity));
+		entityManager->addEntity(std::move(entity));
+	}
 }
 
 void MainState::destroyObjects() {
@@ -108,6 +98,7 @@ void MainState::destroyObjects() {
 	for (auto& id: _objectIds) {
 		entityManager->removeEntity(id);
 	}
+	_objectIds.clear();
 }
 
 void MainState::setObjectsActive(bool isActive) {
@@ -179,6 +170,7 @@ void MainState::destroySystems() {
 	for (auto& systemName: _systemNames) {
 		systemManager->removeSystem(systemName);
 	}
+	_systemNames.clear();
 }
 
 void MainState::setSystemsActive(bool isActive) {
