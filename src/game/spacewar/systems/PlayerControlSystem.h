@@ -39,8 +39,7 @@ private:
 	bool onRegisterEntity(firefly::Entity* entity) override;
 	void onUnregisterEntity(firefly::Entity* entity) override;
 
-	bool onPlayerInput(
-		const std::shared_ptr<firefly::NativeEvent>& event);
+	bool onPlayerInput(firefly::NativeEvent* event);
 
 	void onUpPressed(bool isPressed);
 	void onLeftPressed(bool isPressed);

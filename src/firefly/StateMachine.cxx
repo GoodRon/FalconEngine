@@ -27,14 +27,18 @@ bool StateMachine::pushState(
 		return false;
 	}
 	_states[id] = std::move(state);
+	return true;
 }
 
 bool StateMachine::switchState(int stateId) {
-	if (hasState(stateId)) {
+	if (!hasState(stateId)) {
 		return false;
 	}
 
-	_states[_currentStateId]->onExit();
+	if (hasState(_currentStateId)) {
+		_states[_currentStateId]->onExit();
+	}
+
 	_currentStateId = stateId;
 	_states[_currentStateId]->onEnter();
 	return true;
@@ -58,7 +62,6 @@ bool StateMachine::processEvent(
 	if (_currentStateId < 0) {
 		return false;
 	}
-
 	return _states[_currentStateId]->onEvent(event);
 }
 

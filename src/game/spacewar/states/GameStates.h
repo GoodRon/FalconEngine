@@ -9,7 +9,7 @@
 namespace spacewar {
 
 enum GameState {
-	Menu,
+	Menu = 0,
 	Main
 };
 

@@ -12,15 +12,6 @@
 
 #include "EntityBuilder.h"
 
-#include "systems/PlayerControlSystem.h"
-#include "systems/PositioningSystem.h"
-#include "systems/GravitationalSystem.h"
-#include "systems/StateSystem.h"
-#include "systems/LifetimeSystem.h"
-#include "systems/CollisionSystem.h"
-#include "systems/VelocitySystem.h"
-#include "systems/RespawnSystem.h"
-
 #include "states/GameStates.h"
 #include "states/MainState.h"
 

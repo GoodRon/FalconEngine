@@ -40,7 +40,7 @@ bool SystemManager::hasSystem(const std::string& name) const {
 
 std::shared_ptr<ISystem> 
 SystemManager::getSystem(const std::string& name) {
-	if (hasSystem(name)) {
+	if (!hasSystem(name)) {
 		return nullptr;
 	}
 	return _systems[name];
@@ -49,6 +49,10 @@ SystemManager::getSystem(const std::string& name) {
 bool SystemManager::processEvent(
 		const std::shared_ptr<IEvent>& event) {
 	for (auto& sys: _systems) {
+		if (!sys.second->isActive()) {
+			continue;
+		}
+
 		if (sys.second->processEvent(event)) {
 			return true;
 		}

@@ -49,6 +49,7 @@ Engine::Engine(int width, int height):
 
 	_renderingSystem.reset(
 		new firefly::RenderingSystem(this));
+	_renderingSystem->setActive(true);
 	_systemManager->addSystem(_renderingSystem);
 }
 

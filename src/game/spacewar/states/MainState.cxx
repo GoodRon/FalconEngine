@@ -7,6 +7,7 @@
 #include <firefly/EntityManager.h>
 #include <firefly/SystemManager.h>
 #include <firefly/Entity.h>
+#include <firefly/events/NativeEvent.h>
 
 #include "systems/PlayerControlSystem.h"
 #include "systems/PositioningSystem.h"
@@ -41,7 +42,7 @@ void MainState::onEnter() {
 
 	std::shared_ptr<firefly::ISystem> sys;
 	for (auto& systemName: _systemNames) {
-		sys = systemManager->getSystem(systemName);
+		sys = std::move(systemManager->getSystem(systemName));
 		if (sys) {
 			sys->setActive(true);
 		}
@@ -54,7 +55,7 @@ void MainState::onExit() {
 
 	std::shared_ptr<firefly::ISystem> sys;
 	for (auto& systemName: _systemNames) {
-		sys = systemManager->getSystem(systemName);
+		sys = std::move(systemManager->getSystem(systemName));
 		if (sys) {
 			sys->setActive(false);
 		}
@@ -64,7 +65,24 @@ void MainState::onExit() {
 bool MainState::onEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
 
-	// TODO write me
+	if (!event) {
+		return false;
+	}
+
+	if (event->getType() != firefly::EventType::Native) {
+		return false;
+	}
+
+	const auto nativeEvent = 
+			static_cast<firefly::NativeEvent*>(event.get());
+
+	const auto sdlEvent = nativeEvent->getSDLEvent();
+	if (sdlEvent.type && sdlEvent.key.keysym.sym == SDLK_ESCAPE) {
+		// NOTE exit the game
+		getEngine()->stop();
+		return true;
+	}
+
 	return false;
 }
 

@@ -12,7 +12,7 @@ ISystem::ISystem(const std::string& name,
 	Engine* engine): 
 	_name(name), 
 	_engine(engine),
-	_isActive(true),
+	_isActive(false),
 	_requiredComponents(),
 	_entities(),
 	_updateTimepoint(SDL_GetTicks64()) {
@@ -52,10 +52,8 @@ bool ISystem::processEvent(const std::shared_ptr<IEvent>& event) {
 		} break;
 
 		case EventType::Update: {
-			if (_isActive) {
-				onUpdate();
-				_updateTimepoint = SDL_GetTicks64();
-			}
+			onUpdate();
+			_updateTimepoint = SDL_GetTicks64();
 			return false;
 		} break;
 
