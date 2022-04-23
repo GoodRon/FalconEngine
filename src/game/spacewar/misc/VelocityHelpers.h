@@ -8,6 +8,8 @@
 
 #include <cstdint>
 
+// TODO rename
+
 namespace firefly {
 	class Velocity;
 	class Position;
@@ -15,12 +17,16 @@ namespace firefly {
 
 namespace spacewar {
 
+// TODO improve these
 double normalizeAngle(double degrees);
 
 void updateSpeed(firefly::Velocity* velocity);
 
+void addSpeed(firefly::Velocity* velocity, 
+	double speed, double direction);
+
 void accelerate(firefly::Velocity* velocity, 
-	double acceleration, double accelerationAngle, 
+	double acceleration, double direction, 
 	uint64_t elapsedMs);
 
 void move(firefly::Position* position, 

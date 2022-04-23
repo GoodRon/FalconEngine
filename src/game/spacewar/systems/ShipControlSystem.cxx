@@ -326,9 +326,9 @@ namespace spacewar {
 		const auto playerVelocity = entity->getComponent<firefly::Velocity>();
 
 		velocity->speedDirection = playerPosition->direction;
-		velocity->accelerationDirection = playerVelocity->accelerationDirection;
-		velocity->acceleration = playerVelocity->acceleration;
-		position->direction = playerPosition->direction;
+		addSpeed(velocity, playerVelocity->speed, playerVelocity->speedDirection);
+		
+		position->direction = velocity->speedDirection;
 		position->x = playerPosition->x;
 		position->y = playerPosition->y;
 		lifetime->timepoint = timepoint;
