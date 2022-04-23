@@ -34,9 +34,6 @@ public:
 	void setWindowHeader(const std::string& header);
 	void setWindowIcon(const std::string& iconPath);
 
-	void pushStateMachine(
-		std::unique_ptr<StateMachine>&& stateMachine);
-
 	int run();
 	void stop();
 

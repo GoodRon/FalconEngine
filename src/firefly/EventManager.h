@@ -15,10 +15,13 @@ namespace firefly {
 
 class IEvent;
 class SystemManager;
+class StateMachine;
 
 class EventManager {
 public:
-	EventManager(SystemManager* systemManager);
+	EventManager(
+		StateMachine* stateMachine,
+		SystemManager* systemManager);
 	~EventManager();
 
 	EventManager(const EventManager&) = delete;
@@ -29,6 +32,7 @@ public:
 	void processEvents();
 
 private:
+	StateMachine* const _stateMachine;
 	SystemManager* const _systemManager;
 	std::atomic<bool> _hasNewEvents;
 	std::mutex _queueMutex;

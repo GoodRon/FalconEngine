@@ -1,11 +1,16 @@
 #include "EventManager.h"
 
 #include "SystemManager.h"
+#include "StateMachine.h"
+
 #include "events/IEvent.h"
 
 namespace firefly {
 
-EventManager::EventManager(SystemManager* systemManager):
+EventManager::EventManager(
+	StateMachine* stateMachine,
+	SystemManager* systemManager):
+	_stateMachine(stateMachine),
 	_systemManager(systemManager),
 	_hasNewEvents(false),
 	_queueMutex(),
@@ -42,8 +47,13 @@ void EventManager::processEvents() {
 	_hasNewEvents = false;
 	_queueMutex.unlock();
 
+	bool isHandled = false;
 	while (!events.empty()) {
-		_systemManager->processEvent(std::move(events.front()));
+		isHandled = _stateMachine->processEvent(events.front());
+
+		if (!isHandled) {
+			isHandled = _systemManager->processEvent(events.front());
+		}
 		events.pop();
 	}
 }

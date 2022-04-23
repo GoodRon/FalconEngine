@@ -47,7 +47,7 @@ bool StateMachine::hasState(int stateId) const {
 	return true;
 }
 
-bool StateMachine::onEvent(
+bool StateMachine::processEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
 
 	if (_currentStateId < 0) {

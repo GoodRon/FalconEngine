@@ -29,7 +29,7 @@ public:
 
 	void clearStates();
 
-	bool onEvent(
+	bool processEvent(
 		const std::shared_ptr<IEvent>& event);
 
 private:

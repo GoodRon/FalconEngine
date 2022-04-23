@@ -41,8 +41,11 @@ Engine::Engine(int width, int height):
 		throw EngineException(SDL_GetError());
 	}
 
-	_systemManager.reset(new SystemManager());
-	_eventManager.reset(new EventManager(_systemManager.get()));
+	_systemManager.reset(new SystemManager);
+	_stateMachine.reset(new StateMachine);
+
+	_eventManager.reset(new EventManager(_stateMachine.get(), 
+		_systemManager.get()));
 
 	_renderer.reset(new Renderer(width, height));
 	_resourceManager.reset(new ResourceManager(_renderer.get()));
@@ -64,11 +67,6 @@ void Engine::setWindowHeader(const std::string& header) {
 
 void Engine::setWindowIcon(const std::string& iconPath) {
 	_renderer->setWindowIcon(iconPath);
-}
-
-void Engine::pushStateMachine(
-	std::unique_ptr<StateMachine>&& stateMachine) {
-	_stateMachine = std::move(stateMachine);
 }
 
 int Engine::run() {
