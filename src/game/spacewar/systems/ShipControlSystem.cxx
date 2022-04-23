@@ -20,7 +20,7 @@
 #include <firefly/components/Lifetime.h>
 #include <firefly/components/ShipControls.h>
 
-#include "States.h"
+#include "ObjectStates.h"
 #include "misc/VelocityHelpers.h"
 
 namespace spacewar {

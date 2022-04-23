@@ -22,7 +22,7 @@
 #include <firefly/components/Lives.h>
 #include <firefly/components/RoundCollidable.h>
 
-#include "States.h"
+#include "ObjectStates.h"
 
 namespace spacewar {
 

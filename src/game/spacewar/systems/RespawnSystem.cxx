@@ -19,7 +19,7 @@
 #include <firefly/events/SpeedEvent.h>
 #include <firefly/events/PositionEvent.h>
 
-#include "States.h"
+#include "ObjectStates.h"
 
 namespace spacewar {
 
