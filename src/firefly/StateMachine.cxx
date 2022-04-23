@@ -2,6 +2,8 @@
 
 #include "IGameState.h"
 
+#include "events/GameStateEvent.h"
+
 namespace firefly {
 
 StateMachine::StateMachine():
@@ -59,6 +61,22 @@ bool StateMachine::hasState(int stateId) const {
 
 bool StateMachine::processEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
+
+	switch (event->getType()) {
+	case EventType::GameState: {
+		const auto gameState = 
+			static_cast<GameStateEvent*>(event.get());
+		if (!gameState) {
+			return false;
+		}
+
+		switchState(gameState->getState());
+		return true;
+	} break;
+
+	default:
+		break;
+	}
 
 	if (_currentStateId < 0) {
 		return false;
