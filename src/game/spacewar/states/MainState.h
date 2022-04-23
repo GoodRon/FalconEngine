@@ -24,6 +24,9 @@ public:
 	MainState(firefly::Engine* engine);
 	~MainState() override;
 
+	MainState(const MainState&) = delete;
+	MainState& operator=(MainState&) = delete;
+
 	void onEnter() override;
 	void onExit() override;
 
@@ -33,9 +36,11 @@ public:
 private:
 	void buildObjects();
 	void destroyObjects();
+	void setObjectsActive(bool isActive);
 
 	void buildSystems();
 	void destroySystems();
+	void setSystemsActive(bool isActive);
 
 private:
 	std::forward_list<firefly::EntityID> _objectIds; 

@@ -37,43 +37,15 @@ MainState::~MainState() {
 }
 
 void MainState::onEnter() {
-	const auto engine = getEngine();
-	const auto systemManager = engine->getSystemManager();
-	const auto entityManager = engine->getEntityManager();
-
-	std::shared_ptr<firefly::ISystem> sys;
-	for (auto& systemName: _systemNames) {
-		sys = std::move(systemManager->getSystem(systemName));
-		if (sys) {
-			sys->setActive(true);
-		}
-	}
-
-	std::shared_ptr<firefly::Entity> entity;
-	for (auto& id: _objectIds) {
-		entity = std::move(entityManager->getEntity(id));
-		entity->setActive(true);
-	}
+	const bool isActive = true;
+	setObjectsActive(isActive);
+	setSystemsActive(isActive);
 }
 
 void MainState::onExit() {
-	const auto engine = getEngine();
-	const auto systemManager = engine->getSystemManager();
-	const auto entityManager = engine->getEntityManager();
-
-	std::shared_ptr<firefly::ISystem> sys;
-	for (auto& systemName: _systemNames) {
-		sys = std::move(systemManager->getSystem(systemName));
-		if (sys) {
-			sys->setActive(false);
-		}
-	}
-
-	std::shared_ptr<firefly::Entity> entity;
-	for (auto& id: _objectIds) {
-		entity = std::move(entityManager->getEntity(id));
-		entity->setActive(false);
-	}
+	const bool isActive = false;
+	setObjectsActive(isActive);
+	setSystemsActive(isActive);
 }
 
 bool MainState::onEvent(
@@ -101,6 +73,7 @@ bool MainState::onEvent(
 }
 
 void MainState::buildObjects() {
+	// TODO make a loop?
 	const auto engine = getEngine();
 	const auto entityManager = engine->getEntityManager();
 	const auto prototypes = engine->getEntityPrototypes();
@@ -112,17 +85,17 @@ void MainState::buildObjects() {
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
 
-	entity = prototypes->makeEntity("Player_2");
+	entity = std::move(prototypes->makeEntity("Player_2"));
 	entity->setActive(false);
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
 
-	entity = prototypes->makeEntity("Star");
+	entity = std::move(prototypes->makeEntity("Star"));
 	entity->setActive(false);
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
 
-	entity = prototypes->makeEntity("Background");
+	entity = std::move(prototypes->makeEntity("Background"));
 	entity->setActive(false);
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
@@ -134,6 +107,17 @@ void MainState::destroyObjects() {
 
 	for (auto& id: _objectIds) {
 		entityManager->removeEntity(id);
+	}
+}
+
+void MainState::setObjectsActive(bool isActive) {
+	const auto engine = getEngine();
+	const auto entityManager = engine->getEntityManager();
+
+	std::shared_ptr<firefly::Entity> entity;
+	for (auto& id: _objectIds) {
+		entity = std::move(entityManager->getEntity(id));
+		entity->setActive(isActive);
 	}
 }
 
@@ -194,6 +178,19 @@ void MainState::destroySystems() {
 
 	for (auto& systemName: _systemNames) {
 		systemManager->removeSystem(systemName);
+	}
+}
+
+void MainState::setSystemsActive(bool isActive) {
+	const auto engine = getEngine();
+	const auto systemManager = engine->getSystemManager();
+
+	std::shared_ptr<firefly::ISystem> sys;
+	for (auto& systemName: _systemNames) {
+		sys = std::move(systemManager->getSystem(systemName));
+		if (sys) {
+			sys->setActive(isActive);
+		}
 	}
 }
 

@@ -18,6 +18,9 @@ public:
 	IGameState(Engine* engine, int id);
 	virtual ~IGameState() = 0;
 
+	IGameState(const IGameState&) = delete;
+	IGameState& operator=(IGameState&) = delete;
+
 	virtual void onEnter();
 	virtual void onExit();
 
