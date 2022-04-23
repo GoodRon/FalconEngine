@@ -11,12 +11,13 @@
 #include "GameBuilder.h"
 
 int main(int, char**) {
+	// TODO read from a config
 	const int width = 1500;
 	const int height = 900;
 	const std::string header("Space War!");
 	const std::string icon("resources/icon.png");
 
-	int ret = 0;
+	int ret = -1;
 	try {
 
 		firefly::Engine engine(width, height);
@@ -24,13 +25,14 @@ int main(int, char**) {
 		engine.setWindowIcon(icon);
 
 		spacewar::GameBuilder gameBuilder(&engine);
-		gameBuilder.buildGame();
+		if (!gameBuilder.buildGame()) {
+			return ret;
+		}
 
 		ret = engine.run();
 
 	} catch (firefly::EngineException& exception) {
-		SDL_Log("Exception caught: %s", exception.what());
-		ret = -1;
+		SDL_Log("Engine exception caught: %s", exception.what());
 	}
 	return ret;
 }

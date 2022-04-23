@@ -1,5 +1,7 @@
 #include "GameBuilder.h"
 
+#include <forward_list>
+
 #include <SDL.h>
 
 #include <firefly/Engine.h>
@@ -43,7 +45,7 @@ public:
 			return _isBuilt;
 		}
 
-		// TODO return some error code && clean the engine mb
+		// TODO return some error code & clean the engine
 
 		if (!buildEntityPrototypes()) {
 			return _isBuilt;
@@ -62,31 +64,24 @@ private:
 	bool buildEntityPrototypes() const {
 		const auto prototypes = _engine->getEntityPrototypes();
 
-		// TODO while on a json list
+		// TODO read from a file
+		std::forward_list<std::string> entityConfigs{
+			"resources/background.json", 
+			"resources/player1.json", 
+			"resources/player2.json", 
+			"resources/star.json",
+			"resources/rocket.json"
+		};
 
 		EntityBuilder builder(_engine);
 		std::shared_ptr<firefly::Entity> entity;
 
-		entity = builder.buildEntity("resources/background.json");
-		prototypes->registerPrototype(entity->getName(), 
-			std::move(entity));
-
-		entity = builder.buildEntity("resources/player1.json");
-		prototypes->registerPrototype(entity->getName(), 
-			std::move(entity));
-
-		entity = builder.buildEntity("resources/player2.json");
-		prototypes->registerPrototype(entity->getName(), 
-			std::move(entity));
-
-		entity = builder.buildEntity("resources/star.json");
-		prototypes->registerPrototype(entity->getName(), 
-			std::move(entity));
-
-		entity = builder.buildEntity("resources/rocket.json");
-		prototypes->registerPrototype(entity->getName(), 
-			std::move(entity));
-
+		for (auto& config: entityConfigs) {
+			entity = std::move(
+				builder.buildEntity(config));
+			prototypes->registerPrototype(entity->getName(), 
+				std::move(entity));
+		}
 		return true;
 	}
 

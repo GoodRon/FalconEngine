@@ -105,6 +105,10 @@ void MainState::buildObjects() {
 	std::shared_ptr<firefly::Entity> entity;
 	for (auto& name: entityNames) {
 		entity = std::move(prototypes->makeEntity(name));
+		if (!entity) {
+			continue;
+		}
+
 		entity->setActive(false);
 		_objectIds.push_front(entity->getId());
 
