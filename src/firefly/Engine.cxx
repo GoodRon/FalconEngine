@@ -1,8 +1,3 @@
-/*
- * Copyright (c) 2022, Roman Meita <theshrodingerscat@gmail.com>
- * All rights reserved
- */
-
 #include <SDL_timer.h>
 
 #include "Engine.h"

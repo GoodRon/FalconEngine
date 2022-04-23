@@ -5,48 +5,160 @@
 #include <firefly/Engine.h>
 #include <firefly/EntityPrototypes.h>
 #include <firefly/EntityManager.h>
+#include <firefly/SystemManager.h>
+#include <firefly/Entity.h>
+
+#include "systems/PlayerControlSystem.h"
+#include "systems/PositioningSystem.h"
+#include "systems/GravitationalSystem.h"
+#include "systems/StateSystem.h"
+#include "systems/LifetimeSystem.h"
+#include "systems/CollisionSystem.h"
+#include "systems/VelocitySystem.h"
+#include "systems/RespawnSystem.h"
 
 #include <firefly/events/NativeEvent.h>
 
 namespace spacewar {
 
 MainState::MainState(firefly::Engine* engine):
-	firefly::IGameState(engine, GameState::Main) {
+	firefly::IGameState(engine, GameState::Main),
+	_systemNames(),
+	_objectIds() {
 
-	const auto entityManager = engine->getEntityManager();
-	const auto prototypes = engine->getEntityPrototypes();
-
-	std::shared_ptr<firefly::Entity> entity;
-
-	entity = prototypes->makeEntity("Background");
-	entityManager->addEntity(std::move(entity));
-
-	entity = prototypes->makeEntity("Player_1");
-	entityManager->addEntity(std::move(entity));
-
-	entity = prototypes->makeEntity("Player_2");
-	entityManager->addEntity(std::move(entity));
-
-	entity = prototypes->makeEntity("Star");
-	entityManager->addEntity(std::move(entity));
+	buildObjects();
+	buildSystems();
 }
 
 MainState::~MainState() {
+	destroySystems();
+	destroyObjects();
 }
 
 void MainState::onEnter() {
+	const auto engine = getEngine();
+	const auto systemManager = engine->getSystemManager();
 
+	std::shared_ptr<firefly::ISystem> sys;
+	for (auto& systemName: _systemNames) {
+		sys = systemManager->getSystem(systemName);
+		if (sys) {
+			sys->setActive(true);
+		}
+	}
 }
 
 void MainState::onExit() {
+	const auto engine = getEngine();
+	const auto systemManager = engine->getSystemManager();
 
+	std::shared_ptr<firefly::ISystem> sys;
+	for (auto& systemName: _systemNames) {
+		sys = systemManager->getSystem(systemName);
+		if (sys) {
+			sys->setActive(false);
+		}
+	}
 }
 
 bool MainState::onEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
 
-
+	// TODO write me
 	return false;
+}
+
+void MainState::buildObjects() {
+	const auto engine = getEngine();
+	const auto entityManager = engine->getEntityManager();
+	const auto prototypes = engine->getEntityPrototypes();
+
+	std::shared_ptr<firefly::Entity> entity;
+
+	entity = std::move(prototypes->makeEntity("Player_1"));
+	_objectIds.push_front(entity->getId());
+	entityManager->addEntity(std::move(entity));
+
+	entity = prototypes->makeEntity("Player_2");
+	_objectIds.push_front(entity->getId());
+	entityManager->addEntity(std::move(entity));
+
+	entity = prototypes->makeEntity("Star");
+	_objectIds.push_front(entity->getId());
+	entityManager->addEntity(std::move(entity));
+
+	entity = prototypes->makeEntity("Background");
+	_objectIds.push_front(entity->getId());
+	entityManager->addEntity(std::move(entity));
+}
+
+void MainState::destroyObjects() {
+	const auto engine = getEngine();
+	const auto entityManager = engine->getEntityManager();
+
+	for (auto& id: _objectIds) {
+		entityManager->removeEntity(id);
+	}
+}
+
+void MainState::buildSystems() {
+	// TODO make a loop?
+	const auto engine = getEngine();
+	const auto systemManager = engine->getSystemManager();
+
+	std::shared_ptr<PlayerControlSystem> playerControl;
+
+	playerControl.reset(new PlayerControlSystem(engine, 1, "Player 1"));
+	_systemNames.push_front(playerControl->getName());
+
+	playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d);
+	systemManager->addSystem(std::move(playerControl));
+
+	playerControl.reset(new PlayerControlSystem(engine, 2, "Player 2"));
+	_systemNames.push_front(playerControl->getName());
+
+	playerControl->setKeyCodes(SDLK_KP_8, SDLK_KP_4, 
+		SDLK_KP_5, SDLK_KP_6);
+	systemManager->addSystem(std::move(playerControl));
+
+	std::shared_ptr<firefly::ISystem> systemPtr;
+
+	systemPtr.reset(new VelocitySystem(engine));
+	_systemNames.push_front(systemPtr->getName());
+	systemManager->addSystem(std::move(systemPtr));
+
+	systemPtr.reset(new GravitationalSystem(engine));
+	_systemNames.push_front(systemPtr->getName());
+	systemManager->addSystem(std::move(systemPtr));
+
+	systemPtr.reset(new PositioningSystem(engine));
+	_systemNames.push_front(systemPtr->getName());
+	systemManager->addSystem(std::move(systemPtr));
+
+	systemPtr.reset(new StateSystem(engine));
+	_systemNames.push_front(systemPtr->getName());
+	systemManager->addSystem(std::move(systemPtr));
+		
+	systemPtr.reset(new LifetimeSystem(engine));
+	_systemNames.push_front(systemPtr->getName());
+	systemManager->addSystem(std::move(systemPtr));
+
+	systemPtr.reset(new CollisionSystem(engine));
+	_systemNames.push_front(systemPtr->getName());
+	systemManager->addSystem(std::move(systemPtr));
+
+	systemPtr.reset(new RespawnSystem(engine));
+	_systemNames.push_front(systemPtr->getName());
+	systemManager->addSystem(std::move(systemPtr));
+}
+
+void MainState::destroySystems() {
+	const auto engine = getEngine();
+	const auto systemManager = engine->getSystemManager();
+
+	for (auto& systemName: _systemNames) {
+		systemManager->removeSystem(systemName);
+	}
 }
 
 }

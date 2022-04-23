@@ -26,7 +26,9 @@ public:
 	SystemManager(const SystemManager&) = delete;
 	SystemManager& operator=(const SystemManager&) = delete;
 
-	void addSystem(const std::shared_ptr<ISystem>& system);
+	bool addSystem(const std::shared_ptr<ISystem>& system);
+	void removeSystem(const std::string& name);
+	
 	bool hasSystem(const std::string& name) const;
 	std::shared_ptr<ISystem> getSystem(const std::string& name);
 

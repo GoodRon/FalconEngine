@@ -6,13 +6,15 @@
 #ifndef SW_MAIN_STATE_H
 #define SW_MAIN_STATE_H
 
+#include <forward_list>
+#include <string>
+
 #include <firefly/IGameState.h>
+#include <firefly/Types.h>
 
 namespace firefly {
-
-class IEvent;
-class Engine;
-
+	class IEvent;
+	class Engine;
 }
 
 namespace spacewar {
@@ -29,7 +31,15 @@ public:
 		const std::shared_ptr<firefly::IEvent>& event) override;
 
 private:
-	
+	void buildObjects();
+	void destroyObjects();
+
+	void buildSystems();
+	void destroySystems();
+
+private:
+	std::forward_list<firefly::EntityID> _objectIds; 
+	std::forward_list<std::string> _systemNames;
 };
 
 }

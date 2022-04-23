@@ -54,11 +54,7 @@ public:
 
 		// TODO return some error code && clean the engine mb
 
-		if (!registerSystems()) {
-			return _isBuilt;
-		}
-
-		if (!buildGameObjects()) {
+		if (!buildEntityPrototypes()) {
 			return _isBuilt;
 		}
 
@@ -72,51 +68,8 @@ public:
 
 private:
 
-	bool registerSystems() const {
-		auto systemManager = _engine->getSystemManager();
-		if (!systemManager) {
-			return false;
-		}
-
-		std::shared_ptr<PlayerControlSystem> playerControl;
-
-		playerControl.reset(new PlayerControlSystem(_engine, 1, "Player 1"));
-		playerControl->setKeyCodes(SDLK_w, SDLK_a, SDLK_s, SDLK_d);
-		systemManager->addSystem(std::move(playerControl));
-
-		playerControl.reset(new PlayerControlSystem(_engine, 2, "Player 2"));
-		playerControl->setKeyCodes(SDLK_KP_8, SDLK_KP_4, 
-			SDLK_KP_5, SDLK_KP_6);
-		systemManager->addSystem(std::move(playerControl));
-
-		std::shared_ptr<firefly::ISystem> systemPtr;
-
-		systemPtr.reset(new VelocitySystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-
-		systemPtr.reset(new GravitationalSystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-
-		systemPtr.reset(new PositioningSystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-
-		systemPtr.reset(new StateSystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-		
-		systemPtr.reset(new LifetimeSystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-
-		systemPtr.reset(new CollisionSystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-
-		systemPtr.reset(new RespawnSystem(_engine));
-		systemManager->addSystem(std::move(systemPtr));
-
-		return true;
-	}
-
-	bool buildGameObjects() const {
-		const auto entityPrototypes = _engine->getEntityPrototypes();
+	bool buildEntityPrototypes() const {
+		const auto prototypes = _engine->getEntityPrototypes();
 
 		// TODO while on a json list
 
@@ -124,23 +77,23 @@ private:
 		std::shared_ptr<firefly::Entity> entity;
 
 		entity = builder.buildEntity("resources/background.json");
-		entityPrototypes->registerPrototype(entity->getName(), 
+		prototypes->registerPrototype(entity->getName(), 
 			std::move(entity));
 
 		entity = builder.buildEntity("resources/player1.json");
-		entityPrototypes->registerPrototype(entity->getName(), 
+		prototypes->registerPrototype(entity->getName(), 
 			std::move(entity));
 
 		entity = builder.buildEntity("resources/player2.json");
-		entityPrototypes->registerPrototype(entity->getName(), 
+		prototypes->registerPrototype(entity->getName(), 
 			std::move(entity));
 
 		entity = builder.buildEntity("resources/star.json");
-		entityPrototypes->registerPrototype(entity->getName(), 
+		prototypes->registerPrototype(entity->getName(), 
 			std::move(entity));
 
 		entity = builder.buildEntity("resources/rocket.json");
-		entityPrototypes->registerPrototype(entity->getName(), 
+		prototypes->registerPrototype(entity->getName(), 
 			std::move(entity));
 
 		return true;

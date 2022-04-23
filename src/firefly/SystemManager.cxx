@@ -11,13 +11,24 @@ SystemManager::SystemManager():
 SystemManager::~SystemManager() {
 }
 
-void SystemManager::addSystem(const std::shared_ptr<ISystem>& system) {
+bool SystemManager::addSystem(const std::shared_ptr<ISystem>& system) {
 	if (!system) {
-		return;
+		return false;
 	}
 
 	const auto name = system->getName();
+	if (hasSystem(name)) {
+		return false;
+	}
 	_systems[name] = system;
+	return true;
+}
+
+void SystemManager::removeSystem(const std::string& name) {
+	if (hasSystem(name)) {
+		return;
+	}
+	_systems.erase(name);
 }
 
 bool SystemManager::hasSystem(const std::string& name) const {
