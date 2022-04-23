@@ -103,7 +103,8 @@ void GravitationalSystem::processGravity(
 		const double distance = sqrt(squaredDistance);
 
 		// TODO improve
-		const double acceleration = ((gConstant * emitterGravity->mass) / gDivider) / squaredDistance;
+		const double acceleration = (gConstant * emitterGravity->mass) / 
+			(gDivider * squaredDistance);
 
 		double accelerationRad = asin(distanceX / distance);
 		if (dsistanceY > 0.0) {
