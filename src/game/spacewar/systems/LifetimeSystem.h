@@ -29,9 +29,6 @@ public:
 private:
 	void onUpdate() override;
 	bool isEntityExpired(firefly::Entity* entity) const;
-
-private:
-	firefly::EntityManager* _entityManager;
 };
 
 }

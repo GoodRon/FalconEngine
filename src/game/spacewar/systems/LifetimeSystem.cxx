@@ -5,15 +5,17 @@
 #include <SDL_timer.h>
 
 #include <firefly/Engine.h>
-#include <firefly/EntityManager.h>
 #include <firefly/Entity.h>
+#include <firefly/EventManager.h>
 #include <firefly/components/Lifetime.h>
+#include <firefly/events/StateEvent.h>
+
+#include "ObjectStates.h"
 
 namespace spacewar {
 
 LifetimeSystem::LifetimeSystem(firefly::Engine* engine):
-	firefly::ISystem(LifetimeSystem::Name, engine),
-	_entityManager(engine->getEntityManager()) {
+	firefly::ISystem(LifetimeSystem::Name, engine) {
 
 	addRequiredComponent(firefly::Lifetime::ComponentName);
 }
@@ -24,19 +26,21 @@ LifetimeSystem::~LifetimeSystem() {
 void LifetimeSystem::onUpdate() {
 	std::forward_list<firefly::EntityID> expiredIds;
 
+	const auto eventManager = getEngine()->getEventManager();
+	std::shared_ptr<firefly::IEvent> event;
+
 	for (auto& entity: getEntities()) {
 		if (!entity.second->isActive()) {
 			continue;
 		}
 
 		if (isEntityExpired(entity.second)) {
-			expiredIds.push_front(entity.second->getId());
+			event.reset(new firefly::StateEvent(
+				entity.second->getId(), ObjectState::Exploading));
+			eventManager->registerEvent(std::move(event));
 		}
 	}
 
-	for (auto& id: expiredIds) {
-		_entityManager->removeEntity(id);
-	}
 }
 
 bool LifetimeSystem::isEntityExpired(firefly::Entity* entity) const {

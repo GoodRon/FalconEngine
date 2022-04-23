@@ -98,7 +98,7 @@ bool StateSystem::onEvent(
 
 	case firefly::EventType::State: {
 		const auto stateEvent = 
-		static_cast<firefly::StateEvent*>(event.get());
+			static_cast<firefly::StateEvent*>(event.get());
 
 		if (!stateEvent) {
 			return false;
