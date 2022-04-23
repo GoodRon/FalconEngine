@@ -70,7 +70,7 @@ void GravitationalSystem::processGravity(
 		return;
 	}
 
-	// TODO improve, just testing
+	// TODO improve
 	constexpr double gConstant = 6.67430;
 	//constexpr double gDivider = 100000000000.0;
 	constexpr double gDivider = 1000.0;

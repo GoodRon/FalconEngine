@@ -95,7 +95,7 @@ bool MainState::onEvent(
 	}
 
 	const auto nativeEvent = 
-			static_cast<firefly::NativeEvent*>(event.get());
+		static_cast<firefly::NativeEvent*>(event.get());
 
 	const auto sdlEvent = nativeEvent->getSDLEvent();
 	if (sdlEvent.type == SDL_KEYDOWN && 
@@ -110,8 +110,6 @@ bool MainState::onEvent(
 
 void MainState::buildObjects() {
 	const auto engine = getEngine();
-	const auto renderer = engine->getRenderer();
-	const auto viewport = renderer->getViewport();
 	const auto entityManager = engine->getEntityManager();
 	const auto prototypes = engine->getEntityPrototypes();
 
@@ -120,9 +118,6 @@ void MainState::buildObjects() {
 		"Player_1", "Player_2", "Star", "Background"
 	};
 	std::unordered_set<firefly::EntityID> ids;
-
-	const double spawnX = 140.0;
-	const double spawnY = 140.0;
 
 	std::shared_ptr<firefly::Entity> entity;
 	for (auto& name: entityNames) {
@@ -134,26 +129,7 @@ void MainState::buildObjects() {
 		entity->setActive(false);
 		ids.insert(entity->getId());
 
-		if (name == "Player_1") {
-			setControls(entity.get(), SDLK_w, SDLK_s,
-				SDLK_a, SDLK_d);
-
-			setPosition(entity.get(), 
-				spawnX, spawnY);
-		}
-
-		if (name == "Player_2") {
-			setControls(entity.get(), SDLK_KP_8, SDLK_KP_5,
-				SDLK_KP_4, SDLK_KP_6);
-
-			setPosition(entity.get(), 
-				viewport.w - spawnX, viewport.h - spawnY);
-		}
-
-		if (name == "Star") {
-			setPosition(entity.get(), 
-				viewport.w / 2.0, viewport.h / 2.0);
-		}
+		configureEntity(entity.get());
 
 		entityManager->addEntity(std::move(entity));
 	}
@@ -184,6 +160,43 @@ void MainState::buildSystems() {
 	}
 
 	setSystemNames(std::move(systemNames));
+}
+
+void MainState::configureEntity(
+	firefly::Entity* entity) const {
+
+	// TODO improve
+
+	const auto renderer = getEngine()->getRenderer();
+	const auto viewport = renderer->getViewport();
+
+	constexpr double spawnX = 140.0;
+	constexpr double spawnY = 140.0;
+
+	const auto name = entity->getName();
+
+	if (name == "Player_1") {
+		setControls(entity, SDLK_w, SDLK_s,
+			SDLK_a, SDLK_d);
+
+		setPosition(entity, spawnX, spawnY);
+		return;
+	}
+
+	if (name == "Player_2") {
+		setControls(entity, SDLK_KP_8, SDLK_KP_5,
+			SDLK_KP_4, SDLK_KP_6);
+
+		setPosition(entity, 
+			viewport.w - spawnX, viewport.h - spawnY);
+		return;
+	}
+
+	if (name == "Star") {
+		setPosition(entity, 
+			viewport.w / 2.0, viewport.h / 2.0);
+		return;
+	}
 }
 
 }

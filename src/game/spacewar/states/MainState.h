@@ -11,6 +11,7 @@
 namespace firefly {
 	class IEvent;
 	class Engine;
+	class Entity;
 }
 
 namespace spacewar {
@@ -31,6 +32,8 @@ private:
 		const std::shared_ptr<firefly::IEvent>& event) override;
 	void buildObjects() override;
 	void buildSystems() override;
+
+	void configureEntity(firefly::Entity* entity) const;
 };
 
 }

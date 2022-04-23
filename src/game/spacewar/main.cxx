@@ -14,17 +14,13 @@ int main(int, char**) {
 	// TODO read from a config
 	const int width = 1500;
 	const int height = 1000;
-	const std::string header("Space War!");
-	const std::string icon("resources/icon.png");
 
 	int ret = -1;
 	try {
 
 		firefly::Engine engine(width, height);
-		engine.setWindowHeader(header);
-		engine.setWindowIcon(icon);
-
 		spacewar::GameBuilder gameBuilder(&engine);
+		
 		if (!gameBuilder.buildGame()) {
 			return ret;
 		}

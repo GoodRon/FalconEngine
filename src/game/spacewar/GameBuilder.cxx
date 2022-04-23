@@ -46,6 +46,13 @@ public:
 			return _isBuilt;
 		}
 
+		// TODO read from a config
+		const std::string header("Space War!");
+		const std::string icon("resources/icon.png");
+
+		_engine->setWindowHeader(header);
+		_engine->setWindowIcon(icon);
+
 		// TODO return some error code & clean the engine
 
 		if (!buildEntityPrototypes()) {

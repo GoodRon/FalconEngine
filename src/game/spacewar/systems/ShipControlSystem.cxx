@@ -25,6 +25,7 @@
 
 namespace spacewar {
 
+	// TODO move to helpers
 	static int randomInt(int min, int max) {
 		std::random_device rd;
 		std::mt19937 mt(rd());
@@ -33,8 +34,8 @@ namespace spacewar {
 	}
 
 	// TODO move to config here
-	constexpr double acceleration = 10.0;
-	constexpr double angleDelta = 30.0;
+	constexpr double acceleration = 3.0;
+	constexpr double angleDelta = 40.0;
 
 	ShipControlSystem::ShipControlSystem(
 		firefly::Engine* engine):
@@ -334,7 +335,7 @@ namespace spacewar {
 		lifetime->timepoint = timepoint;
 
 		// TODO improve
-		const double spawnDistance = 36.0;
+		constexpr double spawnDistance = 36.0;
 		move(position, spawnDistance, playerPosition->direction);
 
 		entityManager->addEntity(projectile);

@@ -159,7 +159,6 @@ private:
 		};
 	}
 
-	// TODO move to a separate functions
 	bool buildVisualComponent(
 		firefly::Entity* entity,
 		rapidjson::Value& document) const {

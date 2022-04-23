@@ -5,6 +5,7 @@
 
 namespace spacewar {
 
+// TODO set these values
 constexpr size_t maxLevel = 5;
 constexpr size_t maxObjects = 5;
 
