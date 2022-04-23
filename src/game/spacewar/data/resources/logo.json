@@ -11,8 +11,8 @@
 					"state": 0,
 					"texture": "resources/logo.png",
 					"isLooped": false,
-					"frameWidth": 1030,
-					"frameHeight": 172,
+					"frameWidth": 1500,
+					"frameHeight": 1000,
 					"frameDuration": 0,
 					"frameRow": 0,
 					"frameCol": 0,
@@ -22,12 +22,12 @@
 		},
 		{
 			"name": "Position",
-			"x": 250.0,
-			"y": 250.0,
+			"x": 0.0,
+			"y": 0.0,
 			"centerX": 0.0,
 			"centerY": 0.0,
-			"width": 1030.0,
-			"height": 172.0,
+			"width": 1500.0,
+			"height": 1000.0,
 			"scale": 1,
 			"direction": 0.0
 		}
