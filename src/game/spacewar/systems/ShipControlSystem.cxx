@@ -323,14 +323,19 @@ namespace spacewar {
 		}
 
 		const auto playerPosition = entity->getComponent<firefly::Position>();
+		const auto playerVelocity = entity->getComponent<firefly::Velocity>();
 
 		velocity->speedDirection = playerPosition->direction;
+		velocity->accelerationDirection = playerVelocity->accelerationDirection;
+		velocity->acceleration = playerVelocity->acceleration;
 		position->direction = playerPosition->direction;
 		position->x = playerPosition->x;
 		position->y = playerPosition->y;
 		lifetime->timepoint = timepoint;
 
-		move(position, 36, playerPosition->direction);
+		// TODO improve
+		const double spawnDistance = 36.0;
+		move(position, spawnDistance, playerPosition->direction);
 
 		entityManager->addEntity(projectile);
 	}
