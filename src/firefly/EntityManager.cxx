@@ -27,7 +27,7 @@ bool EntityManager::addEntity(
 	}
 
 	const auto id = entity->getId();
-	if (_entites.find(id) != _entites.end()) {
+	if (hasEntity(id)) {
 		return true;
 	}
 
@@ -39,8 +39,7 @@ bool EntityManager::addEntity(
 }
 
 void EntityManager::removeEntity(EntityID id) {
-	auto it = _entites.find(id);
-	if (it == _entites.end()) {
+	if (!hasEntity(id)) {
 		return;
 	}
 
@@ -48,6 +47,21 @@ void EntityManager::removeEntity(EntityID id) {
 	_eventManager->registerEvent(std::move(event));
 
 	_entites.erase(id);
+}
+
+bool EntityManager::hasEntity(EntityID id) const {
+	if (_entites.find(id) != _entites.end()) {
+		return true;
+	}
+	return false;
+}
+
+std::shared_ptr<Entity> 
+EntityManager::getEntity(EntityID id) {
+	if (!hasEntity(id)) {
+		return nullptr;
+	}
+	return _entites[id];
 }
 
 void EntityManager::clear() {

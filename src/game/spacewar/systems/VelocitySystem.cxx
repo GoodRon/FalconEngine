@@ -45,8 +45,11 @@ bool VelocitySystem::onEvent(
 void VelocitySystem::onUpdate() {
 	firefly::Velocity* velocity = nullptr;
 
-	auto& entities = getEntities();
-	for (auto& entity: entities) {
+	for (auto& entity: getEntities()) {
+		if (!entity.second->isActive()) {
+			continue;
+		}
+
 		velocity = entity.second->getComponent<firefly::Velocity>();
 
 		if (velocity->isActive) {

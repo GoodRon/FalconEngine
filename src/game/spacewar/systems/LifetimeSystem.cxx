@@ -24,8 +24,11 @@ LifetimeSystem::~LifetimeSystem() {
 void LifetimeSystem::onUpdate() {
 	std::forward_list<firefly::EntityID> expiredIds;
 
-	auto& entities = getEntities();
-	for (auto& entity: entities) {
+	for (auto& entity: getEntities()) {
+		if (!entity.second->isActive()) {
+			continue;
+		}
+
 		if (isEntityExpired(entity.second)) {
 			expiredIds.push_front(entity.second->getId());
 		}

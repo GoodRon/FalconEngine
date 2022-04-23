@@ -30,6 +30,9 @@ public:
 	EntityID getId() const;
 	const std::string getName() const;
 
+	void setActive(bool isActive);
+	bool isActive() const;
+
 	bool addComponent(const std::string& name, 
 		std::unique_ptr<IComponent>&& component);
 
@@ -43,6 +46,7 @@ public:
 private:
 	EntityID _id;
 	std::string _name;
+	bool _isActive;
 	std::unordered_map<std::string, 
 		std::unique_ptr<IComponent>> _components;
 };

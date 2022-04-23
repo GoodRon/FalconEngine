@@ -12,6 +12,7 @@ static EntityID nextId() {
 Entity::Entity(const std::string& name):
 	_id(nextId()),
 	_name(name),
+	_isActive(false),
 	_components() {
 }
 
@@ -42,6 +43,14 @@ EntityID Entity::getId() const {
 
 const std::string Entity::getName() const {
 	return _name;
+}
+
+void Entity::setActive(bool isActive) {
+	_isActive = isActive;
+}
+
+bool Entity::isActive() const {
+	return _isActive;
 }
 
 bool Entity::addComponent(const std::string& name,

@@ -28,6 +28,9 @@ public:
 	bool addEntity(const std::shared_ptr<Entity>& entity);
 	void removeEntity(EntityID id);
 
+	bool hasEntity(EntityID id) const;
+	std::shared_ptr<Entity> getEntity(EntityID id);
+
 	void clear();
 
 private:

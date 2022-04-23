@@ -96,6 +96,10 @@ void RenderingSystem::onUpdate() {
 		_renderList.reserve(entities.size());
 
 		for (auto& entity: entities) {
+			if (!entity.second->isActive()) {
+				continue;
+			}
+
 			_renderList.push_back(entity.second);
 		}
 

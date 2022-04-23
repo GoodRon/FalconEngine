@@ -39,6 +39,7 @@ MainState::~MainState() {
 void MainState::onEnter() {
 	const auto engine = getEngine();
 	const auto systemManager = engine->getSystemManager();
+	const auto entityManager = engine->getEntityManager();
 
 	std::shared_ptr<firefly::ISystem> sys;
 	for (auto& systemName: _systemNames) {
@@ -47,11 +48,18 @@ void MainState::onEnter() {
 			sys->setActive(true);
 		}
 	}
+
+	std::shared_ptr<firefly::Entity> entity;
+	for (auto& id: _objectIds) {
+		entity = std::move(entityManager->getEntity(id));
+		entity->setActive(true);
+	}
 }
 
 void MainState::onExit() {
 	const auto engine = getEngine();
 	const auto systemManager = engine->getSystemManager();
+	const auto entityManager = engine->getEntityManager();
 
 	std::shared_ptr<firefly::ISystem> sys;
 	for (auto& systemName: _systemNames) {
@@ -59,6 +67,12 @@ void MainState::onExit() {
 		if (sys) {
 			sys->setActive(false);
 		}
+	}
+
+	std::shared_ptr<firefly::Entity> entity;
+	for (auto& id: _objectIds) {
+		entity = std::move(entityManager->getEntity(id));
+		entity->setActive(false);
 	}
 }
 
@@ -94,18 +108,22 @@ void MainState::buildObjects() {
 	std::shared_ptr<firefly::Entity> entity;
 
 	entity = std::move(prototypes->makeEntity("Player_1"));
+	entity->setActive(false);
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
 
 	entity = prototypes->makeEntity("Player_2");
+	entity->setActive(false);
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
 
 	entity = prototypes->makeEntity("Star");
+	entity->setActive(false);
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
 
 	entity = prototypes->makeEntity("Background");
+	entity->setActive(false);
 	_objectIds.push_front(entity->getId());
 	entityManager->addEntity(std::move(entity));
 }

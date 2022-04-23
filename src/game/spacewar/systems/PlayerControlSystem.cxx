@@ -332,6 +332,8 @@ namespace spacewar {
 			return;
 		}
 
+		projectile->setActive(true);
+
 		auto velocity = projectile->getComponent<firefly::Velocity>();
 		auto position = projectile->getComponent<firefly::Position>();
 		auto lifetime = projectile->getComponent<firefly::Lifetime>();

@@ -28,6 +28,9 @@ GravitationalSystem::~GravitationalSystem() {
 
 void GravitationalSystem::onUpdate() {
 	for (auto& entity: _gravityEmitters) {
+		if (!entity.second->isActive()) {
+			continue;
+		}
 		processGravity(entity.second);
 	}
 }
@@ -76,8 +79,11 @@ void GravitationalSystem::processGravity(
 	firefly::Velocity* velocity = nullptr;
 	firefly::Gravity* gravity = nullptr;
 
-	auto& entities = getEntities();
-	for (auto& entity: entities) {
+	for (auto& entity: getEntities()) {
+		if (!entity.second->isActive()) {
+			continue;
+		}
+		
 		if (entity.second == gravityEmitter) {
 			continue;
 		}
@@ -85,6 +91,10 @@ void GravitationalSystem::processGravity(
 		position = entity.second->getComponent<firefly::Position>();
 		velocity = entity.second->getComponent<firefly::Velocity>();
 		gravity = entity.second->getComponent<firefly::Gravity>();
+
+		if (!position || !velocity || !gravity) {
+			continue;
+		}
 
 		if (!velocity->isActive || !gravity->isActive) {
 			continue;
