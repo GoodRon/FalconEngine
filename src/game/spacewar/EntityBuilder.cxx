@@ -388,6 +388,7 @@ private:
 
 		component->max = document["max"].GetDouble();
 		component->current = document["current"].GetDouble();
+		component->consumption = document["consumption"].GetDouble();
 
 		entity->addComponent(firefly::Fuel::ComponentName, 
 			std::move(component));

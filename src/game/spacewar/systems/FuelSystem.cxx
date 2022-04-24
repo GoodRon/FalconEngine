@@ -72,14 +72,11 @@ void FuelSystem::updateFuel(firefly::EntityID id,
 	}
 
 	constexpr double epsilon = 0.00001;
-	if (fuel->current < epsilon) {
+	if (fuel->current < epsilon || fuel->consumption < epsilon) {
 		return;
 	}
 
-	// TODO read from a config
-	constexpr double fuelConsumption = 3.0;
-
-	fuel->current -= fuelConsumption * getElapsedMs() / 1000.0;
+	fuel->current -= fuel->consumption * getElapsedMs() / 1000.0;
 	if (fuel->current > epsilon) {
 		return;
 	}

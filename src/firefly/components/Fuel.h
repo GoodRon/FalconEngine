@@ -26,6 +26,7 @@ public:
 
 	double max = 0.0;
 	double current = 0.0;
+	double consumption = 0.0;
 };
 
 }
