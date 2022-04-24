@@ -20,6 +20,7 @@
 #include <firefly/components/Lives.h>
 #include <firefly/components/RoundCollidable.h>
 #include <firefly/components/ShipControls.h>
+#include <firefly/components/Fuel.h>
 
 #include "rapidjson/document.h"
 
@@ -159,6 +160,12 @@ private:
 			firefly::Entity* entity,
 			rapidjson::Value& document)->bool {
 			return buildShipControlsComponent(entity, document);
+		};
+
+		_componentBuilders[firefly::Fuel::ComponentName] = [this](
+			firefly::Entity* entity,
+			rapidjson::Value& document)->bool {
+			return buildFuelComponent(entity, document);
 		};
 	}
 
@@ -368,6 +375,21 @@ private:
 			new firefly::ShipControls);
 
 		entity->addComponent(firefly::ShipControls::ComponentName, 
+			std::move(component));
+		return true;
+	}
+
+	bool buildFuelComponent(
+		firefly::Entity* entity,
+		rapidjson::Value& document) const {
+
+		std::unique_ptr<firefly::Fuel> component(
+			new firefly::Fuel);
+
+		component->max = document["max"].GetDouble();
+		component->current = document["current"].GetDouble();
+
+		entity->addComponent(firefly::Fuel::ComponentName, 
 			std::move(component));
 		return true;
 	}

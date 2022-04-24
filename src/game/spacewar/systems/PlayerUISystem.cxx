@@ -67,12 +67,15 @@ void PlayerUISystem::drawPlayerUI(
 
 	labels.push_front(std::move(drawPlayer(player)));
 
-	const int heightSpace = 0;
+	constexpr int heightSpace = 0;
 	SDL_Rect uiRect{0, 0, 0, 0};
 
 	for (auto& label: labels) {
 		const auto textureRect = _renderer->getTextureRect(label);
-		uiRect.w += textureRect.w;
+
+		if (textureRect.w > uiRect.w) {
+			uiRect.w = textureRect.w;
+		}
 		uiRect.h += textureRect.h + heightSpace;
 	}
 
@@ -139,7 +142,7 @@ firefly::TexturePointer PlayerUISystem::drawFuel(
 	std::stringstream stream;
 	stream << "Fuel ";
 	stream << fuel->current;
-	stream << " %";
+	stream << "%";
 
 	const int fontSize = 20;
 	const SDL_Color color{0xf1, 0xf1, 0xf1, 255};
