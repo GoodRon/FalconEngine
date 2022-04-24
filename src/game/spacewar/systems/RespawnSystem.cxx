@@ -93,7 +93,7 @@ void RespawnSystem::killEntity(firefly::EntityID id) const {
 	}
 	
 	lives->currentLives--;
-	if (lives->currentLives >= 0) {
+	if (lives->currentLives > 0) {
 		respawnEntity(id);
 		return;
 	}
