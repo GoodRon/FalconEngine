@@ -32,16 +32,25 @@ public:
 
 	bool clearViewport();
 
-	bool drawTexture(TexturePointer& texture, SDL_Rect* source = nullptr,
+	bool drawTexture(const TexturePointer& texture, SDL_Rect* source = nullptr,
 					 SDL_Rect* destination = nullptr);
 
-	bool drawTexture(TexturePointer& texture, SDL_Rect* source,
+	bool drawTexture(const TexturePointer& texture, SDL_Rect* source,
 					 SDL_Rect* destination, double angle, SDL_Point* center);
 
-	bool drawTextureToTexture(TexturePointer& sourceTexture,
-							  TexturePointer& destinationTexture,
-							  SDL_Rect* source,
-							  SDL_Rect* destination);
+	bool drawTextureOnTexture(
+		const TexturePointer& sourceTexture, 
+		const TexturePointer& destinationTexture,
+		SDL_Rect* source, SDL_Rect* destination);
+
+	TexturePointer drawText(
+		const std::string& message, const std::string& fontName, 
+		int fontSize, SDL_Color color) const;
+
+	TexturePointer drawText(
+		const std::string& message, SDL_Color color) const;
+
+	SDL_Rect getTextureRect(const TexturePointer& texture) const;
 
 	bool clearTexture(TexturePointer& texture);
 

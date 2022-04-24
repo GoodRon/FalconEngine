@@ -26,11 +26,11 @@ add_definitions(-D_REENTRANT)
 
 find_package(SDL2 REQUIRED)
 find_package(SDL2_image REQUIRED)
-find_package(JSONCPP REQUIRED)
+find_package(SDL2_ttf REQUIRED)
 
 include_directories(${SDL2_INCLUDE_DIRS})
 include_directories(${SDL2_IMAGE_INCLUDE_DIRS})
-include_directories(${jsoncpp_INCLUDE_DIRS})
+include_directories(${SDL2_TTF_INCLUDE_DIRS})
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/firefly)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/game)

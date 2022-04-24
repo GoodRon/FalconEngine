@@ -8,10 +8,11 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 namespace firefly {
 
-const std::string engineName = "Firefly Engine";
+const std::string engineName("Firefly Engine");
 
 static bool hasIntersection(
 	const SDL_Rect& lhs, const SDL_Rect& rhs) {
@@ -48,9 +49,18 @@ Renderer::Renderer(int width, int height) :
 		throw EngineException(SDL_GetError());
 	}
 	_renderer.reset(renderer, SDL_DestroyRenderer);
+
+	if (TTF_Init() != 0) {
+		// TODO log error
+	}
+
 }
 
 Renderer::~Renderer() {
+	if (TTF_WasInit()) {
+		TTF_Quit();
+	}
+
 	_renderer.reset();
 	_window.reset();
 }
@@ -76,8 +86,8 @@ bool Renderer::clearViewport() {
 	return true;
 }
 
-bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
-	SDL_Rect* destination) {
+bool Renderer::drawTexture(const TexturePointer& texture, 
+	SDL_Rect* source, SDL_Rect* destination) {
 
 	// TODO check if texture is inside the viewport
 	if (SDL_RenderCopy(_renderer.get(), texture.get(), source, destination) != 0) {
@@ -86,8 +96,9 @@ bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
 	return true;
 }
 
-bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
-	SDL_Rect* destination, double angle, SDL_Point* center) {
+bool Renderer::drawTexture(const TexturePointer& texture, 
+	SDL_Rect* source, SDL_Rect* destination, double angle,
+	SDL_Point* center) {
 
 	// TODO check if texture is inside the viewport
 	// TODO pass flip
@@ -99,10 +110,11 @@ bool Renderer::drawTexture(TexturePointer& texture, SDL_Rect* source,
 	return true;
 }
 
-bool Renderer::drawTextureToTexture(TexturePointer& sourceTexture,
-									TexturePointer& destinationTexture,
-									SDL_Rect* source,
-									SDL_Rect* destination) {
+bool Renderer::drawTextureOnTexture(
+	const TexturePointer& sourceTexture,
+	const TexturePointer& destinationTexture, 
+	SDL_Rect* source, SDL_Rect* destination) {
+
 	if ((!sourceTexture) || (!destinationTexture)) {
 		return false;
 	}
@@ -112,6 +124,68 @@ bool Renderer::drawTextureToTexture(TexturePointer& sourceTexture,
 	bool ret = drawTexture(sourceTexture, source, destination);
 	SDL_SetRenderTarget(_renderer.get(), screen);
 	return ret;
+}
+
+TexturePointer Renderer::drawText(
+	const std::string& message, const std::string& fontName, 
+	int fontSize, SDL_Color color) const {
+
+	if (!TTF_WasInit()) {
+		return nullptr;
+	}
+
+	if (message.empty() || fontName.empty() || fontSize <= 0) {
+		return nullptr;
+	}
+
+	TTF_Font* font = TTF_OpenFont(fontName.c_str(), fontSize);
+	if (font == nullptr){
+		// TODO log error
+		return nullptr;
+	}
+
+	SDL_Surface* surface = TTF_RenderText_Blended(
+		font, message.c_str(), color);
+	if (surface == nullptr){
+		TTF_CloseFont(font);
+		return nullptr;
+	}
+
+	SDL_Texture* messageTexture = 
+		SDL_CreateTextureFromSurface(_renderer.get(), surface);
+	if (messageTexture == nullptr) {
+		SDL_FreeSurface(surface);
+		TTF_CloseFont(font);
+		return nullptr;
+	}
+
+	TexturePointer texture(messageTexture, SDL_DestroyTexture);
+
+	SDL_FreeSurface(surface);
+	TTF_CloseFont(font);
+	return texture;
+}
+
+TexturePointer Renderer::drawText(
+	const std::string& message, SDL_Color color) const {
+
+	const std::string defaultFont("resources/default.ttf");
+	const int defaultSize = 20;
+
+	return drawText(message, defaultFont, defaultSize, color);
+}
+
+SDL_Rect Renderer::getTextureRect(
+	const TexturePointer& texture) const {
+	
+	SDL_Rect rect{0, 0, 0, 0};
+	if (!texture) {
+		return rect;
+	}
+
+	SDL_QueryTexture(
+		texture.get(), nullptr, nullptr, &rect.w, &rect.h);
+	return rect;
 }
 
 bool Renderer::clearTexture(TexturePointer& texture) {

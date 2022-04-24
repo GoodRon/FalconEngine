@@ -30,4 +30,4 @@ add_library(firefly
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx)
 
-target_link_libraries(firefly SDL2::Core SDL2::Image)
+target_link_libraries(firefly SDL2::Core SDL2::Image SDL2::TTF)
