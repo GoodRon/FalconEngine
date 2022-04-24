@@ -93,7 +93,8 @@
 				{	
 					"weaponId": 0,
 					"projectile": "Rocket",
-					"rounds": 15,
+					"rounds": 0,
+					"maxRounds": 15,
 					"cooldownTimeMs": 300
 				}
 			]

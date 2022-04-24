@@ -93,6 +93,14 @@ void WeaponSystem::shoot(
 		return;
 	}
 
+	if (weapon.maxRounds > 0) {
+		if (weapon.rounds <= 0) {
+			return;
+		}
+
+		weapon.rounds--;
+	}
+
 	weapon.lastShotTimepoint = timepoint;
 
 	const auto entityPrototypes = getEngine()->getEntityPrototypes();

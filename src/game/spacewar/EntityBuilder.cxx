@@ -315,7 +315,8 @@ private:
 
 			const int weaponId = weaponData["weaponId"].GetInt();
 			weapon.projectile = std::string(weaponData["projectile"].GetString());
-			weapon.rounds = weaponData["rounds"].GetInt();
+			weapon.maxRounds = weaponData["maxRounds"].GetInt();
+			weapon.rounds = weapon.maxRounds;
 			weapon.cooldownTimeMs = weaponData["cooldownTimeMs"].GetUint64();
 
 			component->weapons[weaponId] = std::move(weapon);

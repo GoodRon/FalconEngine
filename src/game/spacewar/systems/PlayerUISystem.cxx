@@ -13,6 +13,8 @@
 
 #include "misc/UIHelpers.h"
 
+#include "WeaponId.h"
+
 namespace spacewar {
 
 PlayerUISystem::PlayerUISystem(firefly::Engine* engine):
@@ -154,7 +156,13 @@ firefly::TexturePointer PlayerUISystem::drawAmmunition(
 	}
 
 	std::stringstream stream;
-	stream << "Ammo ";	// TODO write it
+	stream << "Rockets ";
+
+	if (ammunition->weapons.find(WeaponId::RocketLauncher) !=
+		ammunition->weapons.end()) {
+
+		stream << ammunition->weapons[WeaponId::RocketLauncher].rounds;
+	}
 
 	const int fontSize = 20;
 	const SDL_Color color{0xf1, 0xf1, 0xf1, 255};

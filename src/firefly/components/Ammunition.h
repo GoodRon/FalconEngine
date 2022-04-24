@@ -29,6 +29,7 @@ public:
 	struct Weapon {
 		std::string projectile;
 		int rounds = 0;
+		int maxRounds = 0;
 		uint64_t cooldownTimeMs = 0;
 		uint64_t lastShotTimepoint = 0;
 	};
