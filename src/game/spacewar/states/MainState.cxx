@@ -75,12 +75,20 @@ MainState::~MainState() {
 }
 
 void MainState::onEnter() {
+	if (!isInit()) {
+		return;
+	}
+
 	constexpr bool isActive = true;
 	setObjectsActive(isActive);
 	setSystemsActive(isActive);
 }
 
 void MainState::onExit() {
+	if (!isInit()) {
+		return;
+	}
+
 	constexpr bool isActive = false;
 	setObjectsActive(isActive);
 	setSystemsActive(isActive);
@@ -89,7 +97,11 @@ void MainState::onExit() {
 bool MainState::onEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
 
-	if (!event) {
+	if (!isInit()) {
+		return false;
+	}
+
+	if (!isInit()) {
 		return false;
 	}
 

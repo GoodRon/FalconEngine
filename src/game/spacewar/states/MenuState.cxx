@@ -22,15 +22,25 @@ MenuState::~MenuState() {
 }
 
 void MenuState::onEnter() {
+	if (!isInit()) {
+		return;
+	}
 	setObjectsActive(true);
 }
 
 void MenuState::onExit() {
+	if (!isInit()) {
+		return;
+	}
 	setObjectsActive(false);
 }
 
 bool MenuState::onEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
+
+	if (!isInit()) {
+		return false;
+	}
 
 	if (!event) {
 		return false;

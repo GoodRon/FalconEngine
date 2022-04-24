@@ -28,6 +28,7 @@ public:
 	int getId() const;
 
 	void init();
+	void deinit();
 	bool isInit() const;
 
 	virtual void onEnter();

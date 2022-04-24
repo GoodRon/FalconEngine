@@ -22,15 +22,25 @@ GameOverState::~GameOverState() {
 }
 
 void GameOverState::onEnter() {
+	if (!isInit()) {
+		return;
+	}
 	setObjectsActive(true);
 }
 
 void GameOverState::onExit() {
+	if (!isInit()) {
+		return;
+	}
 	setObjectsActive(false);
 }
 
 bool GameOverState::onEvent(
 	const std::shared_ptr<firefly::IEvent>& event) {
+
+	if (!isInit()) {
+		return false;
+	}
 
 	if (!event) {
 		return false;
@@ -54,6 +64,7 @@ bool GameOverState::onEvent(
 
 		const auto engine = getEngine();
 		const auto stateMachine = engine->getStateMachine();
+		stateMachine->resetState(GameState::Main);
 		stateMachine->switchState(GameState::Menu);
 		return true;
 	} break;

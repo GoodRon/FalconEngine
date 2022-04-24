@@ -25,6 +25,7 @@ public:
 	bool pushState(std::unique_ptr<IGameState>&& state);
 
 	bool switchState(int stateId);
+	bool resetState(int stateId);
 
 	int currentState() const;
 

@@ -35,7 +35,7 @@ bool SystemManager::addSystem(const std::shared_ptr<ISystem>& system) {
 }
 
 void SystemManager::removeSystem(const std::string& name) {
-	if (hasSystem(name)) {
+	if (!hasSystem(name)) {
 		return;
 	}
 

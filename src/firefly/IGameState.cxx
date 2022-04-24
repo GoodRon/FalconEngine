@@ -22,8 +22,7 @@ IGameState::IGameState(
 }
 
 IGameState::~IGameState() {
-	destroySystems();
-	destroyObjects();
+	deinit();
 }
 
 int IGameState::getId() const {
@@ -35,9 +34,20 @@ void IGameState::init() {
 		return;
 	}
 
-	buildObjects();
 	buildSystems();
+	buildObjects();
+	
 	_isInit = true;
+}
+
+void IGameState::deinit() {
+	if (!_isInit) {
+		return;
+	}
+
+	destroySystems();
+	destroyObjects();
+	_isInit = false;
 }
 
 bool IGameState::isInit() const {

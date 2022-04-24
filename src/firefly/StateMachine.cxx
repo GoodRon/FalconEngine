@@ -47,6 +47,14 @@ bool StateMachine::switchState(int stateId) {
 	return true;
 }
 
+bool StateMachine::resetState(int stateId) {
+	if (!hasState(stateId)) {
+		return false;
+	}
+
+	_states[stateId]->deinit();
+}
+
 int StateMachine::currentState() const {
 	return _currentStateId;
 }
