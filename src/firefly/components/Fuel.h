@@ -24,8 +24,8 @@ public:
 		return new Fuel(*this);
 	}
 
-	double max = 0;
-	double current = 0;
+	double max = 0.0;
+	double current = 0.0;
 };
 
 }

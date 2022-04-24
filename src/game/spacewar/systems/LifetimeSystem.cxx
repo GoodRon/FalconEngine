@@ -1,7 +1,5 @@
 #include "LifetimeSystem.h"
 
-#include <forward_list>
-
 #include <SDL_timer.h>
 
 #include <firefly/Engine.h>
@@ -24,8 +22,6 @@ LifetimeSystem::~LifetimeSystem() {
 }
 
 void LifetimeSystem::onUpdate() {
-	std::forward_list<firefly::EntityID> expiredIds;
-
 	const auto eventManager = getEngine()->getEventManager();
 	std::shared_ptr<firefly::IEvent> event;
 
@@ -44,7 +40,7 @@ void LifetimeSystem::onUpdate() {
 }
 
 bool LifetimeSystem::isEntityExpired(firefly::Entity* entity) const {
-	auto lifetime = entity->getComponent<firefly::Lifetime>();
+	const auto lifetime = entity->getComponent<firefly::Lifetime>();
 	if (!lifetime) {
 		return true;
 	}

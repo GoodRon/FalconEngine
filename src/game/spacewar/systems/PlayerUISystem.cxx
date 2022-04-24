@@ -27,10 +27,6 @@ PlayerUISystem::~PlayerUISystem() {
 
 void PlayerUISystem::onUpdate() {
 	for (auto& entity: getEntities()) {
-		if (!entity.second->isActive()) {
-			continue;
-		}
-
 		drawPlayerUI(entity.second);
 	}
 }
@@ -140,6 +136,7 @@ firefly::TexturePointer PlayerUISystem::drawFuel(
 	}
 
 	std::stringstream stream;
+	stream.precision(2);
 	stream << "Fuel ";
 	stream << fuel->current;
 	stream << "%";

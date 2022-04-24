@@ -25,6 +25,7 @@
 #include "systems/VelocitySystem.h"
 #include "systems/RespawnSystem.h"
 #include "systems/PlayerUISystem.h"
+#include "systems/FuelSystem.h"
 
 namespace spacewar {
 
@@ -150,6 +151,7 @@ void MainState::buildSystems() {
 		LifetimeSystem::Name,
 		RespawnSystem::Name,
 		StateSystem::Name,
+		FuelSystem::Name,
 		GravitationalSystem::Name,
 		ShipControlSystem::Name,
 		PlayerUISystem::Name

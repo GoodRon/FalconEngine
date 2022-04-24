@@ -22,6 +22,7 @@
 #include <firefly/components/Ammunition.h>
 #include <firefly/components/Lifetime.h>
 #include <firefly/components/ShipControls.h>
+#include <firefly/components/Fuel.h>
 
 #include "ObjectStates.h"
 #include "misc/VelocityHelpers.h"
@@ -42,6 +43,7 @@ namespace spacewar {
 		addRequiredComponent(firefly::Velocity::ComponentName);
 		addRequiredComponent(firefly::State::ComponentName);
 		addRequiredComponent(firefly::Ammunition::ComponentName);
+		addRequiredComponent(firefly::Fuel::ComponentName);
 	}
 
 	ShipControlSystem::~ShipControlSystem() {
@@ -170,9 +172,13 @@ namespace spacewar {
 
 		controls->isUpPressed = isPressed;
 
-		const auto eventManager = getEngine()->getEventManager();
+		const auto fuelComponent = 
+			entity->getComponent<firefly::Fuel>();
+		
 		const auto stateComponent = 
 			entity->getComponent<firefly::State>();
+
+		const auto eventManager = getEngine()->getEventManager();
 
 		if (!controls->isUpPressed) {
 			// TODO make a swichState func
@@ -186,6 +192,11 @@ namespace spacewar {
 			eventManager->registerEvent(std::move(event));
 			return;
 		} 
+
+		constexpr double epsilon = 0.000001;
+		if (fuelComponent->max > 0.0 && fuelComponent->current < epsilon) {
+			return;
+		}
 
 		const auto positionComponent = 
 			entity->getComponent<firefly::Position>();

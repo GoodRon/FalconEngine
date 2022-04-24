@@ -13,11 +13,13 @@
 
 #include <firefly/components/Lives.h>
 #include <firefly/components/Position.h>
+#include <firefly/components/Fuel.h>
 
 #include <firefly/events/KillEvent.h>
 #include <firefly/events/StateEvent.h>
 #include <firefly/events/SetSpeedEvent.h>
 #include <firefly/events/PositionEvent.h>
+#include <firefly/events/SetFuelEvent.h>
 
 #include "ObjectStates.h"
 
@@ -133,7 +135,16 @@ void RespawnSystem::respawnEntity(firefly::EntityID id) const {
 
 	eventManager->registerEvent(std::move(event));
 
-	return;
+	const auto fuel = entity->getComponent<firefly::Fuel>();
+	if (!fuel) {
+		return;
+	}
+
+	event.reset(new firefly::SetFuelEvent(
+		entity->getId(), fuel->max, fuel->max));
+
+	eventManager->registerEvent(std::move(event));
+
 }
 
 }
