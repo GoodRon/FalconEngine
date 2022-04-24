@@ -12,7 +12,7 @@
 #include <firefly/events/KillEvent.h>
 #include <firefly/events/PositionEvent.h>
 #include <firefly/events/CollisionEvent.h>
-#include <firefly/events/SpeedEvent.h>
+#include <firefly/events/SetSpeedEvent.h>
 
 #include <firefly/components/State.h>
 #include <firefly/components/Position.h>
@@ -143,24 +143,12 @@ void StateSystem::updateState(
 	const auto stateComponent = entity->getComponent<firefly::State>();
 
 	switch (stateComponent->current) {
-	case ObjectState::Idle:
-		updateIdle(entity);
-		break;
-
-	case ObjectState::Moving:
-		updateMoving(entity);
-		break;
-
 	case ObjectState::Hyperspace:
 		updateHyperspace(entity);
 		break;
 
 	case ObjectState::Exploading:
 		updateExploading(entity);
-		break;
-
-	case ObjectState::Destroyed:
-		updateDestroyed(entity);
 		break;
 
 	default:
@@ -218,46 +206,6 @@ void StateSystem::switchState(
 	}
 }
 
-void StateSystem::updateIdle(
-	firefly::Entity* entity) const {
-
-	if (!entity) {
-		return;
-	}
-
-	const auto velocity = entity->getComponent<firefly::Velocity>();
-	if (!velocity) {
-		return;
-	}
-
-	constexpr double epsilon = 0.0001;
-	if (velocity->acceleration < epsilon) {
-		return;
-	}
-
-	switchState(entity, ObjectState::Moving);
-}
-
-void StateSystem::updateMoving(
-	firefly::Entity* entity) const {
-
-	if (!entity) {
-		return;
-	}
-
-	const auto velocity = entity->getComponent<firefly::Velocity>();
-	if (!velocity) {
-		return;
-	}
-
-	const double epsilon = 0.0001;
-	if (velocity->acceleration > epsilon) {
-		return;
-	}
-
-	switchState(entity, ObjectState::Idle);
-}
-
 void StateSystem::updateHyperspace(
 	firefly::Entity* entity) const {
 
@@ -287,7 +235,7 @@ void StateSystem::updateHyperspace(
 	const auto eventManager = getEngine()->getEventManager();
 	std::shared_ptr<firefly::IEvent> event;
 
-	event.reset(new firefly::SpeedEvent(
+	event.reset(new firefly::SetSpeedEvent(
 		entity->getId(), 0.0, 0.0));
 
 	eventManager->registerEvent(std::move(event));
@@ -323,12 +271,6 @@ void StateSystem::updateExploading(
 	eventManager->registerEvent(std::move(event));
 
 	switchState(entity, ObjectState::Destroyed);
-}
-
-void StateSystem::updateDestroyed(
-	firefly::Entity* entity) const {
-
-	// TODO write it
 }
 
 }

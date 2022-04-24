@@ -28,12 +28,19 @@ private:
 	bool onEvent(
 		const std::shared_ptr<firefly::IEvent>& event) override;
 	void onUpdate() override;
-	void processVelocity(firefly::Velocity* velocity) const;
 
-	void updateSpeed(firefly::EntityID id, 
+	void setSpeed(firefly::EntityID id, 
 		double speed, double direction) const;
-	void accelerateEntity(firefly::EntityID id, 
+	void addSpeed(firefly::EntityID id, 
+		double speed, double direction) const;
+	void setAcceleration(firefly::EntityID id, 
 		double acceleration, double direction) const;
+	void addAcceleration(firefly::EntityID id, 
+		double acceleration, double direction) const;
+
+	void processAcceleration(
+		firefly::Velocity* velocity, 
+		uint64_t elapsedMs) const;
 };
 
 }

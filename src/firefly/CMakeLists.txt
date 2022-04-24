@@ -23,7 +23,10 @@ add_library(firefly
 	events/KillEvent.cxx
 	events/CollisionEvent.cxx
 	events/PositionEvent.cxx
-	events/SpeedEvent.cxx
+	events/SetSpeedEvent.cxx
+	events/SetAccelerationEvent.cxx
+	events/AddSpeedEvent.cxx
+	events/AddAccelerationEvent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx)
 

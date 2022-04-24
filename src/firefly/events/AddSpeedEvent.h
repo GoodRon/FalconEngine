@@ -3,19 +3,19 @@
  * All rights reserved
  */
 
-#ifndef FIREFLY_SPEED_EVENT_H
-#define FIREFLY_SPEED_EVENT_H
+#ifndef FIREFLY_ADD_SPEED_EVENT_H
+#define FIREFLY_ADD_SPEED_EVENT_H
 
 #include "IEvent.h"
 #include "Types.h"
 
 namespace firefly {
 
-class SpeedEvent final: public IEvent {
+class AddSpeedEvent final: public IEvent {
 public:
-	SpeedEvent(EntityID id, 
+	AddSpeedEvent(EntityID id, 
 		double speed, double direction);
-	~SpeedEvent() override;
+	~AddSpeedEvent() override;
 
 	EntityID getId() const;
 	double getSpeed() const;
@@ -29,4 +29,4 @@ private:
 
 }
 
-#endif // FIREFLY_SPEED_EVENT_H
+#endif // FIREFLY_ADD_SPEED_EVENT_H

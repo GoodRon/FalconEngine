@@ -17,20 +17,20 @@ namespace firefly {
 
 namespace spacewar {
 
-// TODO improve these
 double normalizeAngle(double degrees);
 
-void updateSpeed(firefly::Velocity* velocity);
+void movePoint(double& x, double& y, 
+	double distance, double direction);
 
-void addSpeed(firefly::Velocity* velocity, 
-	double speed, double direction);
+void addVector(double& magnitude, double& direction,
+	double& magnitudeX, double magnitudeY,
+	double deltaMagnitude, double deltaAirection);
 
-void accelerate(firefly::Velocity* velocity, 
-	double acceleration, double direction, 
-	uint64_t elapsedMs);
+void projectVector(double magnitude, double direction,
+	double& magnitudeX, double& magnitudeY);
 
-void move(firefly::Position* position, 
-	double distance, double angle);
+void limitMagnitude(double& magnitude, double& direction,
+	double& magnitudeX, double& magnitudeY, double maxMagnitude);
 
 }
 

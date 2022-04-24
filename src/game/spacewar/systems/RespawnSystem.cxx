@@ -16,7 +16,7 @@
 
 #include <firefly/events/KillEvent.h>
 #include <firefly/events/StateEvent.h>
-#include <firefly/events/SpeedEvent.h>
+#include <firefly/events/SetSpeedEvent.h>
 #include <firefly/events/PositionEvent.h>
 
 #include "ObjectStates.h"
@@ -118,7 +118,7 @@ void RespawnSystem::respawnEntity(firefly::EntityID id) const {
 
 	std::shared_ptr<firefly::IEvent> event;
 
-	event.reset(new firefly::SpeedEvent(
+	event.reset(new firefly::SetSpeedEvent(
 		entity->getId(), 0.0, 0.0));
 
 	eventManager->registerEvent(std::move(event));

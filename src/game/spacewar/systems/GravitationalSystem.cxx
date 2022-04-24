@@ -3,12 +3,13 @@
 #include <firefly/Engine.h>
 #include <firefly/Renderer.h>
 #include <firefly/Entity.h>
+#include <firefly/EventManager.h>
+
+#include <events/AddAccelerationEvent.h>
 
 #include <firefly/components/Position.h>
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Gravity.h>
-
-#include "misc/VelocityHelpers.h"
 
 namespace spacewar {
 
@@ -118,11 +119,16 @@ void GravitationalSystem::processGravity(
 
 		double accelerationRad = asin(distanceX / distance);
 		if (dsistanceY > 0.0) {
-			accelerationRad = M_PI -accelerationRad;
+			accelerationRad = pi - accelerationRad;
 		}
 
-		accelerate(velocity, acceleration, 
-			accelerationRad * radToDegrees, getElapsedMs());
+		const auto eventManager = getEngine()->getEventManager();
+		std::shared_ptr<firefly::IEvent> event(
+			new firefly::AddAccelerationEvent(
+				entity.second->getId(), acceleration, 
+				accelerationRad * radToDegrees));
+					
+		eventManager->registerEvent(std::move(event));
 	}
 }
 

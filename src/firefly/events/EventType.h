@@ -19,7 +19,10 @@ enum class EventType: int {
 	Kill,
 	Collision,
 	Position,
-	Speed
+	SetSpeed,
+	AddSpeed,
+	SetAcceleration,
+	AddAcceleration
 }; 
 
 }
