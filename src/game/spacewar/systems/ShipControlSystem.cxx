@@ -1,7 +1,5 @@
 #include "ShipControlSystem.h"
 
-#include <random>
-
 #include <SDL_timer.h>
 #include <SDL_events.h>
 
@@ -29,14 +27,6 @@
 #include "misc/VelocityHelpers.h"
 
 namespace spacewar {
-
-	// TODO move to helpers
-	static int randomInt(int min, int max) {
-		std::random_device rd;
-		std::mt19937 mt(rd());
-		std::uniform_int_distribution<int> dist(min, max);
-		return dist(mt);
-	}
 
 	// TODO move to config here
 	constexpr double acceleration = 3.0;
@@ -436,15 +426,8 @@ namespace spacewar {
 			return;
 		}
 
-		ObjectState nextState = ObjectState::Hyperspace;
-
-		constexpr int chanceOfMulfunction = 5;
-		if (randomInt(0, 100) <= chanceOfMulfunction) {
-			nextState = ObjectState::Exploading;
-		}
-
 		std::shared_ptr<firefly::IEvent> event(new firefly::StateEvent(
-			entity->getId(), nextState));
+			entity->getId(), ObjectState::Hyperspace));
 					
 		eventManager->registerEvent(std::move(event));
 	}

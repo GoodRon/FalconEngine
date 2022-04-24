@@ -222,6 +222,14 @@ void StateSystem::updateHyperspace(
 	// TODO read from a config
 	constexpr uint64_t hyperspaceTimeMs = 2000;
 	if ((SDL_GetTicks64() - state->timepoint) < hyperspaceTimeMs) {
+		// NOTE we are still in hyperspace
+		return;
+	}
+
+	// TODO read from a config
+	constexpr int chanceOfMulfunction = 5;
+	if (randomInt(0, 100) <= chanceOfMulfunction) {
+		switchState(entity, ObjectState::Exploading);
 		return;
 	}
 
