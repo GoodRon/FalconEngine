@@ -297,6 +297,13 @@ namespace spacewar {
 		firefly::Entity* entity, 
 		double angle) const {
 
+		const auto stateComponent = 
+			entity->getComponent<firefly::State>();
+		if (stateComponent->current != ObjectState::Idle &&
+			stateComponent->current != ObjectState::Moving) {
+			return;
+		}
+
 		const auto positionComponent = 
 			entity->getComponent<firefly::Position>();
 
