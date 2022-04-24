@@ -55,8 +55,6 @@ public:
 			return nullptr;
 		}
 
-		// TODO check if the document is a valid json
-
 		std::ifstream jsonFile;
 		jsonFile.open(jsonConfig);
 		if (!jsonFile.good()) {
@@ -71,6 +69,11 @@ public:
 
 		rapidjson::Document document;
 		document.Parse(jsonContent.c_str());
+
+		if (document.HasParseError()) {
+			// TODO log error
+			return false;
+		}
 
 		auto entityName = std::string(document["name"].GetString());
 
