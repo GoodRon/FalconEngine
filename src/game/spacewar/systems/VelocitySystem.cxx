@@ -96,10 +96,7 @@ void VelocitySystem::onUpdate() {
 		}
 
 		velocity = entity.second->getComponent<firefly::Velocity>();
-
-		if (velocity->isActive) {
-			processAcceleration(velocity, getElapsedMs());
-		}
+		processAcceleration(velocity, getElapsedMs());
 	}
 }
 
@@ -212,7 +209,7 @@ void VelocitySystem::processAcceleration(
 		return;
 	}
 
-	if (!velocity->isAccelerated) {
+	if (!velocity->isActive) {
 		return;
 	}
 
@@ -233,6 +230,7 @@ void VelocitySystem::processAcceleration(
 
 	if (!velocity->isConstantAcceleration) {
 		velocity->acceleration = 0.0;
+		velocity->accelerationDirection = 0.0;
 	}
 }
 

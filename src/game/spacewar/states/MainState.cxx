@@ -143,14 +143,14 @@ void MainState::buildSystems() {
 
 	// TODO read form a config
 	std::unordered_set<std::string> systemNames{
-		ShipControlSystem::Name,
-		GravitationalSystem::Name,
 		VelocitySystem::Name,
 		PositioningSystem::Name,
-		StateSystem::Name,
+		CollisionSystem::Name,
 		LifetimeSystem::Name,
 		RespawnSystem::Name,
-		CollisionSystem::Name
+		StateSystem::Name,
+		GravitationalSystem::Name,
+		ShipControlSystem::Name
 	};
 
 	std::shared_ptr<firefly::ISystem> system;

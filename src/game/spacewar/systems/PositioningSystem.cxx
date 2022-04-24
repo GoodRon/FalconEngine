@@ -16,7 +16,6 @@ namespace spacewar {
 PositioningSystem::PositioningSystem(firefly::Engine* engine):
 	firefly::ISystem(PositioningSystem::Name, engine) {
 
-	// TODO remove velocity
 	addRequiredComponent(firefly::Position::ComponentName);
 	addRequiredComponent(firefly::Velocity::ComponentName);
 }
@@ -60,9 +59,11 @@ void PositioningSystem::onUpdate() {
 		position = entity.second->getComponent<firefly::Position>();
 		velocity = entity.second->getComponent<firefly::Velocity>();
 
-		if (velocity->isActive) {
-			processPosition(position, velocity);
+		if (!position || !velocity){
+			continue;
 		}
+
+		processPosition(position, velocity);
 	}
 }
 
@@ -83,13 +84,21 @@ void PositioningSystem::updatePosition(firefly::EntityID id,
 	position->y = y;
 	position->direction = direction;
 
-	wrapCoordinates(position);
+	const auto velocity = entity->getComponent<firefly::Velocity>();
+	if (!velocity) {
+		return;
+	}
+	processPosition(position, velocity);
 }
 
 void PositioningSystem::processPosition(
 		firefly::Position* position, firefly::Velocity* velocity) const {
 	
 	if (!position || !velocity) {
+		return;
+	}
+
+	if (!velocity->isActive) {
 		return;
 	}
 

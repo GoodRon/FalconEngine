@@ -273,14 +273,13 @@ namespace spacewar {
 
 	void ShipControlSystem::setAcceleration(
 		firefly::Entity* entity,
-		double acceleration, double direction) const {
-
-		const auto eventManager = getEngine()->getEventManager();
+		double acceleration, double direction, bool isConstantAcceleration) const {
 
 		std::shared_ptr<firefly::IEvent> event(
 			new firefly::SetAccelerationEvent(
-				entity->getId(), acceleration, direction));
-					
+				entity->getId(), acceleration, direction, isConstantAcceleration));
+			
+		const auto eventManager = getEngine()->getEventManager();		
 		eventManager->registerEvent(std::move(event));
 	}
 
@@ -288,52 +287,47 @@ namespace spacewar {
 		firefly::Entity* entity,
 		double acceleration, double direction) const {
 
-		const auto eventManager = getEngine()->getEventManager();
-
 		std::shared_ptr<firefly::IEvent> event(
 			new firefly::AddAccelerationEvent(
 				entity->getId(), acceleration, direction));
-					
+		
+		const auto eventManager = getEngine()->getEventManager();			
 		eventManager->registerEvent(std::move(event));
 	}
 
 	void ShipControlSystem::addSpeed(firefly::Entity* entity,
 		double speed, double direction) const {
 
-		const auto eventManager = getEngine()->getEventManager();
-
 		std::shared_ptr<firefly::IEvent> event(
 			new firefly::AddSpeedEvent(
 				entity->getId(), speed, direction));
 					
+		const auto eventManager = getEngine()->getEventManager();
 		eventManager->registerEvent(std::move(event));
 	}
 
 	void ShipControlSystem::setSpeed(firefly::Entity* entity,
 		double speed, double direction) const {
 
-		const auto eventManager = getEngine()->getEventManager();
-
 		std::shared_ptr<firefly::IEvent> event(
 			new firefly::SetSpeedEvent(
 				entity->getId(), speed, direction));
-					
+		
+		const auto eventManager = getEngine()->getEventManager();
 		eventManager->registerEvent(std::move(event));
 	}
 
 	void ShipControlSystem::setPosition(firefly::Entity* entity,
 		double x, double y, double direction) const {
 
-		const auto eventManager = getEngine()->getEventManager();
-
 		std::shared_ptr<firefly::IEvent> event(
 			new firefly::PositionEvent(
 				entity->getId(), x, y, direction));
 					
+		const auto eventManager = getEngine()->getEventManager();
 		eventManager->registerEvent(std::move(event));
 	}
 
-	// TODO use event
 	void ShipControlSystem::rotate(
 		firefly::Entity* entity, 
 		double angle) const {
@@ -341,8 +335,13 @@ namespace spacewar {
 		const auto positionComponent = 
 			entity->getComponent<firefly::Position>();
 
-		positionComponent->direction =
-			normalizeAngle(positionComponent->direction + angle);
+		std::shared_ptr<firefly::IEvent> event(
+			new firefly::PositionEvent(
+				entity->getId(), positionComponent->x, positionComponent->y,
+				normalizeAngle(positionComponent->direction + angle)));
+
+		const auto eventManager = getEngine()->getEventManager();
+		eventManager->registerEvent(std::move(event));
 	}
 
 	// TODO make a weapon system
@@ -409,7 +408,7 @@ namespace spacewar {
 		addSpeed(projectile.get(), playerVelocity->speed, 
 			playerVelocity->speedDirection);
 		setAcceleration(projectile.get(), velocity->acceleration, 
-			playerPosition->direction);
+			playerPosition->direction, velocity->isConstantAcceleration);
 		setPosition(projectile.get(), x, y, playerPosition->direction);
 
 		// TODO send event
@@ -417,7 +416,6 @@ namespace spacewar {
 	}
 
 	void ShipControlSystem::hyperspace(firefly::Entity* entity) const {
-		const auto eventManager = getEngine()->getEventManager();
 
 		const auto stateComponent = 
 			entity->getComponent<firefly::State>();
@@ -430,6 +428,7 @@ namespace spacewar {
 		std::shared_ptr<firefly::IEvent> event(new firefly::StateEvent(
 			entity->getId(), ObjectState::Hyperspace));
 					
+		const auto eventManager = getEngine()->getEventManager();
 		eventManager->registerEvent(std::move(event));
 	}
 }

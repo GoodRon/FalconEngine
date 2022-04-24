@@ -15,7 +15,7 @@ class SetAccelerationEvent final: public IEvent {
 public:
 	SetAccelerationEvent(EntityID id,
 		double acceleration, double direction, 
-		bool isConstant = false);
+		bool isConstant);
 	~SetAccelerationEvent() override;
 
 	EntityID getId() const;
