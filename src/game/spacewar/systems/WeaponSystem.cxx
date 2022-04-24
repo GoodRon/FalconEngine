@@ -145,7 +145,7 @@ void WeaponSystem::shoot(
 	entityManager->addEntity(projectile);
 
 	// TODO configure it
-	constexpr double spawnDistance = 27.0;
+	constexpr double spawnDistance = 30.0;
 
 	double x = playerPosition->x;
 	double y = playerPosition->y;
