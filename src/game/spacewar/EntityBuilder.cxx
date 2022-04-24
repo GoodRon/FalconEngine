@@ -248,6 +248,7 @@ private:
 		component->maxSpeed = document["maxSpeed"].GetDouble();
 		component->acceleration = document["acceleration"].GetDouble();
 		component->accelerationDirection = document["accelerationDirection"].GetDouble();
+		component->isConstantAcceleration = document["isConstantAcceleration"].GetBool();
 
 		entity->addComponent(firefly::Velocity::ComponentName, std::move(component));
 		return true;

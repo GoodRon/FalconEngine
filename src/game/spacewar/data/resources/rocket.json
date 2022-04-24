@@ -48,6 +48,7 @@
 			"speedDirection": 0.0,
 			"acceleration": 30.0,
 			"accelerationDirection": 0.0,
+			"isConstantAcceleration": true,
 			"maxSpeed": 600.0
 		},
 		{

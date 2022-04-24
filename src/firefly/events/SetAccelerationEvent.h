@@ -14,17 +14,20 @@ namespace firefly {
 class SetAccelerationEvent final: public IEvent {
 public:
 	SetAccelerationEvent(EntityID id,
-		double acceleration, double direction);
+		double acceleration, double direction, 
+		bool isConstant = false);
 	~SetAccelerationEvent() override;
 
 	EntityID getId() const;
 	double getAcceleration() const;
 	double getDirection() const;
+	bool isConstant() const;
 
 private:
 	const EntityID _id;
 	const double _acceleration;
 	const double _direction;
+	const bool _isConstant;
 };
 
 }

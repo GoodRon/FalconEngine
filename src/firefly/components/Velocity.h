@@ -30,6 +30,7 @@ public:
 	double maxSpeed = 0.0;
 	double acceleration = 0.0;
 	double accelerationDirection = 0.0;
+	bool isConstantAcceleration = false;
 	double rotation = 0.0;
 
 	double speedX = 0.0;

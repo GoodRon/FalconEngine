@@ -37,13 +37,14 @@
 			"speedDirection": 0.0,
 			"acceleration": 0.0,
 			"accelerationDirection": 0.0,
+			"isConstantAcceleration": false,
 			"maxSpeed": 0.0
 		},
 		{
 			"name": "Gravity",
 			"hasGravity": false,
 			"emitGravity": true,
-			"mass": 300000000.0
+			"mass": 150000000.0
 		},
 		{
 			"name": "RoundCollidable",

@@ -25,9 +25,7 @@
 #include "ObjectStates.h"
 
 namespace spacewar {
-
-// TODO rename to ship state & make a new state for rockets?
-
+	
 // TODO move to helpers
 static int randomInt(int min, int max) {
 	std::random_device rd;

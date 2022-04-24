@@ -11,7 +11,9 @@
 #include "misc/VelocityHelpers.h"
 
 namespace spacewar {
- 
+
+constexpr double epsilon = 0.00001;
+
 VelocitySystem::VelocitySystem(firefly::Engine* engine):
 	ISystem(VelocitySystem::Name, engine) {
 
@@ -60,7 +62,8 @@ bool VelocitySystem::onEvent(
 
 		setAcceleration(accelerationEvent->getId(),
 			accelerationEvent->getAcceleration(),
-			accelerationEvent->getDirection());
+			accelerationEvent->getDirection(),
+			accelerationEvent->isConstant());
 		return true;
 	} break;
 
@@ -115,6 +118,8 @@ void VelocitySystem::setSpeed(firefly::EntityID id,
 
 	velocity->speed = speed;
 	velocity->speedDirection = direction;
+	velocity->speedX = 0.0;
+	velocity->speedY = 0.0;
 
 	projectVector(velocity->speed, velocity->speedDirection,
 		velocity->speedX, velocity->speedY);
@@ -136,6 +141,10 @@ void VelocitySystem::addSpeed(firefly::EntityID id,
 		return;
 	}
 
+	if (fabs(speed) < epsilon) {
+		return;
+	}
+
 	projectVector(velocity->speed, velocity->speedDirection,
 		velocity->speedX, velocity->speedY);
 
@@ -148,7 +157,7 @@ void VelocitySystem::addSpeed(firefly::EntityID id,
 }
 
 void VelocitySystem::setAcceleration(firefly::EntityID id, 
-	double acceleration, double direction) const {
+	double acceleration, double direction, bool isConstant) const {
 
 	const auto entity = getEntity(id);
 	if (!entity) {
@@ -162,6 +171,7 @@ void VelocitySystem::setAcceleration(firefly::EntityID id,
 
 	velocity->acceleration = acceleration;
 	velocity->accelerationDirection = direction;
+	velocity->isConstantAcceleration = isConstant;
 }
 
 void VelocitySystem::addAcceleration(firefly::EntityID id, 
@@ -174,6 +184,10 @@ void VelocitySystem::addAcceleration(firefly::EntityID id,
 
 	const auto velocity = entity->getComponent<firefly::Velocity>();
 	if (!velocity) {
+		return;
+	}
+
+	if (fabs(acceleration) < epsilon) {
 		return;
 	}
 
@@ -202,7 +216,6 @@ void VelocitySystem::processAcceleration(
 		return;
 	}
 
-	constexpr double epsilon = 0.00001;
 	if (fabs(velocity->acceleration) < epsilon || elapsedMs == 0) {
 		return;
 	}
@@ -218,8 +231,9 @@ void VelocitySystem::processAcceleration(
 	limitMagnitude(velocity->speed, velocity->speedDirection,
 		velocity->speedX, velocity->speedY, velocity->maxSpeed);
 
-	velocity->acceleration = 0.0;
-	velocity->accelerationDirection = 0.0;
+	if (!velocity->isConstantAcceleration) {
+		velocity->acceleration = 0.0;
+	}
 }
 
 }

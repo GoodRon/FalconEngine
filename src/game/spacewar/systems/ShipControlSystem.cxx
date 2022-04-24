@@ -175,6 +175,7 @@ namespace spacewar {
 			entity->getComponent<firefly::State>();
 
 		if (!controls->isUpPressed) {
+			// TODO make a swichState func
 			if (stateComponent->current != ObjectState::Moving) {
 				return;
 			}

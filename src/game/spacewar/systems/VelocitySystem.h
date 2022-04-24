@@ -34,7 +34,7 @@ private:
 	void addSpeed(firefly::EntityID id, 
 		double speed, double direction) const;
 	void setAcceleration(firefly::EntityID id, 
-		double acceleration, double direction) const;
+		double acceleration, double direction, bool isConstant) const;
 	void addAcceleration(firefly::EntityID id, 
 		double acceleration, double direction) const;
 
