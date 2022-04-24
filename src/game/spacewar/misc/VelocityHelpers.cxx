@@ -31,6 +31,20 @@ void movePoint(double& x, double& y,
 	y += deltaY;
 }
 
+void calculateVector(
+	double magnitudeX, double magnitudeY,
+	double& magnitude, double& direction) {
+
+	magnitude = sqrt(magnitudeX * magnitudeX + magnitudeY * magnitudeY);
+
+	double directionRad = asin(magnitudeX / magnitude);
+	if (magnitudeY > 0.0) {
+		directionRad = pi - directionRad;
+	}
+
+	direction = (normalizeAngle(directionRad * radToDegrees));
+}
+
 void addVector(double& magnitude, double& direction,
 	double& magnitudeX, double magnitudeY,
 	double deltaMagnitude, double deltaDirection) {
@@ -44,14 +58,8 @@ void addVector(double& magnitude, double& direction,
 	magnitudeX += deltaMagnitudeX;
 	magnitudeY += deltaMagnitudeY;
 
-	magnitude = sqrt(magnitudeX * magnitudeX + magnitudeY * magnitudeY);
-
-	double directionRad = asin(magnitudeX / magnitude);
-	if (magnitudeY > 0.0) {
-		directionRad = pi - directionRad;
-	}
-
-	direction = (normalizeAngle(directionRad * radToDegrees));
+	calculateVector(magnitudeX, magnitudeY, 
+		magnitude, direction);
 }
 
 void projectVector(double magnitude, double direction,

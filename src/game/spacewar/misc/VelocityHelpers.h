@@ -19,6 +19,10 @@ void addVector(double& magnitude, double& direction,
 	double& magnitudeX, double magnitudeY,
 	double deltaMagnitude, double deltaAirection);
 
+void calculateVector(
+	double magnitudeX, double magnitudeY,
+	double& magnitude, double& direction);
+
 void projectVector(double magnitude, double direction,
 	double& magnitudeX, double& magnitudeY);
 

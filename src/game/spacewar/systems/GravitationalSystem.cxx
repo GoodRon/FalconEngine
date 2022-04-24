@@ -11,6 +11,8 @@
 #include <firefly/components/Velocity.h>
 #include <firefly/components/Gravity.h>
 
+#include "misc/VelocityHelpers.h"
+
 namespace spacewar {
 
 constexpr double pi = 3.14159265358979323846;
@@ -101,32 +103,33 @@ void GravitationalSystem::processGravity(
 			continue;
 		}
 		
-		// TODO use centers!
-		const double distanceX = emitterPosition->x - position->x;
-		const double dsistanceY = emitterPosition->y - position->y;
-		const double squaredDistance = distanceX * distanceX + dsistanceY * dsistanceY;
+		const auto emitterCenter = emitterPosition->center();
+		const auto center = position->center();
+
+		const double distanceX = (emitterPosition->x + emitterCenter.x) 
+			- (position->x + center.x);
+		const double distanceY = (emitterPosition->y + emitterCenter.y) 
+			- (position->y + center.y);
+		const double squaredDistance = distanceX * distanceX + distanceY * distanceY;
 		
 		constexpr double epsilon = 0.0001;
 		if (squaredDistance < epsilon) {
 			continue;
 		}
 
-		const double distance = sqrt(squaredDistance);
-
-		// TODO improve
 		const double acceleration = (gConstant * emitterGravity->mass) / 
 			(gDivider * squaredDistance);
 
-		double accelerationRad = asin(distanceX / distance);
-		if (dsistanceY > 0.0) {
-			accelerationRad = pi - accelerationRad;
-		}
+		double distance = 0.0;
+		double direction = 0.0;
+
+		calculateVector(distanceX, distanceY, distance, direction);
 
 		const auto eventManager = getEngine()->getEventManager();
 		std::shared_ptr<firefly::IEvent> event(
 			new firefly::AddAccelerationEvent(
 				entity.second->getId(), acceleration, 
-				accelerationRad * radToDegrees));
+				direction));
 					
 		eventManager->registerEvent(std::move(event));
 	}
