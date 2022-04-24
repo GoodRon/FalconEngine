@@ -136,7 +136,7 @@ firefly::TexturePointer PlayerUISystem::drawFuel(
 	}
 
 	std::stringstream stream;
-	stream.precision(2);
+	stream.precision(3);
 	stream << "Fuel ";
 	stream << fuel->current;
 	stream << "%";

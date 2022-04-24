@@ -2,9 +2,12 @@
 
 #include <SDL_timer.h>
 
+#include <firefly/Engine.h>
 #include <firefly/Entity.h>
+#include <firefly/EventManager.h>
 
 #include <firefly/events/SetFuelEvent.h>
+#include <firefly/events/StateEvent.h>
 
 #include <firefly/components/Fuel.h>
 #include <firefly/components/State.h>
@@ -57,12 +60,13 @@ void FuelSystem::onUpdate() {
 		const auto state = entity.second->getComponent<firefly::State>();
 
 		if (state->current == ObjectState::Moving) {
-			updateFuel(fuel);
+			updateFuel(entity.second->getId(), fuel, state);
 		}
 	}
 }
 
-void FuelSystem::updateFuel(firefly::Fuel* fuel) const {
+void FuelSystem::updateFuel(firefly::EntityID id,
+	firefly::Fuel* fuel, firefly::State* state) const {
 	if (!fuel) {
 		return;
 	}
@@ -73,12 +77,24 @@ void FuelSystem::updateFuel(firefly::Fuel* fuel) const {
 	}
 
 	// TODO read from a config
-	constexpr double fuelConsumption = 10.0;
+	constexpr double fuelConsumption = 3.0;
 
 	fuel->current -= fuelConsumption * getElapsedMs() / 1000.0;
-	if (fuel->current < epsilon) {
-		fuel->current = 0.0;
+	if (fuel->current > epsilon) {
+		return;
 	}
+
+	fuel->current = 0.0;
+
+	if (!state) {
+		return;
+	}
+
+	std::shared_ptr<firefly::IEvent> event(new firefly::StateEvent(
+		id, ObjectState::Idle));
+
+	const auto eventManager = getEngine()->getEventManager();
+	eventManager->registerEvent(std::move(event));
 }
 
 void FuelSystem::setFuel(

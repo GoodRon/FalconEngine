@@ -11,6 +11,7 @@
 
 namespace firefly {
 	class Fuel;
+	class State;
 }
 
 namespace spacewar {
@@ -30,7 +31,8 @@ private:
 		const std::shared_ptr<firefly::IEvent>& event);
 	void onUpdate() override;
 
-	void updateFuel(firefly::Fuel* fuel) const;
+	void updateFuel(firefly::EntityID id, 
+		firefly::Fuel* fuel, firefly::State* state) const;
 	void setFuel(firefly::EntityID id, 
 		double current, double max) const;
 };
