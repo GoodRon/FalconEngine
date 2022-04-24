@@ -24,6 +24,7 @@
 #include "systems/CollisionSystem.h"
 #include "systems/VelocitySystem.h"
 #include "systems/RespawnSystem.h"
+#include "systems/PlayerUISystem.h"
 
 namespace spacewar {
 
@@ -150,7 +151,8 @@ void MainState::buildSystems() {
 		RespawnSystem::Name,
 		StateSystem::Name,
 		GravitationalSystem::Name,
-		ShipControlSystem::Name
+		ShipControlSystem::Name,
+		PlayerUISystem::Name
 	};
 
 	std::shared_ptr<firefly::ISystem> system;

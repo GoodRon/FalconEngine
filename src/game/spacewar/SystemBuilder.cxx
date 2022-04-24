@@ -8,6 +8,7 @@
 #include "systems/CollisionSystem.h"
 #include "systems/VelocitySystem.h"
 #include "systems/RespawnSystem.h"
+#include "systems/PlayerUISystem.h"
 
 namespace spacewar {
 
@@ -54,6 +55,11 @@ std::shared_ptr<firefly::ISystem> buidSystem(
 	if (name == VelocitySystem::Name) {
 		return std::shared_ptr<firefly::ISystem>(
 			new VelocitySystem(engine));
+	}
+
+	if (name == PlayerUISystem::Name) {
+		return std::shared_ptr<firefly::ISystem>(
+			new PlayerUISystem(engine));
 	}
 
 	return nullptr;

@@ -64,11 +64,12 @@
 		},
 		{
 			"name": "Player",
-			"playerId": 2
+			"playerId": 2,
+			"playerName": "The Wedge"
 		},
 		{
 			"name": "Lives",
-			"maxLives": 0
+			"maxLives": 5
 		},
 		{
 			"name": "RoundCollidable",

@@ -77,8 +77,12 @@ int Engine::run() {
 			onSDLEvent(event);
 		}
 
+		_renderer->clearViewport();
+
 		_eventManager->registerEvent(updateEvent);
 		_eventManager->processEvents();
+		
+		SDL_RenderPresent(_renderer->getContext());
 	}
 	return _returnCode;
 }

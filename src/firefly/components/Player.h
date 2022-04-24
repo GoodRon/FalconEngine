@@ -25,6 +25,7 @@ public:
 	}
 
 	int playerId = 0;
+	std::string playerName;
 };
 
 }

@@ -264,6 +264,7 @@ private:
 		std::unique_ptr<firefly::Player> component(new firefly::Player);
 
 		component->playerId = document["playerId"].GetInt();
+		component->playerName = std::string(document["playerName"].GetString());
 
 		entity->addComponent(firefly::Player::ComponentName, std::move(component));
 		return true;

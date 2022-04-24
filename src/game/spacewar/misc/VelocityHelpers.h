@@ -6,8 +6,6 @@
 #ifndef SW_MISC_VELOCITY_HELPERS_H
 #define SW_MISC_VELOCITY_HELPERS_H
 
-#include <cstdint>
-
 namespace spacewar {
 
 double normalizeAngle(double degrees);

@@ -12,11 +12,13 @@ add_executable(spacewar WIN32
 	SystemBuilder.cxx
 	misc/Quadtree.cxx
 	misc/VelocityHelpers.cxx
+	misc/UIHelpers.cxx
 	states/MainState.cxx
 	states/MenuState.cxx
 	systems/ShipControlSystem.cxx
 	systems/RespawnSystem.cxx
 	systems/PositioningSystem.cxx
+	systems/PlayerUISystem.cxx
 	systems/GravitationalSystem.cxx
 	systems/StateSystem.cxx
 	systems/CollisionSystem.cxx

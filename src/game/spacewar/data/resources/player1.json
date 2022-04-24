@@ -64,11 +64,12 @@
 		},
 		{
 			"name": "Player",
-			"playerId": 1
+			"playerId": 1,
+			"playerName": "The Needle"
 		},
 		{
 			"name": "Lives",
-			"maxLives": 0
+			"maxLives": 5
 		},
 		{
 			"name": "RoundCollidable",

@@ -11,7 +11,6 @@
 
 namespace firefly {
 	class Entity;
-	class EntityManager;
 }
 
 namespace spacewar {
