@@ -8,13 +8,6 @@
 
 #include <cstdint>
 
-// TODO rename
-
-namespace firefly {
-	class Velocity;
-	class Position;
-}
-
 namespace spacewar {
 
 double normalizeAngle(double degrees);

@@ -385,7 +385,6 @@ namespace spacewar {
 
 		weapon.lastShotTimepoint = timepoint;
 
-		// TODO send event
 		auto entityPrototypes = getEngine()->getEntityPrototypes();
 		auto entityManager = getEngine()->getEntityManager();
 
