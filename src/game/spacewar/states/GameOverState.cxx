@@ -62,11 +62,13 @@ bool GameOverState::onEvent(
 			return true;
 		}
 
-		const auto engine = getEngine();
-		const auto stateMachine = engine->getStateMachine();
-		stateMachine->resetState(GameState::Main);
-		stateMachine->switchState(GameState::Menu);
-		return true;
+		if (sdlEvent.key.keysym.sym == SDLK_SPACE) {
+			const auto engine = getEngine();
+			const auto stateMachine = engine->getStateMachine();
+			stateMachine->resetState(GameState::Main);
+			stateMachine->switchState(GameState::Menu);
+			return true;
+		}
 	} break;
 
 	default:
