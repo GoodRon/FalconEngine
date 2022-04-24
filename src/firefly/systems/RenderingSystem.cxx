@@ -107,8 +107,6 @@ void RenderingSystem::onUpdate() {
 	Position* positionComponent = nullptr;
 	Visual* visualComponent = nullptr;
 
-	//_renderer->clearViewport();
-
 	for (auto& entity: _renderList) {
 		if (!entity->isActive()) {
 			continue;
@@ -123,8 +121,6 @@ void RenderingSystem::onUpdate() {
 
 		draw(positionComponent, visualComponent);
 	}
-	
-	//SDL_RenderPresent(_renderer->getContext());
 }
 
 bool RenderingSystem::onRegisterEntity(Entity* entity) {
