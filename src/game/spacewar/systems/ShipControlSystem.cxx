@@ -11,9 +11,7 @@
 #include <firefly/events/NativeEvent.h>
 #include <firefly/events/StateEvent.h>
 #include <firefly/events/AddAccelerationEvent.h>
-#include <firefly/events/SetAccelerationEvent.h>
-#include <firefly/events/AddSpeedEvent.h>
-#include <firefly/events/SetSpeedEvent.h>
+#include <firefly/events/ShootEvent.h>
 #include <firefly/events/PositionEvent.h>
 #include <firefly/components/Player.h>
 #include <firefly/components/Velocity.h>
@@ -25,6 +23,7 @@
 #include <firefly/components/Fuel.h>
 
 #include "ObjectStates.h"
+#include "WeaponId.h"
 #include "misc/VelocityHelpers.h"
 
 namespace spacewar {
@@ -282,18 +281,6 @@ namespace spacewar {
 		}
 	}
 
-	void ShipControlSystem::setAcceleration(
-		firefly::Entity* entity,
-		double acceleration, double direction, bool isConstantAcceleration) const {
-
-		std::shared_ptr<firefly::IEvent> event(
-			new firefly::SetAccelerationEvent(
-				entity->getId(), acceleration, direction, isConstantAcceleration));
-			
-		const auto eventManager = getEngine()->getEventManager();		
-		eventManager->registerEvent(std::move(event));
-	}
-
 	void ShipControlSystem::addAcceleration(
 		firefly::Entity* entity,
 		double acceleration, double direction) const {
@@ -303,39 +290,6 @@ namespace spacewar {
 				entity->getId(), acceleration, direction));
 		
 		const auto eventManager = getEngine()->getEventManager();			
-		eventManager->registerEvent(std::move(event));
-	}
-
-	void ShipControlSystem::addSpeed(firefly::Entity* entity,
-		double speed, double direction) const {
-
-		std::shared_ptr<firefly::IEvent> event(
-			new firefly::AddSpeedEvent(
-				entity->getId(), speed, direction));
-					
-		const auto eventManager = getEngine()->getEventManager();
-		eventManager->registerEvent(std::move(event));
-	}
-
-	void ShipControlSystem::setSpeed(firefly::Entity* entity,
-		double speed, double direction) const {
-
-		std::shared_ptr<firefly::IEvent> event(
-			new firefly::SetSpeedEvent(
-				entity->getId(), speed, direction));
-		
-		const auto eventManager = getEngine()->getEventManager();
-		eventManager->registerEvent(std::move(event));
-	}
-
-	void ShipControlSystem::setPosition(firefly::Entity* entity,
-		double x, double y, double direction) const {
-
-		std::shared_ptr<firefly::IEvent> event(
-			new firefly::PositionEvent(
-				entity->getId(), x, y, direction));
-					
-		const auto eventManager = getEngine()->getEventManager();
 		eventManager->registerEvent(std::move(event));
 	}
 
@@ -355,7 +309,6 @@ namespace spacewar {
 		eventManager->registerEvent(std::move(event));
 	}
 
-	// TODO make a weapon system
 	void ShipControlSystem::shoot(firefly::Entity* entity) const {
 		const auto stateComponent = 
 			entity->getComponent<firefly::State>();
@@ -365,65 +318,12 @@ namespace spacewar {
 			return;
 		}
 
-		const auto ammunitionComponent = 
-			entity->getComponent<firefly::Ammunition>();
+		std::shared_ptr<firefly::IEvent> event(
+			new firefly::ShootEvent(
+				entity->getId(), WeaponId::RocketLauncher));
 
-		// TODO improve
-		const std::string weaponName("RocketLauncher");
-
-		if (ammunitionComponent->weapons.find(weaponName) == 
-			ammunitionComponent->weapons.end()) {
-			return;
-		}
-
-		auto& weapon = ammunitionComponent->weapons[weaponName];
-
-		const auto timepoint = SDL_GetTicks64();
-		const auto elapsedMs = timepoint - weapon.lastShotTimepoint;
-		if (elapsedMs < weapon.cooldownTimeMs) {
-			return;
-		}
-
-		weapon.lastShotTimepoint = timepoint;
-
-		auto entityPrototypes = getEngine()->getEntityPrototypes();
-		auto entityManager = getEngine()->getEntityManager();
-
-		auto projectile = entityPrototypes->makeEntity(weapon.projectile);
-		if (!projectile) {
-			return;
-		}
-
-		auto velocity = projectile->getComponent<firefly::Velocity>();
-		auto position = projectile->getComponent<firefly::Position>();
-		auto lifetime = projectile->getComponent<firefly::Lifetime>();
-		if (!velocity || !position || !lifetime) {
-			return;
-		}
-
-		projectile->setActive(true);
-		entityManager->addEntity(projectile);
-
-		const auto playerPosition = entity->getComponent<firefly::Position>();
-		const auto playerVelocity = entity->getComponent<firefly::Velocity>();
-
-		// TODO improve
-		constexpr double spawnDistance = 27.0;
-		double x = playerPosition->x;
-		double y = playerPosition->y;
-		movePoint(x, y, spawnDistance, 
-			playerPosition->direction);
-
-		setSpeed(projectile.get(), velocity->speed, 
-			playerPosition->direction);
-		addSpeed(projectile.get(), playerVelocity->speed, 
-			playerVelocity->speedDirection);
-		setAcceleration(projectile.get(), velocity->acceleration, 
-			playerPosition->direction, velocity->isConstantAcceleration);
-		setPosition(projectile.get(), x, y, playerPosition->direction);
-
-		// TODO send event
-		lifetime->timepoint = timepoint;
+		const auto eventManager = getEngine()->getEventManager();
+		eventManager->registerEvent(std::move(event));
 	}
 
 	void ShipControlSystem::hyperspace(firefly::Entity* entity) const {

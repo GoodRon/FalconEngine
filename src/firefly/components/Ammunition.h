@@ -33,7 +33,7 @@ public:
 		uint64_t lastShotTimepoint = 0;
 	};
 
-	std::unordered_map<std::string, Weapon> weapons;
+	std::unordered_map<int, Weapon> weapons;
 };
 
 }

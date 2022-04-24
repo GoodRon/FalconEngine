@@ -44,21 +44,8 @@ private:
 	void onRightPressed(firefly::Entity* entity, 
 		firefly::ShipControls* controls, bool isPressed) const;
 
-	void setAcceleration(firefly::Entity* entity, 
-		double acceleration, double direction, 
-		bool isConstantAcceleration) const;
-
 	void addAcceleration(firefly::Entity* entity, 
 		double acceleration, double direction) const;
-
-	void addSpeed(firefly::Entity* entity, 
-		double speed, double direction) const;
-
-	void setSpeed(firefly::Entity* entity, 
-		double speed, double direction) const;
-
-	void setPosition(firefly::Entity* entity, 
-		double x, double y, double direction) const;
 	
 	void rotate(firefly::Entity* entity, double angle) const;
 	void shoot(firefly::Entity* entity) const;

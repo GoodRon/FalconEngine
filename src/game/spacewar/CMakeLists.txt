@@ -24,7 +24,8 @@ add_executable(spacewar WIN32
 	systems/StateSystem.cxx
 	systems/CollisionSystem.cxx
 	systems/LifetimeSystem.cxx
-	systems/VelocitySystem.cxx)
+	systems/VelocitySystem.cxx
+	systems/WeaponSystem.cxx)
 target_link_libraries(spacewar firefly SDL2::Main)
 
 install(TARGETS spacewar RUNTIME DESTINATION .)

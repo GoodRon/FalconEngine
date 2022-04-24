@@ -91,7 +91,7 @@
 			"name": "Ammunition",
 			"weapons": [
 				{	
-					"name": "RocketLauncher",
+					"weaponId": 0,
 					"projectile": "Rocket",
 					"rounds": 15,
 					"cooldownTimeMs": 300

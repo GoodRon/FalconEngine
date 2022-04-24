@@ -10,6 +10,7 @@
 #include "systems/RespawnSystem.h"
 #include "systems/PlayerUISystem.h"
 #include "systems/FuelSystem.h"
+#include "systems/WeaponSystem.h"
 
 namespace spacewar {
 
@@ -66,6 +67,11 @@ std::shared_ptr<firefly::ISystem> buidSystem(
 	if (name == FuelSystem::Name) {
 		return std::shared_ptr<firefly::ISystem>(
 			new FuelSystem(engine));
+	}
+
+	if (name == WeaponSystem::Name) {
+		return std::shared_ptr<firefly::ISystem>(
+			new WeaponSystem(engine));
 	}
 
 	return nullptr;

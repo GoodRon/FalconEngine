@@ -313,12 +313,12 @@ private:
 		for (auto& weaponData: document["weapons"].GetArray()) {
 			firefly::Ammunition::Weapon weapon;
 
-			const auto name = std::string(weaponData["name"].GetString());
+			const int weaponId = weaponData["weaponId"].GetInt();
 			weapon.projectile = std::string(weaponData["projectile"].GetString());
 			weapon.rounds = weaponData["rounds"].GetInt();
 			weapon.cooldownTimeMs = weaponData["cooldownTimeMs"].GetUint64();
 
-			component->weapons[name] = std::move(weapon);
+			component->weapons[weaponId] = std::move(weapon);
 		}
 		
 		entity->addComponent(firefly::Ammunition::ComponentName, std::move(component));
