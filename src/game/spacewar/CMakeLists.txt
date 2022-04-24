@@ -15,6 +15,7 @@ add_executable(spacewar WIN32
 	misc/UIHelpers.cxx
 	states/MainState.cxx
 	states/MenuState.cxx
+	states/GameOverState.cxx
 	systems/ShipControlSystem.cxx
 	systems/FuelSystem.cxx
 	systems/RespawnSystem.cxx

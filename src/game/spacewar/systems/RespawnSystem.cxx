@@ -15,6 +15,7 @@
 #include <firefly/components/Position.h>
 #include <firefly/components/Fuel.h>
 #include <firefly/components/Ammunition.h>
+#include <firefly/components/Player.h>
 
 #include <firefly/events/KillEvent.h>
 #include <firefly/events/StateEvent.h>
@@ -22,8 +23,10 @@
 #include <firefly/events/PositionEvent.h>
 #include <firefly/events/SetFuelEvent.h>
 #include <firefly/events/SetAmmunitionEvent.h>
+#include <firefly/events/GameStateEvent.h>
 
 #include "ObjectStates.h"
+#include "states/GameStates.h"
 
 namespace spacewar {
 
@@ -97,7 +100,19 @@ void RespawnSystem::killEntity(firefly::EntityID id) const {
 		respawnEntity(id);
 		return;
 	}
+
 	_entityManager->removeEntity(id);
+
+	const auto player = entity->getComponent<firefly::Player>();
+	if (!player) {
+		return;
+	}
+	
+	std::shared_ptr<firefly::IEvent> event(
+		new firefly::GameStateEvent(GameState::GameOver));
+
+	const auto eventManager = getEngine()->getEventManager();
+	eventManager->registerEvent(std::move(event));
 }
 
 void RespawnSystem::respawnEntity(firefly::EntityID id) const {

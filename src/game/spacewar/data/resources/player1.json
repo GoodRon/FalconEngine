@@ -69,7 +69,7 @@
 		},
 		{
 			"name": "Lives",
-			"maxLives": 10
+			"maxLives": 1
 		},
 		{
 			"name": "RoundCollidable",

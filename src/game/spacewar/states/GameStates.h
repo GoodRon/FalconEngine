@@ -10,7 +10,8 @@ namespace spacewar {
 
 enum GameState {
 	Menu = 0,
-	Main
+	Main,
+    GameOver
 };
 
 }

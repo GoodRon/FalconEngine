@@ -17,6 +17,7 @@
 #include "states/GameStates.h"
 #include "states/MenuState.h"
 #include "states/MainState.h"
+#include "states/GameOverState.h"
 
 namespace spacewar {
 
@@ -79,7 +80,8 @@ private:
 			"resources/player1.json", 
 			"resources/player2.json", 
 			"resources/star.json",
-			"resources/rocket.json"
+			"resources/rocket.json",
+			"resources/game_over.json"
 		};
 
 		EntityBuilder builder(_engine);
@@ -108,6 +110,9 @@ private:
 		stateMachine->pushState(std::move(state));
 
 		state.reset(new MenuState(_engine));
+		stateMachine->pushState(std::move(state));
+
+		state.reset(new GameOverState(_engine));
 		stateMachine->pushState(std::move(state));
 
 		stateMachine->switchState(GameState::Menu);
