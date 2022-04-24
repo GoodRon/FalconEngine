@@ -127,18 +127,26 @@ bool Renderer::drawTextureOnTexture(
 }
 
 TexturePointer Renderer::drawText(
-	const std::string& message, const std::string& fontName, 
-	int fontSize, SDL_Color color) const {
+	const std::string& message, int fontSize, 
+	SDL_Color color, const std::string& fontName) const {
 
 	if (!TTF_WasInit()) {
 		return nullptr;
 	}
 
-	if (message.empty() || fontName.empty() || fontSize <= 0) {
+	if (message.empty() || fontSize <= 0) {
 		return nullptr;
 	}
 
-	TTF_Font* font = TTF_OpenFont(fontName.c_str(), fontSize);
+	TTF_Font* font = nullptr;
+	if (!fontName.empty()) {
+		font = TTF_OpenFont(fontName.c_str(), fontSize);
+	} else {
+		// TODO move from here
+		const std::string defaultFont("resources/default.ttf");
+		font = TTF_OpenFont(defaultFont.c_str(), fontSize);
+	}
+
 	if (font == nullptr){
 		// TODO log error
 		return nullptr;
@@ -164,15 +172,6 @@ TexturePointer Renderer::drawText(
 	SDL_FreeSurface(surface);
 	TTF_CloseFont(font);
 	return texture;
-}
-
-TexturePointer Renderer::drawText(
-	const std::string& message, SDL_Color color) const {
-
-	const std::string defaultFont("resources/default.ttf");
-	const int defaultSize = 20;
-
-	return drawText(message, defaultFont, defaultSize, color);
 }
 
 SDL_Rect Renderer::getTextureRect(

@@ -44,11 +44,8 @@ public:
 		SDL_Rect* source, SDL_Rect* destination);
 
 	TexturePointer drawText(
-		const std::string& message, const std::string& fontName, 
-		int fontSize, SDL_Color color) const;
-
-	TexturePointer drawText(
-		const std::string& message, SDL_Color color) const;
+		const std::string& message, int fontSize, 
+		SDL_Color color, const std::string& fontName = "") const;
 
 	SDL_Rect getTextureRect(const TexturePointer& texture) const;
 
