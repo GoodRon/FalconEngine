@@ -16,6 +16,7 @@
 #include <firefly/events/SetSpeedEvent.h>
 #include <firefly/events/AddSpeedEvent.h>
 #include <firefly/events/SetAccelerationEvent.h>
+#include <firefly/events/SetAmmunitionEvent.h>
 
 #include "WeaponId.h"
 #include "misc/VelocityHelpers.h"
@@ -51,6 +52,24 @@ bool WeaponSystem::onEvent(
 
 		shoot(entity,
 			shootEvent->getWeaponId());
+		return true;
+	} break;
+
+	case firefly::EventType::SetAmmunition: {
+		const auto setAmmunitionEvent = 
+			static_cast<firefly::SetAmmunitionEvent*>(event.get());
+		if (!setAmmunitionEvent) {
+			return false;
+		}
+
+		auto entity = getEntity(setAmmunitionEvent->getId());
+		if (!entity) {
+			return false;
+		}
+
+		reload(entity,
+			setAmmunitionEvent->getWeaponId(),
+			setAmmunitionEvent->getRounds());
 		return true;
 	} break;
 
@@ -155,6 +174,27 @@ void WeaponSystem::shoot(
 	event.reset(new firefly::PositionEvent(
 		projectile->getId(), x, y, playerPosition->direction));
 	eventManager->registerEvent(std::move(event));
+}
+
+void WeaponSystem::reload(firefly::Entity* entity, 
+	int weaponId, int rounds) const {
+	if (!entity || weaponId < 0) {
+		return;
+	}
+
+	const auto ammunitionComponent = 
+		entity->getComponent<firefly::Ammunition>();
+	if (!ammunitionComponent) {
+		return;
+	}
+
+	if (ammunitionComponent->weapons.find(weaponId) == 
+		ammunitionComponent->weapons.end()) {
+		return;
+	}
+
+	auto& weapon = ammunitionComponent->weapons[weaponId];
+	weapon.rounds = rounds;
 }
 
 }

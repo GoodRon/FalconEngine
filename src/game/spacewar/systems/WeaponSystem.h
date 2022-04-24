@@ -30,6 +30,8 @@ private:
 		const std::shared_ptr<firefly::IEvent>& event);
 	
 	void shoot(firefly::Entity* entity, int weaponId) const;
+	void reload(firefly::Entity* entity, 
+		int weaponId, int rounds) const;
 };
 
 }

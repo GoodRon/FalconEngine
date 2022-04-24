@@ -14,12 +14,14 @@
 #include <firefly/components/Lives.h>
 #include <firefly/components/Position.h>
 #include <firefly/components/Fuel.h>
+#include <firefly/components/Ammunition.h>
 
 #include <firefly/events/KillEvent.h>
 #include <firefly/events/StateEvent.h>
 #include <firefly/events/SetSpeedEvent.h>
 #include <firefly/events/PositionEvent.h>
 #include <firefly/events/SetFuelEvent.h>
+#include <firefly/events/SetAmmunitionEvent.h>
 
 #include "ObjectStates.h"
 
@@ -144,6 +146,20 @@ void RespawnSystem::respawnEntity(firefly::EntityID id) const {
 		entity->getId(), fuel->max, fuel->max));
 
 	eventManager->registerEvent(std::move(event));
+
+	const auto ammunition = 
+		entity->getComponent<firefly::Ammunition>();
+	if (!ammunition) {
+		return;
+	}
+
+	for (auto& weapon: ammunition->weapons) {
+		event.reset(new firefly::SetAmmunitionEvent(
+			entity->getId(), weapon.first, 
+			weapon.second.maxRounds));
+
+		eventManager->registerEvent(std::move(event));
+	}
 
 }
 

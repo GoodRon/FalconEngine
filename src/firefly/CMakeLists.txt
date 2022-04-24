@@ -28,6 +28,7 @@ add_library(firefly
 	events/SetAccelerationEvent.cxx
 	events/AddSpeedEvent.cxx
 	events/AddAccelerationEvent.cxx
+	events/SetAmmunitionEvent.cxx
 	events/ShootEvent.cxx
 	systems/ISystem.cxx
 	systems/RenderingSystem.cxx)

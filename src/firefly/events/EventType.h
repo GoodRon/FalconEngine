@@ -24,7 +24,8 @@ enum class EventType: int {
 	SetAcceleration,
 	AddAcceleration,
 	SetFuel,
-	Shoot
+	Shoot,
+	SetAmmunition
 }; 
 
 }
